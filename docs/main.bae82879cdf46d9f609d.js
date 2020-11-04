@@ -29,7 +29,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.scss */ "./index.scss");
 ;
-console.log('hello world');
+
 
 /***/ })
 
@@ -77,4 +77,4 @@ console.log('hello world');
 /******/ 	// This entry module used 'exports' so it can't be inlined
 /******/ })()
 ;
-//# sourceMappingURL=main.0804b7991cf8c83a8f20.js.map
+//# sourceMappingURL=main.bae82879cdf46d9f609d.js.map

@@ -9,6 +9,8 @@
   "devDependencies": {
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^5.0.0",
+    "eslint": "^7.12.1",
+    "eslint-plugin-fsd": "^1.0.1",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^4.5.0",
     "mini-css-extract-plugin": "^1.2.1",
@@ -20,7 +22,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
   },
   "author": "Vadim Manushin",
   "license": "MIT"
