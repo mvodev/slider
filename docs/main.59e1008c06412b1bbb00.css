@@ -1,0 +1,17 @@
+.fsd-slider__range {
+  max-width: 300px;
+  height: 20px;
+  background-color: green;
+}
+
+.fsd-slider__thumb {
+  position: relative;
+  background-color: indigo;
+  height: 30px;
+  width: 15px;
+  left: 10px;
+  top: -5px;
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=main.59e1008c06412b1bbb00.css.map*/

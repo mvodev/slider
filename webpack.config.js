@@ -21,8 +21,11 @@ module.exports = {
  context: path.resolve(__dirname, 'src'),
  mode: 'development',
  entry: {
-  main: './index.ts',
+  main: './index.js',
  },
+  resolve: {
+    extensions: [ '.tsx', '.ts', '.js' ],
+  },
  output: {
   filename: '[name].[contenthash].js',
   path: path.resolve(__dirname, 'docs')
@@ -70,7 +73,15 @@ module.exports = {
    {
     test: /\.s[ac]ss$/,
     use: cssLoaders('sass-loader')
-   }
+   },
+  {
+    test: /\.ts(x?)$/,
+    exclude: ['/node_modules/'],
+    use: [
+     'babel-loader',
+      'ts-loader',
+    ]
+  },
   ]
  }
 };
