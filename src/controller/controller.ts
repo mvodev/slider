@@ -11,6 +11,9 @@ export class Controller {
  }
  initialize() {
   this.view.render();
+  this.view.setValueToThumbLabel(20);
+  this.view.setValueToMinRange(10);
+  this.view.setValueToMaxRange(100);
  }
  bindEvents() {
   this.view.getThumb().onmousedown = this.mouseDownHandler.bind(this);
@@ -37,9 +40,7 @@ export class Controller {
    }
    model.setCurrPos(newLeft);
    view.reDrawView();
-   //thumb.style.left = newLeft + 'px';
   }
-
   function onMouseUp() {
    document.removeEventListener('mouseup', onMouseUp);
    document.removeEventListener('mousemove', onMouseMove);

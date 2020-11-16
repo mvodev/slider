@@ -1,18 +1,18 @@
-interface Options {
+interface Settings {
  [key: string]: string | boolean;
 }
 export class Model {
 
- private options: Options;
+ private settings: Settings;
  private currentPos: number;
 
- constructor(options: Options) {
-  this.options = Object.assign({}, options);
+ constructor(settings: Settings) {
+  this.settings = Object.assign({}, settings);
   this.currentPos = 0;
  }
 
  getSettings(): Object {
-  return Object.assign({}, this.options);
+  return Object.assign({}, this.settings);
  }
 
  setCurrPos(pos: number) {

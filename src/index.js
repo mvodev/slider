@@ -7,9 +7,9 @@ import { Controller } from './controller/controller.ts';
  $.fn.fsdSlider = function (rootElem, options) {
   const root = rootElem;
   var settings = $.extend({
-   'min': '0',
-   'max': '100',
-   'curPos': '30',
+   min: '0',
+   max: '100',
+   curPos: '30',
   }, options);
 
   let model = new Model(settings);
