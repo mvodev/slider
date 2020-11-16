@@ -1,0 +1,14 @@
+.slider{
+ max-width: 300px;
+ height: 20px;
+ background-color: green;
+}
+.thumb{
+ position: relative;
+ background-color: indigo;
+ height: 30px;
+ width: 15px;
+ left: 10px;
+ top:-5px;
+ cursor: pointer;
+}

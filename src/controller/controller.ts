@@ -1,5 +1,5 @@
-import { Model } from '../model/model';
-import { View } from '../view/view';
+import { Model } from '../model/Model';
+import { View } from '../view/View';
 export class Controller {
 
  private view: View;
@@ -11,30 +11,34 @@ export class Controller {
  }
  initialize() {
   this.view.render();
-  this.view.setValueToThumbLabel(20);
-  this.view.setValueToMinRange(10);
-  this.view.setValueToMaxRange(100);
+  this.view.setValueToThumbLabel(this.model.getSettings().currentPos);
+  this.view.setValueToMinRange(this.model.getSettings().min);
+  this.view.setValueToMaxRange(this.model.getSettings().max);
  }
  bindEvents() {
   this.view.getThumb().onmousedown = this.mouseDownHandler.bind(this);
+ }
+ start() {
+  this.initialize();
+  this.bindEvents();
  }
  mouseDownHandler(e: MouseEvent) {
   e.preventDefault();
   let shiftX = e.clientX - this.view.getThumb().getBoundingClientRect().left;
   document.addEventListener('mousemove', onMouseMove);
   document.addEventListener('mouseup', onMouseUp);
-  let slider = this.view.getRange();
+  let sliderRange = this.view.getRange();
   let thumb = this.view.getThumb();
   let model = this.model;
   let view = this.view;
 
   function onMouseMove(e: MouseEvent) {
-   let newLeft = e.clientX - shiftX - slider.getBoundingClientRect().left;
-   console.log(e.clientX + ' ' + shiftX + ' ' + slider.getBoundingClientRect().left);
+   let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
+   console.log(e.clientX + ' ' + shiftX + ' ' + sliderRange.getBoundingClientRect().left);
    if (newLeft < 0) {
     newLeft = 0;
    }
-   let rightEdge = slider.offsetWidth - thumb.offsetWidth;
+   let rightEdge = sliderRange.offsetWidth - thumb.offsetWidth;
    if (newLeft > rightEdge) {
     newLeft = rightEdge;
    }
@@ -46,4 +50,5 @@ export class Controller {
    document.removeEventListener('mousemove', onMouseMove);
   }
  }
+
 }

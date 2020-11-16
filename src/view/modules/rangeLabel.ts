@@ -14,9 +14,10 @@ export class RangeLabel {
   return this.rangeLabelContainer;
  }
  setMinRange(value: number) {
-  this.minLabel.innerHTML = value.toString();
+
+  this.minLabel.innerText = '' + value;
  }
  setMaxRange(value: number) {
-  this.maxLabel.innerHTML = value.toString();
+  this.maxLabel.innerText = '' + value;
  }
 }

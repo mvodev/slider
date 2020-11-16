@@ -1,18 +1,17 @@
-interface Settings {
- [key: string]: string | boolean;
-}
+import {ISettings} from './ISettings';
 export class Model {
 
- private settings: Settings;
+ private settings: ISettings;
  private currentPos: number;
 
- constructor(settings: Settings) {
+ constructor(settings: ISettings) {
   this.settings = Object.assign({}, settings);
+  console.log(this.settings);
   this.currentPos = 0;
  }
 
- getSettings(): Object {
-  return Object.assign({}, this.settings);
+ getSettings() {
+  return this.settings;
  }
 
  setCurrPos(pos: number) {

@@ -15,7 +15,7 @@ export class ThumbLabel {
   return this.thumbLabelContainer;
  }
  setValueToLabel(value: number) {
-  this.thumbLabelValue.innerHTML = value.toString();
+  this.thumbLabelValue.innerText = ''+value;
  }
  hideLabel() {
   this.thumbLabelContainer.style.display = 'none';
