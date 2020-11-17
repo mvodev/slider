@@ -1,27 +1,25 @@
 const slider = document.querySelector('.slider');
 const thumb = document.querySelector('.thumb');
-//console.log(thumb.getBoundingClientRect());
-console.log(slider);
+//console.log(thumb);
+//console.log(slider);
 thumb.addEventListener('mousedown', mouseDownHandler);
 function mouseDownHandler(e) {
  e.preventDefault();
- let shiftX = e.clientX - thumb.getBoundingClientRect().left;
+ let shiftY = e.clientY - thumb.getBoundingClientRect().top;
  document.addEventListener('mousemove', onMouseMove);
  document.addEventListener('mouseup', onMouseUp);
 
  function onMouseMove(event) {
-  let newLeft = event.clientX - shiftX - slider.getBoundingClientRect().left;
-  console.log(event.clientX + ' ' + shiftX + ' ' + slider.getBoundingClientRect().left);
-  // курсор вышел из слайдера => оставить бегунок в его границах.
-  if (newLeft < 0) {
-   newLeft = 0;
+  let top = event.clientY - shiftY - slider.getBoundingClientRect().top;
+  if (top < 0) {
+   top = 0;
   }
-  let rightEdge = slider.offsetWidth - thumb.offsetWidth;
-  if (newLeft > rightEdge) {
-   newLeft = rightEdge;
+  let bottom = slider.offsetHeight - thumb.offsetHeight;
+  if (top > bottom) {
+   top = bottom;
   }
 
-  thumb.style.left = newLeft + 'px';
+  thumb.style.top = top + 'px';
  }
 
  function onMouseUp() {

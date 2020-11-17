@@ -15,5 +15,7 @@ import { Controller } from './controller/Controller.ts';
 $('.slider').fsdSlider(document.querySelector('.slider'), {
  min: '0',
  max: '10',
- currentPos:'5'
+ currentPos: '5',
+ isVertical: true,
+ hideThumbLabel: false,
 });

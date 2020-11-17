@@ -3,10 +3,10 @@ export class ThumbLabel {
  private thumbLabelValue: HTMLSpanElement;
  constructor(thumbRootElen: HTMLDivElement) {
   let div = document.createElement('div');
-  let span = document.createElement('span');
+  let divValue = document.createElement('div');
   this.thumbLabelContainer = div;
   this.thumbLabelContainer.classList.add('fsd-slider__thumb-label');
-  this.thumbLabelValue = span;
+  this.thumbLabelValue = divValue;
   this.thumbLabelValue.classList.add('fsd-slider__thumb-label-value');
   this.thumbLabelContainer.appendChild(this.thumbLabelValue);
  }
@@ -15,7 +15,7 @@ export class ThumbLabel {
   return this.thumbLabelContainer;
  }
  setValueToLabel(value: number) {
-  this.thumbLabelValue.innerText = ''+value;
+  this.thumbLabelValue.innerText = '' + value;
  }
  hideLabel() {
   this.thumbLabelContainer.style.display = 'none';

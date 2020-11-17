@@ -1,15 +1,16 @@
 .fsd-slider {
-  max-width: 300px;
+  width: 300px;
+  height: 100px;
 }
 
 .fsd-slider__range {
   background-color: green;
-  max-height: 20px;
+  height: 20px;
 }
 
 .fsd-slider_is_vertical {
-  max-width: 20px;
-  max-height: 300px;
+  width: 30px;
+  height: 300px;
 }
 
 .fsd-slider__thumb {
@@ -34,12 +35,13 @@
 }
 
 .fsd-slider__thumb-label-value {
-  font-size: 12px;
+  font-size: 16px;
   font-family: inherit;
+  display: flex;
+  justify-content: center;
 }
 
 .fsd-slider__range-label {
-  all: inherit;
   display: flex;
   justify-content: space-between;
 }
@@ -48,4 +50,4 @@
   margin-top: 50px;
 }
 
-/*# sourceMappingURL=main.558f368c36242c217848.css.map*/
+/*# sourceMappingURL=main.226b9af8bad18c3d7096.css.map*/

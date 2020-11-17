@@ -16,6 +16,12 @@ export class View {
  render() {
   this.slider.render();
   this.invalidateWidth();
+  if (this.model.getSettings().hideThumbLabel) {
+   this.slider.getThumbLabel().hideLabel();
+  }
+  if (this.model.getSettings().isVertical) {
+   this.slider.setVertical();
+  }
  }
  invalidateWidth() {
   this.rangeWidth = this.slider.getRange().clientWidth;

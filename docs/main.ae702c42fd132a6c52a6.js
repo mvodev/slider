@@ -40,35 +40,67 @@ class Controller {
 
   mouseDownHandler(e) {
     e.preventDefault();
-    let shiftX = e.clientX - this.view.getThumb().getBoundingClientRect().left;
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-    let sliderRange = this.view.getRange();
-    let thumb = this.view.getThumb();
-    let model = this.model;
-    let view = this.view;
 
-    function onMouseMove(e) {
-      let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
-      console.log(e.clientX + ' ' + shiftX + ' ' + sliderRange.getBoundingClientRect().left);
+    if (this.model.getSettings().isVertical) {
+      let shiftY = e.clientY - this.view.getThumb().getBoundingClientRect().top;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      let sliderRange = this.view.getRange();
+      let thumb = this.view.getThumb();
+      let model = this.model;
+      let view = this.view;
 
-      if (newLeft < 0) {
-        newLeft = 0;
+      function onMouseMove(event) {
+        let top = event.clientY - shiftY - sliderRange.getBoundingClientRect().top;
+
+        if (top < 0) {
+          top = 0;
+        }
+
+        let bottom = sliderRange.offsetHeight - thumb.offsetHeight;
+
+        if (top > bottom) {
+          top = bottom;
+        }
+
+        thumb.style.top = top + 'px';
       }
 
-      let rightEdge = sliderRange.offsetWidth - thumb.offsetWidth;
+      function onMouseUp() {
+        document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('mousemove', onMouseMove);
+      }
+    } else {
+      let shiftX = e.clientX - this.view.getThumb().getBoundingClientRect().left;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      let sliderRange = this.view.getRange();
+      let thumb = this.view.getThumb();
+      let model = this.model;
+      let view = this.view;
 
-      if (newLeft > rightEdge) {
-        newLeft = rightEdge;
+      function onMouseMove(e) {
+        let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
+        console.log(e.clientX + ' ' + shiftX + ' ' + sliderRange.getBoundingClientRect().left);
+
+        if (newLeft < 0) {
+          newLeft = 0;
+        }
+
+        let rightEdge = sliderRange.offsetWidth - thumb.offsetWidth;
+
+        if (newLeft > rightEdge) {
+          newLeft = rightEdge;
+        }
+
+        model.setCurrPos(newLeft);
+        view.reDrawView();
       }
 
-      model.setCurrPos(newLeft);
-      view.reDrawView();
-    }
-
-    function onMouseUp() {
-      document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mousemove', onMouseMove);
+      function onMouseUp() {
+        document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('mousemove', onMouseMove);
+      }
     }
   }
 
@@ -141,6 +173,14 @@ class View {
   render() {
     this.slider.render();
     this.invalidateWidth();
+
+    if (this.model.getSettings().hideThumbLabel) {
+      this.slider.getThumbLabel().hideLabel();
+    }
+
+    if (this.model.getSettings().isVertical) {
+      this.slider.setVertical();
+    }
   }
 
   invalidateWidth() {
@@ -209,16 +249,16 @@ class Slider {
     this.range = new _range__WEBPACK_IMPORTED_MODULE_0__.Range();
     this.thumbLabel = new _thumbLabel__WEBPACK_IMPORTED_MODULE_2__.ThumbLabel(this.thumb.getThumb());
     this.rangeLabel = new _rangeLabel__WEBPACK_IMPORTED_MODULE_3__.RangeLabel();
+    this.container = document.createElement('div');
   }
 
   render() {
-    let container = document.createElement('div');
-    container.classList.add('fsd-slider');
-    container.appendChild(this.range.getRange());
+    this.container.classList.add('fsd-slider');
+    this.container.appendChild(this.range.getRange());
     this.range.getRange().appendChild(this.thumb.getThumb());
     this.thumb.getThumb().appendChild(this.thumbLabel.getThumbLabelContainer());
-    container.appendChild(this.rangeLabel.getRangeLabel());
-    this.rootElem.appendChild(container);
+    this.container.appendChild(this.rangeLabel.getRangeLabel());
+    this.rootElem.appendChild(this.container);
   }
 
   getRange() {
@@ -245,10 +285,6 @@ class Slider {
     this.rangeLabel.setMaxRange(value);
   }
 
-  getSlider() {
-    return this.getSlider;
-  }
-
   setMaxRange(value) {
     this.rangeLabel.setMaxRange(value);
   }
@@ -259,6 +295,11 @@ class Slider {
 
   setValueToLabel(value) {
     this.thumbLabel.setValueToLabel(value);
+  }
+
+  setVertical() {
+    this.container.classList.add('fsd-slider_is_vertical');
+    this.range.getRange().classList.add('fsd-slider_is_vertical');
   }
 
 }
@@ -380,10 +421,10 @@ __webpack_require__.r(__webpack_exports__);
 class ThumbLabel {
   constructor(thumbRootElen) {
     let div = document.createElement('div');
-    let span = document.createElement('span');
+    let divValue = document.createElement('div');
     this.thumbLabelContainer = div;
     this.thumbLabelContainer.classList.add('fsd-slider__thumb-label');
-    this.thumbLabelValue = span;
+    this.thumbLabelValue = divValue;
     this.thumbLabelValue.classList.add('fsd-slider__thumb-label-value');
     this.thumbLabelContainer.appendChild(this.thumbLabelValue);
   }
@@ -456,7 +497,9 @@ __webpack_require__.r(__webpack_exports__);
 $('.slider').fsdSlider(document.querySelector('.slider'), {
  min: '0',
  max: '10',
- currentPos:'5'
+ currentPos: '5',
+ isVertical: true,
+ hideThumbLabel: false,
 });
 
 /***/ })
@@ -618,4 +661,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.755d5f37ab9ef82445f5.js.map
+//# sourceMappingURL=main.ae702c42fd132a6c52a6.js.map
