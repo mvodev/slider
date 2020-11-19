@@ -37,11 +37,13 @@ class Controller {
     if (this.model.getSettings().isVertical) {
       let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
       let valueToThumb = heightRange / this.model.getSettings().max * this.model.getSettings().from;
+      this.view.setWidthToColoredRange(valueToThumb);
       this.view.getThumb().style.top = '' + valueToThumb + 'px';
       this.view.setValueToThumbLabel(this.model.getSettings().from);
     } else {
       let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
       let valueToThumb = widthRange / this.model.getSettings().max * this.model.getSettings().from;
+      this.view.setWidthToColoredRange(valueToThumb);
       this.view.getThumb().style.left = '' + valueToThumb + 'px';
       this.view.setValueToThumbLabel(this.model.getSettings().from);
     }
@@ -62,11 +64,13 @@ class Controller {
         let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
         let valueToThumbLabel = Math.floor(value / (heightRange / this.model.getSettings().max));
         this.view.setValueToThumbLabel(valueToThumbLabel);
+        this.view.setWidthToColoredRange(value);
         this.model.getSettings().from = valueToThumbLabel;
       } else {
         let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
         let valueToThumbLabel = Math.floor(value / (widthRange / this.model.getSettings().max));
         this.view.setValueToThumbLabel(valueToThumbLabel);
+        this.view.setWidthToColoredRange(value);
         this.model.getSettings().from = valueToThumbLabel;
       }
     }
@@ -236,6 +240,10 @@ class View {
     return this.slider.getThumb();
   }
 
+  setWidthToColoredRange(value) {
+    this.slider.setWidthToColoredRange(value, this.model.getSettings().isVertical);
+  }
+
 }
 
 /***/ }),
@@ -269,7 +277,7 @@ class Slider {
     this.rootElem = rootElem;
     this.thumb = new _thumb__WEBPACK_IMPORTED_MODULE_1__.Thumb();
     this.range = new _range__WEBPACK_IMPORTED_MODULE_0__.Range();
-    this.coloredRange = new _coloredRange__WEBPACK_IMPORTED_MODULE_4__.ColoredRange().getColoredRange();
+    this.coloredRange = new _coloredRange__WEBPACK_IMPORTED_MODULE_4__.ColoredRange();
     this.thumbLabel = new _thumbLabel__WEBPACK_IMPORTED_MODULE_2__.ThumbLabel(this.thumb.getThumb());
     this.rangeLabel = new _rangeLabel__WEBPACK_IMPORTED_MODULE_3__.RangeLabel();
     this.container = document.createElement('div');
@@ -278,7 +286,7 @@ class Slider {
   render() {
     this.container.classList.add('fsd-slider');
     this.container.appendChild(this.range.getRange());
-    this.range.getRange().appendChild(this.coloredRange);
+    this.range.getRange().appendChild(this.coloredRange.getColoredRange());
     this.range.getRange().appendChild(this.thumb.getThumb());
     this.thumb.getThumb().appendChild(this.thumbLabel.getThumbLabelContainer());
     this.container.appendChild(this.rangeLabel.getRangeLabel());
@@ -295,6 +303,18 @@ class Slider {
 
   getThumbLabel() {
     return this.thumbLabel;
+  }
+
+  getColoredRange() {
+    return this.coloredRange;
+  }
+
+  setWidthToColoredRange(value, isVertical) {
+    if (isVertical) {
+      this.coloredRange.getColoredRange().style.height = value + this.thumb.getThumb().offsetHeight / 2 + 'px';
+    } else {
+      this.coloredRange.getColoredRange().style.width = value + this.thumb.getThumb().offsetWidth / 2 + 'px';
+    }
   }
 
   setValueToThumbLabel(value) {
@@ -324,6 +344,7 @@ class Slider {
   setVertical() {
     this.container.classList.add('fsd-slider_is_vertical');
     this.range.getRange().classList.add('fsd-slider_is_vertical');
+    this.coloredRange.getColoredRange().classList.add('fsd-slider__colored-range_is_vertical');
     this.rangeLabel.getRangeLabel().classList.add('fsd-slider__range-label_is_vertical');
     this.thumbLabel.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
   }
@@ -554,7 +575,7 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
  from: 3,
  isVertical: true,
  hideThumbLabel: false,
- isInterval:false,
+ isInterval: false,
 });
 
 /***/ })
@@ -716,4 +737,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.53568135450c68540cb0.js.map
+//# sourceMappingURL=main.bbff52345773c0c5d9f7.js.map

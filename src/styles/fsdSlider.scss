@@ -7,13 +7,18 @@
 .fsd-slider__range{
  background-color: green;
  height: 20px;
+ position: relative;
 }
 .fsd-slider__colored-range{
  background-color: purple;
  height: 20px;
+ position: absolute;
+}
+.fsd-slider__colored-range_is_vertical{
+ width: 20px;
 }
 .fsd-slider_is_vertical{
- width: 30px;
+ width: 20px;
  height: 300px;
  flex-direction: row;
 }

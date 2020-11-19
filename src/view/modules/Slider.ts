@@ -11,13 +11,13 @@ export class Slider {
  private rangeLabel: RangeLabel;
  private rootElem: HTMLDivElement;
  private container: HTMLDivElement;
- private coloredRange: HTMLDivElement;
+ private coloredRange: ColoredRange;
 
  constructor(rootElem: HTMLDivElement) {
   this.rootElem = rootElem;
   this.thumb = new Thumb();
   this.range = new Range();
-  this.coloredRange = new ColoredRange().getColoredRange();
+  this.coloredRange = new ColoredRange();
   this.thumbLabel = new ThumbLabel(this.thumb.getThumb());
   this.rangeLabel = new RangeLabel();
   this.container = document.createElement('div');
@@ -26,7 +26,7 @@ export class Slider {
  render() {
   this.container.classList.add('fsd-slider');
   this.container.appendChild(this.range.getRange());
-  this.range.getRange().appendChild(this.coloredRange);
+  this.range.getRange().appendChild(this.coloredRange.getColoredRange());
   this.range.getRange().appendChild(this.thumb.getThumb());
   this.thumb.getThumb().appendChild(this.thumbLabel.getThumbLabelContainer());
   this.container.appendChild(this.rangeLabel.getRangeLabel());
@@ -40,6 +40,17 @@ export class Slider {
  }
  getThumbLabel() {
   return this.thumbLabel;
+ }
+ getColoredRange() {
+  return this.coloredRange;
+ }
+ setWidthToColoredRange(value: number, isVertical: boolean | undefined) {
+  if (isVertical) {
+   this.coloredRange.getColoredRange().style.height = value + this.thumb.getThumb().offsetHeight / 2 + 'px';
+  }
+  else {
+   this.coloredRange.getColoredRange().style.width = value + this.thumb.getThumb().offsetWidth / 2 + 'px';
+  }
  }
  setValueToThumbLabel(value: number) {
   this.thumbLabel.setValueToLabel(value);
@@ -62,6 +73,7 @@ export class Slider {
  setVertical() {
   this.container.classList.add('fsd-slider_is_vertical');
   this.range.getRange().classList.add('fsd-slider_is_vertical');
+  this.coloredRange.getColoredRange().classList.add('fsd-slider__colored-range_is_vertical');
   this.rangeLabel.getRangeLabel().classList.add('fsd-slider__range-label_is_vertical');
   this.thumbLabel.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
  }

@@ -8,15 +8,21 @@
 .fsd-slider__range {
   background-color: green;
   height: 20px;
+  position: relative;
 }
 
 .fsd-slider__colored-range {
   background-color: purple;
   height: 20px;
+  position: absolute;
+}
+
+.fsd-slider__colored-range_is_vertical {
+  width: 20px;
 }
 
 .fsd-slider_is_vertical {
-  width: 30px;
+  width: 20px;
   height: 300px;
   flex-direction: row;
 }
@@ -68,4 +74,4 @@
   margin-top: 50px;
 }
 
-/*# sourceMappingURL=main.e519d3189a6d2e39f109.css.map*/
+/*# sourceMappingURL=main.2c214c24f76c70a93459.css.map*/

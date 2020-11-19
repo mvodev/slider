@@ -18,5 +18,5 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
  from: 3,
  isVertical: true,
  hideThumbLabel: false,
- isInterval:false,
+ isInterval: false,
 });
