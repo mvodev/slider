@@ -10,6 +10,11 @@
   height: 20px;
 }
 
+.fsd-slider__colored-range {
+  background-color: purple;
+  height: 20px;
+}
+
 .fsd-slider_is_vertical {
   width: 30px;
   height: 300px;
@@ -63,4 +68,4 @@
   margin-top: 50px;
 }
 
-/*# sourceMappingURL=main.8fa09e69610ff262a0bf.css.map*/
+/*# sourceMappingURL=main.e519d3189a6d2e39f109.css.map*/

@@ -23,9 +23,6 @@ export class View {
   }
  }
 
- reDrawView() {
-  this.slider.getThumb().style.left = this.model.getCurrPos() + 'px';
- }
  getSliderWidth() {
   return this.rangeWidth;
  }

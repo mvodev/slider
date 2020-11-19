@@ -11,10 +11,10 @@ export class Model {
   return this.settings;
  }
 
- setCurrPos(pos: number) {
-  this.settings.currentPos = pos;
+ setFrom(pos: number) {
+  this.settings.from = pos;
  }
- getCurrPos() {
-  return this.settings.currentPos + 'px';
+ getFrom() {
+  return this.settings.from + 'px';
  }
 }

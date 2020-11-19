@@ -12,7 +12,7 @@ export class Controller {
  initialize() {
   this.view.render();
   if (!this.model.getSettings().hideThumbLabel) {
-   this.setThumbToValue(this.model.getSettings().currentPos);
+   this.setThumbToValue(this.model.getSettings().from);
   }
   this.view.setValueToMinRange(this.model.getSettings().min);
   this.view.setValueToMaxRange(this.model.getSettings().max);
@@ -20,15 +20,15 @@ export class Controller {
  setThumbToValue(currentPos: number) {
   if (this.model.getSettings().isVertical) {
    let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
-   let valueToThumb = (heightRange / this.model.getSettings().max) * this.model.getSettings().currentPos;
+   let valueToThumb = (heightRange / this.model.getSettings().max) * this.model.getSettings().from;
    this.view.getThumb().style.top = '' + valueToThumb + 'px';
-   this.view.setValueToThumbLabel(this.model.getSettings().currentPos);
+   this.view.setValueToThumbLabel(this.model.getSettings().from);
   }
   else {
    let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
-   let valueToThumb = (widthRange / this.model.getSettings().max) * this.model.getSettings().currentPos;
+   let valueToThumb = (widthRange / this.model.getSettings().max) * this.model.getSettings().from;
    this.view.getThumb().style.left = '' + valueToThumb + 'px';
-   this.view.setValueToThumbLabel(this.model.getSettings().currentPos);
+   this.view.setValueToThumbLabel(this.model.getSettings().from);
   }
 
  }
@@ -45,13 +45,13 @@ export class Controller {
     let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
     let valueToThumbLabel = Math.floor(value / (heightRange / this.model.getSettings().max));
     this.view.setValueToThumbLabel(valueToThumbLabel);
-    this.model.getSettings().currentPos = valueToThumbLabel;
+    this.model.getSettings().from = valueToThumbLabel;
    }
    else {
     let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
     let valueToThumbLabel = Math.floor(value / (widthRange / this.model.getSettings().max));
     this.view.setValueToThumbLabel(valueToThumbLabel);
-    this.model.getSettings().currentPos = valueToThumbLabel;
+    this.model.getSettings().from = valueToThumbLabel;
    }
   }
  }

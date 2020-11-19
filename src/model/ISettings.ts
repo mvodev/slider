@@ -1,7 +1,8 @@
 export interface ISettings {
  min: number;
  max: number;
- currentPos: number;
+ from: number;
+ to?:number;
  currentPosMin?: number;
  currentPosMax?: number;
  isVertical?: boolean;

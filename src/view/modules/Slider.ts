@@ -2,6 +2,7 @@ import { Range } from './range';
 import { Thumb } from './thumb';
 import { ThumbLabel } from './thumbLabel';
 import { RangeLabel } from './rangeLabel';
+import { ColoredRange } from './coloredRange';
 export class Slider {
 
  private thumb: Thumb;
@@ -10,11 +11,13 @@ export class Slider {
  private rangeLabel: RangeLabel;
  private rootElem: HTMLDivElement;
  private container: HTMLDivElement;
+ private coloredRange: HTMLDivElement;
 
  constructor(rootElem: HTMLDivElement) {
   this.rootElem = rootElem;
   this.thumb = new Thumb();
   this.range = new Range();
+  this.coloredRange = new ColoredRange().getColoredRange();
   this.thumbLabel = new ThumbLabel(this.thumb.getThumb());
   this.rangeLabel = new RangeLabel();
   this.container = document.createElement('div');
@@ -23,6 +26,7 @@ export class Slider {
  render() {
   this.container.classList.add('fsd-slider');
   this.container.appendChild(this.range.getRange());
+  this.range.getRange().appendChild(this.coloredRange);
   this.range.getRange().appendChild(this.thumb.getThumb());
   this.thumb.getThumb().appendChild(this.thumbLabel.getThumbLabelContainer());
   this.container.appendChild(this.rangeLabel.getRangeLabel());

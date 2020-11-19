@@ -26,7 +26,7 @@ class Controller {
     this.view.render();
 
     if (!this.model.getSettings().hideThumbLabel) {
-      this.setThumbToValue(this.model.getSettings().currentPos);
+      this.setThumbToValue(this.model.getSettings().from);
     }
 
     this.view.setValueToMinRange(this.model.getSettings().min);
@@ -36,14 +36,14 @@ class Controller {
   setThumbToValue(currentPos) {
     if (this.model.getSettings().isVertical) {
       let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
-      let valueToThumb = heightRange / this.model.getSettings().max * this.model.getSettings().currentPos;
+      let valueToThumb = heightRange / this.model.getSettings().max * this.model.getSettings().from;
       this.view.getThumb().style.top = '' + valueToThumb + 'px';
-      this.view.setValueToThumbLabel(this.model.getSettings().currentPos);
+      this.view.setValueToThumbLabel(this.model.getSettings().from);
     } else {
       let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
-      let valueToThumb = widthRange / this.model.getSettings().max * this.model.getSettings().currentPos;
+      let valueToThumb = widthRange / this.model.getSettings().max * this.model.getSettings().from;
       this.view.getThumb().style.left = '' + valueToThumb + 'px';
-      this.view.setValueToThumbLabel(this.model.getSettings().currentPos);
+      this.view.setValueToThumbLabel(this.model.getSettings().from);
     }
   }
 
@@ -62,12 +62,12 @@ class Controller {
         let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
         let valueToThumbLabel = Math.floor(value / (heightRange / this.model.getSettings().max));
         this.view.setValueToThumbLabel(valueToThumbLabel);
-        this.model.getSettings().currentPos = valueToThumbLabel;
+        this.model.getSettings().from = valueToThumbLabel;
       } else {
         let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
         let valueToThumbLabel = Math.floor(value / (widthRange / this.model.getSettings().max));
         this.view.setValueToThumbLabel(valueToThumbLabel);
-        this.model.getSettings().currentPos = valueToThumbLabel;
+        this.model.getSettings().from = valueToThumbLabel;
       }
     }
   }
@@ -163,12 +163,12 @@ class Model {
     return this.settings;
   }
 
-  setCurrPos(pos) {
-    this.settings.currentPos = pos;
+  setFrom(pos) {
+    this.settings.from = pos;
   }
 
-  getCurrPos() {
-    return this.settings.currentPos + 'px';
+  getFrom() {
+    return this.settings.from + 'px';
   }
 
 }
@@ -210,10 +210,6 @@ class View {
     if (this.model.getSettings().isVertical) {
       this.slider.setVertical();
     }
-  }
-
-  reDrawView() {
-    this.slider.getThumb().style.left = this.model.getCurrPos() + 'px';
   }
 
   getSliderWidth() {
@@ -262,7 +258,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _thumb__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./thumb */ "./view/modules/thumb.ts");
 /* harmony import */ var _thumbLabel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./thumbLabel */ "./view/modules/thumbLabel.ts");
 /* harmony import */ var _rangeLabel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./rangeLabel */ "./view/modules/rangeLabel.ts");
+/* harmony import */ var _coloredRange__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./coloredRange */ "./view/modules/coloredRange.ts");
 ;
+
 
 
 
@@ -271,6 +269,7 @@ class Slider {
     this.rootElem = rootElem;
     this.thumb = new _thumb__WEBPACK_IMPORTED_MODULE_1__.Thumb();
     this.range = new _range__WEBPACK_IMPORTED_MODULE_0__.Range();
+    this.coloredRange = new _coloredRange__WEBPACK_IMPORTED_MODULE_4__.ColoredRange().getColoredRange();
     this.thumbLabel = new _thumbLabel__WEBPACK_IMPORTED_MODULE_2__.ThumbLabel(this.thumb.getThumb());
     this.rangeLabel = new _rangeLabel__WEBPACK_IMPORTED_MODULE_3__.RangeLabel();
     this.container = document.createElement('div');
@@ -279,6 +278,7 @@ class Slider {
   render() {
     this.container.classList.add('fsd-slider');
     this.container.appendChild(this.range.getRange());
+    this.range.getRange().appendChild(this.coloredRange);
     this.range.getRange().appendChild(this.thumb.getThumb());
     this.thumb.getThumb().appendChild(this.thumbLabel.getThumbLabelContainer());
     this.container.appendChild(this.rangeLabel.getRangeLabel());
@@ -326,6 +326,34 @@ class Slider {
     this.range.getRange().classList.add('fsd-slider_is_vertical');
     this.rangeLabel.getRangeLabel().classList.add('fsd-slider__range-label_is_vertical');
     this.thumbLabel.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
+  }
+
+}
+
+/***/ }),
+
+/***/ "./view/modules/coloredRange.ts":
+/*!**************************************!*\
+  !*** ./view/modules/coloredRange.ts ***!
+  \**************************************/
+/*! namespace exports */
+/*! export ColoredRange [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "ColoredRange": () => /* binding */ ColoredRange
+/* harmony export */ });
+class ColoredRange {
+  constructor() {
+    this.coloredRange = document.createElement('div');
+    this.coloredRange.classList.add('fsd-slider__colored-range');
+  }
+
+  getColoredRange() {
+    return this.coloredRange;
   }
 
 }
@@ -523,7 +551,7 @@ __webpack_require__.r(__webpack_exports__);
 $('.slider').fsdSlider(document.querySelector('.slider'), {
  min: 0,
  max: 10,
- currentPos: 3,
+ from: 3,
  isVertical: true,
  hideThumbLabel: false,
  isInterval:false,
@@ -688,4 +716,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.3c34cfe50593b64da88d.js.map
+//# sourceMappingURL=main.53568135450c68540cb0.js.map
