@@ -16,6 +16,6 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
  min: 0,
  max: 10,
  currentPos: 3,
- isVertical: false,
+ isVertical: true,
  hideThumbLabel: false,
 });

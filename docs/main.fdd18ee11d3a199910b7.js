@@ -34,10 +34,17 @@ class Controller {
   }
 
   setThumbToValue(currentPos) {
-    let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
-    let valueToThumb = widthRange / this.model.getSettings().max * this.model.getSettings().currentPos;
-    this.view.getThumb().style.left = '' + valueToThumb + 'px';
-    this.view.setValueToThumbLabel(this.model.getSettings().currentPos);
+    if (this.model.getSettings().isVertical) {
+      let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
+      let valueToThumb = heightRange / this.model.getSettings().max * this.model.getSettings().currentPos;
+      this.view.getThumb().style.top = '' + valueToThumb + 'px';
+      this.view.setValueToThumbLabel(this.model.getSettings().currentPos);
+    } else {
+      let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
+      let valueToThumb = widthRange / this.model.getSettings().max * this.model.getSettings().currentPos;
+      this.view.getThumb().style.left = '' + valueToThumb + 'px';
+      this.view.setValueToThumbLabel(this.model.getSettings().currentPos);
+    }
   }
 
   bindEvents() {
@@ -47,16 +54,24 @@ class Controller {
   start() {
     this.initialize();
     this.bindEvents();
-  } // setValueToThumb(value: number) {
-  //  if (!this.model.getSettings().hideThumbLabel) {
-  //   let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
-  //   let valueToThumbLabel =
-  //   Math.floor((widthRange / this.model.getSettings().max) * this.model.getSettings().currentPos);
-  //   this.model.getSettings().currentPos = valueToThumbLabel;
-  //   this.view.reDrawView();
-  //  }
-  // }
+  }
 
+  setValueToThumb(value) {
+    if (!this.model.getSettings().hideThumbLabel) {
+      if (this.model.getSettings().isVertical) {
+        let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
+        console.log(heightRange);
+        let valueToThumbLabel = Math.floor(value / (heightRange / this.model.getSettings().max));
+        this.view.setValueToThumbLabel(valueToThumbLabel);
+        this.model.getSettings().currentPos = valueToThumbLabel;
+      } else {
+        let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
+        let valueToThumbLabel = Math.floor(value / (widthRange / this.model.getSettings().max));
+        this.view.setValueToThumbLabel(valueToThumbLabel);
+        this.model.getSettings().currentPos = valueToThumbLabel;
+      }
+    }
+  }
 
   mouseDownHandler(e) {
     e.preventDefault();
@@ -67,23 +82,23 @@ class Controller {
       document.addEventListener('mouseup', onMouseUp);
       let sliderRange = this.view.getRange();
       let thumb = this.view.getThumb();
-      let model = this.model;
-      let view = this.view;
+      let that = this;
 
       function onMouseMove(event) {
-        let top = event.clientY - shiftY - sliderRange.getBoundingClientRect().top;
+        let newTop = event.clientY - shiftY - sliderRange.getBoundingClientRect().top;
 
-        if (top < 0) {
-          top = 0;
+        if (newTop < 0) {
+          newTop = 0;
         }
 
         let bottom = sliderRange.offsetHeight - thumb.offsetHeight;
 
-        if (top > bottom) {
-          top = bottom;
+        if (newTop > bottom) {
+          newTop = bottom;
         }
 
-        thumb.style.top = top + 'px';
+        thumb.style.top = newTop + 'px';
+        that.setValueToThumb(newTop);
       }
 
       function onMouseUp() {
@@ -92,13 +107,10 @@ class Controller {
       }
     } else {
       let shiftX = e.clientX - this.view.getThumb().getBoundingClientRect().left;
-      console.log('e.clientX=' + e.clientX + ' shiftX=' + shiftX + ' bound=' + this.view.getThumb().getBoundingClientRect().left);
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
       let sliderRange = this.view.getRange();
       let thumb = this.view.getThumb();
-      let model = this.model;
-      let view = this.view;
       let that = this;
 
       function onMouseMove(e) {
@@ -114,9 +126,8 @@ class Controller {
           newLeft = rightEdge;
         }
 
-        thumb.style.left = newLeft + 'px'; //that.setValueToThumb(newLeft);
-
-        view.reDrawView();
+        thumb.style.left = newLeft + 'px';
+        that.setValueToThumb(newLeft); //view.reDrawView();
       }
 
       function onMouseUp() {
@@ -513,7 +524,7 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
  min: 0,
  max: 10,
  currentPos: 3,
- isVertical: false,
+ isVertical: true,
  hideThumbLabel: false,
 });
 
@@ -676,4 +687,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.3041506304ff55ff3808.js.map
+//# sourceMappingURL=main.fdd18ee11d3a199910b7.js.map

@@ -24,7 +24,7 @@ export class View {
  }
 
  reDrawView() {
-  this.slider.getThumb().style.left = this.model.getCurrPos()+'px';
+  this.slider.getThumb().style.left = this.model.getCurrPos() + 'px';
  }
  getSliderWidth() {
   return this.rangeWidth;
@@ -38,7 +38,7 @@ export class View {
  setValueToMaxRange(value: number) {
   this.slider.setMaxRange(value);
  }
- 
+
  getRange() {
   return this.slider.getRange();
  }
