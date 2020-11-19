@@ -9,4 +9,5 @@ export interface ISettings {
  currentMin?: number;
  currentMax?: number;
  hideThumbLabel?: boolean;
+ isInterval?: false;
 }

@@ -60,7 +60,6 @@ class Controller {
     if (!this.model.getSettings().hideThumbLabel) {
       if (this.model.getSettings().isVertical) {
         let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
-        console.log(heightRange);
         let valueToThumbLabel = Math.floor(value / (heightRange / this.model.getSettings().max));
         this.view.setValueToThumbLabel(valueToThumbLabel);
         this.model.getSettings().currentPos = valueToThumbLabel;
@@ -326,6 +325,7 @@ class Slider {
     this.container.classList.add('fsd-slider_is_vertical');
     this.range.getRange().classList.add('fsd-slider_is_vertical');
     this.rangeLabel.getRangeLabel().classList.add('fsd-slider__range-label_is_vertical');
+    this.thumbLabel.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
   }
 
 }
@@ -526,6 +526,7 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
  currentPos: 3,
  isVertical: true,
  hideThumbLabel: false,
+ isInterval:false,
 });
 
 /***/ })
@@ -687,4 +688,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.fdd18ee11d3a199910b7.js.map
+//# sourceMappingURL=main.3c34cfe50593b64da88d.js.map

@@ -37,6 +37,11 @@
   border-radius: 3px;
 }
 
+.fsd-slider__thumb-label_is_vertical {
+  top: 0px;
+  left: 40px;
+}
+
 .fsd-slider__thumb-label-value {
   font-size: 16px;
   font-family: inherit;
@@ -58,4 +63,4 @@
   margin-top: 50px;
 }
 
-/*# sourceMappingURL=main.5ca4a23763fb5c427e41.css.map*/
+/*# sourceMappingURL=main.8fa09e69610ff262a0bf.css.map*/

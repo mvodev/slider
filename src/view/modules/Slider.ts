@@ -59,5 +59,6 @@ export class Slider {
   this.container.classList.add('fsd-slider_is_vertical');
   this.range.getRange().classList.add('fsd-slider_is_vertical');
   this.rangeLabel.getRangeLabel().classList.add('fsd-slider__range-label_is_vertical');
+  this.thumbLabel.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
  }
 }

@@ -18,4 +18,5 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
  currentPos: 3,
  isVertical: true,
  hideThumbLabel: false,
+ isInterval:false,
 });
