@@ -15,7 +15,6 @@ export class View {
 
  render() {
   this.slider.render();
-  this.invalidateWidth();
   if (this.model.getSettings().hideThumbLabel) {
    this.slider.getThumbLabel().hideLabel();
   }
@@ -23,12 +22,9 @@ export class View {
    this.slider.setVertical();
   }
  }
- invalidateWidth() {
-  this.rangeWidth = this.slider.getRange().clientWidth;
- }
+
  reDrawView() {
-  this.slider.getThumb().style.left = this.model.getCurrPos();
-  this.invalidateWidth();
+  this.slider.getThumb().style.left = this.model.getCurrPos()+'px';
  }
  getSliderWidth() {
   return this.rangeWidth;
@@ -42,6 +38,7 @@ export class View {
  setValueToMaxRange(value: number) {
   this.slider.setMaxRange(value);
  }
+ 
  getRange() {
   return this.slider.getRange();
  }

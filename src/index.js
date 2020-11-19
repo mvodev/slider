@@ -13,9 +13,9 @@ import { Controller } from './controller/Controller.ts';
  };
 })(jQuery);
 $('.slider').fsdSlider(document.querySelector('.slider'), {
- min: '0',
- max: '10',
- currentPos: '5',
- isVertical: true,
+ min: 0,
+ max: 10,
+ currentPos: 3,
+ isVertical: false,
  hideThumbLabel: false,
 });

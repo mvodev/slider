@@ -24,9 +24,20 @@ class Controller {
 
   initialize() {
     this.view.render();
-    this.view.setValueToThumbLabel(this.model.getSettings().currentPos);
+
+    if (!this.model.getSettings().hideThumbLabel) {
+      this.setThumbToValue(this.model.getSettings().currentPos);
+    }
+
     this.view.setValueToMinRange(this.model.getSettings().min);
     this.view.setValueToMaxRange(this.model.getSettings().max);
+  }
+
+  setThumbToValue(currentPos) {
+    let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
+    let valueToThumb = widthRange / this.model.getSettings().max * this.model.getSettings().currentPos;
+    this.view.getThumb().style.left = '' + valueToThumb + 'px';
+    this.view.setValueToThumbLabel(this.model.getSettings().currentPos);
   }
 
   bindEvents() {
@@ -36,7 +47,16 @@ class Controller {
   start() {
     this.initialize();
     this.bindEvents();
-  }
+  } // setValueToThumb(value: number) {
+  //  if (!this.model.getSettings().hideThumbLabel) {
+  //   let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
+  //   let valueToThumbLabel =
+  //   Math.floor((widthRange / this.model.getSettings().max) * this.model.getSettings().currentPos);
+  //   this.model.getSettings().currentPos = valueToThumbLabel;
+  //   this.view.reDrawView();
+  //  }
+  // }
+
 
   mouseDownHandler(e) {
     e.preventDefault();
@@ -72,16 +92,17 @@ class Controller {
       }
     } else {
       let shiftX = e.clientX - this.view.getThumb().getBoundingClientRect().left;
+      console.log('e.clientX=' + e.clientX + ' shiftX=' + shiftX + ' bound=' + this.view.getThumb().getBoundingClientRect().left);
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
       let sliderRange = this.view.getRange();
       let thumb = this.view.getThumb();
       let model = this.model;
       let view = this.view;
+      let that = this;
 
       function onMouseMove(e) {
         let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
-        console.log(e.clientX + ' ' + shiftX + ' ' + sliderRange.getBoundingClientRect().left);
 
         if (newLeft < 0) {
           newLeft = 0;
@@ -93,7 +114,8 @@ class Controller {
           newLeft = rightEdge;
         }
 
-        model.setCurrPos(newLeft);
+        thumb.style.left = newLeft + 'px'; //that.setValueToThumb(newLeft);
+
         view.reDrawView();
       }
 
@@ -125,7 +147,6 @@ __webpack_require__.r(__webpack_exports__);
 class Model {
   constructor(settings) {
     this.settings = Object.assign({}, settings);
-    console.log(this.settings);
   }
 
   getSettings() {
@@ -171,7 +192,6 @@ class View {
 
   render() {
     this.slider.render();
-    this.invalidateWidth();
 
     if (this.model.getSettings().hideThumbLabel) {
       this.slider.getThumbLabel().hideLabel();
@@ -182,13 +202,8 @@ class View {
     }
   }
 
-  invalidateWidth() {
-    this.rangeWidth = this.slider.getRange().clientWidth;
-  }
-
   reDrawView() {
-    this.slider.getThumb().style.left = this.model.getCurrPos();
-    this.invalidateWidth();
+    this.slider.getThumb().style.left = this.model.getCurrPos() + 'px';
   }
 
   getSliderWidth() {
@@ -495,10 +510,10 @@ __webpack_require__.r(__webpack_exports__);
  };
 })(jQuery);
 $('.slider').fsdSlider(document.querySelector('.slider'), {
- min: '0',
- max: '10',
- currentPos: '5',
- isVertical: true,
+ min: 0,
+ max: 10,
+ currentPos: 3,
+ isVertical: false,
  hideThumbLabel: false,
 });
 
@@ -661,4 +676,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.dbe0ee2de9c915220532.js.map
+//# sourceMappingURL=main.3041506304ff55ff3808.js.map
