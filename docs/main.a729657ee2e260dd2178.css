@@ -1,6 +1,8 @@
 .fsd-slider {
   width: 300px;
   height: 100px;
+  display: flex;
+  flex-direction: column;
 }
 
 .fsd-slider__range {
@@ -11,6 +13,7 @@
 .fsd-slider_is_vertical {
   width: 30px;
   height: 300px;
+  flex-direction: row;
 }
 
 .fsd-slider__thumb {
@@ -44,10 +47,15 @@
 .fsd-slider__range-label {
   display: flex;
   justify-content: space-between;
+  flex-direction: row;
+}
+
+.fsd-slider__range-label_is_vertical {
+  flex-direction: column;
 }
 
 .slider {
   margin-top: 50px;
 }
 
-/*# sourceMappingURL=main.226b9af8bad18c3d7096.css.map*/
+/*# sourceMappingURL=main.a729657ee2e260dd2178.css.map*/

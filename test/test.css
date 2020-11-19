@@ -7,8 +7,9 @@
  position: relative;
  background-color: indigo;
  height: 30px;
- width: 15px;
+ width: 30px;
  left: 10px;
  top:-5px;
  cursor: pointer;
+ border-radius: 50%;
 }

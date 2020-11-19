@@ -58,5 +58,6 @@ export class Slider {
  setVertical() {
   this.container.classList.add('fsd-slider_is_vertical');
   this.range.getRange().classList.add('fsd-slider_is_vertical');
+  this.rangeLabel.getRangeLabel().classList.add('fsd-slider__range-label_is_vertical');
  }
 }

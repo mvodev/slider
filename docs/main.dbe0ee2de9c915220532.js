@@ -126,7 +126,6 @@ class Model {
   constructor(settings) {
     this.settings = Object.assign({}, settings);
     console.log(this.settings);
-    this.currentPos = 0;
   }
 
   getSettings() {
@@ -134,11 +133,11 @@ class Model {
   }
 
   setCurrPos(pos) {
-    this.currentPos = pos;
+    this.settings.currentPos = pos;
   }
 
   getCurrPos() {
-    return this.currentPos + 'px';
+    return this.settings.currentPos + 'px';
   }
 
 }
@@ -300,6 +299,7 @@ class Slider {
   setVertical() {
     this.container.classList.add('fsd-slider_is_vertical');
     this.range.getRange().classList.add('fsd-slider_is_vertical');
+    this.rangeLabel.getRangeLabel().classList.add('fsd-slider__range-label_is_vertical');
   }
 
 }
@@ -661,4 +661,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.ae702c42fd132a6c52a6.js.map
+//# sourceMappingURL=main.dbe0ee2de9c915220532.js.map
