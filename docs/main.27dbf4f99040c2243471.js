@@ -26,10 +26,10 @@ class Controller {
     this.view.render();
 
     if (!this.model.getSettings().hideThumbLabel) {
-      this.setThumbFromToValue(this.model.getSettings().from);
+      this.setThumbToValue(this.model.getSettings().from, 'from');
 
       if (this.model.getSettings().isRange) {
-        this.setThumbToToValue(this.model.getSettings().to);
+        this.setThumbToValue(this.model.getSettings().to, 'to');
       }
     }
 
@@ -37,35 +37,35 @@ class Controller {
     this.view.setValueToMaxRange(this.model.getSettings().max);
   }
 
-  setThumbToToValue(currentPos) {
-    if (this.model.getSettings().isVertical) {
-      let heightRange = this.view.getRange().offsetHeight - this.view.getThumbTo().offsetHeight;
-      let valueToThumb = heightRange / this.model.getSettings().max * this.model.getSettings().from;
-      this.view.setColoredRange(valueToThumb);
-      this.view.getThumbTo().style.top = '' + valueToThumb + 'px';
-      this.view.setValueToThumbLabelTo(this.model.getSettings().from);
+  setThumbToValue(currentPos, type) {
+    if (type === 'from') {
+      if (this.model.getSettings().isVertical) {
+        let heightRange = this.view.getRange().offsetHeight - this.view.getThumbFrom().offsetHeight;
+        let valueToThumb = heightRange / (this.model.getSettings().max - this.model.getSettings().min) * this.model.getSettings().from;
+        this.view.setColoredRange(valueToThumb);
+        this.view.getThumbFrom().style.top = '' + valueToThumb + 'px';
+        this.view.setValueToThumbLabelFrom(this.model.getSettings().from);
+      } else {
+        let widthRange = this.view.getRange().offsetWidth - this.view.getThumbFrom().offsetWidth;
+        let valueToThumb = widthRange / (this.model.getSettings().max - this.model.getSettings().min) * this.model.getSettings().from;
+        this.view.setColoredRange(valueToThumb);
+        this.view.getThumbFrom().style.left = '' + valueToThumb + 'px';
+        this.view.setValueToThumbLabelFrom(this.model.getSettings().from);
+      }
     } else {
-      let widthRange = this.view.getRange().offsetWidth - this.view.getThumbTo().offsetWidth;
-      let valueToThumb = widthRange / this.model.getSettings().max * this.model.getSettings().from;
-      this.view.setColoredRange(valueToThumb);
-      this.view.getThumbTo().style.left = '' + valueToThumb + 'px';
-      this.view.setValueToThumbLabelTo(this.model.getSettings().from);
-    }
-  }
-
-  setThumbFromToValue(currentPos) {
-    if (this.model.getSettings().isVertical) {
-      let heightRange = this.view.getRange().offsetHeight - this.view.getThumbFrom().offsetHeight;
-      let valueToThumb = heightRange / this.model.getSettings().max * this.model.getSettings().from;
-      this.view.setColoredRange(valueToThumb);
-      this.view.getThumbFrom().style.top = '' + valueToThumb + 'px';
-      this.view.setValueToThumbLabelFrom(this.model.getSettings().from);
-    } else {
-      let widthRange = this.view.getRange().offsetWidth - this.view.getThumbFrom().offsetWidth;
-      let valueToThumb = widthRange / this.model.getSettings().max * this.model.getSettings().from;
-      this.view.setColoredRange(valueToThumb);
-      this.view.getThumbFrom().style.left = '' + valueToThumb + 'px';
-      this.view.setValueToThumbLabelFrom(this.model.getSettings().from);
+      if (this.model.getSettings().isVertical) {
+        let heightRange = this.view.getRange().offsetHeight - this.view.getThumbTo().offsetHeight;
+        let valueToThumb = heightRange / (this.model.getSettings().max - this.model.getSettings().min) * this.model.getSettings().to;
+        this.view.setColoredRange(valueToThumb);
+        this.view.getThumbTo().style.top = '' + valueToThumb + 'px';
+        this.view.setValueToThumbLabelTo(this.model.getSettings().from);
+      } else {
+        let widthRange = this.view.getRange().offsetWidth - this.view.getThumbTo().offsetWidth;
+        let valueToThumb = widthRange / (this.model.getSettings().max - this.model.getSettings().min) * this.model.getSettings().to;
+        this.view.setColoredRange(valueToThumb);
+        this.view.getThumbTo().style.left = '' + valueToThumb + 'px';
+        this.view.setValueToThumbLabelTo(this.model.getSettings().to);
+      }
     }
   }
 
@@ -220,7 +220,7 @@ class View {
   constructor(model, root) {
     this.model = model;
     this.rootElem = root;
-    this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem);
+    this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.model.getSettings().isRange);
     this.rangeWidth = 0;
   }
 
@@ -304,12 +304,12 @@ class Slider {
   constructor(rootElem, isRange) {
     this.isRange = isRange;
     this.rootElem = rootElem;
-    this.thumbTo = new _thumb__WEBPACK_IMPORTED_MODULE_1__.Thumb();
+    this.thumbTo = new _thumb__WEBPACK_IMPORTED_MODULE_1__.Thumb('fsd-slider__thumb-to');
     this.thumbLabelTo = new _thumbLabel__WEBPACK_IMPORTED_MODULE_2__.ThumbLabel(this.thumbTo.getThumb());
-    this.thumbFrom = new _thumb__WEBPACK_IMPORTED_MODULE_1__.Thumb();
+    this.thumbFrom = new _thumb__WEBPACK_IMPORTED_MODULE_1__.Thumb('fsd-slider__thumb-from');
+    this.thumbLabelFrom = new _thumbLabel__WEBPACK_IMPORTED_MODULE_2__.ThumbLabel(this.thumbFrom.getThumb());
     this.range = new _range__WEBPACK_IMPORTED_MODULE_0__.Range();
     this.coloredRange = new _coloredRange__WEBPACK_IMPORTED_MODULE_4__.ColoredRange();
-    this.thumbLabelFrom = new _thumbLabel__WEBPACK_IMPORTED_MODULE_2__.ThumbLabel(this.thumbFrom.getThumb());
     this.rangeLabel = new _rangeLabel__WEBPACK_IMPORTED_MODULE_3__.RangeLabel();
     this.container = document.createElement('div');
   }
@@ -322,6 +322,7 @@ class Slider {
     this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
 
     if (this.isRange) {
+      console.log('slider class inside if is range');
       this.thumbTo.getThumb().appendChild(this.thumbLabelTo?.getThumbLabelContainer());
       this.range.getRange().appendChild(this.thumbTo.getThumb());
     }
@@ -502,9 +503,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Thumb": () => /* binding */ Thumb
 /* harmony export */ });
 class Thumb {
-  constructor() {
+  constructor(className) {
     let div = document.createElement('div');
-    div.classList.add('fsd-slider__thumb');
+    div.classList.add(className);
     this.thumb = div;
   }
 
@@ -610,9 +611,10 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
  min: 0,
  max: 10,
  from: 3,
+ to: 5,
  isVertical: false,
  hideThumbLabel: false,
- isInterval: false,
+ isRange: true,
 });
 
 /***/ })
@@ -774,4 +776,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.46afe2e8d30cdfca86f6.js.map
+//# sourceMappingURL=main.27dbf4f99040c2243471.js.map

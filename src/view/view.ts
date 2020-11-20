@@ -10,7 +10,7 @@ export class View {
  constructor(model: Model, root: HTMLDivElement) {
   this.model = model;
   this.rootElem = root;
-  this.slider = new Slider(this.rootElem);
+  this.slider = new Slider(this.rootElem,this.model.getSettings().isRange);
   this.rangeWidth = 0;
  }
 

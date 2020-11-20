@@ -16,15 +16,15 @@ export class Slider {
  private coloredRange: ColoredRange;
  private isRange: boolean | undefined;
 
- constructor(rootElem: HTMLDivElement, isRange?: boolean | undefined) {
+ constructor(rootElem: HTMLDivElement, isRange: boolean | undefined) {
   this.isRange = isRange;
   this.rootElem = rootElem;
-  this.thumbTo = new Thumb();
+  this.thumbTo = new Thumb('fsd-slider__thumb-to');
   this.thumbLabelTo = new ThumbLabel(this.thumbTo.getThumb());
-  this.thumbFrom = new Thumb();
+  this.thumbFrom = new Thumb('fsd-slider__thumb-from');
+  this.thumbLabelFrom = new ThumbLabel(this.thumbFrom.getThumb());
   this.range = new Range();
   this.coloredRange = new ColoredRange();
-  this.thumbLabelFrom = new ThumbLabel(this.thumbFrom.getThumb());
   this.rangeLabel = new RangeLabel();
   this.container = document.createElement('div');
  }
@@ -36,6 +36,7 @@ export class Slider {
   this.range.getRange().appendChild(this.thumbFrom.getThumb());
   this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
   if (this.isRange) {
+   console.log('slider class inside if is range');
    this.thumbTo.getThumb().appendChild(this.thumbLabelTo?.getThumbLabelContainer());
    this.range.getRange().appendChild(this.thumbTo.getThumb());
   }

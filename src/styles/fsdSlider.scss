@@ -24,7 +24,8 @@
  height: 300px;
  flex-direction: row;
 }
-.fsd-slider__thumb{
+.fsd-slider__thumb-from,
+.fsd-slider__thumb-to{
  position: absolute;
  background-color: indigo;
  height: 30px;
@@ -32,6 +33,9 @@
  top:-5px;
  cursor: pointer;
  border-radius: 50%;
+}
+.fsd-slider__thumb-to{
+ z-index: 1;
 }
 .fsd-slider__thumb-label{
  position: relative;

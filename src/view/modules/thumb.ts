@@ -1,8 +1,8 @@
 export class Thumb {
  private thumb: HTMLDivElement;
- constructor() {
+ constructor(className:string) {
   let div = document.createElement('div');
-  div.classList.add('fsd-slider__thumb');
+  div.classList.add(className);
   this.thumb = div;
  }
  getThumb(): HTMLDivElement {
