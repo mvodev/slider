@@ -21,14 +21,14 @@ export class Controller {
   if (this.model.getSettings().isVertical) {
    let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
    let valueToThumb = (heightRange / this.model.getSettings().max) * this.model.getSettings().from;
-   this.view.setWidthToColoredRange(valueToThumb);
+   this.view.setColoredRange(valueToThumb);
    this.view.getThumb().style.top = '' + valueToThumb + 'px';
    this.view.setValueToThumbLabel(this.model.getSettings().from);
   }
   else {
    let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
    let valueToThumb = (widthRange / this.model.getSettings().max) * this.model.getSettings().from;
-   this.view.setWidthToColoredRange(valueToThumb);
+   this.view.setColoredRange(valueToThumb);
    this.view.getThumb().style.left = '' + valueToThumb + 'px';
    this.view.setValueToThumbLabel(this.model.getSettings().from);
   }
@@ -47,14 +47,14 @@ export class Controller {
     let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
     let valueToThumbLabel = Math.floor(value / (heightRange / this.model.getSettings().max));
     this.view.setValueToThumbLabel(valueToThumbLabel);
-    this.view.setWidthToColoredRange(value);
+    this.view.setColoredRange(value);
     this.model.getSettings().from = valueToThumbLabel;
    }
    else {
     let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
-    let valueToThumbLabel = Math.floor(value / (widthRange / this.model.getSettings().max));
+    let valueToThumbLabel = Math.floor(value / (widthRange / (this.model.getSettings().max - this.model.getSettings().min)));
     this.view.setValueToThumbLabel(valueToThumbLabel);
-    this.view.setWidthToColoredRange(value);
+    this.view.setColoredRange(value);
     this.model.getSettings().from = valueToThumbLabel;
    }
   }
@@ -74,7 +74,7 @@ export class Controller {
     if (newTop < 0) {
      newTop = 0;
     }
-    let bottom = sliderRange.offsetHeight - thumb.offsetHeight;
+    let bottom = sliderRange.offsetHeight - thumb.offsetHeight / 2;
     if (newTop > bottom) {
      newTop = bottom;
     }
@@ -98,16 +98,15 @@ export class Controller {
 
    function onMouseMove(e: MouseEvent) {
     let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
-    if (newLeft < 0) {
-     newLeft = 0;
+    if (newLeft < -thumb.offsetWidth/2) {
+     newLeft = -thumb.offsetWidth / 2;
     }
-    let rightEdge = sliderRange.offsetWidth - thumb.offsetWidth;
+    let rightEdge = sliderRange.offsetWidth - thumb.offsetWidth / 2;
     if (newLeft > rightEdge) {
      newLeft = rightEdge;
     }
     thumb.style.left = newLeft + 'px';
-    that.setValueToThumb(newLeft);
-    //view.reDrawView();
+    that.setValueToThumb(newLeft<0 ? 0 : newLeft);
    }
    function onMouseUp() {
     document.removeEventListener('mouseup', onMouseUp);

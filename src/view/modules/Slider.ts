@@ -46,10 +46,10 @@ export class Slider {
  }
  setWidthToColoredRange(value: number, isVertical: boolean | undefined) {
   if (isVertical) {
-   this.coloredRange.getColoredRange().style.height = value + this.thumb.getThumb().offsetHeight / 2 + 'px';
+   this.coloredRange.getColoredRange().style.height = value + this.thumb.getThumb().offsetHeight / 4 + 'px';
   }
   else {
-   this.coloredRange.getColoredRange().style.width = value + this.thumb.getThumb().offsetWidth / 2 + 'px';
+   this.coloredRange.getColoredRange().style.width = value + this.thumb.getThumb().offsetWidth / 4 + 'px';
   }
  }
  setValueToThumbLabel(value: number) {

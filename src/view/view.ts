@@ -42,7 +42,7 @@ export class View {
  getThumb() {
   return this.slider.getThumb();
  }
- setWidthToColoredRange(value: number) {
+ setColoredRange(value: number) {
   this.slider.setWidthToColoredRange(value,this.model.getSettings().isVertical);
  }
 }

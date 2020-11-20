@@ -37,13 +37,13 @@ class Controller {
     if (this.model.getSettings().isVertical) {
       let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
       let valueToThumb = heightRange / this.model.getSettings().max * this.model.getSettings().from;
-      this.view.setWidthToColoredRange(valueToThumb);
+      this.view.setColoredRange(valueToThumb);
       this.view.getThumb().style.top = '' + valueToThumb + 'px';
       this.view.setValueToThumbLabel(this.model.getSettings().from);
     } else {
       let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
       let valueToThumb = widthRange / this.model.getSettings().max * this.model.getSettings().from;
-      this.view.setWidthToColoredRange(valueToThumb);
+      this.view.setColoredRange(valueToThumb);
       this.view.getThumb().style.left = '' + valueToThumb + 'px';
       this.view.setValueToThumbLabel(this.model.getSettings().from);
     }
@@ -64,13 +64,13 @@ class Controller {
         let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
         let valueToThumbLabel = Math.floor(value / (heightRange / this.model.getSettings().max));
         this.view.setValueToThumbLabel(valueToThumbLabel);
-        this.view.setWidthToColoredRange(value);
+        this.view.setColoredRange(value);
         this.model.getSettings().from = valueToThumbLabel;
       } else {
         let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
-        let valueToThumbLabel = Math.floor(value / (widthRange / this.model.getSettings().max));
+        let valueToThumbLabel = Math.floor(value / (widthRange / (this.model.getSettings().max - this.model.getSettings().min)));
         this.view.setValueToThumbLabel(valueToThumbLabel);
-        this.view.setWidthToColoredRange(value);
+        this.view.setColoredRange(value);
         this.model.getSettings().from = valueToThumbLabel;
       }
     }
@@ -94,7 +94,7 @@ class Controller {
           newTop = 0;
         }
 
-        let bottom = sliderRange.offsetHeight - thumb.offsetHeight;
+        let bottom = sliderRange.offsetHeight - thumb.offsetHeight / 2;
 
         if (newTop > bottom) {
           newTop = bottom;
@@ -119,18 +119,18 @@ class Controller {
       function onMouseMove(e) {
         let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
 
-        if (newLeft < 0) {
-          newLeft = 0;
+        if (newLeft < -thumb.offsetWidth / 2) {
+          newLeft = -thumb.offsetWidth / 2;
         }
 
-        let rightEdge = sliderRange.offsetWidth - thumb.offsetWidth;
+        let rightEdge = sliderRange.offsetWidth - thumb.offsetWidth / 2;
 
         if (newLeft > rightEdge) {
           newLeft = rightEdge;
         }
 
         thumb.style.left = newLeft + 'px';
-        that.setValueToThumb(newLeft); //view.reDrawView();
+        that.setValueToThumb(newLeft < 0 ? 0 : newLeft);
       }
 
       function onMouseUp() {
@@ -240,7 +240,7 @@ class View {
     return this.slider.getThumb();
   }
 
-  setWidthToColoredRange(value) {
+  setColoredRange(value) {
     this.slider.setWidthToColoredRange(value, this.model.getSettings().isVertical);
   }
 
@@ -311,9 +311,9 @@ class Slider {
 
   setWidthToColoredRange(value, isVertical) {
     if (isVertical) {
-      this.coloredRange.getColoredRange().style.height = value + this.thumb.getThumb().offsetHeight / 2 + 'px';
+      this.coloredRange.getColoredRange().style.height = value + this.thumb.getThumb().offsetHeight / 4 + 'px';
     } else {
-      this.coloredRange.getColoredRange().style.width = value + this.thumb.getThumb().offsetWidth / 2 + 'px';
+      this.coloredRange.getColoredRange().style.width = value + this.thumb.getThumb().offsetWidth / 4 + 'px';
     }
   }
 
@@ -573,7 +573,7 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
  min: 0,
  max: 10,
  from: 3,
- isVertical: true,
+ isVertical: false,
  hideThumbLabel: false,
  isInterval: false,
 });
@@ -737,4 +737,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.bbff52345773c0c5d9f7.js.map
+//# sourceMappingURL=main.56c0abccda29bd0bb75a.js.map

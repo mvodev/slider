@@ -8,14 +8,16 @@
  background-color: green;
  height: 20px;
  position: relative;
+ border-radius: 4px;
 }
 .fsd-slider__colored-range{
  background-color: purple;
- height: 20px;
+ height: inherit;
  position: absolute;
+ border-radius: 4px;
 }
 .fsd-slider__colored-range_is_vertical{
- width: 20px;
+ width: inherit;
 }
 .fsd-slider_is_vertical{
  width: 20px;
@@ -23,11 +25,10 @@
  flex-direction: row;
 }
 .fsd-slider__thumb{
- position: relative;
+ position: absolute;
  background-color: indigo;
  height: 30px;
  width: 30px;
- left: 10px;
  top:-5px;
  cursor: pointer;
  border-radius: 50%;
