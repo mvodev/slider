@@ -3,12 +3,9 @@ export interface ISettings {
  max: number;
  from: number;
  to?: number;
- currentPosMin?: number;
- currentPosMax?: number;
  isVertical?: boolean;
  isRange?: boolean;
- currentMin?: number;
- currentMax?: number;
+ currentFrom?: number;
+ currentTo?: number;
  hideThumbLabel?: boolean;
- isInterval?: false;
 }

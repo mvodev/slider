@@ -1,6 +1,7 @@
 import { Model } from '../model/Model';
 import { Slider } from './modules/Slider';
 export class View {
+
  private slider: Slider;
  private model: Model;
  private rootElem: HTMLDivElement;
@@ -16,7 +17,7 @@ export class View {
  render() {
   this.slider.render();
   if (this.model.getSettings().hideThumbLabel) {
-   this.slider.getThumbLabel().hideLabel();
+   this.slider.getThumbLabelFrom().hideLabel();
   }
   if (this.model.getSettings().isVertical) {
    this.slider.setVertical();
@@ -26,8 +27,8 @@ export class View {
  getSliderWidth() {
   return this.rangeWidth;
  }
- setValueToThumbLabel(value: number) {
-  this.slider.setValueToLabel(value);
+ setValueToThumbLabelFrom(value: number) {
+  this.slider.setValueToLabelThumbFrom(value);
  }
  setValueToMinRange(value: number) {
   this.slider.setMinRange(value);
@@ -39,8 +40,14 @@ export class View {
  getRange() {
   return this.slider.getRange();
  }
- getThumb() {
-  return this.slider.getThumb();
+ getThumbFrom() {
+  return this.slider.getThumbFrom();
+ }
+ setValueToThumbLabelTo(value: number) {
+  this.slider.setValueToLabelThumbTo(value);
+ }
+ getThumbTo() {
+  return this.slider.getThumbTo();
  }
  setColoredRange(value: number) {
   this.slider.setWidthToColoredRange(value,this.model.getSettings().isVertical);

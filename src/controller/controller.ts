@@ -12,30 +12,49 @@ export class Controller {
  initialize() {
   this.view.render();
   if (!this.model.getSettings().hideThumbLabel) {
-   this.setThumbToValue(this.model.getSettings().from);
+   this.setThumbFromToValue(this.model.getSettings().from);
+   if(this.model.getSettings().isRange){
+    this.setThumbToToValue(this.model.getSettings().to);
+   }
   }
   this.view.setValueToMinRange(this.model.getSettings().min);
   this.view.setValueToMaxRange(this.model.getSettings().max);
  }
- setThumbToValue(currentPos: number) {
+ setThumbToToValue(currentPos: number|undefined) {
   if (this.model.getSettings().isVertical) {
-   let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
+   let heightRange = this.view.getRange().offsetHeight - this.view.getThumbTo().offsetHeight;
    let valueToThumb = (heightRange / this.model.getSettings().max) * this.model.getSettings().from;
    this.view.setColoredRange(valueToThumb);
-   this.view.getThumb().style.top = '' + valueToThumb + 'px';
-   this.view.setValueToThumbLabel(this.model.getSettings().from);
+   this.view.getThumbTo().style.top = '' + valueToThumb + 'px';
+   this.view.setValueToThumbLabelTo(this.model.getSettings().from);
   }
   else {
-   let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
+   let widthRange = this.view.getRange().offsetWidth - this.view.getThumbTo().offsetWidth;
    let valueToThumb = (widthRange / this.model.getSettings().max) * this.model.getSettings().from;
    this.view.setColoredRange(valueToThumb);
-   this.view.getThumb().style.left = '' + valueToThumb + 'px';
-   this.view.setValueToThumbLabel(this.model.getSettings().from);
+   this.view.getThumbTo().style.left = '' + valueToThumb + 'px';
+   this.view.setValueToThumbLabelTo(this.model.getSettings().from);
+  }
+ }
+ setThumbFromToValue(currentPos: number) {
+  if (this.model.getSettings().isVertical) {
+   let heightRange = this.view.getRange().offsetHeight - this.view.getThumbFrom().offsetHeight;
+   let valueToThumb = (heightRange / this.model.getSettings().max) * this.model.getSettings().from;
+   this.view.setColoredRange(valueToThumb);
+   this.view.getThumbFrom().style.top = '' + valueToThumb + 'px';
+   this.view.setValueToThumbLabelFrom(this.model.getSettings().from);
+  }
+  else {
+   let widthRange = this.view.getRange().offsetWidth - this.view.getThumbFrom().offsetWidth;
+   let valueToThumb = (widthRange / this.model.getSettings().max) * this.model.getSettings().from;
+   this.view.setColoredRange(valueToThumb);
+   this.view.getThumbFrom().style.left = '' + valueToThumb + 'px';
+   this.view.setValueToThumbLabelFrom(this.model.getSettings().from);
   }
 
  }
  bindEvents() {
-  this.view.getThumb().onmousedown = this.mouseDownHandler.bind(this);
+  this.view.getThumbFrom().onmousedown = this.mouseDownHandler.bind(this);
  }
  start() {
   this.initialize();
@@ -44,16 +63,16 @@ export class Controller {
  setValueToThumb(value: number) {
   if (!this.model.getSettings().hideThumbLabel) {
    if (this.model.getSettings().isVertical) {
-    let heightRange = this.view.getRange().offsetHeight - this.view.getThumb().offsetHeight;
+    let heightRange = this.view.getRange().offsetHeight - this.view.getThumbFrom().offsetHeight;
     let valueToThumbLabel = Math.floor(value / (heightRange / this.model.getSettings().max));
-    this.view.setValueToThumbLabel(valueToThumbLabel);
+    this.view.setValueToThumbLabelFrom(valueToThumbLabel);
     this.view.setColoredRange(value);
     this.model.getSettings().from = valueToThumbLabel;
    }
    else {
-    let widthRange = this.view.getRange().offsetWidth - this.view.getThumb().offsetWidth;
+    let widthRange = this.view.getRange().offsetWidth - this.view.getThumbFrom().offsetWidth;
     let valueToThumbLabel = Math.floor(value / (widthRange / (this.model.getSettings().max - this.model.getSettings().min)));
-    this.view.setValueToThumbLabel(valueToThumbLabel);
+    this.view.setValueToThumbLabelFrom(valueToThumbLabel);
     this.view.setColoredRange(value);
     this.model.getSettings().from = valueToThumbLabel;
    }
@@ -62,11 +81,11 @@ export class Controller {
  mouseDownHandler(e: MouseEvent) {
   e.preventDefault();
   if (this.model.getSettings().isVertical) {
-   let shiftY = e.clientY - this.view.getThumb().getBoundingClientRect().top;
+   let shiftY = e.clientY - this.view.getThumbFrom().getBoundingClientRect().top;
    document.addEventListener('mousemove', onMouseMove);
    document.addEventListener('mouseup', onMouseUp);
    let sliderRange = this.view.getRange();
-   let thumb = this.view.getThumb();
+   let thumb = this.view.getThumbFrom();
    let that = this;
 
    function onMouseMove(event: MouseEvent) {
@@ -89,11 +108,11 @@ export class Controller {
    }
   }
   else {
-   let shiftX = e.clientX - this.view.getThumb().getBoundingClientRect().left;
+   let shiftX = e.clientX - this.view.getThumbFrom().getBoundingClientRect().left;
    document.addEventListener('mousemove', onMouseMove);
    document.addEventListener('mouseup', onMouseUp);
    let sliderRange = this.view.getRange();
-   let thumb = this.view.getThumb();
+   let thumb = this.view.getThumbFrom();
    let that = this;
 
    function onMouseMove(e: MouseEvent) {
