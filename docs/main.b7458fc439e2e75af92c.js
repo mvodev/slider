@@ -70,7 +70,11 @@ class Controller {
   }
 
   bindEvents() {
-    this.view.getThumbFrom().onmousedown = this.mouseDownHandler.bind(this);
+    this.view.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this);
+
+    if (this.model.getSettings().isRange) {
+      this.view.getThumbTo().onmousedown = this.mouseToHandler.bind(this);
+    }
   }
 
   start() {
@@ -96,7 +100,8 @@ class Controller {
     }
   }
 
-  mouseDownHandler(e) {
+  mouseFromHandler(e) {
+    //console.log(type);
     e.preventDefault();
 
     if (this.model.getSettings().isVertical) {
@@ -134,6 +139,71 @@ class Controller {
       document.addEventListener('mouseup', onMouseUp);
       let sliderRange = this.view.getRange();
       let thumb = this.view.getThumbFrom();
+      let that = this;
+
+      function onMouseMove(e) {
+        let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
+
+        if (newLeft < -thumb.offsetWidth / 2) {
+          newLeft = -thumb.offsetWidth / 2;
+        }
+
+        let rightEdge = sliderRange.offsetWidth - thumb.offsetWidth / 2;
+
+        if (newLeft > rightEdge) {
+          newLeft = rightEdge;
+        }
+
+        thumb.style.left = newLeft + 'px';
+        that.setValueToThumb(newLeft < 0 ? 0 : newLeft);
+      }
+
+      function onMouseUp() {
+        document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('mousemove', onMouseMove);
+      }
+    }
+  }
+
+  mouseToHandler(e) {
+    //console.log(type);
+    e.preventDefault();
+
+    if (this.model.getSettings().isVertical) {
+      let shiftY = e.clientY - this.view.getThumbTo().getBoundingClientRect().top;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      let sliderRange = this.view.getRange();
+      let thumb = this.view.getThumbTo();
+      let that = this;
+
+      function onMouseMove(event) {
+        let newTop = event.clientY - shiftY - sliderRange.getBoundingClientRect().top;
+
+        if (newTop < 0) {
+          newTop = 0;
+        }
+
+        let bottom = sliderRange.offsetHeight - thumb.offsetHeight / 2;
+
+        if (newTop > bottom) {
+          newTop = bottom;
+        }
+
+        thumb.style.top = newTop + 'px';
+        that.setValueToThumb(newTop);
+      }
+
+      function onMouseUp() {
+        document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('mousemove', onMouseMove);
+      }
+    } else {
+      let shiftX = e.clientX - this.view.getThumbTo().getBoundingClientRect().left;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      let sliderRange = this.view.getRange();
+      let thumb = this.view.getThumbTo();
       let that = this;
 
       function onMouseMove(e) {
@@ -322,7 +392,6 @@ class Slider {
     this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
 
     if (this.isRange) {
-      console.log('slider class inside if is range');
       this.thumbTo.getThumb().appendChild(this.thumbLabelTo?.getThumbLabelContainer());
       this.range.getRange().appendChild(this.thumbTo.getThumb());
     }
@@ -351,15 +420,17 @@ class Slider {
     return this.thumbLabelTo;
   }
 
-  getColoredRange() {
-    return this.coloredRange;
-  }
-
-  setWidthToColoredRange(value, isVertical) {
+  setWidthToColoredRange(valueFrom, isVertical, valueTo) {
     if (isVertical) {
-      this.coloredRange.getColoredRange().style.height = value + this.thumbFrom.getThumb().offsetHeight / 4 + 'px';
+      if (valueTo) {//todo
+      } else {
+        this.coloredRange.getColoredRange().style.height = valueFrom + this.thumbFrom.getThumb().offsetHeight / 4 + 'px';
+      }
     } else {
-      this.coloredRange.getColoredRange().style.width = value + this.thumbFrom.getThumb().offsetWidth / 4 + 'px';
+      if (valueTo) {//todo
+      } else {
+        this.coloredRange.getColoredRange().style.width = valueFrom + this.thumbFrom.getThumb().offsetWidth / 4 + 'px';
+      }
     }
   }
 
@@ -776,4 +847,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.27dbf4f99040c2243471.js.map
+//# sourceMappingURL=main.b7458fc439e2e75af92c.js.map

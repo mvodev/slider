@@ -36,7 +36,6 @@ export class Slider {
   this.range.getRange().appendChild(this.thumbFrom.getThumb());
   this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
   if (this.isRange) {
-   console.log('slider class inside if is range');
    this.thumbTo.getThumb().appendChild(this.thumbLabelTo?.getThumbLabelContainer());
    this.range.getRange().appendChild(this.thumbTo.getThumb());
   }
@@ -58,15 +57,23 @@ export class Slider {
  getThumbLabelTo() {
   return this.thumbLabelTo;
  }
- getColoredRange() {
-  return this.coloredRange;
- }
- setWidthToColoredRange(value: number, isVertical: boolean | undefined) {
+
+ setWidthToColoredRange(valueFrom: number, isVertical: boolean | undefined, valueTo?: number) {
   if (isVertical) {
-   this.coloredRange.getColoredRange().style.height = value + this.thumbFrom.getThumb().offsetHeight / 4 + 'px';
+   if (valueTo) {
+    //todo
+   }
+   else {
+    this.coloredRange.getColoredRange().style.height = valueFrom + this.thumbFrom.getThumb().offsetHeight / 4 + 'px';
+   }
   }
   else {
-   this.coloredRange.getColoredRange().style.width = value + this.thumbFrom.getThumb().offsetWidth / 4 + 'px';
+   if (valueTo) {
+    //todo
+   }
+   else {
+    this.coloredRange.getColoredRange().style.width = valueFrom + this.thumbFrom.getThumb().offsetWidth / 4 + 'px';
+   }
   }
  }
  setMaxRange(value: number) {

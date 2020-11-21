@@ -54,10 +54,12 @@ export class Controller {
     this.view.setValueToThumbLabelTo(this.model.getSettings().to);
    }
   }
-
  }
  bindEvents() {
-  this.view.getThumbFrom().onmousedown = this.mouseDownHandler.bind(this);
+  this.view.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this);
+  if (this.model.getSettings().isRange) {
+   this.view.getThumbTo().onmousedown = this.mouseToHandler.bind(this);
+  }
  }
  start() {
   this.initialize();
@@ -81,7 +83,8 @@ export class Controller {
    }
   }
  }
- mouseDownHandler(e: MouseEvent) {
+ mouseFromHandler(e: MouseEvent) {
+  //console.log(type);
   e.preventDefault();
   if (this.model.getSettings().isVertical) {
    let shiftY = e.clientY - this.view.getThumbFrom().getBoundingClientRect().top;
@@ -137,4 +140,61 @@ export class Controller {
   }
  }
 
+ mouseToHandler(e: MouseEvent) {
+  //console.log(type);
+  e.preventDefault();
+  if (this.model.getSettings().isVertical) {
+   let shiftY = e.clientY - this.view.getThumbTo().getBoundingClientRect().top;
+   document.addEventListener('mousemove', onMouseMove);
+   document.addEventListener('mouseup', onMouseUp);
+   let sliderRange = this.view.getRange();
+
+   let thumb = this.view.getThumbTo();
+   let that = this;
+
+   function onMouseMove(event: MouseEvent) {
+    let newTop = event.clientY - shiftY - sliderRange.getBoundingClientRect().top;
+    if (newTop < 0) {
+     newTop = 0;
+    }
+    let bottom = sliderRange.offsetHeight - thumb.offsetHeight / 2;
+    if (newTop > bottom) {
+     newTop = bottom;
+    }
+
+    thumb.style.top = newTop + 'px';
+    that.setValueToThumb(newTop);
+   }
+
+   function onMouseUp() {
+    document.removeEventListener('mouseup', onMouseUp);
+    document.removeEventListener('mousemove', onMouseMove);
+   }
+  }
+  else {
+   let shiftX = e.clientX - this.view.getThumbTo().getBoundingClientRect().left;
+   document.addEventListener('mousemove', onMouseMove);
+   document.addEventListener('mouseup', onMouseUp);
+   let sliderRange = this.view.getRange();
+   let thumb = this.view.getThumbTo();
+   let that = this;
+
+   function onMouseMove(e: MouseEvent) {
+    let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
+    if (newLeft < -thumb.offsetWidth / 2) {
+     newLeft = -thumb.offsetWidth / 2;
+    }
+    let rightEdge = sliderRange.offsetWidth - thumb.offsetWidth / 2;
+    if (newLeft > rightEdge) {
+     newLeft = rightEdge;
+    }
+    thumb.style.left = newLeft + 'px';
+    that.setValueToThumb(newLeft < 0 ? 0 : newLeft);
+   }
+   function onMouseUp() {
+    document.removeEventListener('mouseup', onMouseUp);
+    document.removeEventListener('mousemove', onMouseMove);
+   }
+  }
+ }
 }
