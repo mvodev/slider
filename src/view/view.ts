@@ -1,3 +1,4 @@
+import { ISettings } from '../model/ISettings';
 import { Model } from '../model/Model';
 import { Slider } from './modules/Slider';
 export class View {
@@ -10,7 +11,7 @@ export class View {
  constructor(model: Model, root: HTMLDivElement) {
   this.model = model;
   this.rootElem = root;
-  this.slider = new Slider(this.rootElem,this.model.getSettings().isRange);
+  this.slider = new Slider(this.rootElem, this.model);
   this.rangeWidth = 0;
  }
 
@@ -23,13 +24,13 @@ export class View {
    this.slider.setVertical();
   }
  }
-
+ getModel() {
+  return this.model;
+ }
  getSliderWidth() {
   return this.rangeWidth;
  }
- setValueToThumbLabelFrom(value: number) {
-  this.slider.setValueToLabelThumbFrom(value);
- }
+
  setValueToMinRange(value: number) {
   this.slider.setMinRange(value);
  }
@@ -49,7 +50,11 @@ export class View {
  getThumbTo() {
   return this.slider.getThumbTo();
  }
- setColoredRange(value: number) {
-  this.slider.setWidthToColoredRange(value,this.model.getSettings().isVertical);
+ refreshView() {
+  this.slider.setValueToLabelThumbFrom(this.model.getSettings().from);
+  if (this.model.getSettings().isRange) {
+   this.slider.setValueToLabelThumbTo(this.model.getSettings().to);
+  }
  }
+ 
 }
