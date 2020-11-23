@@ -13,10 +13,10 @@ import { Controller } from './controller/Controller.ts';
  };
 })(jQuery);
 $('.slider').fsdSlider(document.querySelector('.slider'), {
- min: 0,
- max: 10,
- from: 3,
- to: 5,
+ min: -22,
+ max: -10,
+ from: -20,
+ to: -15,
  isVertical: false,
  hideThumbLabel: false,
  isRange: true,

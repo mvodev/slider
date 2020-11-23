@@ -6,13 +6,11 @@ export class View {
  private slider: Slider;
  private model: Model;
  private rootElem: HTMLDivElement;
- private rangeWidth: number;
  //TODO: add this class from settings
  constructor(model: Model, root: HTMLDivElement) {
   this.model = model;
   this.rootElem = root;
   this.slider = new Slider(this.rootElem, this.model);
-  this.rangeWidth = 0;
  }
 
  render() {
@@ -27,8 +25,13 @@ export class View {
  getModel() {
   return this.model;
  }
- getSliderWidth() {
-  return this.rangeWidth;
+ getSliderLengthInPx() {
+  if(this.model.getSettings().isVertical){
+   return this.getRange().offsetHeight - this.getThumbFrom().offsetHeight;
+  }
+  else{
+   return this.getRange().offsetWidth - this.getThumbFrom().offsetWidth;
+  }
  }
 
  setValueToMinRange(value: number) {

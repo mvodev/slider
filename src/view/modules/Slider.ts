@@ -58,9 +58,9 @@ export class Slider {
  getThumbLabelTo() {
   return this.thumbLabelTo;
  }
-getColoredRange(){
-return this.coloredRange.getColoredRange();
-}
+ getColoredRange() {
+  return this.coloredRange.getColoredRange();
+ }
  setMaxRange(value: number) {
   this.rangeLabel.setMaxRange(value);
  }
@@ -75,10 +75,12 @@ return this.coloredRange.getColoredRange();
  }
  setVertical() {
   this.container.classList.add('fsd-slider_is_vertical');
-  this.range.getRange().classList.add('fsd-slider_is_vertical');
+  this.range.getRange().classList.add('fsd-slider__range_is_vertical');
   this.coloredRange.getColoredRange().classList.add('fsd-slider__colored-range_is_vertical');
   this.rangeLabel.getRangeLabel().classList.add('fsd-slider__range-label_is_vertical');
   this.thumbLabelFrom.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
+  if (this.model.getSettings().isRange) {
+   this.thumbLabelTo.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
+  }
  }
- 
 }

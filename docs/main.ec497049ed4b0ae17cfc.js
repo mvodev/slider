@@ -26,13 +26,14 @@ class Controller {
     this.view.render();
 
     if (!this.model.getSettings().hideThumbLabel) {
-      this.setThumbToValue('from');
+      this.setThumbToValue('thumbFrom');
 
       if (this.model.getSettings().isRange) {
-        this.setThumbToValue('to');
+        this.setThumbToValue('thumbTo');
       }
     }
 
+    this.view.refreshView();
     this.view.setValueToMinRange(this.model.getSettings().min);
     this.view.setValueToMaxRange(this.model.getSettings().max);
   }
@@ -47,77 +48,55 @@ class Controller {
 
   start() {
     this.initialize();
-    this.bindEvents();
+    this.bindEvents(); //this.setValueToThumb();
+
     this.view.refreshView();
   }
 
-  setValueToThumb(value, type) {
-    if (!this.model.getSettings().hideThumbLabel) {
-      if (this.model.getSettings().isVertical) {
-        let heightRange = this.view.getRange().offsetHeight - this.view.getThumbFrom().offsetHeight;
-        let valueToThumbLabel = Math.floor(value / (heightRange / (this.model.getSettings().max - this.model.getSettings().min)));
+  isVerticalSlider() {
+    return this.model.getSettings().isVertical;
+  }
 
-        if (type === 'from') {
-          this.model.getSettings().from = valueToThumbLabel;
-        } else {
-          this.model.getSettings().to = valueToThumbLabel;
-        }
+  isRangeSlider() {
+    return this.model.getSettings().isRange;
+  }
 
-        this.view.refreshView();
-      } else {
-        let widthRange = this.view.getRange().offsetWidth - this.view.getThumbFrom().offsetWidth;
-        let valueToThumbLabel = Math.floor(value / (widthRange / (this.model.getSettings().max - this.model.getSettings().min)));
-
-        if (type === 'from') {
-          this.model.getSettings().from = valueToThumbLabel;
-        } else {
-          this.model.getSettings().to = valueToThumbLabel;
-        }
-
-        this.view.refreshView();
-      }
-    }
+  withThumbLabel() {
+    return !this.model.getSettings().hideThumbLabel;
   }
 
   setThumbToValue(type) {
-    if (type === 'from') {
-      if (this.model.getSettings().isVertical) {
-        let heightRange = this.view.getRange().offsetHeight - this.view.getThumbFrom().offsetHeight;
-        let valueToThumb = heightRange / (this.model.getSettings().max - this.model.getSettings().min) * this.model.getSettings().from;
-        this.view.getThumbFrom().style.top = '' + valueToThumb + 'px';
-        this.model.getSettings().currentFrom = valueToThumb;
+    if (type === 'thumbFrom') {
+      if (this.isVerticalSlider()) {
+        let valueToThumb = this.getPosInPxFromValue(this.model.getSettings().from);
+        this.view.getThumbFrom().style.top = valueToThumb + 'px';
+        this.model.getSettings().fromInPx = valueToThumb;
         this.view.refreshView();
       } else {
-        let widthRange = this.view.getRange().offsetWidth - this.view.getThumbFrom().offsetWidth;
-        let valueToThumb = widthRange / (this.model.getSettings().max - this.model.getSettings().min) * this.model.getSettings().from;
-        this.view.getThumbFrom().style.left = '' + valueToThumb + 'px';
-        this.model.getSettings().currentFrom = valueToThumb;
+        let valueToThumb = this.getPosInPxFromValue(this.model.getSettings().from);
+        this.view.getThumbFrom().style.left = valueToThumb + 'px';
+        this.model.getSettings().fromInPx = valueToThumb;
         this.view.refreshView();
       }
     } else {
-      if (this.model.getSettings().isVertical) {
-        let heightRange = this.view.getRange().offsetHeight - this.view.getThumbTo().offsetHeight;
-        let valueToThumb = heightRange / (this.model.getSettings().max - this.model.getSettings().min) * this.model.getSettings().to;
+      if (this.isVerticalSlider()) {
+        let valueToThumb = this.getPosInPxFromValue(this.model.getSettings().to);
+        this.view.getThumbTo().style.top = valueToThumb + 'px';
+        this.model.getSettings().toInPx = valueToThumb;
         this.view.refreshView();
-        this.view.getThumbTo().style.top = '' + valueToThumb + 'px';
-        this.model.getSettings().currentTo = valueToThumb;
-        this.view.setValueToThumbLabelTo(this.model.getSettings().from);
       } else {
-        let widthRange = this.view.getRange().offsetWidth - this.view.getThumbTo().offsetWidth;
-        let valueToThumb = widthRange / (this.model.getSettings().max - this.model.getSettings().min) * this.model.getSettings().to;
+        let valueToThumb = this.getPosInPxFromValue(this.model.getSettings().to);
+        this.view.getThumbTo().style.left = valueToThumb + 'px';
+        this.model.getSettings().toInPx = valueToThumb;
         this.view.refreshView();
-        this.view.getThumbTo().style.left = '' + valueToThumb + 'px';
-        this.model.getSettings().currentTo = valueToThumb;
-        this.view.setValueToThumbLabelTo(this.model.getSettings().to);
       }
     }
   }
 
   mouseFromHandler(e) {
-    //console.log(type);
     e.preventDefault();
 
-    if (this.model.getSettings().isVertical) {
+    if (this.isVerticalSlider()) {
       let shiftY = e.clientY - this.view.getThumbFrom().getBoundingClientRect().top;
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
@@ -134,8 +113,8 @@ class Controller {
 
         let bottom = sliderRange.offsetHeight - thumb.offsetHeight / 2;
 
-        if (that.model.getSettings().isRange) {
-          bottom = that.model.getSettings().currentTo;
+        if (that.isRangeSlider()) {
+          bottom = that.model.getSettings().toInPx;
         }
 
         if (newTop > bottom) {
@@ -143,8 +122,9 @@ class Controller {
         }
 
         thumb.style.top = newTop + 'px';
-        that.model.getSettings().currentFrom = newTop;
-        that.setValueToThumb(newTop, 'from');
+        that.model.getSettings().fromInPx = newTop;
+        that.setValueToThumb();
+        that.view.refreshView();
       }
 
       function onMouseUp() {
@@ -162,14 +142,14 @@ class Controller {
       function onMouseMove(e) {
         let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
 
-        if (newLeft < -thumb.offsetWidth / 2) {
-          newLeft = -thumb.offsetWidth / 2;
+        if (newLeft < 0) {
+          newLeft = 0;
         }
 
         let rightEdge = sliderRange.offsetWidth - thumb.offsetWidth / 2;
 
-        if (that.model.getSettings().isRange) {
-          rightEdge = that.model.getSettings().currentTo;
+        if (that.isRangeSlider()) {
+          rightEdge = that.model.getSettings().toInPx;
         }
 
         if (newLeft > rightEdge) {
@@ -177,8 +157,9 @@ class Controller {
         }
 
         thumb.style.left = newLeft + 'px';
-        that.model.getSettings().currentFrom = newLeft;
-        that.setValueToThumb(newLeft < 0 ? 0 : newLeft, 'from');
+        that.model.getSettings().fromInPx = newLeft;
+        that.setValueToThumb();
+        that.view.refreshView();
       }
 
       function onMouseUp() {
@@ -191,7 +172,7 @@ class Controller {
   mouseToHandler(e) {
     e.preventDefault();
 
-    if (this.model.getSettings().isVertical) {
+    if (this.isVerticalSlider()) {
       let shiftY = e.clientY - this.view.getThumbTo().getBoundingClientRect().top;
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
@@ -202,19 +183,20 @@ class Controller {
       function onMouseMove(event) {
         let newTop = event.clientY - shiftY - sliderRange.getBoundingClientRect().top;
 
-        if (newTop < that.model.getSettings().currentFrom) {
-          newTop = that.model.getSettings().currentFrom + 1;
+        if (newTop < that.model.getSettings().fromInPx) {
+          newTop = that.model.getSettings().fromInPx + 1;
         }
 
-        let bottom = sliderRange.offsetHeight - thumb.offsetHeight / 2;
+        let bottom = sliderRange.offsetHeight - thumb.offsetHeight;
 
         if (newTop > bottom) {
           newTop = bottom;
         }
 
         thumb.style.top = newTop + 'px';
-        that.model.getSettings().currentTo = newTop;
-        that.setValueToThumb(newTop, 'to');
+        that.model.getSettings().toInPx = newTop;
+        that.setValueToThumb();
+        that.view.refreshView();
       }
 
       function onMouseUp() {
@@ -232,19 +214,20 @@ class Controller {
       function onMouseMove(e) {
         let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
 
-        if (newLeft < that.model.getSettings().currentFrom) {
-          newLeft = that.model.getSettings().currentFrom + 1;
+        if (newLeft < that.model.getSettings().fromInPx) {
+          newLeft = that.model.getSettings().fromInPx + 1;
         }
 
-        let rightEdge = sliderRange.offsetWidth - thumb.offsetWidth / 2;
+        let rightEdge = sliderRange.offsetWidth - thumb.offsetWidth;
 
         if (newLeft > rightEdge) {
           newLeft = rightEdge;
         }
 
         thumb.style.left = newLeft + 'px';
-        that.model.getSettings().currentTo = newLeft;
-        that.setValueToThumb(newLeft < 0 ? 0 : newLeft, 'to');
+        that.model.getSettings().toInPx = newLeft;
+        that.setValueToThumb();
+        that.view.refreshView();
       }
 
       function onMouseUp() {
@@ -252,6 +235,32 @@ class Controller {
         document.removeEventListener('mousemove', onMouseMove);
       }
     }
+  }
+
+  setValueToThumb() {
+    if (this.withThumbLabel()) {
+      if (this.isVerticalSlider()) {
+        this.model.getSettings().from = this.getValueFromPosInPx(this.model.getSettings().fromInPx);
+
+        if (this.isRangeSlider()) {
+          this.model.getSettings().to = this.getValueFromPosInPx(this.model.getSettings().toInPx);
+        }
+      } else {
+        this.model.getSettings().from = this.getValueFromPosInPx(this.model.getSettings().fromInPx);
+
+        if (this.isRangeSlider()) {
+          this.model.getSettings().to = this.getValueFromPosInPx(this.model.getSettings().toInPx);
+        }
+      }
+    }
+  }
+
+  getPosInPxFromValue(value) {
+    return this.view.getSliderLengthInPx() / Math.abs(this.model.getSettings().max - this.model.getSettings().min) * Math.abs(value - this.model.getSettings().min);
+  }
+
+  getValueFromPosInPx(valueInPx) {
+    return Math.floor(valueInPx / (this.view.getSliderLengthInPx() / Math.abs(this.model.getSettings().max - this.model.getSettings().min))) + this.model.getSettings().min;
   }
 
 }
@@ -315,7 +324,6 @@ class View {
     this.model = model;
     this.rootElem = root;
     this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.model);
-    this.rangeWidth = 0;
   }
 
   render() {
@@ -334,8 +342,12 @@ class View {
     return this.model;
   }
 
-  getSliderWidth() {
-    return this.rangeWidth;
+  getSliderLengthInPx() {
+    if (this.model.getSettings().isVertical) {
+      return this.getRange().offsetHeight - this.getThumbFrom().offsetHeight;
+    } else {
+      return this.getRange().offsetWidth - this.getThumbFrom().offsetWidth;
+    }
   }
 
   setValueToMinRange(value) {
@@ -470,10 +482,14 @@ class Slider {
 
   setVertical() {
     this.container.classList.add('fsd-slider_is_vertical');
-    this.range.getRange().classList.add('fsd-slider_is_vertical');
+    this.range.getRange().classList.add('fsd-slider__range_is_vertical');
     this.coloredRange.getColoredRange().classList.add('fsd-slider__colored-range_is_vertical');
     this.rangeLabel.getRangeLabel().classList.add('fsd-slider__range-label_is_vertical');
     this.thumbLabelFrom.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
+
+    if (this.model.getSettings().isRange) {
+      this.thumbLabelTo.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
+    }
   }
 
 }
@@ -697,10 +713,10 @@ __webpack_require__.r(__webpack_exports__);
  };
 })(jQuery);
 $('.slider').fsdSlider(document.querySelector('.slider'), {
- min: 0,
- max: 10,
- from: 3,
- to: 5,
+ min: -22,
+ max: -10,
+ from: -20,
+ to: -15,
  isVertical: false,
  hideThumbLabel: false,
  isRange: true,
@@ -865,4 +881,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.4c6195afd088f57c1846.js.map
+//# sourceMappingURL=main.ec497049ed4b0ae17cfc.js.map

@@ -5,7 +5,7 @@ export interface ISettings {
  to?: number;
  isVertical?: boolean;
  isRange?: boolean;
- currentFrom?: number;
- currentTo?: number;
+ fromInPx?: number;
+ toInPx?: number;
  hideThumbLabel?: boolean;
 }
