@@ -45,7 +45,7 @@ export class Controller {
  setThumbToValue(type: string) {
   if (type === 'thumbFrom') {
    if (this.isVerticalSlider()) {
-    let valueToThumb:number = this.getPosInPxFromValue(this.model.getFrom());
+    let valueToThumb: number = this.getPosInPxFromValue(this.model.getFrom());
     this.view.getThumbFrom().style.top = valueToThumb + 'px';
     this.model.setFromInPx(valueToThumb);
     this.refreshView();

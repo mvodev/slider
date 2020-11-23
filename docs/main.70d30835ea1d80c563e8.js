@@ -431,14 +431,35 @@ class View {
   }
 
   setColoredRange() {
+    //console.log('inside setColoredRange()');
     let that = this;
 
     if (this.model.isRange()) {
-      if (this.model.isVertical()) {//todo
-      } else {//todo
-        }
-    } else {//todo set colored range for single thumb
+      if (this.model.isVertical()) {
+        let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
+        let height = this.model.getToInPx() + thumbHalf - this.model.getFromInPx() + 'px';
+        let top = this.model.getFromInPx() + 'px';
+        this.slider.getColoredRange().style.top = top;
+        this.slider.getColoredRange().style.height = height;
+      } else {
+        let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
+        let width = this.model.getToInPx() + thumbHalf - this.model.getFromInPx() + 'px';
+        let left = this.model.getFromInPx() + 'px';
+        this.slider.getColoredRange().style.left = left;
+        this.slider.getColoredRange().style.width = width;
       }
+    } else {
+      //console.log('inside setColoredRange() is not range');
+      if (this.model.isVertical()) {
+        let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
+        let height = this.model.getFromInPx() + thumbHalf + 'px';
+        this.slider.getColoredRange().style.height = height;
+      } else {
+        let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
+        let width = this.model.getFromInPx() + thumbHalf + 'px';
+        this.slider.getColoredRange().style.width = width;
+      }
+    }
   }
 
 }
@@ -668,9 +689,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 class Thumb {
   constructor(className) {
-    let div = document.createElement('div');
-    div.classList.add(className);
-    this.thumb = div;
+    this.thumb = document.createElement('div');
+    this.thumb.classList.add(className);
   }
 
   getThumb() {
@@ -776,7 +796,7 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
  max: -10,
  from: -20,
  to: -15,
- isVertical: false,
+ isVertical: true,
  hideThumbLabel: false,
  isRange: true,
 });
@@ -940,4 +960,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.ef6978d103a4b5379dbc.js.map
+//# sourceMappingURL=main.70d30835ea1d80c563e8.js.map

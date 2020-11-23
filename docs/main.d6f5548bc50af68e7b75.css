@@ -25,8 +25,8 @@
 
 .fsd-slider__colored-range {
   background-color: purple;
-  height: inherit;
-  position: absolute;
+  height: 20px;
+  position: relative;
   border-radius: 10px;
 }
 
@@ -86,4 +86,4 @@
   margin-top: 50px;
 }
 
-/*# sourceMappingURL=main.071839d0a89db9d63c0e.css.map*/
+/*# sourceMappingURL=main.d6f5548bc50af68e7b75.css.map*/

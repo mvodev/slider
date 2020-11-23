@@ -10,7 +10,6 @@ export class ThumbLabel {
   this.thumbLabelValue.classList.add('fsd-slider__thumb-label-value');
   this.thumbLabelContainer.appendChild(this.thumbLabelValue);
  }
-
  getThumbLabelContainer() {
   return this.thumbLabelContainer;
  }

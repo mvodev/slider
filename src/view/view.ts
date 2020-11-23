@@ -26,10 +26,10 @@ export class View {
   return this.model;
  }
  getSliderLengthInPx() {
-  if(this.model.isVertical()){
+  if (this.model.isVertical()) {
    return this.getRange().offsetHeight - this.getThumbFrom().offsetHeight;
   }
-  else{
+  else {
    return this.getRange().offsetWidth - this.getThumbFrom().offsetWidth;
   }
  }
@@ -60,19 +60,37 @@ export class View {
   }
   this.setColoredRange();
  }
- setColoredRange() {
+ private setColoredRange() {
+  //console.log('inside setColoredRange()');
   let that = this;
-  if(this.model.isRange()){
-   if(this.model.isVertical()) { 
-//todo
+  if (this.model.isRange()) {
+   if (this.model.isVertical()) {
+    let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
+    let height = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) + 'px';
+    let top = this.model.getFromInPx() + 'px';
+    this.slider.getColoredRange().style.top = top;
+    this.slider.getColoredRange().style.height = height;
    }
    else {
-//todo
+    let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
+    let width = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) + 'px';
+    let left = this.model.getFromInPx() + 'px';
+    this.slider.getColoredRange().style.left = left;
+    this.slider.getColoredRange().style.width = width;
    }
   }
-  else{
-   //todo set colored range for single thumb
+  else {
+   //console.log('inside setColoredRange() is not range');
+   if (this.model.isVertical()) {
+    let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
+    let height = (this.model.getFromInPx() + thumbHalf) + 'px';
+    this.slider.getColoredRange().style.height = height;
+   }
+   else {
+    let thumbHalf = this.slider.getThumbFrom().offsetWidth/2;
+    let width = (this.model.getFromInPx() + thumbHalf)+'px';
+    this.slider.getColoredRange().style.width=width;
+   }
   }
-}
-
+ }
 }
