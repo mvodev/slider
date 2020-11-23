@@ -36,7 +36,7 @@ export class Slider {
   this.range.getRange().appendChild(this.coloredRange.getColoredRange());
   this.range.getRange().appendChild(this.thumbFrom.getThumb());
   this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
-  if (this.model.getSettings().isRange) {
+  if (this.model.isRange()) {
    this.thumbTo.getThumb().appendChild(this.thumbLabelTo?.getThumbLabelContainer());
    this.range.getRange().appendChild(this.thumbTo.getThumb());
   }
@@ -79,7 +79,7 @@ export class Slider {
   this.coloredRange.getColoredRange().classList.add('fsd-slider__colored-range_is_vertical');
   this.rangeLabel.getRangeLabel().classList.add('fsd-slider__range-label_is_vertical');
   this.thumbLabelFrom.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
-  if (this.model.getSettings().isRange) {
+  if (this.model.isRange()) {
    this.thumbLabelTo.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
   }
  }

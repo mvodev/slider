@@ -15,10 +15,10 @@ export class View {
 
  render() {
   this.slider.render();
-  if (this.model.getSettings().hideThumbLabel) {
+  if (!this.model.showThumbLabel()) {
    this.slider.getThumbLabelFrom().hideLabel();
   }
-  if (this.model.getSettings().isVertical) {
+  if (this.model.isVertical()) {
    this.slider.setVertical();
   }
  }
@@ -26,7 +26,7 @@ export class View {
   return this.model;
  }
  getSliderLengthInPx() {
-  if(this.model.getSettings().isVertical){
+  if(this.model.isVertical()){
    return this.getRange().offsetHeight - this.getThumbFrom().offsetHeight;
   }
   else{
@@ -54,10 +54,25 @@ export class View {
   return this.slider.getThumbTo();
  }
  refreshView() {
-  this.slider.setValueToLabelThumbFrom(this.model.getSettings().from);
-  if (this.model.getSettings().isRange) {
-   this.slider.setValueToLabelThumbTo(this.model.getSettings().to);
+  this.slider.setValueToLabelThumbFrom(this.model.getFrom());
+  if (this.model.isRange()) {
+   this.slider.setValueToLabelThumbTo(this.model.getTo());
   }
+  this.setColoredRange();
  }
- 
+ setColoredRange() {
+  let that = this;
+  if(this.model.isRange()){
+   if(this.model.isVertical()) { 
+//todo
+   }
+   else {
+//todo
+   }
+  }
+  else{
+   //todo set colored range for single thumb
+  }
+}
+
 }
