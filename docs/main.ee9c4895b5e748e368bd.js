@@ -259,7 +259,7 @@ class Controller {
   }
 
   getValueFromPosInPx(valueInPx) {
-    return Math.floor(valueInPx / (this.view.getSliderLengthInPx() / Math.abs(this.model.getMax() - this.model.getMin()))) + this.model.getMin();
+    return Math.floor(valueInPx / (this.view.getSliderLengthInPx() / (Math.abs(this.model.getMax() - this.model.getMin()) / this.model.getStep()))) * this.model.getStep() + this.model.getMin();
   }
 
   refreshView() {
@@ -287,10 +287,22 @@ __webpack_require__.r(__webpack_exports__);
 class Model {
   constructor(settings) {
     this.settings = Object.assign({}, settings);
-  } // getSettings() {
-  //  return this.settings;
-  // }
+    console.log(settings);
 
+    if (!this.settings.to && this.settings.isRange) {
+      this.settings.to = this.settings.max;
+    }
+
+    if (this.settings.min >= this.settings.max) {
+      console.error('unacceptable value,min value in settings more than max value');
+      throw new Error('unacceptable value,min value in settings more than max value');
+    }
+
+    if (this.settings.from < this.settings.min || this.settings.from > this.settings.max || this.settings.to < this.settings.min || this.settings.to > this.settings.max) {
+      console.error('unacceptable value,from and to values in settings must be between min and max value');
+      throw new Error('unacceptable value,from and to values in settings must be between min and max value');
+    }
+  }
 
   getMin() {
     return this.settings.min;
@@ -342,6 +354,10 @@ class Model {
 
   isVertical() {
     return this.settings.isVertical;
+  }
+
+  getStep() {
+    return this.settings.step ? this.settings.step : 1;
   }
 
 }
@@ -784,21 +800,28 @@ __webpack_require__.r(__webpack_exports__);
 
 (function ($) {
  $.fn.fsdSlider = function (rootElem, settings) {
+  let defaultSettings = {
+   min: 0,
+   max: 10,
+   from: 5,
+  };
+  let unionSettings = Object.assign(defaultSettings, settings);
   const root = rootElem;
-  let model = new _model_Model_ts__WEBPACK_IMPORTED_MODULE_2__.Model(settings);
+  let model = new _model_Model_ts__WEBPACK_IMPORTED_MODULE_2__.Model(defaultSettings);
   let view = new _view_View_ts__WEBPACK_IMPORTED_MODULE_1__.View(model, root);
   let controller = new _controller_Controller_ts__WEBPACK_IMPORTED_MODULE_3__.Controller(view, model);
   controller.start();
  };
 })(jQuery);
 $('.slider').fsdSlider(document.querySelector('.slider'), {
- min: -22,
- max: -10,
- from: -20,
- to: -15,
- isVertical: true,
+ min: -5,
+ max: 10,
+ from: 7.4,
+ step: 2,
+ //to: -15,
+ isVertical: false,
  hideThumbLabel: false,
- isRange: true,
+ isRange: false,
 });
 
 /***/ })
@@ -960,4 +983,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.70d30835ea1d80c563e8.js.map
+//# sourceMappingURL=main.ee9c4895b5e748e368bd.js.map

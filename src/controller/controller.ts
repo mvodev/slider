@@ -220,7 +220,16 @@ export class Controller {
   return this.view.getSliderLengthInPx() / Math.abs(this.model.getMax() - this.model.getMin()) * (Math.abs(value - this.model.getMin()));
  }
  getValueFromPosInPx(valueInPx: number): number {
-  return Math.floor(valueInPx / (this.view.getSliderLengthInPx() / Math.abs(this.model.getMax() - this.model.getMin()))) + this.model.getMin();
+  return Math.floor(valueInPx /
+   (
+    this.view.getSliderLengthInPx()
+    /
+    (
+     (Math.abs(this.model.getMax() - this.model.getMin())) / this.model.getStep()
+     )
+
+   ))*this.model.getStep()
+   + this.model.getMin();
  }
  refreshView() {
   this.view.refreshView();

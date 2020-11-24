@@ -5,30 +5,40 @@ export class Model {
 
  constructor(settings: ISettings) {
   this.settings = Object.assign({}, settings);
+  console.log(settings);
+  if (!this.settings.to && this.settings.isRange) {
+   this.settings.to = this.settings.max;
+  }
+  if (this.settings.min >= this.settings.max) {
+   console.error('unacceptable value,min value in settings more than max value');
+   throw new Error('unacceptable value,min value in settings more than max value');
+  }
+  if (this.settings.from < this.settings.min || this.settings.from > this.settings.max ||
+   this.settings.to < this.settings.min || this.settings.to > this.settings.max) {
+   console.error('unacceptable value,from and to values in settings must be between min and max value');
+   throw new Error('unacceptable value,from and to values in settings must be between min and max value');
+  }
  }
 
- // getSettings() {
- //  return this.settings;
- // }
-getMin():number{
- return this.settings.min;
-}
-getMax(){
- return this.settings.max;
-}
-showThumbLabel():boolean|undefined{
- return !this.settings.hideThumbLabel;
-}
+ getMin(): number {
+  return this.settings.min;
+ }
+ getMax() {
+  return this.settings.max;
+ }
+ showThumbLabel(): boolean | undefined {
+  return !this.settings.hideThumbLabel;
+ }
  setFrom(pos: number) {
   this.settings.from = pos;
  }
- getFrom():number {
+ getFrom(): number {
   return this.settings.from;
  }
  setTo(value: number): void {
   this.settings.to = value;
  }
- getTo():number|undefined{
+ getTo(): number | undefined {
   return this.settings.to;
  }
  getFromInPx(): number {
@@ -37,7 +47,7 @@ showThumbLabel():boolean|undefined{
  setFromInPx(value: number): void {
   this.settings.fromInPx = value;
  }
- getToInPx(): number|undefined {
+ getToInPx(): number | undefined {
   return this.settings.toInPx;
  }
  setToInPx(value: number): void {
@@ -48,5 +58,8 @@ showThumbLabel():boolean|undefined{
  }
  isVertical(): boolean | undefined {
   return this.settings.isVertical;
+ }
+ getStep() {
+  return this.settings.step ? this.settings.step : 1;
  }
 }
