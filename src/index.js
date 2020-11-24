@@ -19,10 +19,10 @@ import { Controller } from './controller/Controller.ts';
  };
 })(jQuery);
 $('.slider').fsdSlider(document.querySelector('.slider'), {
- min: -5,
- max: 10,
- from: 7.4,
- step: 2,
+ min: -15,
+ max: -10,
+ from: -12,
+ step: 0.2,
  //to: -15,
  isVertical: false,
  hideThumbLabel: false,

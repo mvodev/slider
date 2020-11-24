@@ -220,18 +220,22 @@ export class Controller {
   return this.view.getSliderLengthInPx() / Math.abs(this.model.getMax() - this.model.getMin()) * (Math.abs(value - this.model.getMin()));
  }
  getValueFromPosInPx(valueInPx: number): number {
-  return Math.floor(valueInPx /
+  return +(Math.floor(valueInPx /
    (
     this.view.getSliderLengthInPx()
     /
     (
      (Math.abs(this.model.getMax() - this.model.getMin())) / this.model.getStep()
-     )
+    )
 
-   ))*this.model.getStep()
-   + this.model.getMin();
+   )) * this.model.getStep()
+   + this.model.getMin()).toFixed(this.numDigitsAfterDecimal(this.model.getStep()));
  }
  refreshView() {
   this.view.refreshView();
+ }
+ numDigitsAfterDecimal(value: number) {
+  let afterDecimalStr = value.toString().split('.')[1] || ''
+  return afterDecimalStr.length
  }
 }

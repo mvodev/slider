@@ -259,11 +259,16 @@ class Controller {
   }
 
   getValueFromPosInPx(valueInPx) {
-    return Math.floor(valueInPx / (this.view.getSliderLengthInPx() / (Math.abs(this.model.getMax() - this.model.getMin()) / this.model.getStep()))) * this.model.getStep() + this.model.getMin();
+    return +(Math.floor(valueInPx / (this.view.getSliderLengthInPx() / (Math.abs(this.model.getMax() - this.model.getMin()) / this.model.getStep()))) * this.model.getStep() + this.model.getMin()).toFixed(this.numDigitsAfterDecimal(this.model.getStep()));
   }
 
   refreshView() {
     this.view.refreshView();
+  }
+
+  numDigitsAfterDecimal(value) {
+    let afterDecimalStr = value.toString().split('.')[1] || '';
+    return afterDecimalStr.length;
   }
 
 }
@@ -814,10 +819,10 @@ __webpack_require__.r(__webpack_exports__);
  };
 })(jQuery);
 $('.slider').fsdSlider(document.querySelector('.slider'), {
- min: -5,
- max: 10,
- from: 7.4,
- step: 2,
+ min: -15,
+ max: -10,
+ from: -12,
+ step: 0.2,
  //to: -15,
  isVertical: false,
  hideThumbLabel: false,
@@ -983,4 +988,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.ee9c4895b5e748e368bd.js.map
+//# sourceMappingURL=main.cd4c6adb91c9ad593210.js.map
