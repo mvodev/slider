@@ -6,11 +6,12 @@ export class View {
  private slider: Slider;
  private model: Model;
  private rootElem: HTMLDivElement;
+ private numberOfMarking: number=10;
  //TODO: add this class from settings
- constructor(model: Model, root: HTMLDivElement) {
+ constructor(model: Model, root: HTMLDivElement,) {
   this.model = model;
   this.rootElem = root;
-  this.slider = new Slider(this.rootElem, this.model);
+  this.slider = new Slider(this.rootElem, this.model,this.numberOfMarking);
  }
 
  render() {
@@ -22,8 +23,11 @@ export class View {
    this.slider.setVertical();
   }
  }
- getModel() {
-  return this.model;
+ // getModel() {
+ //  return this.model;
+ // }
+ getRangeLabel(){
+  return this.slider.getRangeLabel();
  }
  getSliderLengthInPx() {
   if (this.model.isVertical()) {

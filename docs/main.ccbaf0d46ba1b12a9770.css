@@ -73,17 +73,22 @@
 }
 
 .fsd-slider__range-label {
+  height: 20px;
+  width: auto;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
+  cursor: pointer;
 }
 
 .fsd-slider__range-label_is_vertical {
   flex-direction: column;
+  width: 20px;
+  height: auto;
 }
 
 .slider {
   margin-top: 50px;
 }
 
-/*# sourceMappingURL=main.d6f5548bc50af68e7b75.css.map*/
+/*# sourceMappingURL=main.ccbaf0d46ba1b12a9770.css.map*/

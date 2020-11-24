@@ -16,17 +16,20 @@ export class Slider {
  private container: HTMLDivElement;
  private coloredRange: ColoredRange;
  private model: Model;
+ private numberOfMarking:number;
 
- constructor(rootElem: HTMLDivElement, model: Model) {
+ constructor(rootElem: HTMLDivElement, model: Model,numberOfMarking:number) {
   this.model = model;
   this.rootElem = rootElem;
+  this.numberOfMarking = numberOfMarking;
+  this.numberOfMarking = this.numberOfMarking;
   this.thumbTo = new Thumb('fsd-slider__thumb-to');
   this.thumbLabelTo = new ThumbLabel(this.thumbTo.getThumb());
   this.thumbFrom = new Thumb('fsd-slider__thumb-from');
   this.thumbLabelFrom = new ThumbLabel(this.thumbFrom.getThumb());
   this.range = new Range();
   this.coloredRange = new ColoredRange();
-  this.rangeLabel = new RangeLabel();
+  this.rangeLabel = new RangeLabel(this.numberOfMarking,this.model.isVertical());
   this.container = document.createElement('div');
  }
 
@@ -72,6 +75,9 @@ export class Slider {
  }
  setValueToLabelThumbTo(value: number) {
   this.thumbLabelTo.setValueToLabel(value);
+ }
+ getRangeLabel():HTMLDivElement{
+  return this.rangeLabel.getRangeLabel();
  }
  setVertical() {
   this.container.classList.add('fsd-slider_is_vertical');

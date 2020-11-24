@@ -40,6 +40,7 @@ class Controller {
 
   bindEvents() {
     this.view.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this);
+    this.view.getRangeLabel().onmousedown = this.mouseRangeHandler.bind(this);
 
     if (this.model.isRange()) {
       this.view.getThumbTo().onmousedown = this.mouseToHandler.bind(this);
@@ -236,6 +237,10 @@ class Controller {
     }
   }
 
+  mouseRangeHandler(e) {
+    console.log(e.screenY);
+  }
+
   setValueToThumb() {
     if (this.withThumbLabel()) {
       if (this.isVerticalSlider()) {
@@ -388,9 +393,10 @@ __webpack_require__.r(__webpack_exports__);
 class View {
   //TODO: add this class from settings
   constructor(model, root) {
+    this.numberOfMarking = 10;
     this.model = model;
     this.rootElem = root;
-    this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.model);
+    this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.model, this.numberOfMarking);
   }
 
   render() {
@@ -403,10 +409,13 @@ class View {
     if (this.model.isVertical()) {
       this.slider.setVertical();
     }
-  }
+  } // getModel() {
+  //  return this.model;
+  // }
 
-  getModel() {
-    return this.model;
+
+  getRangeLabel() {
+    return this.slider.getRangeLabel();
   }
 
   getSliderLengthInPx() {
@@ -512,16 +521,18 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Slider {
-  constructor(rootElem, model) {
+  constructor(rootElem, model, numberOfMarking) {
     this.model = model;
     this.rootElem = rootElem;
+    this.numberOfMarking = numberOfMarking;
+    this.numberOfMarking = this.numberOfMarking;
     this.thumbTo = new _thumb__WEBPACK_IMPORTED_MODULE_1__.Thumb('fsd-slider__thumb-to');
     this.thumbLabelTo = new _thumbLabel__WEBPACK_IMPORTED_MODULE_2__.ThumbLabel(this.thumbTo.getThumb());
     this.thumbFrom = new _thumb__WEBPACK_IMPORTED_MODULE_1__.Thumb('fsd-slider__thumb-from');
     this.thumbLabelFrom = new _thumbLabel__WEBPACK_IMPORTED_MODULE_2__.ThumbLabel(this.thumbFrom.getThumb());
     this.range = new _range__WEBPACK_IMPORTED_MODULE_0__.Range();
     this.coloredRange = new _coloredRange__WEBPACK_IMPORTED_MODULE_4__.ColoredRange();
-    this.rangeLabel = new _rangeLabel__WEBPACK_IMPORTED_MODULE_3__.RangeLabel();
+    this.rangeLabel = new _rangeLabel__WEBPACK_IMPORTED_MODULE_3__.RangeLabel(this.numberOfMarking, this.model.isVertical());
     this.container = document.createElement('div');
   }
 
@@ -579,6 +590,10 @@ class Slider {
 
   setValueToLabelThumbTo(value) {
     this.thumbLabelTo.setValueToLabel(value);
+  }
+
+  getRangeLabel() {
+    return this.rangeLabel.getRangeLabel();
   }
 
   setVertical() {
@@ -669,12 +684,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "RangeLabel": () => /* binding */ RangeLabel
 /* harmony export */ });
 class RangeLabel {
-  constructor() {
+  constructor(numberOfMarking, isVertical) {
     this.rangeLabelContainer = document.createElement('div');
     this.rangeLabelContainer.classList.add('fsd-slider__range-label');
     this.minLabel = document.createElement('span');
-    this.maxLabel = document.createElement('span');
     this.rangeLabelContainer.appendChild(this.minLabel);
+
+    for (let i = 0; i < numberOfMarking; i++) {
+      let marking = document.createElement('span');
+
+      if (isVertical) {
+        marking.innerText = '-';
+      } else marking.innerText = '|';
+
+      this.rangeLabelContainer.appendChild(marking);
+    }
+
+    this.maxLabel = document.createElement('span');
     this.rangeLabelContainer.appendChild(this.maxLabel);
   }
 
@@ -824,7 +850,7 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
  from: -12,
  step: 0.2,
  //to: -15,
- isVertical: false,
+ isVertical: true,
  hideThumbLabel: false,
  isRange: false,
 });
@@ -988,4 +1014,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.cd4c6adb91c9ad593210.js.map
+//# sourceMappingURL=main.a4e03fb0eed9096d4924.js.map

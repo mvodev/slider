@@ -64,10 +64,15 @@ width: 20px;
  justify-content: center;
 }
 .fsd-slider__range-label{
+ height: 20px;
+ width: auto;
  display: flex;
  justify-content: space-between;
  flex-direction: row;
+ cursor: pointer;
 }
 .fsd-slider__range-label_is_vertical{
  flex-direction: column;
+ width: 20px;
+ height: auto;
 }

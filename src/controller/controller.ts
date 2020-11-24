@@ -24,6 +24,7 @@ export class Controller {
 
  bindEvents() {
   this.view.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this);
+  this.view.getRangeLabel().onmousedown = this.mouseRangeHandler.bind(this);
   if (this.model.isRange()) {
    this.view.getThumbTo().onmousedown = this.mouseToHandler.bind(this);
   }
@@ -199,6 +200,9 @@ export class Controller {
     document.removeEventListener('mousemove', onMouseMove);
    }
   }
+ }
+ mouseRangeHandler(e:MouseEvent){
+console.log(e.screenY);
  }
  setValueToThumb() {
   if (this.withThumbLabel()) {
