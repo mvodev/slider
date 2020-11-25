@@ -119,9 +119,9 @@ class Controller {
 
         if (newTop > bottom) {
           newTop = bottom;
-        }
+        } //thumb.style.top = newTop + 'px';
 
-        thumb.style.top = newTop + 'px';
+
         that.model.setFromInPx(newTop);
         that.setValueToThumb();
         that.view.refreshView();
@@ -154,9 +154,9 @@ class Controller {
 
         if (newLeft > rightEdge) {
           newLeft = rightEdge;
-        }
+        } //thumb.style.left = newLeft + 'px';
 
-        thumb.style.left = newLeft + 'px';
+
         that.model.setFromInPx(newLeft);
         that.setValueToThumb();
         that.view.refreshView();
@@ -191,9 +191,9 @@ class Controller {
 
         if (newTop > bottom) {
           newTop = bottom;
-        }
+        } //thumb.style.top = newTop + 'px';
 
-        thumb.style.top = newTop + 'px';
+
         that.model.setToInPx(newTop);
         that.setValueToThumb();
         that.refreshView();
@@ -222,9 +222,9 @@ class Controller {
 
         if (newLeft > rightEdge) {
           newLeft = rightEdge;
-        }
+        } //thumb.style.left = newLeft + 'px';
 
-        thumb.style.left = newLeft + 'px';
+
         that.model.setToInPx(newLeft);
         that.setValueToThumb();
         that.refreshView();
@@ -238,7 +238,18 @@ class Controller {
   }
 
   mouseRangeHandler(e) {
-    console.log(e.screenY);
+    if (this.isVerticalSlider()) {
+      let shiftY = e.clientY - this.view.getRange().getBoundingClientRect().top;
+      console.log(e.screenY + ' ' + e.screenX + ' ' + this.view.getRange().getBoundingClientRect().top);
+      this.model.setFromInPx(shiftY);
+      this.setValueToThumb();
+      this.refreshView();
+    } else {
+      let shiftX = e.clientX - this.view.getRange().getBoundingClientRect().left;
+      this.model.setFromInPx(shiftX);
+      this.setValueToThumb();
+      this.refreshView();
+    }
   }
 
   setValueToThumb() {
@@ -297,7 +308,6 @@ __webpack_require__.r(__webpack_exports__);
 class Model {
   constructor(settings) {
     this.settings = Object.assign({}, settings);
-    console.log(settings);
 
     if (!this.settings.to && this.settings.isRange) {
       this.settings.to = this.settings.max;
@@ -455,6 +465,21 @@ class View {
 
     if (this.model.isRange()) {
       this.slider.setValueToLabelThumbTo(this.model.getTo());
+
+      if (this.model.isVertical()) {
+        this.getThumbTo().style.top = this.model.getToInPx() + 'px';
+        this.getThumbFrom().style.top = this.model.getFromInPx() + 'px';
+      } else {
+        this.getThumbTo().style.left = this.model.getToInPx() + 'px';
+        this.getThumbFrom().style.left = this.model.getFromInPx() + 'px';
+      }
+    } else {
+      if (this.model.isVertical()) {
+        this.getThumbFrom().style.top = this.model.getFromInPx() + 'px';
+        console.log('else if' + this.model.getFromInPx());
+      } else {
+        this.getThumbFrom().style.left = this.model.getFromInPx() + 'px';
+      }
     }
 
     this.setColoredRange();
@@ -850,7 +875,7 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
  from: -12,
  step: 0.2,
  //to: -15,
- isVertical: true,
+ isVertical: false,
  hideThumbLabel: false,
  isRange: false,
 });
@@ -1014,4 +1039,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.a4e03fb0eed9096d4924.js.map
+//# sourceMappingURL=main.ad408107afc448302410.js.map

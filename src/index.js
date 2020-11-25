@@ -24,7 +24,7 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
  from: -12,
  step: 0.2,
  //to: -15,
- isVertical: true,
+ isVertical: false,
  hideThumbLabel: false,
  isRange: false,
 });

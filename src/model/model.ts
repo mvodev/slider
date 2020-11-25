@@ -5,7 +5,6 @@ export class Model {
 
  constructor(settings: ISettings) {
   this.settings = Object.assign({}, settings);
-  console.log(settings);
   if (!this.settings.to && this.settings.isRange) {
    this.settings.to = this.settings.max;
   }

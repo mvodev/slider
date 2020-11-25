@@ -6,12 +6,12 @@ export class View {
  private slider: Slider;
  private model: Model;
  private rootElem: HTMLDivElement;
- private numberOfMarking: number=10;
+ private numberOfMarking: number = 10;
  //TODO: add this class from settings
  constructor(model: Model, root: HTMLDivElement,) {
   this.model = model;
   this.rootElem = root;
-  this.slider = new Slider(this.rootElem, this.model,this.numberOfMarking);
+  this.slider = new Slider(this.rootElem, this.model, this.numberOfMarking);
  }
 
  render() {
@@ -26,7 +26,7 @@ export class View {
  // getModel() {
  //  return this.model;
  // }
- getRangeLabel(){
+ getRangeLabel() {
   return this.slider.getRangeLabel();
  }
  getSliderLengthInPx() {
@@ -61,7 +61,25 @@ export class View {
   this.slider.setValueToLabelThumbFrom(this.model.getFrom());
   if (this.model.isRange()) {
    this.slider.setValueToLabelThumbTo(this.model.getTo());
+   if (this.model.isVertical()) {
+    this.getThumbTo().style.top = this.model.getToInPx() + 'px';
+    this.getThumbFrom().style.top = this.model.getFromInPx() + 'px';
+   }
+   else {
+    this.getThumbTo().style.left = this.model.getToInPx() + 'px';
+    this.getThumbFrom().style.left = this.model.getFromInPx() + 'px'
+   }
   }
+  else {
+   if (this.model.isVertical()) {
+    this.getThumbFrom().style.top = this.model.getFromInPx() + 'px';
+    console.log('else if' + this.model.getFromInPx());
+   }
+   else {
+    this.getThumbFrom().style.left = this.model.getFromInPx() + 'px';
+   }
+  }
+
   this.setColoredRange();
  }
  private setColoredRange() {
@@ -91,9 +109,9 @@ export class View {
     this.slider.getColoredRange().style.height = height;
    }
    else {
-    let thumbHalf = this.slider.getThumbFrom().offsetWidth/2;
-    let width = (this.model.getFromInPx() + thumbHalf)+'px';
-    this.slider.getColoredRange().style.width=width;
+    let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
+    let width = (this.model.getFromInPx() + thumbHalf) + 'px';
+    this.slider.getColoredRange().style.width = width;
    }
   }
  }

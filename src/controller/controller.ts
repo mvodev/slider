@@ -96,7 +96,7 @@ export class Controller {
      newTop = bottom;
     }
 
-    thumb.style.top = newTop + 'px';
+    //thumb.style.top = newTop + 'px';
     that.model.setFromInPx(newTop);
 
     that.setValueToThumb();
@@ -128,7 +128,7 @@ export class Controller {
     if (newLeft > rightEdge) {
      newLeft = rightEdge;
     }
-    thumb.style.left = newLeft + 'px';
+    //thumb.style.left = newLeft + 'px';
     that.model.setFromInPx(newLeft);
     that.setValueToThumb();
     that.view.refreshView();
@@ -162,7 +162,7 @@ export class Controller {
      newTop = bottom;
     }
 
-    thumb.style.top = newTop + 'px';
+    //thumb.style.top = newTop + 'px';
     that.model.setToInPx(newTop);
     that.setValueToThumb();
     that.refreshView();
@@ -190,7 +190,7 @@ export class Controller {
     if (newLeft > rightEdge) {
      newLeft = rightEdge;
     }
-    thumb.style.left = newLeft + 'px';
+    //thumb.style.left = newLeft + 'px';
     that.model.setToInPx(newLeft);
     that.setValueToThumb();
     that.refreshView();
@@ -201,8 +201,20 @@ export class Controller {
    }
   }
  }
- mouseRangeHandler(e:MouseEvent){
-console.log(e.screenY);
+ mouseRangeHandler(e: MouseEvent) {
+  if (this.isVerticalSlider()) {
+   let shiftY = e.clientY - this.view.getRange().getBoundingClientRect().top;
+   console.log(
+    e.screenY + ' ' +e.screenX+' '+ this.view.getRange().getBoundingClientRect().top);
+   this.model.setFromInPx(shiftY);
+   this.setValueToThumb();
+   this.refreshView();
+  } else {
+   let shiftX = e.clientX - this.view.getRange().getBoundingClientRect().left;
+   this.model.setFromInPx(shiftX);
+   this.setValueToThumb();
+   this.refreshView();
+  }
  }
  setValueToThumb() {
   if (this.withThumbLabel()) {
