@@ -239,16 +239,66 @@ class Controller {
 
   mouseRangeHandler(e) {
     if (this.isVerticalSlider()) {
-      let shiftY = e.clientY - this.view.getRange().getBoundingClientRect().top;
-      console.log(e.screenY + ' ' + e.screenX + ' ' + this.view.getRange().getBoundingClientRect().top);
-      this.model.setFromInPx(shiftY);
-      this.setValueToThumb();
-      this.refreshView();
+      if (this.model.isRange()) {
+        let shiftY = e.clientY - this.view.getRange().getBoundingClientRect().top;
+
+        if (shiftY < this.model.getFromInPx()) {
+          this.model.setFromInPx(shiftY);
+          this.setValueToThumb();
+          this.refreshView();
+        } else if (shiftY > this.model.getToInPx()) {
+          this.model.setToInPx(shiftY);
+          this.setValueToThumb();
+          this.refreshView();
+        } else if (shiftY >= this.model.getFromInPx() && shiftY <= this.model.getToInPx()) {
+          let pivot = this.model.getToInPx() - this.model.getFromInPx();
+
+          if (shiftY < pivot) {
+            this.model.setFromInPx(shiftY);
+            this.setValueToThumb();
+            this.refreshView();
+          } else if (shiftY >= pivot) {
+            this.model.setToInPx(shiftY);
+            this.setValueToThumb();
+            this.refreshView();
+          }
+        }
+      } else {
+        let shiftY = e.clientY - this.view.getRange().getBoundingClientRect().top;
+        this.model.setFromInPx(shiftY);
+        this.setValueToThumb();
+        this.refreshView();
+      }
     } else {
       let shiftX = e.clientX - this.view.getRange().getBoundingClientRect().left;
-      this.model.setFromInPx(shiftX);
-      this.setValueToThumb();
-      this.refreshView();
+
+      if (this.model.isRange()) {
+        if (shiftX < this.model.getFromInPx()) {
+          this.model.setFromInPx(shiftX);
+          this.setValueToThumb();
+          this.refreshView();
+        } else if (shiftX > this.model.getToInPx()) {
+          this.model.setToInPx(shiftX);
+          this.setValueToThumb();
+          this.refreshView();
+        } else if (shiftX >= this.model.getFromInPx() && shiftX <= this.model.getToInPx()) {
+          let pivot = this.model.getToInPx() - this.model.getFromInPx();
+
+          if (shiftX < pivot) {
+            this.model.setFromInPx(shiftX);
+            this.setValueToThumb();
+            this.refreshView();
+          } else if (shiftX >= pivot) {
+            this.model.setToInPx(shiftX);
+            this.setValueToThumb();
+            this.refreshView();
+          }
+        }
+      } else {
+        this.model.setFromInPx(shiftX);
+        this.setValueToThumb();
+        this.refreshView();
+      }
     }
   }
 
@@ -872,12 +922,12 @@ __webpack_require__.r(__webpack_exports__);
 $('.slider').fsdSlider(document.querySelector('.slider'), {
  min: -15,
  max: -10,
- from: -12,
+ from: -14,
  step: 0.2,
- //to: -15,
- isVertical: false,
+ to: -11,
+ isVertical: true,
  hideThumbLabel: false,
- isRange: false,
+ isRange: true,
 });
 
 /***/ })
@@ -1039,4 +1089,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.ad408107afc448302410.js.map
+//# sourceMappingURL=main.0724561c37402957329d.js.map

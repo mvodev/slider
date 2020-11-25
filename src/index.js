@@ -21,10 +21,10 @@ import { Controller } from './controller/Controller.ts';
 $('.slider').fsdSlider(document.querySelector('.slider'), {
  min: -15,
  max: -10,
- from: -12,
+ from: -14,
  step: 0.2,
- //to: -15,
- isVertical: false,
+ to: -11,
+ isVertical: true,
  hideThumbLabel: false,
- isRange: false,
+ isRange: true,
 });
