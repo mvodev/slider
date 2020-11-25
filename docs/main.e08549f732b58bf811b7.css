@@ -1,5 +1,5 @@
 .fsd-slider {
-  width: 300px;
+  width: 800px;
   height: 100px;
   display: flex;
   flex-direction: column;
@@ -7,7 +7,7 @@
 
 .fsd-slider_is_vertical {
   width: 100px;
-  height: 300px;
+  height: 800px;
   flex-direction: row;
 }
 
@@ -91,4 +91,4 @@
   margin-top: 50px;
 }
 
-/*# sourceMappingURL=main.ccbaf0d46ba1b12a9770.css.map*/
+/*# sourceMappingURL=main.e08549f732b58bf811b7.css.map*/

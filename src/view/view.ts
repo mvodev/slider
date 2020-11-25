@@ -8,7 +8,7 @@ export class View {
  private rootElem: HTMLDivElement;
  private numberOfMarking: number = 10;
  //TODO: add this class from settings
- constructor(model: Model, root: HTMLDivElement,) {
+ constructor(model: Model, root: HTMLInputElement,) {
   this.model = model;
   this.rootElem = root;
   this.slider = new Slider(this.rootElem, this.model, this.numberOfMarking);
@@ -62,55 +62,52 @@ export class View {
   if (this.model.isRange()) {
    this.slider.setValueToLabelThumbTo(this.model.getTo());
    if (this.model.isVertical()) {
-    this.getThumbTo().style.top = this.model.getToInPx() + 'px';
-    this.getThumbFrom().style.top = this.model.getFromInPx() + 'px';
+    this.getThumbTo().style.top = (this.model.getToInPx() / this.slider.getRange().clientHeight) * 100 + '%';
+    this.getThumbFrom().style.top = (this.model.getFromInPx() / this.slider.getRange().clientHeight) * 100 + '%';
    }
    else {
-    this.getThumbTo().style.left = this.model.getToInPx() + 'px';
-    this.getThumbFrom().style.left = this.model.getFromInPx() + 'px'
+    this.getThumbTo().style.left = (this.model.getToInPx() / this.slider.getRange().clientWidth) * 100 + '%';
+    this.getThumbFrom().style.left = (this.model.getFromInPx() / this.slider.getRange().clientWidth) * 100 + '%';
    }
   }
   else {
    if (this.model.isVertical()) {
-    this.getThumbFrom().style.top = this.model.getFromInPx() + 'px';
-    console.log('else if' + this.model.getFromInPx());
+    this.getThumbFrom().style.top = (this.model.getFromInPx() / this.slider.getRange().offsetHeight) * 100 + '%';
    }
    else {
-    this.getThumbFrom().style.left = this.model.getFromInPx() + 'px';
+    this.getThumbFrom().style.left = (this.model.getFromInPx() / this.slider.getRange().clientWidth) * 100 + '%';
    }
   }
 
   this.setColoredRange();
  }
  private setColoredRange() {
-  //console.log('inside setColoredRange()');
   let that = this;
   if (this.model.isRange()) {
    if (this.model.isVertical()) {
     let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
-    let height = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) + 'px';
-    let top = this.model.getFromInPx() + 'px';
+    let height = ((this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) / this.getRange().offsetHeight) * 100 + '%';
+    let top = (this.model.getFromInPx() / this.getRange().offsetHeight) * 100 + '%';
     this.slider.getColoredRange().style.top = top;
     this.slider.getColoredRange().style.height = height;
    }
    else {
     let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
-    let width = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) + 'px';
-    let left = this.model.getFromInPx() + 'px';
+    let width = ((this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) / this.getRange().offsetWidth) * 100 + '%';
+    let left = (this.model.getFromInPx() / this.getRange().offsetWidth) * 100 + '%';
     this.slider.getColoredRange().style.left = left;
     this.slider.getColoredRange().style.width = width;
    }
   }
   else {
-   //console.log('inside setColoredRange() is not range');
    if (this.model.isVertical()) {
     let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
-    let height = (this.model.getFromInPx() + thumbHalf) + 'px';
+    let height = ((this.model.getFromInPx() + thumbHalf) / this.slider.getRange().clientHeight) * 100 + '%';
     this.slider.getColoredRange().style.height = height;
    }
    else {
     let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
-    let width = (this.model.getFromInPx() + thumbHalf) + 'px';
+    let width = ((this.model.getFromInPx() + thumbHalf) / this.slider.getRange().clientWidth) * 100 + '%';
     this.slider.getColoredRange().style.width = width;
    }
   }

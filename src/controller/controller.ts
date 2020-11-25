@@ -96,7 +96,6 @@ export class Controller {
           newTop = bottom;
         }
 
-        //thumb.style.top = newTop + 'px';
         that.model.setFromInPx(newTop);
 
         that.setValueToThumb();
@@ -128,7 +127,6 @@ export class Controller {
         if (newLeft > rightEdge) {
           newLeft = rightEdge;
         }
-        //thumb.style.left = newLeft + 'px';
         that.model.setFromInPx(newLeft);
         that.setValueToThumb();
         that.view.refreshView();
@@ -250,12 +248,12 @@ export class Controller {
         }
         else if (shiftX >= this.model.getFromInPx() && shiftX <= this.model.getToInPx()) {
           let pivot = (this.model.getToInPx() - this.model.getFromInPx());
-          if(shiftX<pivot){
+          if (shiftX < pivot) {
             this.model.setFromInPx(shiftX);
             this.setValueToThumb();
             this.refreshView();
           }
-          else if (shiftX >= pivot){
+          else if (shiftX >= pivot) {
             this.model.setToInPx(shiftX);
             this.setValueToThumb();
             this.refreshView();
@@ -286,8 +284,11 @@ export class Controller {
       }
     }
   }
+  getPosInPercentFromValue(value: number): number {
+    return (100 / Math.abs(this.model.getMax() - this.model.getMin())) * (Math.abs(value - this.model.getMin()));
+  }
   getPosInPxFromValue(value: number): number {
-    return this.view.getSliderLengthInPx() / Math.abs(this.model.getMax() - this.model.getMin()) * (Math.abs(value - this.model.getMin()));
+    return (this.view.getSliderLengthInPx() / Math.abs(this.model.getMax() - this.model.getMin())) * (Math.abs(value - this.model.getMin()));
   }
   getValueFromPosInPx(valueInPx: number): number {
     return +(Math.floor(valueInPx /

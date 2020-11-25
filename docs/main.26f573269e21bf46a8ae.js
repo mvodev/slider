@@ -119,8 +119,7 @@ class Controller {
 
         if (newTop > bottom) {
           newTop = bottom;
-        } //thumb.style.top = newTop + 'px';
-
+        }
 
         that.model.setFromInPx(newTop);
         that.setValueToThumb();
@@ -154,8 +153,7 @@ class Controller {
 
         if (newLeft > rightEdge) {
           newLeft = rightEdge;
-        } //thumb.style.left = newLeft + 'px';
-
+        }
 
         that.model.setFromInPx(newLeft);
         that.setValueToThumb();
@@ -318,6 +316,10 @@ class Controller {
         }
       }
     }
+  }
+
+  getPosInPercentFromValue(value) {
+    return 100 / Math.abs(this.model.getMax() - this.model.getMin()) * Math.abs(value - this.model.getMin());
   }
 
   getPosInPxFromValue(value) {
@@ -517,18 +519,22 @@ class View {
       this.slider.setValueToLabelThumbTo(this.model.getTo());
 
       if (this.model.isVertical()) {
-        this.getThumbTo().style.top = this.model.getToInPx() + 'px';
-        this.getThumbFrom().style.top = this.model.getFromInPx() + 'px';
+        //this.getThumbTo().style.top = this.model.getToInPx() + 'px';
+        this.getThumbTo().style.top = this.model.getToInPx() / this.slider.getRange().clientHeight * 100 + '%';
+        this.getThumbFrom().style.top = this.model.getFromInPx() / this.slider.getRange().clientHeight * 100 + '%'; //this.getThumbFrom().style.top = this.model.getFromInPx() + 'px';
       } else {
-        this.getThumbTo().style.left = this.model.getToInPx() + 'px';
-        this.getThumbFrom().style.left = this.model.getFromInPx() + 'px';
+        this.getThumbTo().style.left = this.model.getToInPx() / this.slider.getRange().clientWidth * 100 + '%';
+        this.getThumbFrom().style.left = this.model.getFromInPx() / this.slider.getRange().clientWidth * 100 + '%'; //this.getThumbTo().style.left = this.model.getToInPx() + 'px';
+        //this.getThumbFrom().style.left = this.model.getFromInPx() + 'px'
       }
     } else {
       if (this.model.isVertical()) {
-        this.getThumbFrom().style.top = this.model.getFromInPx() + 'px';
-        console.log('else if' + this.model.getFromInPx());
+        //this.getThumbFrom().style.top = this.model.getFromInPx() + 'px';
+        this.getThumbFrom().style.top = this.model.getFromInPx() / this.slider.getRange().offsetHeight * 100 + '%';
       } else {
-        this.getThumbFrom().style.left = this.model.getFromInPx() + 'px';
+        //todo done all other branches in %
+        //this.getThumbFrom().style.left = this.model.getFromInPx() + 'px';
+        this.getThumbFrom().style.left = this.model.getFromInPx() / this.slider.getRange().clientWidth * 100 + '%';
       }
     }
 
@@ -541,27 +547,32 @@ class View {
 
     if (this.model.isRange()) {
       if (this.model.isVertical()) {
-        let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
-        let height = this.model.getToInPx() + thumbHalf - this.model.getFromInPx() + 'px';
-        let top = this.model.getFromInPx() + 'px';
+        let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2; //let height = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) + 'px';
+        //let top = this.model.getFromInPx() + 'px';
+
+        let height = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) / this.getRange().offsetHeight * 100 + '%';
+        let top = this.model.getFromInPx() / this.getRange().offsetHeight * 100 + '%';
         this.slider.getColoredRange().style.top = top;
         this.slider.getColoredRange().style.height = height;
       } else {
-        let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
-        let width = this.model.getToInPx() + thumbHalf - this.model.getFromInPx() + 'px';
-        let left = this.model.getFromInPx() + 'px';
+        let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2; //let width = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) + 'px';
+
+        let width = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) / this.getRange().offsetWidth * 100 + '%'; //let left = this.model.getFromInPx() + 'px';
+
+        let left = this.model.getFromInPx() / this.getRange().offsetWidth * 100 + '%';
         this.slider.getColoredRange().style.left = left;
         this.slider.getColoredRange().style.width = width;
       }
     } else {
-      //console.log('inside setColoredRange() is not range');
       if (this.model.isVertical()) {
-        let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
-        let height = this.model.getFromInPx() + thumbHalf + 'px';
+        let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2; //let height = (this.model.getFromInPx() + thumbHalf) + 'px';
+
+        let height = (this.model.getFromInPx() + thumbHalf) / this.slider.getRange().clientHeight * 100 + '%';
         this.slider.getColoredRange().style.height = height;
       } else {
-        let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
-        let width = this.model.getFromInPx() + thumbHalf + 'px';
+        let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2; //let width = (this.model.getFromInPx() + thumbHalf) + 'px';
+
+        let width = (this.model.getFromInPx() + thumbHalf) / this.slider.getRange().clientWidth * 100 + '%';
         this.slider.getColoredRange().style.width = width;
       }
     }
@@ -1089,4 +1100,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.0724561c37402957329d.js.map
+//# sourceMappingURL=main.26f573269e21bf46a8ae.js.map
