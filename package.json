@@ -4,6 +4,7 @@
   "description": "FSD Course4",
   "main": "index.js",
   "dependencies": {
+    "@types/jquery": "^3.5.4",
     "jquery": "^3.5.1",
     "webpack-cli": "^4.1.0"
   },

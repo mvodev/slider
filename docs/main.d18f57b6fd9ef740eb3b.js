@@ -453,11 +453,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_Slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/Slider */ "./view/modules/Slider.ts");
 ;
 class View {
-  //TODO: add this class from settings
   constructor(model, root) {
     this.numberOfMarking = 10;
     this.model = model;
     this.rootElem = root;
+    console.log(this.rootElem + 'inside constructor view class');
     this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.model, this.numberOfMarking);
   }
 
@@ -471,10 +471,7 @@ class View {
     if (this.model.isVertical()) {
       this.slider.setVertical();
     }
-  } // getModel() {
-  //  return this.model;
-  // }
-
+  }
 
   getRangeLabel() {
     return this.slider.getRangeLabel();
@@ -519,22 +516,17 @@ class View {
       this.slider.setValueToLabelThumbTo(this.model.getTo());
 
       if (this.model.isVertical()) {
-        //this.getThumbTo().style.top = this.model.getToInPx() + 'px';
-        this.getThumbTo().style.top = this.model.getToInPx() / this.slider.getRange().clientHeight * 100 + '%';
-        this.getThumbFrom().style.top = this.model.getFromInPx() / this.slider.getRange().clientHeight * 100 + '%'; //this.getThumbFrom().style.top = this.model.getFromInPx() + 'px';
+        this.getThumbTo().style.top = this.model.getToInPx() / this.getRange().clientHeight * 100 + '%';
+        this.getThumbFrom().style.top = this.model.getFromInPx() / this.getRange().clientHeight * 100 + '%';
       } else {
-        this.getThumbTo().style.left = this.model.getToInPx() / this.slider.getRange().clientWidth * 100 + '%';
-        this.getThumbFrom().style.left = this.model.getFromInPx() / this.slider.getRange().clientWidth * 100 + '%'; //this.getThumbTo().style.left = this.model.getToInPx() + 'px';
-        //this.getThumbFrom().style.left = this.model.getFromInPx() + 'px'
+        this.getThumbTo().style.left = this.model.getToInPx() / this.getRange().clientWidth * 100 + '%';
+        this.getThumbFrom().style.left = this.model.getFromInPx() / this.getRange().clientWidth * 100 + '%';
       }
     } else {
       if (this.model.isVertical()) {
-        //this.getThumbFrom().style.top = this.model.getFromInPx() + 'px';
-        this.getThumbFrom().style.top = this.model.getFromInPx() / this.slider.getRange().offsetHeight * 100 + '%';
+        this.getThumbFrom().style.top = this.model.getFromInPx() / this.getRange().offsetHeight * 100 + '%';
       } else {
-        //todo done all other branches in %
-        //this.getThumbFrom().style.left = this.model.getFromInPx() + 'px';
-        this.getThumbFrom().style.left = this.model.getFromInPx() / this.slider.getRange().clientWidth * 100 + '%';
+        this.getThumbFrom().style.left = this.model.getFromInPx() / this.getRange().clientWidth * 100 + '%';
       }
     }
 
@@ -542,37 +534,30 @@ class View {
   }
 
   setColoredRange() {
-    //console.log('inside setColoredRange()');
     let that = this;
 
     if (this.model.isRange()) {
       if (this.model.isVertical()) {
-        let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2; //let height = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) + 'px';
-        //let top = this.model.getFromInPx() + 'px';
-
+        let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
         let height = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) / this.getRange().offsetHeight * 100 + '%';
         let top = this.model.getFromInPx() / this.getRange().offsetHeight * 100 + '%';
         this.slider.getColoredRange().style.top = top;
         this.slider.getColoredRange().style.height = height;
       } else {
-        let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2; //let width = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) + 'px';
-
-        let width = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) / this.getRange().offsetWidth * 100 + '%'; //let left = this.model.getFromInPx() + 'px';
-
+        let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
+        let width = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) / this.getRange().offsetWidth * 100 + '%';
         let left = this.model.getFromInPx() / this.getRange().offsetWidth * 100 + '%';
         this.slider.getColoredRange().style.left = left;
         this.slider.getColoredRange().style.width = width;
       }
     } else {
       if (this.model.isVertical()) {
-        let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2; //let height = (this.model.getFromInPx() + thumbHalf) + 'px';
-
-        let height = (this.model.getFromInPx() + thumbHalf) / this.slider.getRange().clientHeight * 100 + '%';
+        let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
+        let height = (this.model.getFromInPx() + thumbHalf) / this.getRange().clientHeight * 100 + '%';
         this.slider.getColoredRange().style.height = height;
       } else {
-        let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2; //let width = (this.model.getFromInPx() + thumbHalf) + 'px';
-
-        let width = (this.model.getFromInPx() + thumbHalf) / this.slider.getRange().clientWidth * 100 + '%';
+        let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
+        let width = (this.model.getFromInPx() + thumbHalf) / this.getRange().clientWidth * 100 + '%';
         this.slider.getColoredRange().style.width = width;
       }
     }
@@ -905,9 +890,9 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.scss */ "./index.scss");
-/* harmony import */ var _view_View_ts__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./view/View.ts */ "./view/View.ts");
-/* harmony import */ var _model_Model_ts__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./model/Model.ts */ "./model/Model.ts");
-/* harmony import */ var _controller_Controller_ts__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./controller/Controller.ts */ "./controller/Controller.ts");
+/* harmony import */ var _view_View__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./view/View */ "./view/View.ts");
+/* harmony import */ var _model_Model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./model/Model */ "./model/Model.ts");
+/* harmony import */ var _controller_Controller__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./controller/Controller */ "./controller/Controller.ts");
 /* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js");
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js");
 ;
@@ -916,21 +901,27 @@ __webpack_require__.r(__webpack_exports__);
 
 
 (function ($) {
- $.fn.fsdSlider = function (rootElem, settings) {
+ $.fn.fsdSlider = function (settings) {
   let defaultSettings = {
    min: 0,
    max: 10,
    from: 5,
+   isRange: false,
+   isVertical: false,
   };
-  let unionSettings = Object.assign(defaultSettings, settings);
-  const root = rootElem;
-  let model = new _model_Model_ts__WEBPACK_IMPORTED_MODULE_2__.Model(defaultSettings);
-  let view = new _view_View_ts__WEBPACK_IMPORTED_MODULE_1__.View(model, root);
-  let controller = new _controller_Controller_ts__WEBPACK_IMPORTED_MODULE_3__.Controller(view, model);
-  controller.start();
+  let unionSettings = $.extend(defaultSettings, settings);
+  return this.each(function(){
+   let model = new _model_Model__WEBPACK_IMPORTED_MODULE_2__.Model(unionSettings);
+   let view = new _view_View__WEBPACK_IMPORTED_MODULE_1__.View(model, this);
+   let controller = new _controller_Controller__WEBPACK_IMPORTED_MODULE_3__.Controller(view, model);
+   controller.start();
+  });
+  //console.log(root);
+  //console.log($('.slider'));
+  
  };
 })(jQuery);
-$('.slider').fsdSlider(document.querySelector('.slider'), {
+$('.slider').fsdSlider({
  min: -15,
  max: -10,
  from: -14,
@@ -1100,4 +1091,4 @@ $('.slider').fsdSlider(document.querySelector('.slider'), {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.26f573269e21bf46a8ae.js.map
+//# sourceMappingURL=main.d18f57b6fd9ef740eb3b.js.map

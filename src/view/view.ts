@@ -2,18 +2,16 @@ import { ISettings } from '../model/ISettings';
 import { Model } from '../model/Model';
 import { Slider } from './modules/Slider';
 export class View {
-
  private slider: Slider;
  private model: Model;
  private rootElem: HTMLDivElement;
  private numberOfMarking: number = 10;
- //TODO: add this class from settings
  constructor(model: Model, root: HTMLInputElement,) {
   this.model = model;
   this.rootElem = root;
+  console.log(this.rootElem+'inside constructor view class');
   this.slider = new Slider(this.rootElem, this.model, this.numberOfMarking);
  }
-
  render() {
   this.slider.render();
   if (!this.model.showThumbLabel()) {
@@ -23,9 +21,6 @@ export class View {
    this.slider.setVertical();
   }
  }
- // getModel() {
- //  return this.model;
- // }
  getRangeLabel() {
   return this.slider.getRangeLabel();
  }
@@ -58,24 +53,25 @@ export class View {
   return this.slider.getThumbTo();
  }
  refreshView() {
+
   this.slider.setValueToLabelThumbFrom(this.model.getFrom());
   if (this.model.isRange()) {
    this.slider.setValueToLabelThumbTo(this.model.getTo());
    if (this.model.isVertical()) {
-    this.getThumbTo().style.top = (this.model.getToInPx() / this.slider.getRange().clientHeight) * 100 + '%';
-    this.getThumbFrom().style.top = (this.model.getFromInPx() / this.slider.getRange().clientHeight) * 100 + '%';
+    this.getThumbTo().style.top = (this.model.getToInPx() / this.getRange().clientHeight) * 100 + '%';
+    this.getThumbFrom().style.top = (this.model.getFromInPx() / this.getRange().clientHeight) * 100 + '%';
    }
    else {
-    this.getThumbTo().style.left = (this.model.getToInPx() / this.slider.getRange().clientWidth) * 100 + '%';
-    this.getThumbFrom().style.left = (this.model.getFromInPx() / this.slider.getRange().clientWidth) * 100 + '%';
+    this.getThumbTo().style.left = (this.model.getToInPx() / this.getRange().clientWidth) * 100 + '%';
+    this.getThumbFrom().style.left = (this.model.getFromInPx() / this.getRange().clientWidth) * 100 + '%';
    }
   }
   else {
    if (this.model.isVertical()) {
-    this.getThumbFrom().style.top = (this.model.getFromInPx() / this.slider.getRange().offsetHeight) * 100 + '%';
+    this.getThumbFrom().style.top = (this.model.getFromInPx() / this.getRange().offsetHeight) * 100 + '%';
    }
    else {
-    this.getThumbFrom().style.left = (this.model.getFromInPx() / this.slider.getRange().clientWidth) * 100 + '%';
+    this.getThumbFrom().style.left = (this.model.getFromInPx() / this.getRange().clientWidth) * 100 + '%';
    }
   }
 
@@ -102,12 +98,12 @@ export class View {
   else {
    if (this.model.isVertical()) {
     let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
-    let height = ((this.model.getFromInPx() + thumbHalf) / this.slider.getRange().clientHeight) * 100 + '%';
+    let height = ((this.model.getFromInPx() + thumbHalf) / this.getRange().clientHeight) * 100 + '%';
     this.slider.getColoredRange().style.height = height;
    }
    else {
     let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
-    let width = ((this.model.getFromInPx() + thumbHalf) / this.slider.getRange().clientWidth) * 100 + '%';
+    let width = ((this.model.getFromInPx() + thumbHalf) / this.getRange().clientWidth) * 100 + '%';
     this.slider.getColoredRange().style.width = width;
    }
   }

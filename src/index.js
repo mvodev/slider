@@ -1,24 +1,27 @@
 import './index.scss';
-import { View } from './view/View.ts';
-import { Model } from './model/Model.ts';
-import { Controller } from './controller/Controller.ts';
+import { View } from './view/View';
+import { Model } from './model/Model';
+import { Controller } from './controller/Controller';
 
 (function ($) {
- $.fn.fsdSlider = function (rootElem, settings) {
+ $.fn.fsdSlider = function (settings) {
   let defaultSettings = {
    min: 0,
    max: 10,
    from: 5,
+   isRange: false,
+   isVertical: false,
   };
-  let unionSettings = Object.assign(defaultSettings, settings);
-  const root = rootElem;
-  let model = new Model(defaultSettings);
-  let view = new View(model, root);
-  let controller = new Controller(view, model);
-  controller.start();
+  let unionSettings = $.extend(defaultSettings, settings);
+  return this.each(function () {
+   let model = new Model(unionSettings);
+   let view = new View(model, this);
+   let controller = new Controller(view, model);
+   controller.start();
+  });
  };
 })(jQuery);
-$('.slider').fsdSlider(document.querySelector('.slider'), {
+$('.slider').fsdSlider({
  min: -15,
  max: -10,
  from: -14,
