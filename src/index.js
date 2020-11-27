@@ -5,14 +5,14 @@ import { Controller } from './controller/Controller';
 
 (function ($) {
  $.fn.fsdSlider = function (settings) {
-  let defaultSettings = {
+  var defaultSettings = {
    min: 0,
    max: 10,
    from: 5,
    isRange: false,
    isVertical: false,
   };
-  let unionSettings = $.extend(defaultSettings, settings);
+  var unionSettings = $.extend(defaultSettings, settings);
   return this.each(function () {
    let model = new Model(unionSettings);
    let view = new View(model, this);

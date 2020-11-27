@@ -902,23 +902,20 @@ __webpack_require__.r(__webpack_exports__);
 
 (function ($) {
  $.fn.fsdSlider = function (settings) {
-  let defaultSettings = {
+  var defaultSettings = {
    min: 0,
    max: 10,
    from: 5,
    isRange: false,
    isVertical: false,
   };
-  let unionSettings = $.extend(defaultSettings, settings);
-  return this.each(function(){
+  var unionSettings = $.extend(defaultSettings, settings);
+  return this.each(function () {
    let model = new _model_Model__WEBPACK_IMPORTED_MODULE_2__.Model(unionSettings);
    let view = new _view_View__WEBPACK_IMPORTED_MODULE_1__.View(model, this);
    let controller = new _controller_Controller__WEBPACK_IMPORTED_MODULE_3__.Controller(view, model);
    controller.start();
   });
-  //console.log(root);
-  //console.log($('.slider'));
-  
  };
 })(jQuery);
 $('.slider').fsdSlider({
@@ -1091,4 +1088,4 @@ $('.slider').fsdSlider({
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.d18f57b6fd9ef740eb3b.js.map
+//# sourceMappingURL=main.0522451efdc3bc859995.js.map
