@@ -19,9 +19,9 @@ import { Controller } from './controller/Controller';
   };
   var unionSettings = $.extend(defaultSettings, settings);
   return this.each(function () {
-   let model = new Model(unionSettings);
-   let view = new View(model, this);
-   let controller = new Controller(view, model);
+   var model = new Model(unionSettings);
+   var view = new View(model, this);
+   var controller = new Controller(view, model);
    controller.start();
   });
  };
