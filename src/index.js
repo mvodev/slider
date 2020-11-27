@@ -11,6 +11,11 @@ import { Controller } from './controller/Controller';
    from: 5,
    isRange: false,
    isVertical: false,
+   hideThumbLabel: false,
+   onStart: undefined,
+   onChange: undefined,
+   onFinish: undefined,
+   onUpdate: undefined,
   };
   var unionSettings = $.extend(defaultSettings, settings);
   return this.each(function () {
@@ -38,7 +43,6 @@ $('.slider2').fsdSlider({
  step: 2,
  to: -11,
  isVertical: false,
- hideThumbLabel: false,
  isRange: false,
  hideThumbLabel: true,
 });
