@@ -370,7 +370,7 @@ class Model {
       throw new Error('unacceptable value,min value in settings more than max value');
     }
 
-    if (this.settings.from < this.settings.min || this.settings.from > this.settings.max || this.settings.to < this.settings.min || this.settings.to > this.settings.max) {
+    if (this.settings.from < this.settings.min || this.settings.from > this.settings.max || this.settings.to < this.settings.min && this.settings.isRange || this.settings.to > this.settings.max && this.settings.isRange) {
       console.error('unacceptable value,from and to values in settings must be between min and max value');
       throw new Error('unacceptable value,from and to values in settings must be between min and max value');
     }
@@ -457,7 +457,6 @@ class View {
     this.numberOfMarking = 10;
     this.model = model;
     this.rootElem = root;
-    console.log(this.rootElem + 'inside constructor view class');
     this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.model, this.numberOfMarking);
   }
 
@@ -928,6 +927,17 @@ $('.slider').fsdSlider({
  hideThumbLabel: false,
  isRange: true,
 });
+$('.slider2').fsdSlider({
+ min: 5,
+ max: 50,
+ from: 7,
+ step: 2,
+ to: -11,
+ isVertical: false,
+ hideThumbLabel: false,
+ isRange: false,
+ hideThumbLabel: true,
+});
 
 /***/ })
 
@@ -1088,4 +1098,4 @@ $('.slider').fsdSlider({
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.0522451efdc3bc859995.js.map
+//# sourceMappingURL=main.a8b70bea518c89341e4d.js.map

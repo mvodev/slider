@@ -31,3 +31,14 @@ $('.slider').fsdSlider({
  hideThumbLabel: false,
  isRange: true,
 });
+$('.slider2').fsdSlider({
+ min: 5,
+ max: 50,
+ from: 7,
+ step: 2,
+ to: -11,
+ isVertical: false,
+ hideThumbLabel: false,
+ isRange: false,
+ hideThumbLabel: true,
+});

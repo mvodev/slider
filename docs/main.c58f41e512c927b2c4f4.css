@@ -90,10 +90,15 @@
   height: auto;
 }
 
-.slider {
+.slider,
+.slider2 {
   margin-top: 50px;
   max-width: 300px;
-  max-height: 40px;
+  max-height: 400px;
 }
 
-/*# sourceMappingURL=main.e4496d0de53b4059b20d.css.map*/
+.slider2 {
+  max-width: 600px;
+}
+
+/*# sourceMappingURL=main.c58f41e512c927b2c4f4.css.map*/

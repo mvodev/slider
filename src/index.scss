@@ -1,6 +1,11 @@
 @import './styles/fsdSlider.scss';
-.slider{
+.slider,
+.slider2{
   margin-top: 50px;
   max-width: 300px;
-  max-height: 40px;
+  max-height: 400px;
  }
+ .slider2{
+   max-width: 600px;
+ }
+

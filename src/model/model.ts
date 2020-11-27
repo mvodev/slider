@@ -13,7 +13,7 @@ export class Model {
    throw new Error('unacceptable value,min value in settings more than max value');
   }
   if (this.settings.from < this.settings.min || this.settings.from > this.settings.max ||
-   this.settings.to < this.settings.min || this.settings.to > this.settings.max) {
+   (this.settings.to < this.settings.min && this.settings.isRange) || (this.settings.to > this.settings.max && this.settings.isRange)) {
    console.error('unacceptable value,from and to values in settings must be between min and max value');
    throw new Error('unacceptable value,from and to values in settings must be between min and max value');
   }

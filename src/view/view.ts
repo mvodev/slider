@@ -9,7 +9,6 @@ export class View {
  constructor(model: Model, root: HTMLInputElement,) {
   this.model = model;
   this.rootElem = root;
-  console.log(this.rootElem+'inside constructor view class');
   this.slider = new Slider(this.rootElem, this.model, this.numberOfMarking);
  }
  render() {

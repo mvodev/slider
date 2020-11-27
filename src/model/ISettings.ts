@@ -8,5 +8,9 @@ export interface ISettings {
  isRange?: boolean;
  fromInPx?: number;
  toInPx?: number;
- hideThumbLabel?: boolean;
+ hideThumbLabel?: boolean|undefined;
+ onStart?: Function|undefined;
+ onChange: Function | undefined;
+ onFinish: Function | undefined;
+ onUpdate: Function | undefined;
 }
