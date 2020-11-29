@@ -124,6 +124,7 @@ class Controller {
         that.model.setFromInPx(newTop);
         that.setValueToThumb();
         that.view.refreshView();
+        that.callOnChange();
       }
 
       function onMouseUp() {
@@ -158,6 +159,7 @@ class Controller {
         that.model.setFromInPx(newLeft);
         that.setValueToThumb();
         that.view.refreshView();
+        that.callOnChange();
       }
 
       function onMouseUp() {
@@ -195,6 +197,7 @@ class Controller {
         that.model.setToInPx(newTop);
         that.setValueToThumb();
         that.refreshView();
+        that.callOnChange();
       }
 
       function onMouseUp() {
@@ -226,6 +229,7 @@ class Controller {
         that.model.setToInPx(newLeft);
         that.setValueToThumb();
         that.refreshView();
+        that.callOnChange();
       }
 
       function onMouseUp() {
@@ -308,12 +312,16 @@ class Controller {
         if (this.isRangeSlider()) {
           this.model.setTo(this.getValueFromPosInPx(this.model.getToInPx()));
         }
+
+        this.callOnChange();
       } else {
         this.model.setFrom(this.getValueFromPosInPx(this.model.getFromInPx()));
 
         if (this.isRangeSlider()) {
           this.model.setTo(this.getValueFromPosInPx(this.model.getToInPx()));
         }
+
+        this.callOnChange();
       }
     }
   }
@@ -339,6 +347,22 @@ class Controller {
     return afterDecimalStr.length;
   }
 
+  callOnChange() {
+    let result = {
+      from: 0,
+      to: 0
+    };
+    result.from = this.model.getFrom();
+
+    if (this.model.isRange) {
+      result.to = this.model.getTo();
+    }
+
+    if (this.model.getCallback()) {
+      this.model.getCallback().call(this, result);
+    }
+  }
+
 }
 
 /***/ }),
@@ -360,6 +384,7 @@ __webpack_require__.r(__webpack_exports__);
 class Model {
   constructor(settings) {
     this.settings = Object.assign({}, settings);
+    this.validateSettings();
   }
 
   getMin() {
@@ -368,6 +393,10 @@ class Model {
 
   getMax() {
     return this.settings.max;
+  }
+
+  getCallback() {
+    return this.settings.callback;
   }
 
   showThumbLabel() {
@@ -436,24 +465,9 @@ class Model {
       this.settings.to = this.settings.max;
     }
 
-    if (this.settings.onChange && typeof this.settings.onChange != 'function') {
+    if (this.settings.callback && typeof this.settings.callback != 'function') {
       console.error('unacceptable value,callback must be function');
-      this.settings.onChange = undefined;
-    }
-
-    if (this.settings.onStart && typeof this.settings.onStart != 'function') {
-      console.error('unacceptable value,callback must be function');
-      this.settings.onStart = undefined;
-    }
-
-    if (this.settings.onFinish && typeof this.settings.onFinish != 'function') {
-      console.error('unacceptable value,callback must be function');
-      this.settings.onFinish = undefined;
-    }
-
-    if (this.settings.onUpdate && typeof this.settings.onUpdate != 'function') {
-      console.error('unacceptable value,callback must be function');
-      this.settings.onUpdate = undefined;
+      this.settings.callback = undefined;
     }
   }
 
@@ -925,7 +939,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 (function ($) {
- $.fn.fsdSlider = function (settings) {
+ $.fn.fsdSlider = function (settings, callback) {
   var defaultSettings = {
    min: 0,
    max: 10,
@@ -933,10 +947,7 @@ __webpack_require__.r(__webpack_exports__);
    isRange: false,
    isVertical: false,
    hideThumbLabel: false,
-   onStart: undefined,
-   onChange: undefined,
-   onFinish: undefined,
-   onUpdate: undefined,
+   callback: undefined,
   };
   var unionSettings = $.extend(defaultSettings, settings);
   return this.each(function () {
@@ -965,8 +976,16 @@ $('.slider2').fsdSlider({
  to: -11,
  isVertical: false,
  isRange: false,
- hideThumbLabel: true,
+ hideThumbLabel: false,
+ callback: callback2,
 });
+// function callback(result) {
+//  $('.slider__input').val(result.from+''+result.to);
+//  console.log('inside callback' + result.from);
+// }
+function callback2(result2) {
+ $('.slider2__input').val(result2.from);
+}
 
 /***/ })
 
@@ -1127,4 +1146,4 @@ $('.slider2').fsdSlider({
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.1ca70baf30cf2f549b19.js.map
+//# sourceMappingURL=main.55ae4e3cc6f642835716.js.map

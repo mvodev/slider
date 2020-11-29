@@ -4,6 +4,7 @@ export class Controller {
 
   private view: View;
   private model: Model;
+  private callback: Function;
 
   constructor(view: View, model: Model) {
     this.view = view;
@@ -95,11 +96,10 @@ export class Controller {
         if (newTop > bottom) {
           newTop = bottom;
         }
-
         that.model.setFromInPx(newTop);
-
         that.setValueToThumb();
         that.view.refreshView();
+        that.callOnChange();
       }
 
       function onMouseUp() {
@@ -130,6 +130,7 @@ export class Controller {
         that.model.setFromInPx(newLeft);
         that.setValueToThumb();
         that.view.refreshView();
+        that.callOnChange();
       }
       function onMouseUp() {
         document.removeEventListener('mouseup', onMouseUp);
@@ -164,6 +165,7 @@ export class Controller {
         that.model.setToInPx(newTop);
         that.setValueToThumb();
         that.refreshView();
+        that.callOnChange();
       }
 
       function onMouseUp() {
@@ -192,6 +194,7 @@ export class Controller {
         that.model.setToInPx(newLeft);
         that.setValueToThumb();
         that.refreshView();
+        that.callOnChange();
       }
       function onMouseUp() {
         document.removeEventListener('mouseup', onMouseUp);
@@ -275,12 +278,14 @@ export class Controller {
         if (this.isRangeSlider()) {
           this.model.setTo(this.getValueFromPosInPx(this.model.getToInPx()));
         }
+        this.callOnChange();
       }
       else {
         this.model.setFrom(this.getValueFromPosInPx(this.model.getFromInPx()));
         if (this.isRangeSlider()) {
           this.model.setTo(this.getValueFromPosInPx(this.model.getToInPx()));
         }
+        this.callOnChange();
       }
     }
   }
@@ -308,5 +313,19 @@ export class Controller {
   numDigitsAfterDecimal(value: number) {
     let afterDecimalStr = value.toString().split('.')[1] || ''
     return afterDecimalStr.length
+  }
+  callOnChange() {
+    let result = {
+      from: 0,
+      to: 0,
+    };
+    result.from = this.model.getFrom();
+    if (this.model.isRange) {
+      result.to = this.model.getTo();
+    }
+    if (this.model.getCallback()) {
+      this.model.getCallback().call(this, result);
+    }
+
   }
 }

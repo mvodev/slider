@@ -14,6 +14,9 @@ export class Model {
  getMax() {
   return this.settings.max;
  }
+ getCallback(){
+  return this.settings.callback;
+ }
  showThumbLabel(): boolean | undefined {
   return !this.settings.hideThumbLabel;
  }
@@ -66,21 +69,9 @@ export class Model {
    console.error('unacceptable value,to must be higher than max');
    this.settings.to = this.settings.max;
   }
-  if (this.settings.onChange && typeof this.settings.onChange != 'function') {
+  if (this.settings.callback && typeof this.settings.callback != 'function') {
    console.error('unacceptable value,callback must be function');
-   this.settings.onChange = undefined;
-  }
-  if (this.settings.onStart && typeof this.settings.onStart != 'function') {
-   console.error('unacceptable value,callback must be function');
-   this.settings.onStart = undefined;
-  }
-  if (this.settings.onFinish && typeof this.settings.onFinish != 'function') {
-   console.error('unacceptable value,callback must be function');
-   this.settings.onFinish = undefined;
-  }
-  if (this.settings.onUpdate && typeof this.settings.onUpdate != 'function') {
-   console.error('unacceptable value,callback must be function');
-   this.settings.onUpdate = undefined;
+   this.settings.callback = undefined;
   }
  }
 }

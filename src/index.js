@@ -4,7 +4,7 @@ import { Model } from './model/Model';
 import { Controller } from './controller/Controller';
 
 (function ($) {
- $.fn.fsdSlider = function (settings) {
+ $.fn.fsdSlider = function (settings, callback) {
   var defaultSettings = {
    min: 0,
    max: 10,
@@ -12,10 +12,7 @@ import { Controller } from './controller/Controller';
    isRange: false,
    isVertical: false,
    hideThumbLabel: false,
-   onStart: undefined,
-   onChange: undefined,
-   onFinish: undefined,
-   onUpdate: undefined,
+   callback: undefined,
   };
   var unionSettings = $.extend(defaultSettings, settings);
   return this.each(function () {
@@ -44,5 +41,13 @@ $('.slider2').fsdSlider({
  to: -11,
  isVertical: false,
  isRange: false,
- hideThumbLabel: true,
+ hideThumbLabel: false,
+ callback: callback2,
 });
+// function callback(result) {
+//  $('.slider__input').val(result.from+''+result.to);
+//  console.log('inside callback' + result.from);
+// }
+function callback2(result2) {
+ $('.slider2__input').val(result2.from);
+}

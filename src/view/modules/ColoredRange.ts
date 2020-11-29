@@ -4,7 +4,7 @@ export class ColoredRange {
   this.coloredRange = document.createElement('div');
   this.coloredRange.classList.add('fsd-slider__colored-range');
  }
- getColoredRange() :HTMLDivElement{
+ getColoredRange(): HTMLDivElement {
   return this.coloredRange;
  }
 }
