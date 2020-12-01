@@ -53,6 +53,10 @@ class Controller {
     this.view.refreshView();
   }
 
+  update() {
+    console.log('inside update controller');
+  }
+
   isVerticalSlider() {
     return this.model.isVertical();
   }
@@ -917,6 +921,64 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./fsdSlider.js":
+/*!**********************!*\
+  !*** ./fsdSlider.js ***!
+  \**********************/
+/*! namespace exports */
+/*! exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _view_View__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./view/View */ "./view/View.ts");
+/* harmony import */ var _model_Model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./model/Model */ "./model/Model.ts");
+/* harmony import */ var _controller_Controller__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./controller/Controller */ "./controller/Controller.ts");
+/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js");
+;
+
+
+
+(function ($) {
+ var FsdSlider = function (root, settings) {
+  this.root = root;
+ 
+  var defaultSettings = {
+   min: 0,
+   max: 10,
+   from: 5,
+   isRange: false,
+   isVertical: false,
+   hideThumbLabel: false,
+   callback: undefined,
+  };
+  this.unionSettings = $.extend(defaultSettings, settings);
+  let model = new _model_Model__WEBPACK_IMPORTED_MODULE_1__.Model(this.unionSettings);
+  let view = new _view_View__WEBPACK_IMPORTED_MODULE_0__.View(model, this.root);
+  this.controller = new _controller_Controller__WEBPACK_IMPORTED_MODULE_2__.Controller(view, model);
+  this.init();
+ };
+ FsdSlider.prototype = {
+  init: function () {
+   this.controller.start();
+  },
+  update: function (newSettings) {
+   this.controller.update(newSettings);
+  },
+ };
+ $.fn.fsdSlider = function (settings) {
+  console.log(this);
+  return this.each(function () {
+   if (!$.data(this, "fsdSlider")) {
+    $.data(this, "fsdSlider", new FsdSlider(this, settings));
+   }
+  });
+ };
+
+})(jQuery);
+
+/***/ }),
+
 /***/ "./index.js":
 /*!******************!*\
   !*** ./index.js ***!
@@ -928,37 +990,12 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.scss */ "./index.scss");
-/* harmony import */ var _view_View__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./view/View */ "./view/View.ts");
-/* harmony import */ var _model_Model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./model/Model */ "./model/Model.ts");
-/* harmony import */ var _controller_Controller__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./controller/Controller */ "./controller/Controller.ts");
-/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js");
+/* harmony import */ var _fsdSlider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fsdSlider */ "./fsdSlider.js");
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js");
 ;
 
-
-
-
-(function ($) {
- $.fn.fsdSlider = function (settings, callback) {
-  var defaultSettings = {
-   min: 0,
-   max: 10,
-   from: 5,
-   isRange: false,
-   isVertical: false,
-   hideThumbLabel: false,
-   callback: undefined,
-  };
-  var unionSettings = $.extend(defaultSettings, settings);
-  return this.each(function () {
-   var model = new _model_Model__WEBPACK_IMPORTED_MODULE_2__.Model(unionSettings);
-   var view = new _view_View__WEBPACK_IMPORTED_MODULE_1__.View(model, this);
-   var controller = new _controller_Controller__WEBPACK_IMPORTED_MODULE_3__.Controller(view, model);
-   controller.start();
-  });
- };
-})(jQuery);
-$('.slider').fsdSlider({
+var $sl1 = $('.slider');
+$sl1.fsdSlider({
  min: -15,
  max: -10,
  from: -14,
@@ -968,24 +1005,28 @@ $('.slider').fsdSlider({
  hideThumbLabel: false,
  isRange: true,
 });
-$('.slider2').fsdSlider({
- min: 5,
- max: 50,
- from: 7,
- step: 2,
- to: -11,
- isVertical: false,
- isRange: false,
- hideThumbLabel: false,
- callback: callback2,
-});
-// function callback(result) {
-//  $('.slider__input').val(result.from+''+result.to);
-//  console.log('inside callback' + result.from);
+var sl1_instance = $sl1.data("fsdSlider");
+sl1_instance.update();
+// $fsd.update();
+// $('.slider2').fsdSlider({
+//  min: 5,
+//  max: 50,
+//  from: 7,
+//  step: 2,
+//  to: -11,
+//  isVertical: false,
+//  isRange: false,
+//  hideThumbLabel: false,
+//  callback: callback2,
+// });
+// // function callback(result) {
+// //  $('.slider__input').val(result.from+''+result.to);
+// //  console.log('inside callback' + result.from);
+// // }
+// var $sl2 = $('.slider2__input');
+// function callback2(result2) {
+//  $sl2.val(result2.from);
 // }
-function callback2(result2) {
- $('.slider2__input').val(result2.from);
-}
 
 /***/ })
 
@@ -1146,4 +1187,4 @@ function callback2(result2) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.55ae4e3cc6f642835716.js.map
+//# sourceMappingURL=main.51464e3d1a60efeb0915.js.map

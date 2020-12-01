@@ -35,6 +35,9 @@ export class Controller {
     this.bindEvents();
     this.view.refreshView();
   }
+  update(){
+    console.log('inside update controller');
+  }
   isVerticalSlider(): boolean | undefined {
     return this.model.isVertical();
   }
