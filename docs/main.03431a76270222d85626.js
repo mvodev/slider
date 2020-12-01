@@ -20,6 +20,12 @@ class Controller {
   constructor(view, model) {
     this.view = view;
     this.model = model;
+    this.isUpdated = false;
+    this.result = {
+      min: 0,
+      max: 0,
+      from: 0
+    };
   }
 
   initialize() {
@@ -34,8 +40,14 @@ class Controller {
     }
 
     this.view.refreshView();
-    this.view.setValueToMinRange(this.model.getMin());
-    this.view.setValueToMaxRange(this.model.getMax());
+  }
+
+  isUpdate() {
+    return this.isUpdated;
+  }
+
+  setIsUpdate(value) {
+    this.isUpdated = value;
   }
 
   bindEvents() {
@@ -53,8 +65,19 @@ class Controller {
     this.view.refreshView();
   }
 
-  update() {
-    console.log('inside update controller');
+  update(newSettings) {
+    this.model.updateSettings(newSettings);
+
+    if (this.model.showThumbLabel) {
+      this.setThumbToValue('thumbFrom');
+
+      if (this.model.isRange()) {
+        this.setThumbToValue('thumbTo');
+      }
+    }
+
+    this.setIsUpdate(true);
+    this.view.refreshView();
   }
 
   isVerticalSlider() {
@@ -72,26 +95,22 @@ class Controller {
   setThumbToValue(type) {
     if (type === 'thumbFrom') {
       if (this.isVerticalSlider()) {
-        let valueToThumb = this.getPosInPxFromValue(this.model.getFrom());
-        this.view.getThumbFrom().style.top = valueToThumb + 'px';
-        this.model.setFromInPx(valueToThumb);
+        this.view.getThumbFrom().style.top = this.getPosInPercentFromValue(this.model.getFrom()) + '%';
+        this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
         this.refreshView();
       } else {
-        let valueToThumb = this.getPosInPxFromValue(this.model.getFrom());
-        this.view.getThumbFrom().style.left = valueToThumb + 'px';
-        this.model.setFromInPx(valueToThumb);
+        this.view.getThumbFrom().style.left = this.getPosInPercentFromValue(this.model.getFrom()) + '%';
+        this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
         this.refreshView();
       }
     } else {
       if (this.isVerticalSlider()) {
-        let valueToThumb = this.getPosInPxFromValue(this.model.getTo());
-        this.view.getThumbTo().style.top = valueToThumb + 'px';
-        this.model.setToInPx(valueToThumb);
+        this.view.getThumbTo().style.top = this.getPosInPercentFromValue(this.model.getTo()) + '%';
+        this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
         this.view.refreshView();
       } else {
-        let valueToThumb = this.getPosInPxFromValue(this.model.getTo());
-        this.view.getThumbTo().style.left = valueToThumb + 'px';
-        this.model.setToInPx(valueToThumb);
+        this.view.getThumbTo().style.left = this.getPosInPercentFromValue(this.model.getTo()) + '%';
+        this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
         this.view.refreshView();
       }
     }
@@ -195,8 +214,7 @@ class Controller {
 
         if (newTop > bottom) {
           newTop = bottom;
-        } //thumb.style.top = newTop + 'px';
-
+        }
 
         that.model.setToInPx(newTop);
         that.setValueToThumb();
@@ -227,8 +245,7 @@ class Controller {
 
         if (newLeft > rightEdge) {
           newLeft = rightEdge;
-        } //thumb.style.left = newLeft + 'px';
-
+        }
 
         that.model.setToInPx(newLeft);
         that.setValueToThumb();
@@ -313,16 +330,32 @@ class Controller {
       if (this.isVerticalSlider()) {
         this.model.setFrom(this.getValueFromPosInPx(this.model.getFromInPx()));
 
+        if (this.isUpdate()) {
+          this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
+        }
+
         if (this.isRangeSlider()) {
           this.model.setTo(this.getValueFromPosInPx(this.model.getToInPx()));
+
+          if (this.isUpdate()) {
+            this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
+          }
         }
 
         this.callOnChange();
       } else {
         this.model.setFrom(this.getValueFromPosInPx(this.model.getFromInPx()));
 
+        if (this.isUpdate()) {
+          this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
+        }
+
         if (this.isRangeSlider()) {
           this.model.setTo(this.getValueFromPosInPx(this.model.getToInPx()));
+
+          if (this.isUpdate()) {
+            this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
+          }
         }
 
         this.callOnChange();
@@ -331,7 +364,8 @@ class Controller {
   }
 
   getPosInPercentFromValue(value) {
-    return 100 / Math.abs(this.model.getMax() - this.model.getMin()) * Math.abs(value - this.model.getMin());
+    let res = 100 / Math.abs(this.model.getMax() - this.model.getMin()) * Math.abs(value - this.model.getMin());
+    return res;
   }
 
   getPosInPxFromValue(value) {
@@ -352,18 +386,14 @@ class Controller {
   }
 
   callOnChange() {
-    let result = {
-      from: 0,
-      to: 0
-    };
-    result.from = this.model.getFrom();
+    this.result.from = this.model.getFrom();
 
     if (this.model.isRange) {
-      result.to = this.model.getTo();
+      this.result.to = this.model.getTo();
     }
 
-    if (this.model.getCallback()) {
-      this.model.getCallback().call(this, result);
+    if (this.model.getOnChangeCallback()) {
+      this.model.getOnChangeCallback().call(this, this.result);
     }
   }
 
@@ -388,7 +418,13 @@ __webpack_require__.r(__webpack_exports__);
 class Model {
   constructor(settings) {
     this.settings = Object.assign({}, settings);
-    this.validateSettings();
+    this.validateSettings(this.settings);
+  }
+
+  updateSettings(settings) {
+    this.settings = Object.assign(this.settings, settings);
+    this.validateSettings(this.settings);
+    console.log('inside updatesettings model' + this.settings.from + this.settings.to);
   }
 
   getMin() {
@@ -399,8 +435,8 @@ class Model {
     return this.settings.max;
   }
 
-  getCallback() {
-    return this.settings.callback;
+  getOnChangeCallback() {
+    return this.settings.onChange;
   }
 
   showThumbLabel() {
@@ -451,27 +487,55 @@ class Model {
     return this.settings.step ? this.settings.step : 1;
   }
 
-  validateSettings() {
-    if (!this.settings.to && this.settings.isRange) {
-      this.settings.to = this.settings.max;
+  validateSettings(settings) {
+    if (!settings.to && settings.isRange) {
+      this.settings.to = settings.max;
+      console.error('unacceptable value,`to` value must be established');
     }
 
-    if (this.settings.min >= this.settings.max) {
+    if (settings.min >= settings.max) {
       console.error('unacceptable value,min value in settings more than max value');
-      this.settings.min = this.settings.max - 10;
+      this.settings.min = settings.max - 10;
     }
 
-    if (this.settings.from < this.settings.min) {
-      console.error('unacceptable value,from must be lower min');
-      this.settings.from = this.settings.min;
-    } else if (this.settings.isRange && this.settings.to > this.settings.max) {
+    if (settings.from < settings.min) {
+      console.error('unacceptable value,from must be more than min');
+      this.settings.from = settings.min;
+    }
+
+    if (settings.from > settings.max) {
+      console.error('unacceptable value,from must be lower than max');
+      this.settings.from = settings.min;
+    }
+
+    if (settings.isRange && settings.to > settings.max) {
       console.error('unacceptable value,to must be higher than max');
-      this.settings.to = this.settings.max;
+      this.settings.to = settings.max;
     }
 
-    if (this.settings.callback && typeof this.settings.callback != 'function') {
+    if (settings.isRange && settings.from >= settings.to) {
+      console.error('unacceptable value,from must be lower than to');
+      this.settings.to = this.settings.from + this.settings.step ? this.settings.step : 0;
+    }
+
+    if (settings.onStart && typeof settings.onStart != 'function') {
       console.error('unacceptable value,callback must be function');
-      this.settings.callback = undefined;
+      this.settings.onStart = undefined;
+    }
+
+    if (settings.onChange && typeof settings.onChange != 'function') {
+      console.error('unacceptable value,callback onChange must be function');
+      this.settings.onChange = undefined;
+    }
+
+    if (settings.onUpdate && typeof settings.onUpdate != 'function') {
+      console.error('unacceptable value,callback onUpdate must be function');
+      this.settings.onUpdate = undefined;
+    }
+
+    if (settings.onDestroy && typeof settings.onDestroy != 'function') {
+      console.error('unacceptable value,callback onUpdate must be function');
+      this.settings.onDestroy = undefined;
     }
   }
 
@@ -501,6 +565,15 @@ class View {
     this.model = model;
     this.rootElem = root;
     this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.model, this.numberOfMarking);
+    this.isUpdated = false;
+  }
+
+  setIsUpdate(value) {
+    this.isUpdated = value;
+  }
+
+  isUpdate() {
+    return this.isUpdated;
   }
 
   render() {
@@ -527,14 +600,6 @@ class View {
     }
   }
 
-  setValueToMinRange(value) {
-    this.slider.setMinRange(value);
-  }
-
-  setValueToMaxRange(value) {
-    this.slider.setMaxRange(value);
-  }
-
   getRange() {
     return this.slider.getRange();
   }
@@ -552,6 +617,8 @@ class View {
   }
 
   refreshView() {
+    this.slider.setMinRange(this.model.getMin());
+    this.slider.setMaxRange(this.model.getMax());
     this.slider.setValueToLabelThumbFrom(this.model.getFrom());
 
     if (this.model.isRange()) {
@@ -942,7 +1009,6 @@ __webpack_require__.r(__webpack_exports__);
 (function ($) {
  var FsdSlider = function (root, settings) {
   this.root = root;
- 
   var defaultSettings = {
    min: 0,
    max: 10,
@@ -952,8 +1018,8 @@ __webpack_require__.r(__webpack_exports__);
    hideThumbLabel: false,
    callback: undefined,
   };
-  this.unionSettings = $.extend(defaultSettings, settings);
-  let model = new _model_Model__WEBPACK_IMPORTED_MODULE_1__.Model(this.unionSettings);
+  let unionSettings = $.extend(defaultSettings, settings);
+  let model = new _model_Model__WEBPACK_IMPORTED_MODULE_1__.Model(unionSettings);
   let view = new _view_View__WEBPACK_IMPORTED_MODULE_0__.View(model, this.root);
   this.controller = new _controller_Controller__WEBPACK_IMPORTED_MODULE_2__.Controller(view, model);
   this.init();
@@ -967,14 +1033,12 @@ __webpack_require__.r(__webpack_exports__);
   },
  };
  $.fn.fsdSlider = function (settings) {
-  console.log(this);
   return this.each(function () {
    if (!$.data(this, "fsdSlider")) {
     $.data(this, "fsdSlider", new FsdSlider(this, settings));
    }
   });
  };
-
 })(jQuery);
 
 /***/ }),
@@ -1004,29 +1068,31 @@ $sl1.fsdSlider({
  isVertical: true,
  hideThumbLabel: false,
  isRange: true,
+ onChange: callback,
 });
 var sl1_instance = $sl1.data("fsdSlider");
-sl1_instance.update();
-// $fsd.update();
-// $('.slider2').fsdSlider({
-//  min: 5,
-//  max: 50,
-//  from: 7,
-//  step: 2,
-//  to: -11,
-//  isVertical: false,
-//  isRange: false,
-//  hideThumbLabel: false,
-//  callback: callback2,
-// });
-// // function callback(result) {
-// //  $('.slider__input').val(result.from+''+result.to);
-// //  console.log('inside callback' + result.from);
-// // }
-// var $sl2 = $('.slider2__input');
-// function callback2(result2) {
-//  $sl2.val(result2.from);
-// }
+sl1_instance.update({ min: 0, max: 22, from: -5, });
+var $sl2 = $('.slider2');
+$sl2.fsdSlider({
+ min: 5,
+ max: 50,
+ from: 7,
+ step: 0.5,
+ to: -11,
+ isVertical: false,
+ isRange: false,
+ hideThumbLabel: false,
+ onChange: callback2,
+});
+var sl2_instance = $sl2.data('fsdSlider');
+sl2_instance.update({ min: 0, max: 6, from: 3, step: 1, });
+function callback(result) {
+ $('.slider__input').val(result.from + '' + result.to);
+}
+var $sl2_input = $('.slider2__input');
+function callback2(result2) {
+ $sl2_input.val(result2.from);
+}
 
 /***/ })
 
@@ -1187,4 +1253,4 @@ sl1_instance.update();
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.51464e3d1a60efeb0915.js.map
+//# sourceMappingURL=main.03431a76270222d85626.js.map

@@ -5,17 +5,20 @@ export class Model {
 
  constructor(settings: ISettings) {
   this.settings = Object.assign({}, settings);
-  this.validateSettings();
+  this.validateSettings(this.settings);
  }
-
+ updateSettings(settings: ISettings) {
+  this.settings = Object.assign(this.settings, settings);
+  this.validateSettings(this.settings);
+ }
  getMin(): number {
   return this.settings.min;
  }
  getMax() {
   return this.settings.max;
  }
- getCallback(){
-  return this.settings.callback;
+ getOnChangeCallback() {
+  return this.settings.onChange;
  }
  showThumbLabel(): boolean | undefined {
   return !this.settings.hideThumbLabel;
@@ -53,25 +56,46 @@ export class Model {
  getStep() {
   return this.settings.step ? this.settings.step : 1;
  }
- validateSettings() {
-  if (!this.settings.to && this.settings.isRange) {
-   this.settings.to = this.settings.max;
+ private validateSettings(settings: ISettings) {
+  if (!settings.to && settings.isRange) {
+   this.settings.to = settings.max;
+   console.error('unacceptable value,`to` value must be established');
   }
-  if (this.settings.min >= this.settings.max) {
+  if (settings.min >= settings.max) {
    console.error('unacceptable value,min value in settings more than max value');
-   this.settings.min = this.settings.max - 10;
+   this.settings.min = settings.max - 10;
   }
-  if (this.settings.from < this.settings.min) {
-   console.error('unacceptable value,from must be lower min');
-   this.settings.from = this.settings.min;
+  if (settings.from < settings.min) {
+   console.error('unacceptable value,from must be more than min');
+   this.settings.from = settings.min;
   }
-  else if (this.settings.isRange && this.settings.to > this.settings.max) {
+  if (settings.from > settings.max) {
+   console.error('unacceptable value,from must be lower than max');
+   this.settings.from = settings.min;
+  }
+  if (settings.isRange && settings.to > settings.max) {
    console.error('unacceptable value,to must be higher than max');
-   this.settings.to = this.settings.max;
+   this.settings.to = settings.max;
   }
-  if (this.settings.callback && typeof this.settings.callback != 'function') {
+  if (settings.isRange && settings.from >= settings.to) {
+   console.error('unacceptable value,from must be lower than to');
+   this.settings.to = this.settings.from + this.settings.step ? this.settings.step : 0;
+  }
+  if (settings.onStart && typeof settings.onStart != 'function') {
    console.error('unacceptable value,callback must be function');
-   this.settings.callback = undefined;
+   this.settings.onStart = undefined;
+  }
+  if (settings.onChange && typeof settings.onChange != 'function') {
+   console.error('unacceptable value,callback onChange must be function');
+   this.settings.onChange = undefined;
+  }
+  if (settings.onUpdate && typeof settings.onUpdate != 'function') {
+   console.error('unacceptable value,callback onUpdate must be function');
+   this.settings.onUpdate = undefined;
+  }
+  if (settings.onDestroy && typeof settings.onDestroy != 'function') {
+   console.error('unacceptable value,callback onUpdate must be function');
+   this.settings.onDestroy = undefined;
   }
  }
 }

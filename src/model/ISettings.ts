@@ -9,5 +9,8 @@ export interface ISettings {
  fromInPx?: number;
  toInPx?: number;
  hideThumbLabel?: boolean | undefined;
- callback?: Function | undefined;
+ onStart?: Function | undefined;
+ onChange?: Function | undefined;
+ onUpdate?: Function | undefined;
+ onDestroy?: Function | undefined;
 }

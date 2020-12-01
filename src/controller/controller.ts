@@ -1,3 +1,4 @@
+import { ISettings } from '../model/ISettings';
 import { Model } from '../model/Model';
 import { View } from '../view/View';
 export class Controller {
@@ -5,10 +6,18 @@ export class Controller {
   private view: View;
   private model: Model;
   private callback: Function;
+  private result: ISettings;
+  private isUpdated: boolean;
 
   constructor(view: View, model: Model) {
     this.view = view;
     this.model = model;
+    this.isUpdated = false;
+    this.result = {
+      min: 0,
+      max: 0,
+      from: 0,
+    };
   }
   initialize() {
     this.view.render();
@@ -19,10 +28,13 @@ export class Controller {
       }
     }
     this.view.refreshView();
-    this.view.setValueToMinRange(this.model.getMin());
-    this.view.setValueToMaxRange(this.model.getMax());
   }
-
+  private isUpdate() {
+    return this.isUpdated;
+  }
+  setIsUpdate(value: boolean) {
+    this.isUpdated = value;
+  }
   bindEvents() {
     this.view.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this);
     this.view.getRangeLabel().onmousedown = this.mouseRangeHandler.bind(this);
@@ -35,8 +47,16 @@ export class Controller {
     this.bindEvents();
     this.view.refreshView();
   }
-  update(){
-    console.log('inside update controller');
+  update(newSettings: ISettings) {
+    this.model.updateSettings(newSettings);
+    if (this.model.showThumbLabel) {
+      this.setThumbToValue('thumbFrom');
+      if (this.model.isRange()) {
+        this.setThumbToValue('thumbTo');
+      }
+    }
+    this.setIsUpdate(true);
+    this.view.refreshView();
   }
   isVerticalSlider(): boolean | undefined {
     return this.model.isVertical();
@@ -50,29 +70,25 @@ export class Controller {
   setThumbToValue(type: string) {
     if (type === 'thumbFrom') {
       if (this.isVerticalSlider()) {
-        let valueToThumb: number = this.getPosInPxFromValue(this.model.getFrom());
-        this.view.getThumbFrom().style.top = valueToThumb + 'px';
-        this.model.setFromInPx(valueToThumb);
+        this.view.getThumbFrom().style.top = this.getPosInPercentFromValue(this.model.getFrom()) + '%';
+        this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
         this.refreshView();
       }
       else {
-        let valueToThumb = this.getPosInPxFromValue(this.model.getFrom());
-        this.view.getThumbFrom().style.left = valueToThumb + 'px';
-        this.model.setFromInPx(valueToThumb);
+        this.view.getThumbFrom().style.left = this.getPosInPercentFromValue(this.model.getFrom()) + '%';
+        this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
         this.refreshView();
       }
     }
     else {
       if (this.isVerticalSlider()) {
-        let valueToThumb = this.getPosInPxFromValue(this.model.getTo());
-        this.view.getThumbTo().style.top = valueToThumb + 'px';
-        this.model.setToInPx(valueToThumb);
+        this.view.getThumbTo().style.top = this.getPosInPercentFromValue(this.model.getTo()) + '%';
+        this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
         this.view.refreshView();
       }
       else {
-        let valueToThumb = this.getPosInPxFromValue(this.model.getTo());
-        this.view.getThumbTo().style.left = valueToThumb + 'px';
-        this.model.setToInPx(valueToThumb);
+        this.view.getThumbTo().style.left = this.getPosInPercentFromValue(this.model.getTo()) + '%';
+        this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
         this.view.refreshView();
       }
     }
@@ -163,8 +179,6 @@ export class Controller {
         if (newTop > bottom) {
           newTop = bottom;
         }
-
-        //thumb.style.top = newTop + 'px';
         that.model.setToInPx(newTop);
         that.setValueToThumb();
         that.refreshView();
@@ -193,7 +207,6 @@ export class Controller {
         if (newLeft > rightEdge) {
           newLeft = rightEdge;
         }
-        //thumb.style.left = newLeft + 'px';
         that.model.setToInPx(newLeft);
         that.setValueToThumb();
         that.refreshView();
@@ -278,22 +291,36 @@ export class Controller {
     if (this.withThumbLabel()) {
       if (this.isVerticalSlider()) {
         this.model.setFrom(this.getValueFromPosInPx(this.model.getFromInPx()));
+        if (this.isUpdate()) {
+          this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
+        }
         if (this.isRangeSlider()) {
           this.model.setTo(this.getValueFromPosInPx(this.model.getToInPx()));
+          if (this.isUpdate()) {
+            this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
+          }
         }
         this.callOnChange();
       }
       else {
         this.model.setFrom(this.getValueFromPosInPx(this.model.getFromInPx()));
+        if (this.isUpdate()) {
+          this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
+        }
         if (this.isRangeSlider()) {
           this.model.setTo(this.getValueFromPosInPx(this.model.getToInPx()));
+          if (this.isUpdate()) {
+            this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
+          }
         }
         this.callOnChange();
       }
     }
   }
   getPosInPercentFromValue(value: number): number {
-    return (100 / Math.abs(this.model.getMax() - this.model.getMin())) * (Math.abs(value - this.model.getMin()));
+
+    let res = (100 / Math.abs(this.model.getMax() - this.model.getMin())) * (Math.abs(value - this.model.getMin()));
+    return res;
   }
   getPosInPxFromValue(value: number): number {
     return (this.view.getSliderLengthInPx() / Math.abs(this.model.getMax() - this.model.getMin())) * (Math.abs(value - this.model.getMin()));
@@ -318,17 +345,12 @@ export class Controller {
     return afterDecimalStr.length
   }
   callOnChange() {
-    let result = {
-      from: 0,
-      to: 0,
-    };
-    result.from = this.model.getFrom();
+    this.result.from = this.model.getFrom();
     if (this.model.isRange) {
-      result.to = this.model.getTo();
+      this.result.to = this.model.getTo();
     }
-    if (this.model.getCallback()) {
-      this.model.getCallback().call(this, result);
+    if (this.model.getOnChangeCallback()) {
+      this.model.getOnChangeCallback().call(this, this.result);
     }
-
   }
 }

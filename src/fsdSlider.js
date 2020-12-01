@@ -5,7 +5,6 @@ import { Controller } from './controller/Controller';
 (function ($) {
  var FsdSlider = function (root, settings) {
   this.root = root;
- 
   var defaultSettings = {
    min: 0,
    max: 10,
@@ -15,8 +14,8 @@ import { Controller } from './controller/Controller';
    hideThumbLabel: false,
    callback: undefined,
   };
-  this.unionSettings = $.extend(defaultSettings, settings);
-  let model = new Model(this.unionSettings);
+  let unionSettings = $.extend(defaultSettings, settings);
+  let model = new Model(unionSettings);
   let view = new View(model, this.root);
   this.controller = new Controller(view, model);
   this.init();
@@ -30,12 +29,10 @@ import { Controller } from './controller/Controller';
   },
  };
  $.fn.fsdSlider = function (settings) {
-  console.log(this);
   return this.each(function () {
    if (!$.data(this, "fsdSlider")) {
     $.data(this, "fsdSlider", new FsdSlider(this, settings));
    }
   });
  };
-
 })(jQuery);

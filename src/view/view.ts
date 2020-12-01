@@ -6,10 +6,18 @@ export class View {
  private model: Model;
  private rootElem: HTMLDivElement;
  private numberOfMarking: number = 10;
+ private isUpdated: boolean;
  constructor(model: Model, root: HTMLInputElement,) {
   this.model = model;
   this.rootElem = root;
   this.slider = new Slider(this.rootElem, this.model, this.numberOfMarking);
+  this.isUpdated = false;
+ }
+ private setIsUpdate(value: boolean) {
+  this.isUpdated = value;
+ }
+ private isUpdate(): boolean {
+  return this.isUpdated;
  }
  render() {
   this.slider.render();
@@ -32,13 +40,6 @@ export class View {
   }
  }
 
- setValueToMinRange(value: number) {
-  this.slider.setMinRange(value);
- }
- setValueToMaxRange(value: number) {
-  this.slider.setMaxRange(value);
- }
-
  getRange() {
   return this.slider.getRange();
  }
@@ -52,7 +53,8 @@ export class View {
   return this.slider.getThumbTo();
  }
  refreshView() {
-
+  this.slider.setMinRange(this.model.getMin());
+  this.slider.setMaxRange(this.model.getMax());
   this.slider.setValueToLabelThumbFrom(this.model.getFrom());
   if (this.model.isRange()) {
    this.slider.setValueToLabelThumbTo(this.model.getTo());
@@ -61,6 +63,7 @@ export class View {
     this.getThumbFrom().style.top = (this.model.getFromInPx() / this.getRange().clientHeight) * 100 + '%';
    }
    else {
+
     this.getThumbTo().style.left = (this.model.getToInPx() / this.getRange().clientWidth) * 100 + '%';
     this.getThumbFrom().style.left = (this.model.getFromInPx() / this.getRange().clientWidth) * 100 + '%';
    }
@@ -73,7 +76,6 @@ export class View {
     this.getThumbFrom().style.left = (this.model.getFromInPx() / this.getRange().clientWidth) * 100 + '%';
    }
   }
-
   this.setColoredRange();
  }
  private setColoredRange() {
