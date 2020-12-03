@@ -2,6 +2,41 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./Observers/EventObservable.ts":
+/*!**************************************!*\
+  !*** ./Observers/EventObservable.ts ***!
+  \**************************************/
+/*! namespace exports */
+/*! export EventObservable [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "EventObservable": () => /* binding */ EventObservable
+/* harmony export */ });
+class EventObservable {
+  constructor() {
+    this.observers = [];
+  }
+
+  addObserver(o) {
+    this.observers.push(o);
+  }
+
+  removeObserver(o) {
+    this.observers.filter(subscriber => subscriber !== o);
+  }
+
+  notifyObservers(data) {
+    this.observers.forEach(elem => elem.handleEvent(data));
+  }
+
+}
+
+/***/ }),
+
 /***/ "./controller/Controller.ts":
 /*!**********************************!*\
   !*** ./controller/Controller.ts ***!
@@ -51,7 +86,7 @@ class Controller {
   }
 
   bindEvents() {
-    this.view.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this);
+    this.view.getThumbFrom().onmousedown = this.mouseFromHandler.call(this);
     this.view.getRangeLabel().onmousedown = this.mouseRangeHandler.bind(this);
 
     if (this.model.isRange()) {
@@ -408,15 +443,18 @@ class Controller {
 /*! namespace exports */
 /*! export Model [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Model": () => /* binding */ Model
 /* harmony export */ });
-class Model {
+/* harmony import */ var _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Observers/EventObservable */ "./Observers/EventObservable.ts");
+;
+class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.EventObservable {
   constructor(settings) {
+    super();
     this.settings = Object.assign({}, settings);
     this.validateSettings(this.settings);
   }
@@ -484,6 +522,22 @@ class Model {
 
   getStep() {
     return this.settings.step ? this.settings.step : 1;
+  }
+
+  getOnStart() {
+    return this.settings.onStart;
+  }
+
+  getOnChange() {
+    return this.settings.onChange;
+  }
+
+  getOnUpdate() {
+    return this.settings.onUpdate;
+  }
+
+  getOnDestroy() {
+    return this.settings.onDestroy;
   }
 
   validateSettings(settings) {
@@ -1256,4 +1310,4 @@ function callback2(result2) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.f46bb04b780cd6408aa3.js.map
+//# sourceMappingURL=main.c50adcb7ef4879a58c43.js.map

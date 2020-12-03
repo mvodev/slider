@@ -1,6 +1,7 @@
 import { ISettings } from '../model/ISettings';
 import { Model } from '../model/Model';
 import { View } from '../view/View';
+import { Utils } from '../utils/Utils';
 export class Controller {
 
   private view: View;
@@ -335,15 +336,12 @@ export class Controller {
         )
 
       )) * this.model.getStep()
-      + this.model.getMin()).toFixed(this.numDigitsAfterDecimal(this.model.getStep()));
+      + this.model.getMin()).toFixed(Utils.numDigitsAfterDecimal(this.model.getStep()));
   }
   refreshView() {
     this.view.refreshView();
   }
-  numDigitsAfterDecimal(value: number) {
-    let afterDecimalStr = value.toString().split('.')[1] || ''
-    return afterDecimalStr.length
-  }
+
   callOnChange() {
     this.result.from = this.model.getFrom();
     if (this.model.isRange) {
