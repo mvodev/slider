@@ -424,7 +424,6 @@ class Model {
   updateSettings(settings) {
     this.settings = Object.assign(this.settings, settings);
     this.validateSettings(this.settings);
-    console.log('inside updatesettings model' + this.settings.from + this.settings.to);
   }
 
   getMin() {
@@ -488,14 +487,14 @@ class Model {
   }
 
   validateSettings(settings) {
-    if (!settings.to && settings.isRange) {
-      this.settings.to = settings.max;
-      console.error('unacceptable value,`to` value must be established');
-    }
-
     if (settings.min >= settings.max) {
       console.error('unacceptable value,min value in settings more than max value');
       this.settings.min = settings.max - 10;
+    }
+
+    if (!settings.to && settings.isRange) {
+      this.settings.to = settings.max;
+      console.error('unacceptable value,`to` value must be established');
     }
 
     if (settings.from < settings.min) {
@@ -508,8 +507,13 @@ class Model {
       this.settings.from = settings.min;
     }
 
+    if (settings.to < settings.min) {
+      this.settings.to = settings.max;
+      console.error('unacceptable value,`to` value must be between min and max');
+    }
+
     if (settings.isRange && settings.to > settings.max) {
-      console.error('unacceptable value,to must be higher than max');
+      console.error('unacceptable value,to must be lower than max');
       this.settings.to = settings.max;
     }
 
@@ -1005,7 +1009,6 @@ __webpack_require__.r(__webpack_exports__);
 ;
 
 
-
 (function ($) {
  var FsdSlider = function (root, settings) {
   this.root = root;
@@ -1253,4 +1256,4 @@ function callback2(result2) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.03431a76270222d85626.js.map
+//# sourceMappingURL=main.f46bb04b780cd6408aa3.js.map

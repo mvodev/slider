@@ -1,7 +1,6 @@
 import { View } from './view/View';
 import { Model } from './model/Model';
 import { Controller } from './controller/Controller';
-
 (function ($) {
  var FsdSlider = function (root, settings) {
   this.root = root;

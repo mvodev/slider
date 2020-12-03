@@ -1,5 +1,6 @@
+import { IModelFacade } from './IModelFacade';
 import { ISettings } from './ISettings';
-export class Model {
+export class Model implements IModelFacade {
 
  private settings: ISettings;
 
@@ -57,13 +58,13 @@ export class Model {
   return this.settings.step ? this.settings.step : 1;
  }
  private validateSettings(settings: ISettings) {
-  if (!settings.to && settings.isRange) {
-   this.settings.to = settings.max;
-   console.error('unacceptable value,`to` value must be established');
-  }
   if (settings.min >= settings.max) {
    console.error('unacceptable value,min value in settings more than max value');
    this.settings.min = settings.max - 10;
+  }
+  if (!settings.to && settings.isRange) {
+   this.settings.to = settings.max;
+   console.error('unacceptable value,`to` value must be established');
   }
   if (settings.from < settings.min) {
    console.error('unacceptable value,from must be more than min');
@@ -73,8 +74,12 @@ export class Model {
    console.error('unacceptable value,from must be lower than max');
    this.settings.from = settings.min;
   }
+  if (settings.to < settings.min) {
+   this.settings.to = settings.max;
+   console.error('unacceptable value,`to` value must be between min and max');
+  }
   if (settings.isRange && settings.to > settings.max) {
-   console.error('unacceptable value,to must be higher than max');
+   console.error('unacceptable value,to must be lower than max');
    this.settings.to = settings.max;
   }
   if (settings.isRange && settings.from >= settings.to) {
