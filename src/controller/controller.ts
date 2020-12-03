@@ -28,7 +28,7 @@ export class Controller {
         this.setThumbToValue('thumbTo');
       }
     }
-    this.view.refreshView();
+    this.view.refreshView(this.model.getSettings());
   }
   private isUpdate() {
     return this.isUpdated;
@@ -46,7 +46,7 @@ export class Controller {
   start() {
     this.initialize();
     this.bindEvents();
-    this.view.refreshView();
+    this.view.refreshView(this.model.getSettings());
   }
   update(newSettings: ISettings) {
     this.model.updateSettings(newSettings);
@@ -57,7 +57,7 @@ export class Controller {
       }
     }
     this.setIsUpdate(true);
-    this.view.refreshView();
+    this.view.refreshView(this.model.getSettings());
   }
   isVerticalSlider(): boolean | undefined {
     return this.model.isVertical();
@@ -85,12 +85,12 @@ export class Controller {
       if (this.isVerticalSlider()) {
         this.view.getThumbTo().style.top = this.getPosInPercentFromValue(this.model.getTo()) + '%';
         this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
-        this.view.refreshView();
+        this.view.refreshView(this.model.getSettings());
       }
       else {
         this.view.getThumbTo().style.left = this.getPosInPercentFromValue(this.model.getTo()) + '%';
         this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
-        this.view.refreshView();
+        this.view.refreshView(this.model.getSettings());
       }
     }
   }
@@ -118,7 +118,7 @@ export class Controller {
         }
         that.model.setFromInPx(newTop);
         that.setValueToThumb();
-        that.view.refreshView();
+        that.view.refreshView(that.model.getSettings());
         that.callOnChange();
       }
 
@@ -149,7 +149,7 @@ export class Controller {
         }
         that.model.setFromInPx(newLeft);
         that.setValueToThumb();
-        that.view.refreshView();
+        that.view.refreshView(that.model.getSettings());
         that.callOnChange();
       }
       function onMouseUp() {
@@ -319,9 +319,7 @@ export class Controller {
     }
   }
   getPosInPercentFromValue(value: number): number {
-
-    let res = (100 / Math.abs(this.model.getMax() - this.model.getMin())) * (Math.abs(value - this.model.getMin()));
-    return res;
+    return (100 / Math.abs(this.model.getMax() - this.model.getMin())) * (Math.abs(value - this.model.getMin()));
   }
   getPosInPxFromValue(value: number): number {
     return (this.view.getSliderLengthInPx() / Math.abs(this.model.getMax() - this.model.getMin())) * (Math.abs(value - this.model.getMin()));
@@ -339,7 +337,7 @@ export class Controller {
       + this.model.getMin()).toFixed(Utils.numDigitsAfterDecimal(this.model.getStep()));
   }
   refreshView() {
-    this.view.refreshView();
+    this.view.refreshView(this.model.getSettings());
   }
 
   callOnChange() {

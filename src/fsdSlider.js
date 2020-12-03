@@ -3,20 +3,11 @@ import { Model } from './model/Model';
 import { Controller } from './controller/Controller';
 (function ($) {
  var FsdSlider = function (root, settings) {
-  this.root = root;
-  var defaultSettings = {
-   min: 0,
-   max: 10,
-   from: 5,
-   isRange: false,
-   isVertical: false,
-   hideThumbLabel: false,
-   callback: undefined,
-  };
-  let unionSettings = $.extend(defaultSettings, settings);
-  let model = new Model(unionSettings);
-  let view = new View(model, this.root);
+  let model = new Model(settings);
+  let view = new View(model, root);
   this.controller = new Controller(view, model);
+  //model.addObserver(this.controller);
+  model.addObserver(view);
   this.init();
  };
  FsdSlider.prototype = {

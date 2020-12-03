@@ -2,17 +2,32 @@ import { IModelFacade } from './IModelFacade';
 import { ISettings } from './ISettings';
 import { EventObservable } from '../Observers/EventObservable';
 export class Model extends EventObservable implements IModelFacade {
+ //todo  delete this method after all subscribed
+
+ getSettings(): ISettings {
+  return this.settings;
+ }
 
  private settings: ISettings;
-
+ private defaultSettings: ISettings = {
+  min: 0,
+  max: 10,
+  from: 5,
+  isRange: false,
+  isVertical: false,
+  hideThumbLabel: false,
+  callBack: undefined,
+ };
  constructor(settings: ISettings) {
   super();
-  this.settings = Object.assign({}, settings);
+  this.settings = Object.assign(this.defaultSettings, settings);
   this.validateSettings(this.settings);
+  this.notifyObservers(this.settings);
  }
  updateSettings(settings: ISettings) {
   this.settings = Object.assign(this.settings, settings);
   this.validateSettings(this.settings);
+  this.notifyObservers(this.settings);
  }
  getMin(): number {
   return this.settings.min;
@@ -28,12 +43,14 @@ export class Model extends EventObservable implements IModelFacade {
  }
  setFrom(pos: number) {
   this.settings.from = pos;
+  this.notifyObservers(this.settings);
  }
  getFrom(): number {
   return this.settings.from;
  }
  setTo(value: number): void {
   this.settings.to = value;
+  this.notifyObservers(this.settings);
  }
  getTo(): number | undefined {
   return this.settings.to;
@@ -43,12 +60,14 @@ export class Model extends EventObservable implements IModelFacade {
  }
  setFromInPx(value: number): void {
   this.settings.fromInPx = value;
+  this.notifyObservers(this.settings);
  }
  getToInPx(): number | undefined {
   return this.settings.toInPx;
  }
  setToInPx(value: number): void {
   this.settings.toInPx = value;
+  this.notifyObservers(this.settings);
  }
  isRange(): boolean | undefined {
   return this.settings.isRange;
@@ -88,8 +107,10 @@ export class Model extends EventObservable implements IModelFacade {
    console.error('unacceptable value,from must be lower than max');
    this.settings.from = settings.min;
   }
-  if (settings.to < settings.min) {
+  if ((settings.to < settings.min) && settings.isRange) {
+   console.error(settings.to + ' ' + settings.min);
    this.settings.to = settings.max;
+
    console.error('unacceptable value,`to` value must be between min and max');
   }
   if (settings.isRange && settings.to > settings.max) {

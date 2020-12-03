@@ -29,8 +29,8 @@ class EventObservable {
     this.observers.filter(subscriber => subscriber !== o);
   }
 
-  notifyObservers(data) {
-    this.observers.forEach(elem => elem.handleEvent(data));
+  notifyObservers(settings) {
+    this.observers.forEach(elem => elem.handleEvent(settings));
   }
 
 }
@@ -44,13 +44,15 @@ class EventObservable {
 /*! namespace exports */
 /*! export Controller [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Controller": () => /* binding */ Controller
 /* harmony export */ });
+/* harmony import */ var _utils_Utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/Utils */ "./utils/Utils.ts");
+;
 class Controller {
   constructor(view, model) {
     this.view = view;
@@ -74,7 +76,7 @@ class Controller {
       }
     }
 
-    this.view.refreshView();
+    this.view.refreshView(this.model.getSettings());
   }
 
   isUpdate() {
@@ -86,7 +88,7 @@ class Controller {
   }
 
   bindEvents() {
-    this.view.getThumbFrom().onmousedown = this.mouseFromHandler.call(this);
+    this.view.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this);
     this.view.getRangeLabel().onmousedown = this.mouseRangeHandler.bind(this);
 
     if (this.model.isRange()) {
@@ -97,7 +99,7 @@ class Controller {
   start() {
     this.initialize();
     this.bindEvents();
-    this.view.refreshView();
+    this.view.refreshView(this.model.getSettings());
   }
 
   update(newSettings) {
@@ -112,7 +114,7 @@ class Controller {
     }
 
     this.setIsUpdate(true);
-    this.view.refreshView();
+    this.view.refreshView(this.model.getSettings());
   }
 
   isVerticalSlider() {
@@ -142,11 +144,11 @@ class Controller {
       if (this.isVerticalSlider()) {
         this.view.getThumbTo().style.top = this.getPosInPercentFromValue(this.model.getTo()) + '%';
         this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
-        this.view.refreshView();
+        this.view.refreshView(this.model.getSettings());
       } else {
         this.view.getThumbTo().style.left = this.getPosInPercentFromValue(this.model.getTo()) + '%';
         this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
-        this.view.refreshView();
+        this.view.refreshView(this.model.getSettings());
       }
     }
   }
@@ -181,7 +183,7 @@ class Controller {
 
         that.model.setFromInPx(newTop);
         that.setValueToThumb();
-        that.view.refreshView();
+        that.view.refreshView(that.model.getSettings());
         that.callOnChange();
       }
 
@@ -216,7 +218,7 @@ class Controller {
 
         that.model.setFromInPx(newLeft);
         that.setValueToThumb();
-        that.view.refreshView();
+        that.view.refreshView(that.model.getSettings());
         that.callOnChange();
       }
 
@@ -399,8 +401,7 @@ class Controller {
   }
 
   getPosInPercentFromValue(value) {
-    let res = 100 / Math.abs(this.model.getMax() - this.model.getMin()) * Math.abs(value - this.model.getMin());
-    return res;
+    return 100 / Math.abs(this.model.getMax() - this.model.getMin()) * Math.abs(value - this.model.getMin());
   }
 
   getPosInPxFromValue(value) {
@@ -408,16 +409,11 @@ class Controller {
   }
 
   getValueFromPosInPx(valueInPx) {
-    return +(Math.floor(valueInPx / (this.view.getSliderLengthInPx() / (Math.abs(this.model.getMax() - this.model.getMin()) / this.model.getStep()))) * this.model.getStep() + this.model.getMin()).toFixed(this.numDigitsAfterDecimal(this.model.getStep()));
+    return +(Math.floor(valueInPx / (this.view.getSliderLengthInPx() / (Math.abs(this.model.getMax() - this.model.getMin()) / this.model.getStep()))) * this.model.getStep() + this.model.getMin()).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_0__.Utils.numDigitsAfterDecimal(this.model.getStep()));
   }
 
   refreshView() {
-    this.view.refreshView();
-  }
-
-  numDigitsAfterDecimal(value) {
-    let afterDecimalStr = value.toString().split('.')[1] || '';
-    return afterDecimalStr.length;
+    this.view.refreshView(this.model.getSettings());
   }
 
   callOnChange() {
@@ -455,13 +451,29 @@ __webpack_require__.r(__webpack_exports__);
 class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.EventObservable {
   constructor(settings) {
     super();
-    this.settings = Object.assign({}, settings);
+    this.defaultSettings = {
+      min: 0,
+      max: 10,
+      from: 5,
+      isRange: false,
+      isVertical: false,
+      hideThumbLabel: false,
+      callBack: undefined
+    };
+    this.settings = Object.assign(this.defaultSettings, settings);
     this.validateSettings(this.settings);
+    this.notifyObservers(this.settings);
+  } //todo  delete this method after all subscribed
+
+
+  getSettings() {
+    return this.settings;
   }
 
   updateSettings(settings) {
     this.settings = Object.assign(this.settings, settings);
     this.validateSettings(this.settings);
+    this.notifyObservers(this.settings);
   }
 
   getMin() {
@@ -482,6 +494,7 @@ class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
 
   setFrom(pos) {
     this.settings.from = pos;
+    this.notifyObservers(this.settings);
   }
 
   getFrom() {
@@ -490,6 +503,7 @@ class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
 
   setTo(value) {
     this.settings.to = value;
+    this.notifyObservers(this.settings);
   }
 
   getTo() {
@@ -502,6 +516,7 @@ class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
 
   setFromInPx(value) {
     this.settings.fromInPx = value;
+    this.notifyObservers(this.settings);
   }
 
   getToInPx() {
@@ -510,6 +525,7 @@ class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
 
   setToInPx(value) {
     this.settings.toInPx = value;
+    this.notifyObservers(this.settings);
   }
 
   isRange() {
@@ -561,7 +577,8 @@ class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
       this.settings.from = settings.min;
     }
 
-    if (settings.to < settings.min) {
+    if (settings.to < settings.min && settings.isRange) {
+      console.error(settings.to + ' ' + settings.min);
       this.settings.to = settings.max;
       console.error('unacceptable value,`to` value must be between min and max');
     }
@@ -601,6 +618,30 @@ class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
 
 /***/ }),
 
+/***/ "./utils/Utils.ts":
+/*!************************!*\
+  !*** ./utils/Utils.ts ***!
+  \************************/
+/*! namespace exports */
+/*! export Utils [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Utils": () => /* binding */ Utils
+/* harmony export */ });
+class Utils {
+  static numDigitsAfterDecimal(value) {
+    let afterDecimalStr = value.toString().split('.')[1] || '';
+    return afterDecimalStr.length;
+  }
+
+}
+
+/***/ }),
+
 /***/ "./view/View.ts":
 /*!**********************!*\
   !*** ./view/View.ts ***!
@@ -624,6 +665,10 @@ class View {
     this.rootElem = root;
     this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.model, this.numberOfMarking);
     this.isUpdated = false;
+  }
+
+  handleEvent(s) {
+    this.refreshView(s);
   }
 
   setIsUpdate(value) {
@@ -674,13 +719,14 @@ class View {
     return this.slider.getThumbTo();
   }
 
-  refreshView() {
-    this.slider.setMinRange(this.model.getMin());
-    this.slider.setMaxRange(this.model.getMax());
-    this.slider.setValueToLabelThumbFrom(this.model.getFrom());
+  refreshView(s) {
+    this.slider.setMinRange(s.min);
+    this.slider.setMaxRange(s.max);
+    s.max = 0;
+    this.slider.setValueToLabelThumbFrom(s.from);
 
     if (this.model.isRange()) {
-      this.slider.setValueToLabelThumbTo(this.model.getTo());
+      this.slider.setValueToLabelThumbTo(s.to);
 
       if (this.model.isVertical()) {
         this.getThumbTo().style.top = this.model.getToInPx() / this.getRange().clientHeight * 100 + '%';
@@ -1065,20 +1111,11 @@ __webpack_require__.r(__webpack_exports__);
 
 (function ($) {
  var FsdSlider = function (root, settings) {
-  this.root = root;
-  var defaultSettings = {
-   min: 0,
-   max: 10,
-   from: 5,
-   isRange: false,
-   isVertical: false,
-   hideThumbLabel: false,
-   callback: undefined,
-  };
-  let unionSettings = $.extend(defaultSettings, settings);
-  let model = new _model_Model__WEBPACK_IMPORTED_MODULE_1__.Model(unionSettings);
-  let view = new _view_View__WEBPACK_IMPORTED_MODULE_0__.View(model, this.root);
+  let model = new _model_Model__WEBPACK_IMPORTED_MODULE_1__.Model(settings);
+  let view = new _view_View__WEBPACK_IMPORTED_MODULE_0__.View(model, root);
   this.controller = new _controller_Controller__WEBPACK_IMPORTED_MODULE_2__.Controller(view, model);
+  //model.addObserver(this.controller);
+  model.addObserver(view);
   this.init();
  };
  FsdSlider.prototype = {
@@ -1127,24 +1164,24 @@ $sl1.fsdSlider({
  isRange: true,
  onChange: callback,
 });
-var sl1_instance = $sl1.data("fsdSlider");
-sl1_instance.update({ min: 0, max: 22, from: -5, });
-var $sl2 = $('.slider2');
-$sl2.fsdSlider({
- min: 5,
- max: 50,
- from: 7,
- step: 0.5,
- to: -11,
- isVertical: false,
- isRange: false,
- hideThumbLabel: false,
- onChange: callback2,
-});
-var sl2_instance = $sl2.data('fsdSlider');
-sl2_instance.update({ min: 0, max: 6, from: 3, step: 1, });
+// var sl1_instance = $sl1.data("fsdSlider");
+// sl1_instance.update({ min: 0, max: 22, from: -5, });
+// var $sl2 = $('.slider2');
+// $sl2.fsdSlider({
+//  min: 5,
+//  max: 50,
+//  from: 7,
+//  step: 0.5,
+//  to: -11,
+//  isVertical: false,
+//  isRange: false,
+//  hideThumbLabel: false,
+//  onChange: callback2,
+// });
+// var sl2_instance = $sl2.data('fsdSlider');
+// sl2_instance.update({ min: 0, max: 6, from: 3, step: 1, });
 function callback(result) {
- $('.slider__input').val(result.from + '' + result.to);
+ $('.slider__input').val(result.from + '///' + result.to);
 }
 var $sl2_input = $('.slider2__input');
 function callback2(result2) {
@@ -1310,4 +1347,4 @@ function callback2(result2) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.c50adcb7ef4879a58c43.js.map
+//# sourceMappingURL=main.cc0a6d9a432b2511c884.js.map

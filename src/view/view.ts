@@ -1,7 +1,8 @@
 import { ISettings } from '../model/ISettings';
 import { Model } from '../model/Model';
 import { Slider } from './modules/Slider';
-export class View {
+import { IObserver } from '../Observers/IObserver';
+export class View implements IObserver {
  private slider: Slider;
  private model: Model;
  private rootElem: HTMLDivElement;
@@ -12,6 +13,9 @@ export class View {
   this.rootElem = root;
   this.slider = new Slider(this.rootElem, this.model, this.numberOfMarking);
   this.isUpdated = false;
+ }
+ handleEvent(s: ISettings) {
+  this.refreshView(s);
  }
  private setIsUpdate(value: boolean) {
   this.isUpdated = value;
@@ -52,12 +56,12 @@ export class View {
  getThumbTo() {
   return this.slider.getThumbTo();
  }
- refreshView() {
-  this.slider.setMinRange(this.model.getMin());
-  this.slider.setMaxRange(this.model.getMax());
-  this.slider.setValueToLabelThumbFrom(this.model.getFrom());
+ refreshView(s: ISettings) {
+  this.slider.setMinRange(s.min);
+  this.slider.setMaxRange(s.max);
+  this.slider.setValueToLabelThumbFrom(s.from);
   if (this.model.isRange()) {
-   this.slider.setValueToLabelThumbTo(this.model.getTo());
+   this.slider.setValueToLabelThumbTo(s.to);
    if (this.model.isVertical()) {
     this.getThumbTo().style.top = (this.model.getToInPx() / this.getRange().clientHeight) * 100 + '%';
     this.getThumbFrom().style.top = (this.model.getFromInPx() / this.getRange().clientHeight) * 100 + '%';

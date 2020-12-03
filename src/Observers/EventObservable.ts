@@ -12,8 +12,8 @@ export class EventObservable implements IObservable {
  removeObserver(o: IObserver) {
   this.observers.filter(subscriber => subscriber !== o);
  }
- notifyObservers(data) {
-  this.observers.forEach(elem => elem.handleEvent(data));
+ notifyObservers(settings) {
+  this.observers.forEach(elem => elem.handleEvent(settings));
  }
 
 }

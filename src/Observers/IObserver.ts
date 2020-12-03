@@ -1,3 +1,5 @@
+import { ISettings } from "../model/ISettings";
+
 export interface IObserver {
- handleEvent(data:any);
+ handleEvent(s:ISettings);
 }

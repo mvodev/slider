@@ -13,4 +13,5 @@ export interface ISettings {
  onChange?: Function | undefined;
  onUpdate?: Function | undefined;
  onDestroy?: Function | undefined;
+ callBack?: Function | undefined;
 }
