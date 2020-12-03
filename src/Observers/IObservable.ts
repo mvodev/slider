@@ -1,6 +1,6 @@
 import { IObserver } from './IObserver';
-interface Observable {
+export interface IObservable {
  addObserver(o: IObserver);
  removeObserver(o: IObserver);
- notifyObservers();
+ notifyObservers(data:any);
 }

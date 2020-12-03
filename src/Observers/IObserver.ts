@@ -1,3 +1,3 @@
 export interface IObserver {
- handleEvent();
+ handleEvent(data:any);
 }

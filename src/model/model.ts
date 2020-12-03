@@ -1,10 +1,12 @@
 import { IModelFacade } from './IModelFacade';
 import { ISettings } from './ISettings';
-export class Model implements IModelFacade {
+import { EventObservable } from '../Observers/EventObservable';
+export class Model extends EventObservable implements IModelFacade {
 
  private settings: ISettings;
 
  constructor(settings: ISettings) {
+  super();
   this.settings = Object.assign({}, settings);
   this.validateSettings(this.settings);
  }
