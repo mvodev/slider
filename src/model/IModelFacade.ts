@@ -14,4 +14,8 @@ export interface IModelFacade {
  isRange(): boolean | undefined;
  isVertical(): boolean | undefined;
  getStep();
+ getOnStart():Function|undefined;
+ getOnChange(): Function | undefined;
+ getOnUpdate(): Function | undefined;
+ getOnDestroy(): Function | undefined;
 }

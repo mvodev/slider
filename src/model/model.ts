@@ -57,6 +57,18 @@ export class Model implements IModelFacade {
  getStep() {
   return this.settings.step ? this.settings.step : 1;
  }
+ getOnStart(): Function | undefined {
+  return this.settings.onStart;
+ }
+ getOnChange(): Function | undefined {
+  return this.settings.onChange;
+ }
+ getOnUpdate(): Function | undefined {
+  return this.settings.onUpdate;
+ }
+ getOnDestroy(): Function | undefined {
+  return this.settings.onDestroy;
+ }
  private validateSettings(settings: ISettings) {
   if (settings.min >= settings.max) {
    console.error('unacceptable value,min value in settings more than max value');
