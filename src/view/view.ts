@@ -11,7 +11,6 @@ export class View implements IObserver {
   this.settings = settings;
   this.rootElem = root;
   this.slider = new Slider(this.rootElem, this.settings, this.numberOfMarking);
-  this.isUpdated = false;
  }
  handleEvent(msg: Messages, s: ISettings) {
   this.refreshView(msg, s);
