@@ -2,6 +2,7 @@ import { ISettings } from '../model/ISettings';
 import { Model } from '../model/Model';
 import { View } from '../view/View';
 import { Utils } from '../utils/Utils';
+import { Messages } from '../utils/Messages';
 export class Controller {
 
   private view: View;
@@ -20,7 +21,7 @@ export class Controller {
       from: 0,
     };
   }
-  initialize() {
+  initialize(msg: Messages, s: ISettings) {
     this.view.render();
     if (this.model.showThumbLabel) {
       this.setThumbToValue('thumbFrom');
@@ -28,7 +29,7 @@ export class Controller {
         this.setThumbToValue('thumbTo');
       }
     }
-    this.view.refreshView(this.model.getSettings());
+    this.view.refreshView(msg, s);
   }
   private isUpdate() {
     return this.isUpdated;
@@ -44,9 +45,9 @@ export class Controller {
     }
   }
   start() {
-    this.initialize();
+    this.initialize(Messages.INIT, this.model.getSettings());
     this.bindEvents();
-    this.view.refreshView(this.model.getSettings());
+    this.view.refreshView(Messages.INIT, this.model.getSettings());
   }
   update(newSettings: ISettings) {
     this.model.updateSettings(newSettings);
@@ -57,7 +58,7 @@ export class Controller {
       }
     }
     this.setIsUpdate(true);
-    this.view.refreshView(this.model.getSettings());
+    this.view.refreshView(Messages.UPDATE, newSettings);
   }
   isVerticalSlider(): boolean | undefined {
     return this.model.isVertical();
@@ -73,24 +74,24 @@ export class Controller {
       if (this.isVerticalSlider()) {
         this.view.getThumbFrom().style.top = this.getPosInPercentFromValue(this.model.getFrom()) + '%';
         this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
-        this.refreshView();
+        this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
       }
       else {
         this.view.getThumbFrom().style.left = this.getPosInPercentFromValue(this.model.getFrom()) + '%';
         this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
-        this.refreshView();
+        this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
       }
     }
     else {
       if (this.isVerticalSlider()) {
         this.view.getThumbTo().style.top = this.getPosInPercentFromValue(this.model.getTo()) + '%';
         this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
-        this.view.refreshView(this.model.getSettings());
+        this.view.refreshView(Messages.TO_IN_PX_IS_SET, this.model.getSettings());
       }
       else {
         this.view.getThumbTo().style.left = this.getPosInPercentFromValue(this.model.getTo()) + '%';
         this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
-        this.view.refreshView(this.model.getSettings());
+        this.view.refreshView(Messages.TO_IN_PX_IS_SET, this.model.getSettings());
       }
     }
   }
@@ -118,7 +119,7 @@ export class Controller {
         }
         that.model.setFromInPx(newTop);
         that.setValueToThumb();
-        that.view.refreshView(that.model.getSettings());
+        that.view.refreshView(Messages.FROM_IN_PX_IS_SET, that.model.getSettings());
         that.callOnChange();
       }
 
@@ -149,7 +150,7 @@ export class Controller {
         }
         that.model.setFromInPx(newLeft);
         that.setValueToThumb();
-        that.view.refreshView(that.model.getSettings());
+        that.view.refreshView(Messages.FROM_IN_PX_IS_SET, that.model.getSettings());
         that.callOnChange();
       }
       function onMouseUp() {
@@ -182,7 +183,7 @@ export class Controller {
         }
         that.model.setToInPx(newTop);
         that.setValueToThumb();
-        that.refreshView();
+        that.view.refreshView(Messages.TO_IN_PX_IS_SET, that.model.getSettings());
         that.callOnChange();
       }
 
@@ -210,7 +211,7 @@ export class Controller {
         }
         that.model.setToInPx(newLeft);
         that.setValueToThumb();
-        that.refreshView();
+        that.view.refreshView(Messages.TO_IN_PX_IS_SET, that.model.getSettings());
         that.callOnChange();
       }
       function onMouseUp() {
@@ -226,24 +227,24 @@ export class Controller {
         if (shiftY < this.model.getFromInPx()) {
           this.model.setFromInPx(shiftY);
           this.setValueToThumb();
-          this.refreshView();
+          this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
         }
         else if (shiftY > this.model.getToInPx()) {
           this.model.setToInPx(shiftY);
           this.setValueToThumb();
-          this.refreshView();
+          this.view.refreshView(Messages.TO_IN_PX_IS_SET, this.model.getSettings());
         }
         else if (shiftY >= this.model.getFromInPx() && shiftY <= this.model.getToInPx()) {
           let pivot = (this.model.getToInPx() - this.model.getFromInPx());
           if (shiftY < pivot) {
             this.model.setFromInPx(shiftY);
             this.setValueToThumb();
-            this.refreshView();
+            this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
           }
           else if (shiftY >= pivot) {
             this.model.setToInPx(shiftY);
             this.setValueToThumb();
-            this.refreshView();
+            this.view.refreshView(Messages.TO_IN_PX_IS_SET, this.model.getSettings());
           }
         }
       }
@@ -251,7 +252,7 @@ export class Controller {
         let shiftY = e.clientY - this.view.getRange().getBoundingClientRect().top;
         this.model.setFromInPx(shiftY);
         this.setValueToThumb();
-        this.refreshView();
+        this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
       }
     } else {
       let shiftX = e.clientX - this.view.getRange().getBoundingClientRect().left;
@@ -259,33 +260,32 @@ export class Controller {
         if (shiftX < this.model.getFromInPx()) {
           this.model.setFromInPx(shiftX);
           this.setValueToThumb();
-          this.refreshView();
+          this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
         }
         else if (shiftX > this.model.getToInPx()) {
           this.model.setToInPx(shiftX);
           this.setValueToThumb();
-          this.refreshView();
+          this.view.refreshView(Messages.TO_IN_PX_IS_SET, this.model.getSettings());
         }
         else if (shiftX >= this.model.getFromInPx() && shiftX <= this.model.getToInPx()) {
           let pivot = (this.model.getToInPx() - this.model.getFromInPx());
           if (shiftX < pivot) {
             this.model.setFromInPx(shiftX);
             this.setValueToThumb();
-            this.refreshView();
+            this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
           }
           else if (shiftX >= pivot) {
             this.model.setToInPx(shiftX);
             this.setValueToThumb();
-            this.refreshView();
+            this.view.refreshView(Messages.TO_IN_PX_IS_SET, this.model.getSettings());
           }
         }
       }
       else {
         this.model.setFromInPx(shiftX);
         this.setValueToThumb();
-        this.refreshView();
+        this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
       }
-
     }
   }
   setValueToThumb() {
@@ -336,9 +336,9 @@ export class Controller {
       )) * this.model.getStep()
       + this.model.getMin()).toFixed(Utils.numDigitsAfterDecimal(this.model.getStep()));
   }
-  refreshView() {
-    this.view.refreshView(this.model.getSettings());
-  }
+  // refreshView() {
+  //   this.view.refreshView(this.model.getSettings());
+  // }
 
   callOnChange() {
     this.result.from = this.model.getFrom();

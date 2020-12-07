@@ -1,5 +1,5 @@
 import { ISettings } from "../model/ISettings";
-
+import { Messages } from '../utils/Messages';
 export interface IObserver {
- handleEvent(s:ISettings);
+ handleEvent(msg:Messages, s:Object);
 }

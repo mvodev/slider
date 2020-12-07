@@ -4,7 +4,7 @@ import { Controller } from './controller/Controller';
 (function ($) {
  var FsdSlider = function (root, settings) {
   let model = new Model(settings);
-  let view = new View(model, root);
+  let view = new View(settings, root);
   this.controller = new Controller(view, model);
   //model.addObserver(this.controller);
   model.addObserver(view);

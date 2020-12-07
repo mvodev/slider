@@ -1,5 +1,6 @@
 import { IObservable } from "./IObservable";
 import { IObserver } from "./IObserver";
+import { Messages } from '../utils/Messages';
 
 export class EventObservable implements IObservable {
  private observers: Array<IObserver>;
@@ -12,8 +13,8 @@ export class EventObservable implements IObservable {
  removeObserver(o: IObserver) {
   this.observers.filter(subscriber => subscriber !== o);
  }
- notifyObservers(settings) {
-  this.observers.forEach(elem => elem.handleEvent(settings));
+ notifyObservers(msg:Messages,settings:Object) {
+  this.observers.forEach(elem => elem.handleEvent(msg,settings));
  }
 
 }

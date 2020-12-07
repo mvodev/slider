@@ -1,3 +1,4 @@
+import { Messages } from '../utils/Messages';
 import { IModelFacade } from './IModelFacade';
 import { ISettings } from './ISettings';
 import { EventObservable } from '../Observers/EventObservable';
@@ -22,12 +23,12 @@ export class Model extends EventObservable implements IModelFacade {
   super();
   this.settings = Object.assign(this.defaultSettings, settings);
   this.validateSettings(this.settings);
-  this.notifyObservers(this.settings);
+  this.notifyObservers(Messages.INIT, this.settings);
  }
  updateSettings(settings: ISettings) {
   this.settings = Object.assign(this.settings, settings);
   this.validateSettings(this.settings);
-  this.notifyObservers(this.settings);
+  this.notifyObservers(Messages.UPDATE, this.settings);
  }
  getMin(): number {
   return this.settings.min;
@@ -43,14 +44,14 @@ export class Model extends EventObservable implements IModelFacade {
  }
  setFrom(pos: number) {
   this.settings.from = pos;
-  this.notifyObservers(this.settings);
+  this.notifyObservers(Messages.FROM_IS_SET, this.settings);
  }
  getFrom(): number {
   return this.settings.from;
  }
  setTo(value: number): void {
   this.settings.to = value;
-  this.notifyObservers(this.settings);
+  this.notifyObservers(Messages.TO_IS_SET, this.settings);
  }
  getTo(): number | undefined {
   return this.settings.to;
@@ -60,14 +61,14 @@ export class Model extends EventObservable implements IModelFacade {
  }
  setFromInPx(value: number): void {
   this.settings.fromInPx = value;
-  this.notifyObservers(this.settings);
+  this.notifyObservers(Messages.FROM_IN_PX_IS_SET, this.settings);
  }
  getToInPx(): number | undefined {
   return this.settings.toInPx;
  }
  setToInPx(value: number): void {
   this.settings.toInPx = value;
-  this.notifyObservers(this.settings);
+  this.notifyObservers(Messages.TO_IN_PX_IS_SET, this.settings);
  }
  isRange(): boolean | undefined {
   return this.settings.isRange;

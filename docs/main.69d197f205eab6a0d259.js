@@ -29,8 +29,8 @@ class EventObservable {
     this.observers.filter(subscriber => subscriber !== o);
   }
 
-  notifyObservers(settings) {
-    this.observers.forEach(elem => elem.handleEvent(settings));
+  notifyObservers(msg, settings) {
+    this.observers.forEach(elem => elem.handleEvent(msg, settings));
   }
 
 }
@@ -65,7 +65,7 @@ class Controller {
     };
   }
 
-  initialize() {
+  initialize(msg, s) {
     this.view.render();
 
     if (this.model.showThumbLabel) {
@@ -76,7 +76,7 @@ class Controller {
       }
     }
 
-    this.view.refreshView(this.model.getSettings());
+    this.view.refreshView(msg, s);
   }
 
   isUpdate() {
@@ -97,9 +97,13 @@ class Controller {
   }
 
   start() {
-    this.initialize();
+    this.initialize(0
+    /* INIT */
+    , this.model.getSettings());
     this.bindEvents();
-    this.view.refreshView(this.model.getSettings());
+    this.view.refreshView(0
+    /* INIT */
+    , this.model.getSettings());
   }
 
   update(newSettings) {
@@ -114,7 +118,9 @@ class Controller {
     }
 
     this.setIsUpdate(true);
-    this.view.refreshView(this.model.getSettings());
+    this.view.refreshView(5
+    /* UPDATE */
+    , newSettings);
   }
 
   isVerticalSlider() {
@@ -134,21 +140,29 @@ class Controller {
       if (this.isVerticalSlider()) {
         this.view.getThumbFrom().style.top = this.getPosInPercentFromValue(this.model.getFrom()) + '%';
         this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
-        this.refreshView();
+        this.view.refreshView(3
+        /* FROM_IN_PX_IS_SET */
+        , this.model.getSettings());
       } else {
         this.view.getThumbFrom().style.left = this.getPosInPercentFromValue(this.model.getFrom()) + '%';
         this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
-        this.refreshView();
+        this.view.refreshView(3
+        /* FROM_IN_PX_IS_SET */
+        , this.model.getSettings());
       }
     } else {
       if (this.isVerticalSlider()) {
         this.view.getThumbTo().style.top = this.getPosInPercentFromValue(this.model.getTo()) + '%';
         this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
-        this.view.refreshView(this.model.getSettings());
+        this.view.refreshView(4
+        /* TO_IN_PX_IS_SET */
+        , this.model.getSettings());
       } else {
         this.view.getThumbTo().style.left = this.getPosInPercentFromValue(this.model.getTo()) + '%';
         this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
-        this.view.refreshView(this.model.getSettings());
+        this.view.refreshView(4
+        /* TO_IN_PX_IS_SET */
+        , this.model.getSettings());
       }
     }
   }
@@ -183,7 +197,9 @@ class Controller {
 
         that.model.setFromInPx(newTop);
         that.setValueToThumb();
-        that.view.refreshView(that.model.getSettings());
+        that.view.refreshView(3
+        /* FROM_IN_PX_IS_SET */
+        , that.model.getSettings());
         that.callOnChange();
       }
 
@@ -218,7 +234,9 @@ class Controller {
 
         that.model.setFromInPx(newLeft);
         that.setValueToThumb();
-        that.view.refreshView(that.model.getSettings());
+        that.view.refreshView(3
+        /* FROM_IN_PX_IS_SET */
+        , that.model.getSettings());
         that.callOnChange();
       }
 
@@ -255,7 +273,9 @@ class Controller {
 
         that.model.setToInPx(newTop);
         that.setValueToThumb();
-        that.refreshView();
+        that.view.refreshView(4
+        /* TO_IN_PX_IS_SET */
+        , that.model.getSettings());
         that.callOnChange();
       }
 
@@ -286,7 +306,9 @@ class Controller {
 
         that.model.setToInPx(newLeft);
         that.setValueToThumb();
-        that.refreshView();
+        that.view.refreshView(4
+        /* TO_IN_PX_IS_SET */
+        , that.model.getSettings());
         that.callOnChange();
       }
 
@@ -305,29 +327,39 @@ class Controller {
         if (shiftY < this.model.getFromInPx()) {
           this.model.setFromInPx(shiftY);
           this.setValueToThumb();
-          this.refreshView();
+          this.view.refreshView(3
+          /* FROM_IN_PX_IS_SET */
+          , this.model.getSettings());
         } else if (shiftY > this.model.getToInPx()) {
           this.model.setToInPx(shiftY);
           this.setValueToThumb();
-          this.refreshView();
+          this.view.refreshView(4
+          /* TO_IN_PX_IS_SET */
+          , this.model.getSettings());
         } else if (shiftY >= this.model.getFromInPx() && shiftY <= this.model.getToInPx()) {
           let pivot = this.model.getToInPx() - this.model.getFromInPx();
 
           if (shiftY < pivot) {
             this.model.setFromInPx(shiftY);
             this.setValueToThumb();
-            this.refreshView();
+            this.view.refreshView(3
+            /* FROM_IN_PX_IS_SET */
+            , this.model.getSettings());
           } else if (shiftY >= pivot) {
             this.model.setToInPx(shiftY);
             this.setValueToThumb();
-            this.refreshView();
+            this.view.refreshView(4
+            /* TO_IN_PX_IS_SET */
+            , this.model.getSettings());
           }
         }
       } else {
         let shiftY = e.clientY - this.view.getRange().getBoundingClientRect().top;
         this.model.setFromInPx(shiftY);
         this.setValueToThumb();
-        this.refreshView();
+        this.view.refreshView(3
+        /* FROM_IN_PX_IS_SET */
+        , this.model.getSettings());
       }
     } else {
       let shiftX = e.clientX - this.view.getRange().getBoundingClientRect().left;
@@ -336,28 +368,38 @@ class Controller {
         if (shiftX < this.model.getFromInPx()) {
           this.model.setFromInPx(shiftX);
           this.setValueToThumb();
-          this.refreshView();
+          this.view.refreshView(3
+          /* FROM_IN_PX_IS_SET */
+          , this.model.getSettings());
         } else if (shiftX > this.model.getToInPx()) {
           this.model.setToInPx(shiftX);
           this.setValueToThumb();
-          this.refreshView();
+          this.view.refreshView(4
+          /* TO_IN_PX_IS_SET */
+          , this.model.getSettings());
         } else if (shiftX >= this.model.getFromInPx() && shiftX <= this.model.getToInPx()) {
           let pivot = this.model.getToInPx() - this.model.getFromInPx();
 
           if (shiftX < pivot) {
             this.model.setFromInPx(shiftX);
             this.setValueToThumb();
-            this.refreshView();
+            this.view.refreshView(3
+            /* FROM_IN_PX_IS_SET */
+            , this.model.getSettings());
           } else if (shiftX >= pivot) {
             this.model.setToInPx(shiftX);
             this.setValueToThumb();
-            this.refreshView();
+            this.view.refreshView(4
+            /* TO_IN_PX_IS_SET */
+            , this.model.getSettings());
           }
         }
       } else {
         this.model.setFromInPx(shiftX);
         this.setValueToThumb();
-        this.refreshView();
+        this.view.refreshView(3
+        /* FROM_IN_PX_IS_SET */
+        , this.model.getSettings());
       }
     }
   }
@@ -410,11 +452,10 @@ class Controller {
 
   getValueFromPosInPx(valueInPx) {
     return +(Math.floor(valueInPx / (this.view.getSliderLengthInPx() / (Math.abs(this.model.getMax() - this.model.getMin()) / this.model.getStep()))) * this.model.getStep() + this.model.getMin()).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_0__.Utils.numDigitsAfterDecimal(this.model.getStep()));
-  }
+  } // refreshView() {
+  //   this.view.refreshView(this.model.getSettings());
+  // }
 
-  refreshView() {
-    this.view.refreshView(this.model.getSettings());
-  }
 
   callOnChange() {
     this.result.from = this.model.getFrom();
@@ -462,7 +503,9 @@ class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
     };
     this.settings = Object.assign(this.defaultSettings, settings);
     this.validateSettings(this.settings);
-    this.notifyObservers(this.settings);
+    this.notifyObservers(0
+    /* INIT */
+    , this.settings);
   } //todo  delete this method after all subscribed
 
 
@@ -473,7 +516,9 @@ class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
   updateSettings(settings) {
     this.settings = Object.assign(this.settings, settings);
     this.validateSettings(this.settings);
-    this.notifyObservers(this.settings);
+    this.notifyObservers(5
+    /* UPDATE */
+    , this.settings);
   }
 
   getMin() {
@@ -494,7 +539,9 @@ class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
 
   setFrom(pos) {
     this.settings.from = pos;
-    this.notifyObservers(this.settings);
+    this.notifyObservers(1
+    /* FROM_IS_SET */
+    , this.settings);
   }
 
   getFrom() {
@@ -503,7 +550,9 @@ class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
 
   setTo(value) {
     this.settings.to = value;
-    this.notifyObservers(this.settings);
+    this.notifyObservers(2
+    /* TO_IS_SET */
+    , this.settings);
   }
 
   getTo() {
@@ -516,7 +565,9 @@ class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
 
   setFromInPx(value) {
     this.settings.fromInPx = value;
-    this.notifyObservers(this.settings);
+    this.notifyObservers(3
+    /* FROM_IN_PX_IS_SET */
+    , this.settings);
   }
 
   getToInPx() {
@@ -525,7 +576,9 @@ class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
 
   setToInPx(value) {
     this.settings.toInPx = value;
-    this.notifyObservers(this.settings);
+    this.notifyObservers(4
+    /* TO_IN_PX_IS_SET */
+    , this.settings);
   }
 
   isRange() {
@@ -659,16 +712,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _modules_Slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/Slider */ "./view/modules/Slider.ts");
 ;
 class View {
-  constructor(model, root) {
+  constructor(settings, root) {
     this.numberOfMarking = 10;
-    this.model = model;
+    this.settings = settings;
     this.rootElem = root;
-    this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.model, this.numberOfMarking);
+    this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.settings, this.numberOfMarking);
     this.isUpdated = false;
   }
 
-  handleEvent(s) {
-    this.refreshView(s);
+  handleEvent(msg, s) {
+    this.refreshView(msg, s);
   }
 
   setIsUpdate(value) {
@@ -682,11 +735,11 @@ class View {
   render() {
     this.slider.render();
 
-    if (!this.model.showThumbLabel()) {
+    if (this.settings.hideThumbLabel) {
       this.slider.getThumbLabelFrom().hideLabel();
     }
 
-    if (this.model.isVertical()) {
+    if (this.settings.isVertical) {
       this.slider.setVertical();
     }
   }
@@ -696,7 +749,7 @@ class View {
   }
 
   getSliderLengthInPx() {
-    if (this.model.isVertical()) {
+    if (this.settings.isVertical) {
       return this.getRange().offsetHeight - this.getThumbFrom().offsetHeight;
     } else {
       return this.getRange().offsetWidth - this.getThumbFrom().offsetWidth;
@@ -719,58 +772,87 @@ class View {
     return this.slider.getThumbTo();
   }
 
-  refreshView(s) {
-    this.slider.setMinRange(s.min);
-    this.slider.setMaxRange(s.max);
-    s.max = 0;
-    this.slider.setValueToLabelThumbFrom(s.from);
+  refreshView(msg, s) {
+    if (msg === 0
+    /* INIT */
+    || msg === 5
+    /* UPDATE */
+    ) {
+        this.slider.setMinRange(s.min);
+        this.slider.setMaxRange(s.max);
+        this.slider.setValueToLabelThumbFrom(s.from);
 
-    if (this.model.isRange()) {
-      this.slider.setValueToLabelThumbTo(s.to);
+        if (s.isRange) {
+          this.slider.setValueToLabelThumbTo(s.to);
 
-      if (this.model.isVertical()) {
-        this.getThumbTo().style.top = this.model.getToInPx() / this.getRange().clientHeight * 100 + '%';
-        this.getThumbFrom().style.top = this.model.getFromInPx() / this.getRange().clientHeight * 100 + '%';
-      } else {
-        this.getThumbTo().style.left = this.model.getToInPx() / this.getRange().clientWidth * 100 + '%';
-        this.getThumbFrom().style.left = this.model.getFromInPx() / this.getRange().clientWidth * 100 + '%';
+          if (s.isVertical) {
+            this.getThumbTo().style.top = s.toInPx / this.getRange().clientHeight * 100 + '%';
+            this.getThumbFrom().style.top = s.fromInPx / this.getRange().clientHeight * 100 + '%';
+          } else {
+            this.getThumbTo().style.left = s.toInPx / this.getRange().clientWidth * 100 + '%';
+            this.getThumbFrom().style.left = s.fromInPx / this.getRange().clientWidth * 100 + '%';
+          }
+        } else {
+          if (s.isVertical) {
+            this.getThumbFrom().style.top = s.fromInPx / this.getRange().offsetHeight * 100 + '%';
+          } else {
+            this.getThumbFrom().style.left = s.fromInPx / this.getRange().clientWidth * 100 + '%';
+          }
+        }
+
+        this.setColoredRange(msg, s);
+      } else if (msg === 3
+    /* FROM_IN_PX_IS_SET */
+    ) {
+        this.slider.setValueToLabelThumbFrom(s.from);
+
+        if (s.isVertical) {
+          this.getThumbFrom().style.top = s.fromInPx / this.getRange().offsetHeight * 100 + '%';
+        } else {
+          this.getThumbFrom().style.left = s.fromInPx / this.getRange().clientWidth * 100 + '%';
+        }
+
+        this.setColoredRange(msg, s);
+      } else if (msg === 4
+    /* TO_IN_PX_IS_SET */
+    ) {
+        this.slider.setValueToLabelThumbTo(s.to);
+
+        if (s.isVertical) {
+          this.getThumbTo().style.top = s.toInPx / this.getRange().offsetHeight * 100 + '%';
+        } else {
+          this.getThumbTo().style.left = s.toInPx / this.getRange().clientWidth * 100 + '%';
+        }
+
+        this.setColoredRange(msg, s);
       }
-    } else {
-      if (this.model.isVertical()) {
-        this.getThumbFrom().style.top = this.model.getFromInPx() / this.getRange().offsetHeight * 100 + '%';
-      } else {
-        this.getThumbFrom().style.left = this.model.getFromInPx() / this.getRange().clientWidth * 100 + '%';
-      }
-    }
-
-    this.setColoredRange();
   }
 
-  setColoredRange() {
+  setColoredRange(msg, s) {
     let that = this;
 
-    if (this.model.isRange()) {
-      if (this.model.isVertical()) {
+    if (s.isRange) {
+      if (s.isVertical) {
         let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
-        let height = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) / this.getRange().offsetHeight * 100 + '%';
-        let top = this.model.getFromInPx() / this.getRange().offsetHeight * 100 + '%';
+        let height = (s.toInPx + thumbHalf - s.fromInPx) / this.getRange().offsetHeight * 100 + '%';
+        let top = s.fromInPx / this.getRange().offsetHeight * 100 + '%';
         this.slider.getColoredRange().style.top = top;
         this.slider.getColoredRange().style.height = height;
       } else {
         let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
-        let width = (this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) / this.getRange().offsetWidth * 100 + '%';
-        let left = this.model.getFromInPx() / this.getRange().offsetWidth * 100 + '%';
+        let width = (s.toInPx + thumbHalf - s.fromInPx) / this.getRange().offsetWidth * 100 + '%';
+        let left = s.fromInPx / this.getRange().offsetWidth * 100 + '%';
         this.slider.getColoredRange().style.left = left;
         this.slider.getColoredRange().style.width = width;
       }
     } else {
-      if (this.model.isVertical()) {
+      if (s.isVertical) {
         let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
-        let height = (this.model.getFromInPx() + thumbHalf) / this.getRange().clientHeight * 100 + '%';
+        let height = (s.fromInPx + thumbHalf) / this.getRange().clientHeight * 100 + '%';
         this.slider.getColoredRange().style.height = height;
       } else {
         let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
-        let width = (this.model.getFromInPx() + thumbHalf) / this.getRange().clientWidth * 100 + '%';
+        let width = (s.fromInPx + thumbHalf) / this.getRange().clientWidth * 100 + '%';
         this.slider.getColoredRange().style.width = width;
       }
     }
@@ -805,8 +887,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class Slider {
-  constructor(rootElem, model, numberOfMarking) {
-    this.model = model;
+  constructor(rootElem, s, numberOfMarking) {
+    this.settings = s;
     this.rootElem = rootElem;
     this.numberOfMarking = numberOfMarking;
     this.numberOfMarking = this.numberOfMarking;
@@ -816,7 +898,7 @@ class Slider {
     this.thumbLabelFrom = new _thumbLabel__WEBPACK_IMPORTED_MODULE_2__.ThumbLabel(this.thumbFrom.getThumb());
     this.range = new _range__WEBPACK_IMPORTED_MODULE_0__.Range();
     this.coloredRange = new _coloredRange__WEBPACK_IMPORTED_MODULE_4__.ColoredRange();
-    this.rangeLabel = new _rangeLabel__WEBPACK_IMPORTED_MODULE_3__.RangeLabel(this.numberOfMarking, this.model.isVertical());
+    this.rangeLabel = new _rangeLabel__WEBPACK_IMPORTED_MODULE_3__.RangeLabel(this.numberOfMarking, this.settings.isVertical);
     this.container = document.createElement('div');
   }
 
@@ -827,7 +909,7 @@ class Slider {
     this.range.getRange().appendChild(this.thumbFrom.getThumb());
     this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
 
-    if (this.model.isRange()) {
+    if (this.settings.isRange) {
       this.thumbTo.getThumb().appendChild(this.thumbLabelTo?.getThumbLabelContainer());
       this.range.getRange().appendChild(this.thumbTo.getThumb());
     }
@@ -887,7 +969,7 @@ class Slider {
     this.rangeLabel.getRangeLabel().classList.add('fsd-slider__range-label_is_vertical');
     this.thumbLabelFrom.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
 
-    if (this.model.isRange()) {
+    if (this.settings.isRange) {
       this.thumbLabelTo.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
     }
   }
@@ -1112,7 +1194,7 @@ __webpack_require__.r(__webpack_exports__);
 (function ($) {
  var FsdSlider = function (root, settings) {
   let model = new _model_Model__WEBPACK_IMPORTED_MODULE_1__.Model(settings);
-  let view = new _view_View__WEBPACK_IMPORTED_MODULE_0__.View(model, root);
+  let view = new _view_View__WEBPACK_IMPORTED_MODULE_0__.View(settings, root);
   this.controller = new _controller_Controller__WEBPACK_IMPORTED_MODULE_2__.Controller(view, model);
   //model.addObserver(this.controller);
   model.addObserver(view);
@@ -1159,25 +1241,25 @@ $sl1.fsdSlider({
  from: -14,
  step: 0.2,
  to: -11,
- isVertical: true,
+ isVertical: false,
  hideThumbLabel: false,
- isRange: true,
+ isRange: false,
  onChange: callback,
 });
 // var sl1_instance = $sl1.data("fsdSlider");
 // sl1_instance.update({ min: 0, max: 22, from: -5, });
-// var $sl2 = $('.slider2');
-// $sl2.fsdSlider({
-//  min: 5,
-//  max: 50,
-//  from: 7,
-//  step: 0.5,
-//  to: -11,
-//  isVertical: false,
-//  isRange: false,
-//  hideThumbLabel: false,
-//  onChange: callback2,
-// });
+var $sl2 = $('.slider2');
+$sl2.fsdSlider({
+ min: 5,
+ max: 50,
+ from: 7,
+ step: 0.5,
+ to: -11,
+ isVertical: false,
+ isRange: false,
+ hideThumbLabel: false,
+ onChange: callback2,
+});
 // var sl2_instance = $sl2.data('fsdSlider');
 // sl2_instance.update({ min: 0, max: 6, from: 3, step: 1, });
 function callback(result) {
@@ -1347,4 +1429,4 @@ function callback2(result2) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.cc0a6d9a432b2511c884.js.map
+//# sourceMappingURL=main.69d197f205eab6a0d259.js.map

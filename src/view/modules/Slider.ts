@@ -4,6 +4,7 @@ import { ThumbLabel } from './thumbLabel';
 import { RangeLabel } from './rangeLabel';
 import { ColoredRange } from './coloredRange';
 import { Model } from '../../model/Model';
+import { ISettings } from '../../model/ISettings';
 export class Slider {
 
  private thumbFrom: Thumb;
@@ -15,11 +16,11 @@ export class Slider {
  private rootElem: HTMLDivElement;
  private container: HTMLDivElement;
  private coloredRange: ColoredRange;
- private model: Model;
- private numberOfMarking:number;
+ private settings: ISettings;
+ private numberOfMarking: number;
 
- constructor(rootElem: HTMLDivElement, model: Model,numberOfMarking:number) {
-  this.model = model;
+ constructor(rootElem: HTMLDivElement, s: ISettings, numberOfMarking: number) {
+  this.settings = s;
   this.rootElem = rootElem;
   this.numberOfMarking = numberOfMarking;
   this.numberOfMarking = this.numberOfMarking;
@@ -29,7 +30,7 @@ export class Slider {
   this.thumbLabelFrom = new ThumbLabel(this.thumbFrom.getThumb());
   this.range = new Range();
   this.coloredRange = new ColoredRange();
-  this.rangeLabel = new RangeLabel(this.numberOfMarking,this.model.isVertical());
+  this.rangeLabel = new RangeLabel(this.numberOfMarking, this.settings.isVertical);
   this.container = document.createElement('div');
  }
 
@@ -39,7 +40,7 @@ export class Slider {
   this.range.getRange().appendChild(this.coloredRange.getColoredRange());
   this.range.getRange().appendChild(this.thumbFrom.getThumb());
   this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
-  if (this.model.isRange()) {
+  if (this.settings.isRange) {
    this.thumbTo.getThumb().appendChild(this.thumbLabelTo?.getThumbLabelContainer());
    this.range.getRange().appendChild(this.thumbTo.getThumb());
   }
@@ -76,7 +77,7 @@ export class Slider {
  setValueToLabelThumbTo(value: number) {
   this.thumbLabelTo.setValueToLabel(value);
  }
- getRangeLabel():HTMLDivElement{
+ getRangeLabel(): HTMLDivElement {
   return this.rangeLabel.getRangeLabel();
  }
  setVertical() {
@@ -85,7 +86,7 @@ export class Slider {
   this.coloredRange.getColoredRange().classList.add('fsd-slider__colored-range_is_vertical');
   this.rangeLabel.getRangeLabel().classList.add('fsd-slider__range-label_is_vertical');
   this.thumbLabelFrom.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
-  if (this.model.isRange()) {
+  if (this.settings.isRange) {
    this.thumbLabelTo.getThumbLabelContainer().classList.add('fsd-slider__thumb-label_is_vertical');
   }
  }

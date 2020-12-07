@@ -1,34 +1,27 @@
 import { ISettings } from '../model/ISettings';
-import { Model } from '../model/Model';
 import { Slider } from './modules/Slider';
 import { IObserver } from '../Observers/IObserver';
+import { Messages } from '../utils/Messages';
 export class View implements IObserver {
  private slider: Slider;
- private model: Model;
+ private settings: ISettings;
  private rootElem: HTMLDivElement;
  private numberOfMarking: number = 10;
- private isUpdated: boolean;
- constructor(model: Model, root: HTMLInputElement,) {
-  this.model = model;
+ constructor(settings: ISettings, root: HTMLInputElement,) {
+  this.settings = settings;
   this.rootElem = root;
-  this.slider = new Slider(this.rootElem, this.model, this.numberOfMarking);
+  this.slider = new Slider(this.rootElem, this.settings, this.numberOfMarking);
   this.isUpdated = false;
  }
- handleEvent(s: ISettings) {
-  this.refreshView(s);
- }
- private setIsUpdate(value: boolean) {
-  this.isUpdated = value;
- }
- private isUpdate(): boolean {
-  return this.isUpdated;
+ handleEvent(msg: Messages, s: ISettings) {
+  this.refreshView(msg, s);
  }
  render() {
   this.slider.render();
-  if (!this.model.showThumbLabel()) {
+  if (this.settings.hideThumbLabel) {
    this.slider.getThumbLabelFrom().hideLabel();
   }
-  if (this.model.isVertical()) {
+  if (this.settings.isVertical) {
    this.slider.setVertical();
   }
  }
@@ -36,7 +29,7 @@ export class View implements IObserver {
   return this.slider.getRangeLabel();
  }
  getSliderLengthInPx() {
-  if (this.model.isVertical()) {
+  if (this.settings.isVertical) {
    return this.getRange().offsetHeight - this.getThumbFrom().offsetHeight;
   }
   else {
@@ -56,59 +49,81 @@ export class View implements IObserver {
  getThumbTo() {
   return this.slider.getThumbTo();
  }
- refreshView(s: ISettings) {
-  this.slider.setMinRange(s.min);
-  this.slider.setMaxRange(s.max);
-  this.slider.setValueToLabelThumbFrom(s.from);
-  if (this.model.isRange()) {
-   this.slider.setValueToLabelThumbTo(s.to);
-   if (this.model.isVertical()) {
-    this.getThumbTo().style.top = (this.model.getToInPx() / this.getRange().clientHeight) * 100 + '%';
-    this.getThumbFrom().style.top = (this.model.getFromInPx() / this.getRange().clientHeight) * 100 + '%';
-   }
-   else {
+ refreshView(msg: Messages, s: ISettings) {
+  if (msg === Messages.INIT || msg === Messages.UPDATE) {
+   this.slider.setMinRange(s.min);
+   this.slider.setMaxRange(s.max);
+   this.slider.setValueToLabelThumbFrom(s.from);
+   if (s.isRange) {
+    this.slider.setValueToLabelThumbTo(s.to);
+    if (s.isVertical) {
+     this.getThumbTo().style.top = (s.toInPx / this.getRange().clientHeight) * 100 + '%';
+     this.getThumbFrom().style.top = (s.fromInPx / this.getRange().clientHeight) * 100 + '%';
+    }
+    else {
 
-    this.getThumbTo().style.left = (this.model.getToInPx() / this.getRange().clientWidth) * 100 + '%';
-    this.getThumbFrom().style.left = (this.model.getFromInPx() / this.getRange().clientWidth) * 100 + '%';
-   }
-  }
-  else {
-   if (this.model.isVertical()) {
-    this.getThumbFrom().style.top = (this.model.getFromInPx() / this.getRange().offsetHeight) * 100 + '%';
+     this.getThumbTo().style.left = (s.toInPx / this.getRange().clientWidth) * 100 + '%';
+     this.getThumbFrom().style.left = (s.fromInPx / this.getRange().clientWidth) * 100 + '%';
+    }
    }
    else {
-    this.getThumbFrom().style.left = (this.model.getFromInPx() / this.getRange().clientWidth) * 100 + '%';
+    if (s.isVertical) {
+     this.getThumbFrom().style.top = (s.fromInPx / this.getRange().offsetHeight) * 100 + '%';
+    }
+    else {
+     this.getThumbFrom().style.left = (s.fromInPx / this.getRange().clientWidth) * 100 + '%';
+    }
    }
+   this.setColoredRange(msg, s);
   }
-  this.setColoredRange();
+  else if (msg === Messages.FROM_IN_PX_IS_SET) {
+   this.slider.setValueToLabelThumbFrom(s.from);
+   if (s.isVertical) {
+    this.getThumbFrom().style.top = (s.fromInPx / this.getRange().offsetHeight) * 100 + '%';
+   }
+   else {
+    this.getThumbFrom().style.left = (s.fromInPx / this.getRange().clientWidth) * 100 + '%';
+   }
+   this.setColoredRange(msg, s);
+  }
+  else if (msg === Messages.TO_IN_PX_IS_SET) {
+   this.slider.setValueToLabelThumbTo(s.to);
+   if (s.isVertical) {
+    this.getThumbTo().style.top = (s.toInPx / this.getRange().offsetHeight) * 100 + '%';
+   }
+   else {
+    this.getThumbTo().style.left = (s.toInPx / this.getRange().clientWidth) * 100 + '%';
+   }
+   this.setColoredRange(msg, s);
+  }
  }
- private setColoredRange() {
+ private setColoredRange(msg: Messages, s: ISettings) {
   let that = this;
-  if (this.model.isRange()) {
-   if (this.model.isVertical()) {
+  if (s.isRange) {
+   if (s.isVertical) {
     let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
-    let height = ((this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) / this.getRange().offsetHeight) * 100 + '%';
-    let top = (this.model.getFromInPx() / this.getRange().offsetHeight) * 100 + '%';
+    let height = ((s.toInPx + thumbHalf - s.fromInPx) / this.getRange().offsetHeight) * 100 + '%';
+    let top = (s.fromInPx / this.getRange().offsetHeight) * 100 + '%';
     this.slider.getColoredRange().style.top = top;
     this.slider.getColoredRange().style.height = height;
    }
    else {
     let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
-    let width = ((this.model.getToInPx() + thumbHalf - this.model.getFromInPx()) / this.getRange().offsetWidth) * 100 + '%';
-    let left = (this.model.getFromInPx() / this.getRange().offsetWidth) * 100 + '%';
+    let width = ((s.toInPx + thumbHalf - s.fromInPx) / this.getRange().offsetWidth) * 100 + '%';
+    let left = (s.fromInPx / this.getRange().offsetWidth) * 100 + '%';
     this.slider.getColoredRange().style.left = left;
     this.slider.getColoredRange().style.width = width;
    }
   }
   else {
-   if (this.model.isVertical()) {
+   if (s.isVertical) {
     let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
-    let height = ((this.model.getFromInPx() + thumbHalf) / this.getRange().clientHeight) * 100 + '%';
+    let height = ((s.fromInPx + thumbHalf) / this.getRange().clientHeight) * 100 + '%';
     this.slider.getColoredRange().style.height = height;
    }
    else {
     let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
-    let width = ((this.model.getFromInPx() + thumbHalf) / this.getRange().clientWidth) * 100 + '%';
+    let width = ((s.fromInPx + thumbHalf) / this.getRange().clientWidth) * 100 + '%';
     this.slider.getColoredRange().style.width = width;
    }
   }
