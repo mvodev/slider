@@ -37,23 +37,221 @@ class EventObservable {
 
 /***/ }),
 
-/***/ "./controller/Controller.ts":
-/*!**********************************!*\
-  !*** ./controller/Controller.ts ***!
-  \**********************************/
+/***/ "./model/Model.ts":
+/*!************************!*\
+  !*** ./model/Model.ts ***!
+  \************************/
 /*! namespace exports */
-/*! export Controller [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export Model [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
 /*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Controller": () => /* binding */ Controller
+/* harmony export */   "Model": () => /* binding */ Model
+/* harmony export */ });
+/* harmony import */ var _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Observers/EventObservable */ "./Observers/EventObservable.ts");
+;
+class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.EventObservable {
+  constructor(settings) {
+    super();
+    this.defaultSettings = {
+      min: 0,
+      max: 10,
+      from: 5,
+      isRange: false,
+      isVertical: false,
+      hideThumbLabel: false,
+      callBack: undefined
+    };
+    this.settings = Object.assign(this.defaultSettings, settings);
+    this.validateSettings(this.settings);
+    this.notifyObservers(0
+    /* INIT */
+    , this.settings);
+  } //todo  delete this method after all subscribed
+
+
+  getSettings() {
+    return this.settings;
+  }
+
+  updateSettings(settings) {
+    this.settings = Object.assign(this.settings, settings);
+    this.validateSettings(this.settings);
+    this.notifyObservers(5
+    /* UPDATE */
+    , this.settings);
+  }
+
+  getMin() {
+    return this.settings.min;
+  }
+
+  getMax() {
+    return this.settings.max;
+  }
+
+  getOnChangeCallback() {
+    return this.settings.onChange;
+  }
+
+  showThumbLabel() {
+    return !this.settings.hideThumbLabel;
+  }
+
+  setFrom(pos) {
+    this.settings.from = pos;
+    this.notifyObservers(1
+    /* FROM_IS_SET */
+    , this.settings);
+  }
+
+  getFrom() {
+    return this.settings.from;
+  }
+
+  setTo(value) {
+    this.settings.to = value;
+    this.notifyObservers(2
+    /* TO_IS_SET */
+    , this.settings);
+  }
+
+  getTo() {
+    return this.settings.to;
+  }
+
+  getFromInPx() {
+    return this.settings.fromInPx;
+  }
+
+  setFromInPx(value) {
+    this.settings.fromInPx = value;
+    this.notifyObservers(3
+    /* FROM_IN_PX_IS_SET */
+    , this.settings);
+  }
+
+  getToInPx() {
+    return this.settings.toInPx;
+  }
+
+  setToInPx(value) {
+    this.settings.toInPx = value;
+    this.notifyObservers(4
+    /* TO_IN_PX_IS_SET */
+    , this.settings);
+  }
+
+  isRange() {
+    return this.settings.isRange;
+  }
+
+  isVertical() {
+    return this.settings.isVertical;
+  }
+
+  getStep() {
+    return this.settings.step ? this.settings.step : 1;
+  }
+
+  getOnStart() {
+    return this.settings.onStart;
+  }
+
+  getOnChange() {
+    return this.settings.onChange;
+  }
+
+  getOnUpdate() {
+    return this.settings.onUpdate;
+  }
+
+  getOnDestroy() {
+    return this.settings.onDestroy;
+  }
+
+  validateSettings(settings) {
+    if (settings.min >= settings.max) {
+      console.error('unacceptable value,min value in settings more than max value');
+      this.settings.min = settings.max - 10;
+    }
+
+    if (!settings.to && settings.isRange) {
+      this.settings.to = settings.max;
+      console.error('unacceptable value,`to` value must be established');
+    }
+
+    if (settings.from < settings.min) {
+      console.error('unacceptable value,from must be more than min');
+      this.settings.from = settings.min;
+    }
+
+    if (settings.from > settings.max) {
+      console.error('unacceptable value,from must be lower than max');
+      this.settings.from = settings.min;
+    }
+
+    if (settings.to < settings.min && settings.isRange) {
+      console.error(settings.to + ' ' + settings.min);
+      this.settings.to = settings.max;
+      console.error('unacceptable value,`to` value must be between min and max');
+    }
+
+    if (settings.isRange && settings.to > settings.max) {
+      console.error('unacceptable value,to must be lower than max');
+      this.settings.to = settings.max;
+    }
+
+    if (settings.isRange && settings.from >= settings.to) {
+      console.error('unacceptable value,from must be lower than to');
+      this.settings.to = this.settings.from + this.settings.step ? this.settings.step : 0;
+    }
+
+    if (settings.onStart && typeof settings.onStart != 'function') {
+      console.error('unacceptable value,callback must be function');
+      this.settings.onStart = undefined;
+    }
+
+    if (settings.onChange && typeof settings.onChange != 'function') {
+      console.error('unacceptable value,callback onChange must be function');
+      this.settings.onChange = undefined;
+    }
+
+    if (settings.onUpdate && typeof settings.onUpdate != 'function') {
+      console.error('unacceptable value,callback onUpdate must be function');
+      this.settings.onUpdate = undefined;
+    }
+
+    if (settings.onDestroy && typeof settings.onDestroy != 'function') {
+      console.error('unacceptable value,callback onUpdate must be function');
+      this.settings.onDestroy = undefined;
+    }
+  }
+
+}
+
+/***/ }),
+
+/***/ "./presenter/presenter.ts":
+/*!********************************!*\
+  !*** ./presenter/presenter.ts ***!
+  \********************************/
+/*! namespace exports */
+/*! export Presenter [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Presenter": () => /* binding */ Presenter
 /* harmony export */ });
 /* harmony import */ var _utils_Utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/Utils */ "./utils/Utils.ts");
 ;
-class Controller {
+class Presenter {
   constructor(view, model) {
     this.view = view;
     this.model = model;
@@ -63,6 +261,10 @@ class Controller {
       max: 0,
       from: 0
     };
+  }
+
+  handleEvent(msg, s) {
+    throw new Error('Method not implemented.');
   }
 
   initialize(msg, s) {
@@ -473,204 +675,6 @@ class Controller {
 
 /***/ }),
 
-/***/ "./model/Model.ts":
-/*!************************!*\
-  !*** ./model/Model.ts ***!
-  \************************/
-/*! namespace exports */
-/*! export Model [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Model": () => /* binding */ Model
-/* harmony export */ });
-/* harmony import */ var _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Observers/EventObservable */ "./Observers/EventObservable.ts");
-;
-class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.EventObservable {
-  constructor(settings) {
-    super();
-    this.defaultSettings = {
-      min: 0,
-      max: 10,
-      from: 5,
-      isRange: false,
-      isVertical: false,
-      hideThumbLabel: false,
-      callBack: undefined
-    };
-    this.settings = Object.assign(this.defaultSettings, settings);
-    this.validateSettings(this.settings);
-    this.notifyObservers(0
-    /* INIT */
-    , this.settings);
-  } //todo  delete this method after all subscribed
-
-
-  getSettings() {
-    return this.settings;
-  }
-
-  updateSettings(settings) {
-    this.settings = Object.assign(this.settings, settings);
-    this.validateSettings(this.settings);
-    this.notifyObservers(5
-    /* UPDATE */
-    , this.settings);
-  }
-
-  getMin() {
-    return this.settings.min;
-  }
-
-  getMax() {
-    return this.settings.max;
-  }
-
-  getOnChangeCallback() {
-    return this.settings.onChange;
-  }
-
-  showThumbLabel() {
-    return !this.settings.hideThumbLabel;
-  }
-
-  setFrom(pos) {
-    this.settings.from = pos;
-    this.notifyObservers(1
-    /* FROM_IS_SET */
-    , this.settings);
-  }
-
-  getFrom() {
-    return this.settings.from;
-  }
-
-  setTo(value) {
-    this.settings.to = value;
-    this.notifyObservers(2
-    /* TO_IS_SET */
-    , this.settings);
-  }
-
-  getTo() {
-    return this.settings.to;
-  }
-
-  getFromInPx() {
-    return this.settings.fromInPx;
-  }
-
-  setFromInPx(value) {
-    this.settings.fromInPx = value;
-    this.notifyObservers(3
-    /* FROM_IN_PX_IS_SET */
-    , this.settings);
-  }
-
-  getToInPx() {
-    return this.settings.toInPx;
-  }
-
-  setToInPx(value) {
-    this.settings.toInPx = value;
-    this.notifyObservers(4
-    /* TO_IN_PX_IS_SET */
-    , this.settings);
-  }
-
-  isRange() {
-    return this.settings.isRange;
-  }
-
-  isVertical() {
-    return this.settings.isVertical;
-  }
-
-  getStep() {
-    return this.settings.step ? this.settings.step : 1;
-  }
-
-  getOnStart() {
-    return this.settings.onStart;
-  }
-
-  getOnChange() {
-    return this.settings.onChange;
-  }
-
-  getOnUpdate() {
-    return this.settings.onUpdate;
-  }
-
-  getOnDestroy() {
-    return this.settings.onDestroy;
-  }
-
-  validateSettings(settings) {
-    if (settings.min >= settings.max) {
-      console.error('unacceptable value,min value in settings more than max value');
-      this.settings.min = settings.max - 10;
-    }
-
-    if (!settings.to && settings.isRange) {
-      this.settings.to = settings.max;
-      console.error('unacceptable value,`to` value must be established');
-    }
-
-    if (settings.from < settings.min) {
-      console.error('unacceptable value,from must be more than min');
-      this.settings.from = settings.min;
-    }
-
-    if (settings.from > settings.max) {
-      console.error('unacceptable value,from must be lower than max');
-      this.settings.from = settings.min;
-    }
-
-    if (settings.to < settings.min && settings.isRange) {
-      console.error(settings.to + ' ' + settings.min);
-      this.settings.to = settings.max;
-      console.error('unacceptable value,`to` value must be between min and max');
-    }
-
-    if (settings.isRange && settings.to > settings.max) {
-      console.error('unacceptable value,to must be lower than max');
-      this.settings.to = settings.max;
-    }
-
-    if (settings.isRange && settings.from >= settings.to) {
-      console.error('unacceptable value,from must be lower than to');
-      this.settings.to = this.settings.from + this.settings.step ? this.settings.step : 0;
-    }
-
-    if (settings.onStart && typeof settings.onStart != 'function') {
-      console.error('unacceptable value,callback must be function');
-      this.settings.onStart = undefined;
-    }
-
-    if (settings.onChange && typeof settings.onChange != 'function') {
-      console.error('unacceptable value,callback onChange must be function');
-      this.settings.onChange = undefined;
-    }
-
-    if (settings.onUpdate && typeof settings.onUpdate != 'function') {
-      console.error('unacceptable value,callback onUpdate must be function');
-      this.settings.onUpdate = undefined;
-    }
-
-    if (settings.onDestroy && typeof settings.onDestroy != 'function') {
-      console.error('unacceptable value,callback onUpdate must be function');
-      this.settings.onDestroy = undefined;
-    }
-  }
-
-}
-
-/***/ }),
-
 /***/ "./utils/Utils.ts":
 /*!************************!*\
   !*** ./utils/Utils.ts ***!
@@ -717,19 +721,10 @@ class View {
     this.settings = settings;
     this.rootElem = root;
     this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.settings, this.numberOfMarking);
-    this.isUpdated = false;
   }
 
   handleEvent(msg, s) {
     this.refreshView(msg, s);
-  }
-
-  setIsUpdate(value) {
-    this.isUpdated = value;
-  }
-
-  isUpdate() {
-    return this.isUpdated;
   }
 
   render() {
@@ -1186,7 +1181,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _view_View__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./view/View */ "./view/View.ts");
 /* harmony import */ var _model_Model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./model/Model */ "./model/Model.ts");
-/* harmony import */ var _controller_Controller__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./controller/Controller */ "./controller/Controller.ts");
+/* harmony import */ var _presenter_presenter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./presenter/presenter */ "./presenter/presenter.ts");
 /* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js");
 ;
 
@@ -1195,17 +1190,17 @@ __webpack_require__.r(__webpack_exports__);
  var FsdSlider = function (root, settings) {
   let model = new _model_Model__WEBPACK_IMPORTED_MODULE_1__.Model(settings);
   let view = new _view_View__WEBPACK_IMPORTED_MODULE_0__.View(settings, root);
-  this.controller = new _controller_Controller__WEBPACK_IMPORTED_MODULE_2__.Controller(view, model);
+  this.presenter = new _presenter_presenter__WEBPACK_IMPORTED_MODULE_2__.Presenter(view, model);
   //model.addObserver(this.controller);
   model.addObserver(view);
   this.init();
  };
  FsdSlider.prototype = {
   init: function () {
-   this.controller.start();
+   this.presenter.start();
   },
   update: function (newSettings) {
-   this.controller.update(newSettings);
+   this.presenter.update(newSettings);
   },
  };
  $.fn.fsdSlider = function (settings) {
@@ -1243,27 +1238,27 @@ $sl1.fsdSlider({
  to: -11,
  isVertical: false,
  hideThumbLabel: false,
- isRange: false,
+ isRange: true,
  onChange: callback,
 });
 // var sl1_instance = $sl1.data("fsdSlider");
 // sl1_instance.update({ min: 0, max: 22, from: -5, });
-var $sl2 = $('.slider2');
-$sl2.fsdSlider({
- min: 5,
- max: 50,
- from: 7,
- step: 0.5,
- to: -11,
- isVertical: false,
- isRange: false,
- hideThumbLabel: false,
- onChange: callback2,
-});
+// var $sl2 = $('.slider2');
+// $sl2.fsdSlider({
+//  min: 5,
+//  max: 50,
+//  from: 7,
+//  step: 0.5,
+//  to: -11,
+//  isVertical: false,
+//  isRange: false,
+//  hideThumbLabel: false,
+//  onChange: callback2,
+// });
 // var sl2_instance = $sl2.data('fsdSlider');
 // sl2_instance.update({ min: 0, max: 6, from: 3, step: 1, });
 function callback(result) {
- $('.slider__input').val(result.from + '///' + result.to);
+ $('.slider__input').val(result.from + '     ' + result.to);
 }
 var $sl2_input = $('.slider2__input');
 function callback2(result2) {
@@ -1429,4 +1424,4 @@ function callback2(result2) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.69d197f205eab6a0d259.js.map
+//# sourceMappingURL=main.60f7217b5339c1722f62.js.map

@@ -3,7 +3,8 @@ import { Model } from '../model/Model';
 import { View } from '../view/View';
 import { Utils } from '../utils/Utils';
 import { Messages } from '../utils/Messages';
-export class Controller {
+import { IObserver } from '../Observers/IObserver';
+export class Presenter implements IObserver {
 
   private view: View;
   private model: Model;
@@ -20,6 +21,9 @@ export class Controller {
       max: 0,
       from: 0,
     };
+  }
+  handleEvent(msg: Messages, s: Object) {
+    throw new Error('Method not implemented.');
   }
   initialize(msg: Messages, s: ISettings) {
     this.view.render();

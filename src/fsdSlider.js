@@ -1,21 +1,21 @@
 import { View } from './view/View';
 import { Model } from './model/Model';
-import { Controller } from './controller/Controller';
+import { Presenter } from './presenter/presenter';
 (function ($) {
  var FsdSlider = function (root, settings) {
   let model = new Model(settings);
   let view = new View(settings, root);
-  this.controller = new Controller(view, model);
+  this.presenter = new Presenter(view, model);
   //model.addObserver(this.controller);
   model.addObserver(view);
   this.init();
  };
  FsdSlider.prototype = {
   init: function () {
-   this.controller.start();
+   this.presenter.start();
   },
   update: function (newSettings) {
-   this.controller.update(newSettings);
+   this.presenter.update(newSettings);
   },
  };
  $.fn.fsdSlider = function (settings) {
