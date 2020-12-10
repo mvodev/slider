@@ -2,41 +2,6 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./Observers/EventObservable.ts":
-/*!**************************************!*\
-  !*** ./Observers/EventObservable.ts ***!
-  \**************************************/
-/*! namespace exports */
-/*! export EventObservable [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "EventObservable": () => /* binding */ EventObservable
-/* harmony export */ });
-class EventObservable {
-  constructor() {
-    this.observers = [];
-  }
-
-  addObserver(o) {
-    this.observers.push(o);
-  }
-
-  removeObserver(o) {
-    this.observers.filter(subscriber => subscriber !== o);
-  }
-
-  notifyObservers(msg, settings) {
-    this.observers.forEach(elem => elem.handleEvent(msg, settings));
-  }
-
-}
-
-/***/ }),
-
 /***/ "./model/Model.ts":
 /*!************************!*\
   !*** ./model/Model.ts ***!
@@ -51,9 +16,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Model": () => /* binding */ Model
 /* harmony export */ });
-/* harmony import */ var _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../Observers/EventObservable */ "./Observers/EventObservable.ts");
+/* harmony import */ var _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
 ;
-class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.EventObservable {
+class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.EventObservable {
   constructor(settings) {
     super();
     this.defaultSettings = {
@@ -67,9 +32,6 @@ class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
     };
     this.settings = Object.assign(this.defaultSettings, settings);
     this.validateSettings(this.settings);
-    this.notifyObservers(0
-    /* INIT */
-    , this.settings);
   } //todo  delete this method after all subscribed
 
 
@@ -235,6 +197,41 @@ class Model extends _Observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
 
 /***/ }),
 
+/***/ "./observers/EventObservable.ts":
+/*!**************************************!*\
+  !*** ./observers/EventObservable.ts ***!
+  \**************************************/
+/*! namespace exports */
+/*! export EventObservable [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "EventObservable": () => /* binding */ EventObservable
+/* harmony export */ });
+class EventObservable {
+  constructor() {
+    this.observers = [];
+  }
+
+  addObserver(o) {
+    this.observers.push(o);
+  }
+
+  removeObserver(o) {
+    this.observers.filter(subscriber => subscriber !== o);
+  }
+
+  notifyObservers(msg, settings) {
+    this.observers.forEach(elem => elem.handleEvent(msg, settings));
+  }
+
+}
+
+/***/ }),
+
 /***/ "./presenter/presenter.ts":
 /*!********************************!*\
   !*** ./presenter/presenter.ts ***!
@@ -264,10 +261,14 @@ class Presenter {
   }
 
   handleEvent(msg, s) {
-    throw new Error('Method not implemented.');
+    if (msg === 0
+    /* INIT */
+    ) {
+        this.initialize();
+      }
   }
 
-  initialize(msg, s) {
+  initialize() {
     this.view.render();
 
     if (this.model.showThumbLabel) {
@@ -278,7 +279,9 @@ class Presenter {
       }
     }
 
-    this.view.refreshView(msg, s);
+    this.view.refreshView(0
+    /* INIT */
+    , this.model.getSettings());
   }
 
   isUpdate() {
@@ -287,25 +290,6 @@ class Presenter {
 
   setIsUpdate(value) {
     this.isUpdated = value;
-  }
-
-  bindEvents() {
-    this.view.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this);
-    this.view.getRangeLabel().onmousedown = this.mouseRangeHandler.bind(this);
-
-    if (this.model.isRange()) {
-      this.view.getThumbTo().onmousedown = this.mouseToHandler.bind(this);
-    }
-  }
-
-  start() {
-    this.initialize(0
-    /* INIT */
-    , this.model.getSettings());
-    this.bindEvents();
-    this.view.refreshView(0
-    /* INIT */
-    , this.model.getSettings());
   }
 
   update(newSettings) {
@@ -714,17 +698,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "View": () => /* binding */ View
 /* harmony export */ });
 /* harmony import */ var _modules_Slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/Slider */ "./view/modules/Slider.ts");
+/* harmony import */ var _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
 ;
-class View {
+
+class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.EventObservable {
   constructor(settings, root) {
+    super();
     this.numberOfMarking = 10;
     this.settings = settings;
     this.rootElem = root;
     this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.settings, this.numberOfMarking);
-  }
-
-  handleEvent(msg, s) {
-    this.refreshView(msg, s);
   }
 
   render() {
@@ -1191,14 +1174,12 @@ __webpack_require__.r(__webpack_exports__);
   let model = new _model_Model__WEBPACK_IMPORTED_MODULE_1__.Model(settings);
   let view = new _view_View__WEBPACK_IMPORTED_MODULE_0__.View(settings, root);
   this.presenter = new _presenter_presenter__WEBPACK_IMPORTED_MODULE_2__.Presenter(view, model);
-  //model.addObserver(this.controller);
-  model.addObserver(view);
-  this.init();
+  model.addObserver(this.presenter);
+  view.addObserver(this.presenter);
+  this.presenter.initialize();
+  //presenter.handleEvent(0,settings);
  };
  FsdSlider.prototype = {
-  init: function () {
-   this.presenter.start();
-  },
   update: function (newSettings) {
    this.presenter.update(newSettings);
   },
@@ -1424,4 +1405,4 @@ function callback2(result2) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.60f7217b5339c1722f62.js.map
+//# sourceMappingURL=main.72168caa8d91537e4172.js.map

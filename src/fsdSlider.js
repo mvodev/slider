@@ -6,14 +6,12 @@ import { Presenter } from './presenter/presenter';
   let model = new Model(settings);
   let view = new View(settings, root);
   this.presenter = new Presenter(view, model);
-  //model.addObserver(this.controller);
-  model.addObserver(view);
-  this.init();
+  model.addObserver(this.presenter);
+  view.addObserver(this.presenter);
+  this.presenter.initialize();
+  //presenter.handleEvent(0,settings);
  };
  FsdSlider.prototype = {
-  init: function () {
-   this.presenter.start();
-  },
   update: function (newSettings) {
    this.presenter.update(newSettings);
   },

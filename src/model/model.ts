@@ -1,7 +1,7 @@
 import { Messages } from '../utils/Messages';
 import { IModelFacade } from './IModelFacade';
 import { ISettings } from './ISettings';
-import { EventObservable } from '../Observers/EventObservable';
+import { EventObservable } from '../observers/EventObservable';
 export class Model extends EventObservable implements IModelFacade {
  //todo  delete this method after all subscribed
 
@@ -23,7 +23,6 @@ export class Model extends EventObservable implements IModelFacade {
   super();
   this.settings = Object.assign(this.defaultSettings, settings);
   this.validateSettings(this.settings);
-  this.notifyObservers(Messages.INIT, this.settings);
  }
  updateSettings(settings: ISettings) {
   this.settings = Object.assign(this.settings, settings);

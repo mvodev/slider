@@ -1,19 +1,17 @@
 import { ISettings } from '../model/ISettings';
 import { Slider } from './modules/Slider';
-import { IObserver } from '../Observers/IObserver';
 import { Messages } from '../utils/Messages';
-export class View implements IObserver {
+import { EventObservable } from '../observers/EventObservable';
+export class View extends EventObservable {
  private slider: Slider;
  private settings: ISettings;
  private rootElem: HTMLDivElement;
  private numberOfMarking: number = 10;
  constructor(settings: ISettings, root: HTMLInputElement,) {
+  super();
   this.settings = settings;
   this.rootElem = root;
   this.slider = new Slider(this.rootElem, this.settings, this.numberOfMarking);
- }
- handleEvent(msg: Messages, s: ISettings) {
-  this.refreshView(msg, s);
  }
  render() {
   this.slider.render();

@@ -1,9 +1,9 @@
 import { ISettings } from '../model/ISettings';
-import { Model } from '../model/Model';
-import { View } from '../view/View';
+import { Model } from '../model/model';
+import { View } from '../view/view';
 import { Utils } from '../utils/Utils';
 import { Messages } from '../utils/Messages';
-import { IObserver } from '../Observers/IObserver';
+import { IObserver } from '../observers/IObserver';
 export class Presenter implements IObserver {
 
   private view: View;
@@ -22,10 +22,13 @@ export class Presenter implements IObserver {
       from: 0,
     };
   }
-  handleEvent(msg: Messages, s: Object) {
-    throw new Error('Method not implemented.');
+  handleEvent(msg: Messages, s: ISettings) {
+    if (msg === Messages.INIT) {
+      this.initialize();
+    }
   }
-  initialize(msg: Messages, s: ISettings) {
+
+  initialize() {
     this.view.render();
     if (this.model.showThumbLabel) {
       this.setThumbToValue('thumbFrom');
@@ -33,7 +36,7 @@ export class Presenter implements IObserver {
         this.setThumbToValue('thumbTo');
       }
     }
-    this.view.refreshView(msg, s);
+    this.view.refreshView(Messages.INIT, this.model.getSettings());
   }
   private isUpdate() {
     return this.isUpdated;
@@ -41,18 +44,7 @@ export class Presenter implements IObserver {
   setIsUpdate(value: boolean) {
     this.isUpdated = value;
   }
-  bindEvents() {
-    this.view.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this);
-    this.view.getRangeLabel().onmousedown = this.mouseRangeHandler.bind(this);
-    if (this.model.isRange()) {
-      this.view.getThumbTo().onmousedown = this.mouseToHandler.bind(this);
-    }
-  }
-  start() {
-    this.initialize(Messages.INIT, this.model.getSettings());
-    this.bindEvents();
-    this.view.refreshView(Messages.INIT, this.model.getSettings());
-  }
+
   update(newSettings: ISettings) {
     this.model.updateSettings(newSettings);
     if (this.model.showThumbLabel) {
