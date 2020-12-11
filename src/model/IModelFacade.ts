@@ -7,10 +7,6 @@ export interface IModelFacade {
  getFrom(): number;
  setTo(value: number): void;
  getTo(): number | undefined;
- getFromInPx(): number;
- setFromInPx(value: number): void;
- getToInPx(): number | undefined;
- setToInPx(value: number): void;
  isRange(): boolean | undefined;
  isVertical(): boolean | undefined;
  getStep();

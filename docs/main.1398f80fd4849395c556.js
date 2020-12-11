@@ -42,7 +42,7 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
   updateSettings(settings) {
     this.settings = Object.assign(this.settings, settings);
     this.validateSettings(this.settings);
-    this.notifyObservers(5
+    this.notifyObservers(3
     /* UPDATE */
     , this.settings);
   }
@@ -65,9 +65,6 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
 
   setFrom(pos) {
     this.settings.from = pos;
-    this.notifyObservers(1
-    /* FROM_IS_SET */
-    , this.settings);
   }
 
   getFrom() {
@@ -76,35 +73,10 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
 
   setTo(value) {
     this.settings.to = value;
-    this.notifyObservers(2
-    /* TO_IS_SET */
-    , this.settings);
   }
 
   getTo() {
     return this.settings.to;
-  }
-
-  getFromInPx() {
-    return this.settings.fromInPx;
-  }
-
-  setFromInPx(value) {
-    this.settings.fromInPx = value;
-    this.notifyObservers(3
-    /* FROM_IN_PX_IS_SET */
-    , this.settings);
-  }
-
-  getToInPx() {
-    return this.settings.toInPx;
-  }
-
-  setToInPx(value) {
-    this.settings.toInPx = value;
-    this.notifyObservers(4
-    /* TO_IN_PX_IS_SET */
-    , this.settings);
   }
 
   isRange() {
@@ -239,15 +211,13 @@ class EventObservable {
 /*! namespace exports */
 /*! export Presenter [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "Presenter": () => /* binding */ Presenter
 /* harmony export */ });
-/* harmony import */ var _utils_Utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils/Utils */ "./utils/Utils.ts");
-;
 class Presenter {
   constructor(view, model) {
     this.view = view;
@@ -265,20 +235,27 @@ class Presenter {
     /* INIT */
     ) {
         this.initialize();
+      } else if (msg === 1
+    /* FROM_IS_SET */
+    ) {
+        this.model.setFrom(s.from); //console.log('inside handle event FROM IS SET' + this.model.getFrom());
+
+        this.view.refreshView(1
+        /* FROM_IS_SET */
+        , s);
+      } else if (msg === 2
+    /* TO_IS_SET */
+    ) {
+        this.model.setTo(s.to); //console.log('inside handle event TO IS SET' + this.model.getTo());
+
+        this.view.refreshView(2
+        /* TO_IS_SET */
+        , s);
       }
   }
 
   initialize() {
     this.view.render();
-
-    if (this.model.showThumbLabel) {
-      this.setThumbToValue('thumbFrom');
-
-      if (this.model.isRange()) {
-        this.setThumbToValue('thumbTo');
-      }
-    }
-
     this.view.refreshView(0
     /* INIT */
     , this.model.getSettings());
@@ -293,18 +270,7 @@ class Presenter {
   }
 
   update(newSettings) {
-    this.model.updateSettings(newSettings);
-
-    if (this.model.showThumbLabel) {
-      this.setThumbToValue('thumbFrom');
-
-      if (this.model.isRange()) {
-        this.setThumbToValue('thumbTo');
-      }
-    }
-
-    this.setIsUpdate(true);
-    this.view.refreshView(5
+    this.view.refreshView(3
     /* UPDATE */
     , newSettings);
   }
@@ -319,326 +285,21 @@ class Presenter {
 
   withThumbLabel() {
     return this.model.showThumbLabel();
-  }
-
-  setThumbToValue(type) {
-    if (type === 'thumbFrom') {
-      if (this.isVerticalSlider()) {
-        this.view.getThumbFrom().style.top = this.getPosInPercentFromValue(this.model.getFrom()) + '%';
-        this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
-        this.view.refreshView(3
-        /* FROM_IN_PX_IS_SET */
-        , this.model.getSettings());
-      } else {
-        this.view.getThumbFrom().style.left = this.getPosInPercentFromValue(this.model.getFrom()) + '%';
-        this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
-        this.view.refreshView(3
-        /* FROM_IN_PX_IS_SET */
-        , this.model.getSettings());
-      }
-    } else {
-      if (this.isVerticalSlider()) {
-        this.view.getThumbTo().style.top = this.getPosInPercentFromValue(this.model.getTo()) + '%';
-        this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
-        this.view.refreshView(4
-        /* TO_IN_PX_IS_SET */
-        , this.model.getSettings());
-      } else {
-        this.view.getThumbTo().style.left = this.getPosInPercentFromValue(this.model.getTo()) + '%';
-        this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
-        this.view.refreshView(4
-        /* TO_IN_PX_IS_SET */
-        , this.model.getSettings());
-      }
-    }
-  }
-
-  mouseFromHandler(e) {
-    e.preventDefault();
-
-    if (this.isVerticalSlider()) {
-      let shiftY = e.clientY - this.view.getThumbFrom().getBoundingClientRect().top;
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-      let sliderRange = this.view.getRange();
-      let thumb = this.view.getThumbFrom();
-      let that = this;
-
-      function onMouseMove(event) {
-        let newTop = event.clientY - shiftY - sliderRange.getBoundingClientRect().top;
-
-        if (newTop < 0) {
-          newTop = 0;
-        }
-
-        let bottom = that.view.getSliderLengthInPx();
-
-        if (that.isRangeSlider()) {
-          bottom = that.model.getToInPx();
-        }
-
-        if (newTop > bottom) {
-          newTop = bottom;
-        }
-
-        that.model.setFromInPx(newTop);
-        that.setValueToThumb();
-        that.view.refreshView(3
-        /* FROM_IN_PX_IS_SET */
-        , that.model.getSettings());
-        that.callOnChange();
-      }
-
-      function onMouseUp() {
-        document.removeEventListener('mouseup', onMouseUp);
-        document.removeEventListener('mousemove', onMouseMove);
-      }
-    } else {
-      let shiftX = e.clientX - this.view.getThumbFrom().getBoundingClientRect().left;
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-      let sliderRange = this.view.getRange();
-      let thumb = this.view.getThumbFrom();
-      let that = this;
-
-      function onMouseMove(e) {
-        let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
-
-        if (newLeft < 0) {
-          newLeft = 0;
-        }
-
-        let rightEdge = that.view.getSliderLengthInPx();
-
-        if (that.isRangeSlider()) {
-          rightEdge = that.model.getToInPx();
-        }
-
-        if (newLeft > rightEdge) {
-          newLeft = rightEdge;
-        }
-
-        that.model.setFromInPx(newLeft);
-        that.setValueToThumb();
-        that.view.refreshView(3
-        /* FROM_IN_PX_IS_SET */
-        , that.model.getSettings());
-        that.callOnChange();
-      }
-
-      function onMouseUp() {
-        document.removeEventListener('mouseup', onMouseUp);
-        document.removeEventListener('mousemove', onMouseMove);
-      }
-    }
-  }
-
-  mouseToHandler(e) {
-    e.preventDefault();
-
-    if (this.isVerticalSlider()) {
-      let shiftY = e.clientY - this.view.getThumbTo().getBoundingClientRect().top;
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-      let sliderRange = this.view.getRange();
-      let thumb = this.view.getThumbTo();
-      let that = this;
-
-      function onMouseMove(event) {
-        let newTop = event.clientY - shiftY - sliderRange.getBoundingClientRect().top;
-
-        if (newTop < that.model.getFromInPx()) {
-          newTop = that.model.getFromInPx() + 1;
-        }
-
-        let bottom = sliderRange.offsetHeight - thumb.offsetHeight;
-
-        if (newTop > bottom) {
-          newTop = bottom;
-        }
-
-        that.model.setToInPx(newTop);
-        that.setValueToThumb();
-        that.view.refreshView(4
-        /* TO_IN_PX_IS_SET */
-        , that.model.getSettings());
-        that.callOnChange();
-      }
-
-      function onMouseUp() {
-        document.removeEventListener('mouseup', onMouseUp);
-        document.removeEventListener('mousemove', onMouseMove);
-      }
-    } else {
-      let shiftX = e.clientX - this.view.getThumbTo().getBoundingClientRect().left;
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-      let sliderRange = this.view.getRange();
-      let thumb = this.view.getThumbTo();
-      let that = this;
-
-      function onMouseMove(e) {
-        let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
-
-        if (newLeft < that.model.getFromInPx()) {
-          newLeft = that.model.getFromInPx() + 1;
-        }
-
-        let rightEdge = sliderRange.offsetWidth - thumb.offsetWidth;
-
-        if (newLeft > rightEdge) {
-          newLeft = rightEdge;
-        }
-
-        that.model.setToInPx(newLeft);
-        that.setValueToThumb();
-        that.view.refreshView(4
-        /* TO_IN_PX_IS_SET */
-        , that.model.getSettings());
-        that.callOnChange();
-      }
-
-      function onMouseUp() {
-        document.removeEventListener('mouseup', onMouseUp);
-        document.removeEventListener('mousemove', onMouseMove);
-      }
-    }
-  }
-
-  mouseRangeHandler(e) {
-    if (this.isVerticalSlider()) {
-      if (this.model.isRange()) {
-        let shiftY = e.clientY - this.view.getRange().getBoundingClientRect().top;
-
-        if (shiftY < this.model.getFromInPx()) {
-          this.model.setFromInPx(shiftY);
-          this.setValueToThumb();
-          this.view.refreshView(3
-          /* FROM_IN_PX_IS_SET */
-          , this.model.getSettings());
-        } else if (shiftY > this.model.getToInPx()) {
-          this.model.setToInPx(shiftY);
-          this.setValueToThumb();
-          this.view.refreshView(4
-          /* TO_IN_PX_IS_SET */
-          , this.model.getSettings());
-        } else if (shiftY >= this.model.getFromInPx() && shiftY <= this.model.getToInPx()) {
-          let pivot = this.model.getToInPx() - this.model.getFromInPx();
-
-          if (shiftY < pivot) {
-            this.model.setFromInPx(shiftY);
-            this.setValueToThumb();
-            this.view.refreshView(3
-            /* FROM_IN_PX_IS_SET */
-            , this.model.getSettings());
-          } else if (shiftY >= pivot) {
-            this.model.setToInPx(shiftY);
-            this.setValueToThumb();
-            this.view.refreshView(4
-            /* TO_IN_PX_IS_SET */
-            , this.model.getSettings());
-          }
-        }
-      } else {
-        let shiftY = e.clientY - this.view.getRange().getBoundingClientRect().top;
-        this.model.setFromInPx(shiftY);
-        this.setValueToThumb();
-        this.view.refreshView(3
-        /* FROM_IN_PX_IS_SET */
-        , this.model.getSettings());
-      }
-    } else {
-      let shiftX = e.clientX - this.view.getRange().getBoundingClientRect().left;
-
-      if (this.model.isRange()) {
-        if (shiftX < this.model.getFromInPx()) {
-          this.model.setFromInPx(shiftX);
-          this.setValueToThumb();
-          this.view.refreshView(3
-          /* FROM_IN_PX_IS_SET */
-          , this.model.getSettings());
-        } else if (shiftX > this.model.getToInPx()) {
-          this.model.setToInPx(shiftX);
-          this.setValueToThumb();
-          this.view.refreshView(4
-          /* TO_IN_PX_IS_SET */
-          , this.model.getSettings());
-        } else if (shiftX >= this.model.getFromInPx() && shiftX <= this.model.getToInPx()) {
-          let pivot = this.model.getToInPx() - this.model.getFromInPx();
-
-          if (shiftX < pivot) {
-            this.model.setFromInPx(shiftX);
-            this.setValueToThumb();
-            this.view.refreshView(3
-            /* FROM_IN_PX_IS_SET */
-            , this.model.getSettings());
-          } else if (shiftX >= pivot) {
-            this.model.setToInPx(shiftX);
-            this.setValueToThumb();
-            this.view.refreshView(4
-            /* TO_IN_PX_IS_SET */
-            , this.model.getSettings());
-          }
-        }
-      } else {
-        this.model.setFromInPx(shiftX);
-        this.setValueToThumb();
-        this.view.refreshView(3
-        /* FROM_IN_PX_IS_SET */
-        , this.model.getSettings());
-      }
-    }
-  }
-
-  setValueToThumb() {
-    if (this.withThumbLabel()) {
-      if (this.isVerticalSlider()) {
-        this.model.setFrom(this.getValueFromPosInPx(this.model.getFromInPx()));
-
-        if (this.isUpdate()) {
-          this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
-        }
-
-        if (this.isRangeSlider()) {
-          this.model.setTo(this.getValueFromPosInPx(this.model.getToInPx()));
-
-          if (this.isUpdate()) {
-            this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
-          }
-        }
-
-        this.callOnChange();
-      } else {
-        this.model.setFrom(this.getValueFromPosInPx(this.model.getFromInPx()));
-
-        if (this.isUpdate()) {
-          this.model.setFromInPx(this.getPosInPxFromValue(this.model.getFrom()));
-        }
-
-        if (this.isRangeSlider()) {
-          this.model.setTo(this.getValueFromPosInPx(this.model.getToInPx()));
-
-          if (this.isUpdate()) {
-            this.model.setToInPx(this.getPosInPxFromValue(this.model.getTo()));
-          }
-        }
-
-        this.callOnChange();
-      }
-    }
-  }
-
-  getPosInPercentFromValue(value) {
-    return 100 / Math.abs(this.model.getMax() - this.model.getMin()) * Math.abs(value - this.model.getMin());
-  }
-
-  getPosInPxFromValue(value) {
-    return this.view.getSliderLengthInPx() / Math.abs(this.model.getMax() - this.model.getMin()) * Math.abs(value - this.model.getMin());
-  }
-
-  getValueFromPosInPx(valueInPx) {
-    return +(Math.floor(valueInPx / (this.view.getSliderLengthInPx() / (Math.abs(this.model.getMax() - this.model.getMin()) / this.model.getStep()))) * this.model.getStep() + this.model.getMin()).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_0__.Utils.numDigitsAfterDecimal(this.model.getStep()));
-  } // refreshView() {
+  } // getPosInPxFromValue(value: number): number {
+  //   return (this.view.getSliderLengthInPx() / Math.abs(this.model.getMax() - this.model.getMin())) * (Math.abs(value - this.model.getMin()));
+  // }
+  // getValueFromPosInPx(valueInPx: number): number {
+  //   return +(Math.floor(valueInPx /
+  //     (
+  //       this.view.getSliderLengthInPx()
+  //       /
+  //       (
+  //         (Math.abs(this.model.getMax() - this.model.getMin())) / this.model.getStep()
+  //       )
+  //     )) * this.model.getStep()
+  //     + this.model.getMin()).toFixed(Utils.numDigitsAfterDecimal(this.model.getStep()));
+  // }
+  // refreshView() {
   //   this.view.refreshView(this.model.getSettings());
   // }
 
@@ -675,8 +336,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 class Utils {
   static numDigitsAfterDecimal(value) {
-    let afterDecimalStr = value.toString().split('.')[1] || '';
-    return afterDecimalStr.length;
+    if (value) {
+      let afterDecimalStr = value.toString().split('.')[1] || '';
+      return afterDecimalStr.length;
+    } else return 0;
   }
 
 }
@@ -699,7 +362,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _modules_Slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/Slider */ "./view/modules/Slider.ts");
 /* harmony import */ var _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
+/* harmony import */ var _utils_Utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/Utils */ "./utils/Utils.ts");
 ;
+
 
 class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.EventObservable {
   constructor(settings, root) {
@@ -708,6 +373,12 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
     this.settings = settings;
     this.rootElem = root;
     this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.settings, this.numberOfMarking);
+
+    if (this.settings.isVertical) {
+      this.thumbInPercentage = Math.abs(this.getThumbFrom().offsetHeight / this.slider.getRange().offsetHeight) * 100;
+    } else {
+      this.thumbInPercentage = Math.abs(this.getThumbFrom().offsetWidth / this.slider.getRange().offsetWidth) * 100;
+    }
   }
 
   render() {
@@ -720,6 +391,16 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
     if (this.settings.isVertical) {
       this.slider.setVertical();
     }
+
+    this.bindEvents();
+  }
+
+  bindEvents() {
+    this.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this); //this.getRangeLabel().onmousedown = this.mouseRangeHandler.bind(this);
+
+    if (this.settings.isRange) {
+      this.getThumbTo().onmousedown = this.mouseToHandler.bind(this);
+    }
   }
 
   getRangeLabel() {
@@ -728,9 +409,17 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
 
   getSliderLengthInPx() {
     if (this.settings.isVertical) {
-      return this.getRange().offsetHeight - this.getThumbFrom().offsetHeight;
+      return this.getRange().offsetHeight + this.getThumbFrom().offsetHeight;
     } else {
-      return this.getRange().offsetWidth - this.getThumbFrom().offsetWidth;
+      return this.getRange().offsetWidth + this.getThumbFrom().offsetWidth;
+    }
+  }
+
+  getThumbLengthInPx() {
+    if (this.settings.isVertical) {
+      return this.getThumbFrom().offsetHeight;
+    } else {
+      return this.getThumbFrom().offsetWidth;
     }
   }
 
@@ -753,85 +442,354 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
   refreshView(msg, s) {
     if (msg === 0
     /* INIT */
-    || msg === 5
+    || msg === 3
     /* UPDATE */
     ) {
+        if (!this.settings.hideThumbLabel) {
+          this.setThumbToValue('thumbFrom');
+
+          if (this.settings.isRange) {
+            this.setThumbToValue('thumbTo');
+          }
+        }
+
         this.slider.setMinRange(s.min);
         this.slider.setMaxRange(s.max);
         this.slider.setValueToLabelThumbFrom(s.from);
 
         if (s.isRange) {
           this.slider.setValueToLabelThumbTo(s.to);
+          this.setColoredRange();
 
           if (s.isVertical) {
-            this.getThumbTo().style.top = s.toInPx / this.getRange().clientHeight * 100 + '%';
-            this.getThumbFrom().style.top = s.fromInPx / this.getRange().clientHeight * 100 + '%';
+            this.getThumbTo().style.top = Math.abs(s.to - s.min) / Math.abs(s.max - s.min) * 100 + '%';
+            this.getThumbFrom().style.top = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
           } else {
-            this.getThumbTo().style.left = s.toInPx / this.getRange().clientWidth * 100 + '%';
-            this.getThumbFrom().style.left = s.fromInPx / this.getRange().clientWidth * 100 + '%';
+            this.getThumbTo().style.left = Math.abs(s.to - s.min) / Math.abs(s.max - s.min) * 100 + '%';
+            this.getThumbFrom().style.left = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
           }
         } else {
+          this.setColoredRange();
+
           if (s.isVertical) {
-            this.getThumbFrom().style.top = s.fromInPx / this.getRange().offsetHeight * 100 + '%';
+            this.getThumbFrom().style.top = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
           } else {
-            this.getThumbFrom().style.left = s.fromInPx / this.getRange().clientWidth * 100 + '%';
+            this.getThumbFrom().style.left = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
           }
         }
-
-        this.setColoredRange(msg, s);
-      } else if (msg === 3
-    /* FROM_IN_PX_IS_SET */
+      } else if (msg === 1
+    /* FROM_IS_SET */
     ) {
         this.slider.setValueToLabelThumbFrom(s.from);
-
-        if (s.isVertical) {
-          this.getThumbFrom().style.top = s.fromInPx / this.getRange().offsetHeight * 100 + '%';
-        } else {
-          this.getThumbFrom().style.left = s.fromInPx / this.getRange().clientWidth * 100 + '%';
-        }
-
-        this.setColoredRange(msg, s);
-      } else if (msg === 4
-    /* TO_IN_PX_IS_SET */
+        this.setColoredRange();
+      } else if (msg === 2
+    /* TO_IS_SET */
     ) {
         this.slider.setValueToLabelThumbTo(s.to);
-
-        if (s.isVertical) {
-          this.getThumbTo().style.top = s.toInPx / this.getRange().offsetHeight * 100 + '%';
-        } else {
-          this.getThumbTo().style.left = s.toInPx / this.getRange().clientWidth * 100 + '%';
-        }
-
-        this.setColoredRange(msg, s);
+        this.setColoredRange();
       }
   }
 
-  setColoredRange(msg, s) {
-    let that = this;
-
-    if (s.isRange) {
-      if (s.isVertical) {
-        let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
-        let height = (s.toInPx + thumbHalf - s.fromInPx) / this.getRange().offsetHeight * 100 + '%';
-        let top = s.fromInPx / this.getRange().offsetHeight * 100 + '%';
-        this.slider.getColoredRange().style.top = top;
-        this.slider.getColoredRange().style.height = height;
+  setColoredRange() {
+    if (this.settings.isRange) {
+      if (this.settings.isVertical) {
+        this.slider.getColoredRange().style.top = this.getThumbFrom().getBoundingClientRect().top - 2 * this.getThumbLengthInPx() + 'px';
+        this.slider.getColoredRange().style.height = this.getThumbTo().getBoundingClientRect().top - this.getThumbFrom().getBoundingClientRect().top + this.getThumbLengthInPx() / 2 + 'px';
       } else {
-        let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
-        let width = (s.toInPx + thumbHalf - s.fromInPx) / this.getRange().offsetWidth * 100 + '%';
-        let left = s.fromInPx / this.getRange().offsetWidth * 100 + '%';
-        this.slider.getColoredRange().style.left = left;
-        this.slider.getColoredRange().style.width = width;
+        this.slider.getColoredRange().style.left = this.getThumbFrom().getBoundingClientRect().left - 1.2 * this.getThumbLengthInPx() + 'px';
+        this.slider.getColoredRange().style.width = this.getThumbTo().getBoundingClientRect().left - this.getThumbFrom().getBoundingClientRect().left - this.getThumbLengthInPx() / 2 + 'px';
       }
     } else {
-      if (s.isVertical) {
-        let thumbHalf = this.slider.getThumbFrom().offsetHeight / 2;
-        let height = (s.fromInPx + thumbHalf) / this.getRange().clientHeight * 100 + '%';
-        this.slider.getColoredRange().style.height = height;
+      if (this.settings.isVertical) {
+        this.slider.getColoredRange().style.height = this.getThumbFrom().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbLengthInPx() / 2) + 'px';
       } else {
-        let thumbHalf = this.slider.getThumbFrom().offsetWidth / 2;
-        let width = (s.fromInPx + thumbHalf) / this.getRange().clientWidth * 100 + '%';
-        this.slider.getColoredRange().style.width = width;
+        this.slider.getColoredRange().style.width = this.getThumbFrom().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbLengthInPx() / 2) + 'px';
+      }
+    }
+  }
+
+  mouseFromHandler(e) {
+    e.preventDefault();
+
+    if (this.settings.isVertical) {
+      let shiftY = e.clientY - this.getThumbFrom().getBoundingClientRect().top;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      let sliderRange = this.getRange();
+      let that = this;
+
+      function onMouseMove(event) {
+        let newTop = event.clientY - shiftY - sliderRange.getBoundingClientRect().top;
+
+        if (newTop < -that.getThumbLengthInPx() / 2) {
+          newTop = -that.getThumbLengthInPx() / 2;
+        }
+
+        let bottom = that.getSliderLengthInPx() - that.getThumbLengthInPx() / 2;
+
+        if (that.settings.isRange) {
+          let toPos = that.getThumbTo().getBoundingClientRect().top - (that.getRange().getBoundingClientRect().top - that.getThumbLengthInPx() / 4);
+          bottom = toPos;
+        }
+
+        if (newTop > bottom) {
+          newTop = bottom;
+        }
+
+        that.getThumbFrom().style.top = that.convertFromPxToPercent(newTop) + '%';
+        that.notifyObservers(1
+        /* FROM_IS_SET */
+        , {
+          from: that.convertFromPxToValue(newTop),
+          min: that.settings.min,
+          max: that.settings.max
+        });
+        that.setColoredRange();
+      }
+
+      function onMouseUp() {
+        document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('mousemove', onMouseMove);
+      }
+    } else {
+      let shiftX = e.clientX - this.getThumbFrom().getBoundingClientRect().left;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      let sliderRange = this.getRange();
+      let that = this;
+
+      function onMouseMove(e) {
+        let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
+
+        if (newLeft < -that.getThumbFrom().offsetWidth / 2) {
+          newLeft = -that.getThumbFrom().offsetWidth / 2;
+        }
+
+        let rightEdge = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth / 2;
+
+        if (that.settings.isRange) {
+          let toPos = that.getThumbTo().getBoundingClientRect().left - (that.getRange().getBoundingClientRect().left - that.getThumbLengthInPx() / 4);
+          rightEdge = toPos;
+        }
+
+        if (newLeft > rightEdge) {
+          newLeft = rightEdge;
+        }
+
+        that.getThumbFrom().style.left = that.convertFromPxToPercent(newLeft) + '%';
+        that.notifyObservers(1
+        /* FROM_IS_SET */
+        , {
+          from: that.convertFromPxToValue(newLeft),
+          min: that.settings.min,
+          max: that.settings.max
+        });
+        that.setColoredRange();
+      }
+
+      function onMouseUp() {
+        document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('mousemove', onMouseMove);
+      }
+    }
+  }
+
+  mouseToHandler(e) {
+    e.preventDefault();
+
+    if (this.settings.isVertical) {
+      let shiftY = e.clientY - this.getThumbTo().getBoundingClientRect().top;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      let sliderRange = this.getRange();
+      let thumb = this.getThumbTo();
+      let that = this;
+
+      function onMouseMove(event) {
+        let newTop = event.clientY - shiftY - sliderRange.getBoundingClientRect().top;
+        let fromPos = that.getThumbFrom().getBoundingClientRect().top - (that.getRange().getBoundingClientRect().top - that.getThumbLengthInPx() / 2);
+
+        if (newTop < fromPos) {
+          newTop = fromPos;
+        }
+
+        let bottom = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth / 2;
+        ;
+
+        if (newTop > bottom) {
+          newTop = bottom;
+        }
+
+        that.getThumbTo().style.top = that.convertFromPxToPercent(newTop) + '%';
+        that.notifyObservers(2
+        /* TO_IS_SET */
+        , {
+          from: 0,
+          to: that.convertFromPxToValue(newTop),
+          min: that.settings.min,
+          max: that.settings.max
+        });
+        that.setColoredRange();
+      }
+
+      function onMouseUp() {
+        document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('mousemove', onMouseMove);
+      }
+    } else {
+      let shiftX = e.clientX - this.getThumbTo().getBoundingClientRect().left;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      let sliderRange = this.getRange();
+      let that = this;
+
+      function onMouseMove(e) {
+        let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
+        let fromPos = that.getThumbFrom().getBoundingClientRect().left - (that.getRange().getBoundingClientRect().left - that.getThumbLengthInPx() / 2);
+
+        if (newLeft < fromPos) {
+          newLeft = fromPos;
+        }
+
+        let rightEdge = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth / 2;
+        ;
+
+        if (newLeft > rightEdge) {
+          newLeft = rightEdge;
+        }
+
+        that.getThumbTo().style.left = that.convertFromPxToPercent(newLeft) + '%';
+        that.notifyObservers(2
+        /* TO_IS_SET */
+        , {
+          from: 0,
+          to: that.convertFromPxToValue(newLeft),
+          min: that.settings.min,
+          max: that.settings.max
+        });
+        that.setColoredRange();
+      }
+
+      function onMouseUp() {
+        document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('mousemove', onMouseMove);
+      }
+    }
+  } // mouseRangeHandler(e: MouseEvent) {
+  //  if (this.settings.isVertical) {
+  //   if (this.settings.isRange) {
+  //    let shiftY = e.clientY - this.getRange().getBoundingClientRect().top;
+  //    if (shiftY < this.model.getFromInPx()) {
+  //     // this.model.setFromInPx(shiftY);
+  //     // this.setValueToThumb();
+  //     // this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
+  //     //todo
+  //    }
+  //    else if (shiftY > this.model.getToInPx()) {
+  //     // this.model.setToInPx(shiftY);
+  //     // this.setValueToThumb();
+  //     // this.view.refreshView(Messages.TO_IN_PX_IS_SET, this.model.getSettings());
+  //     //todo
+  //    }
+  //    else if (shiftY >= this.model.getFromInPx() && shiftY <= this.model.getToInPx()) {
+  //     let pivot = (this.model.getToInPx() - this.model.getFromInPx());
+  //     if (shiftY < pivot) {
+  //      // this.model.setFromInPx(shiftY);
+  //      // this.setValueToThumb();
+  //      // this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
+  //      //todo
+  //     }
+  //     else if (shiftY >= pivot) {
+  //      // this.model.setToInPx(shiftY);
+  //      // this.setValueToThumb();
+  //      // this.view.refreshView(Messages.TO_IN_PX_IS_SET, this.model.getSettings());
+  //      //todo
+  //     }
+  //    }
+  //   }
+  //   else {
+  //    let shiftY = e.clientY - this.view.getRange().getBoundingClientRect().top;
+  //    // this.model.setFromInPx(shiftY);
+  //    // this.setValueToThumb();
+  //    // this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
+  //    //todo
+  //   }
+  //  } else {
+  //   let shiftX = e.clientX - this.view.getRange().getBoundingClientRect().left;
+  //   if (this.settings.isRange) {
+  //    if (shiftX < this.model.getFromInPx()) {
+  //     // this.model.setFromInPx(shiftX);
+  //     // this.setValueToThumb();
+  //     // this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
+  //     //todo
+  //    }
+  //    else if (shiftX > this.model.getToInPx()) {
+  //     // this.model.setToInPx(shiftX);
+  //     // this.setValueToThumb();
+  //     // this.view.refreshView(Messages.TO_IN_PX_IS_SET, this.model.getSettings());
+  //     //todo
+  //    }
+  //    else if (shiftX >= this.model.getFromInPx() && shiftX <= this.model.getToInPx()) {
+  //     let pivot = (this.model.getToInPx() - this.model.getFromInPx());
+  //     if (shiftX < pivot) {
+  //      // this.model.setFromInPx(shiftX);
+  //      // this.setValueToThumb();
+  //      // this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
+  //      //todo
+  //     }
+  //     else if (shiftX >= pivot) {
+  //      // this.model.setToInPx(shiftX);
+  //      // this.setValueToThumb();
+  //      // this.view.refreshView(Messages.TO_IN_PX_IS_SET, this.model.getSettings());
+  //      //todo
+  //     }
+  //    }
+  //   }
+  //   else {
+  //    // this.model.setFromInPx(shiftX);
+  //    // this.setValueToThumb();
+  //    // this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
+  //    //todo
+  //   }
+  //  }
+  // }
+
+
+  convertFromPxToValue(valueInPx) {
+    if (valueInPx < 0) valueInPx = 0;
+    if (valueInPx > this.getSliderLengthInPx() + this.getThumbLengthInPx() / 2) valueInPx = this.getSliderLengthInPx() + this.getThumbLengthInPx() / 2;
+
+    if (this.settings.isVertical) {
+      return +(valueInPx / (this.getSliderLengthInPx() - this.getThumbLengthInPx() / 2) * Math.abs(this.settings.max - this.settings.min) + this.settings.min).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_2__.Utils.numDigitsAfterDecimal(this.settings.step));
+    } else {
+      return +(valueInPx / (this.getSliderLengthInPx() - this.getThumbLengthInPx() / 2) * Math.abs(this.settings.max - this.settings.min) + this.settings.min).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_2__.Utils.numDigitsAfterDecimal(this.settings.step));
+    }
+  }
+
+  convertFromPxToPercent(valueInPX) {
+    return valueInPX / this.getSliderLengthInPx() * 100;
+  }
+
+  convertFromValueToPercent(value) {
+    return 100 / Math.abs(this.settings.max - this.settings.min) * Math.abs(value - this.settings.min);
+  }
+
+  convertFromValueToPx(value) {
+    return this.getSliderLengthInPx() / Math.abs(this.settings.max - this.settings.min) * Math.abs(value - this.settings.min);
+  }
+
+  setThumbToValue(type) {
+    if (type === 'thumbFrom') {
+      if (this.settings.isVertical) {
+        this.getThumbFrom().style.top = this.convertFromValueToPercent(this.settings.from) + '%';
+      } else {
+        this.getThumbFrom().style.left = this.convertFromValueToPercent(this.settings.from) + '%';
+      }
+    } else {
+      if (this.settings.isVertical) {
+        this.getThumbTo().style.top = this.convertFromValueToPercent(this.settings.to) + '%';
+      } else {
+        this.getThumbTo().style.left = this.convertFromValueToPercent(this.settings.to) + '%';
       }
     }
   }
@@ -1217,7 +1175,7 @@ $sl1.fsdSlider({
  from: -14,
  step: 0.2,
  to: -11,
- isVertical: false,
+ isVertical: true,
  hideThumbLabel: false,
  isRange: true,
  onChange: callback,
@@ -1405,4 +1363,4 @@ function callback2(result2) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.72168caa8d91537e4172.js.map
+//# sourceMappingURL=main.1398f80fd4849395c556.js.map

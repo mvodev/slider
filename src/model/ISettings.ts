@@ -6,8 +6,6 @@ export interface ISettings {
  step?: number;
  isVertical?: boolean;
  isRange?: boolean;
- fromInPx?: number;
- toInPx?: number;
  hideThumbLabel?: boolean | undefined;
  onStart?: Function | undefined;
  onChange?: Function | undefined;

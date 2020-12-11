@@ -43,31 +43,15 @@ export class Model extends EventObservable implements IModelFacade {
  }
  setFrom(pos: number) {
   this.settings.from = pos;
-  this.notifyObservers(Messages.FROM_IS_SET, this.settings);
  }
  getFrom(): number {
   return this.settings.from;
  }
  setTo(value: number): void {
   this.settings.to = value;
-  this.notifyObservers(Messages.TO_IS_SET, this.settings);
  }
  getTo(): number | undefined {
   return this.settings.to;
- }
- getFromInPx(): number {
-  return this.settings.fromInPx;
- }
- setFromInPx(value: number): void {
-  this.settings.fromInPx = value;
-  this.notifyObservers(Messages.FROM_IN_PX_IS_SET, this.settings);
- }
- getToInPx(): number | undefined {
-  return this.settings.toInPx;
- }
- setToInPx(value: number): void {
-  this.settings.toInPx = value;
-  this.notifyObservers(Messages.TO_IN_PX_IS_SET, this.settings);
  }
  isRange(): boolean | undefined {
   return this.settings.isRange;
