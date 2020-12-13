@@ -36,7 +36,7 @@ width: 20px;
  width: 30px;
  top:-5px;
  left: -5px;
- cursor: default;
+ cursor: pointer;
  border-radius: 50%;
 }
 .fsd-slider__thumb-from{
@@ -71,7 +71,7 @@ width: 20px;
  display: flex;
  justify-content: space-between;
  flex-direction: row;
- cursor: default;
+ cursor: pointer;
 }
 .fsd-slider__range-label_is_vertical{
  flex-direction: column;

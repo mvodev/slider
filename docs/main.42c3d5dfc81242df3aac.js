@@ -426,7 +426,8 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
   }
 
   bindEvents() {
-    this.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this); //this.getRangeLabel().onmousedown = this.mouseRangeHandler.bind(this);
+    this.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this);
+    this.getRangeLabel().onmousedown = this.mouseRangeHandler.bind(this);
 
     if (this.settings.isRange) {
       this.getThumbTo().onmousedown = this.mouseToHandler.bind(this);
@@ -545,11 +546,10 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
       let shiftY = e.clientY - this.getThumbFrom().getBoundingClientRect().top;
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
-      let sliderRange = this.getRange();
       let that = this;
 
       function onMouseMove(event) {
-        let newTop = event.clientY - shiftY - sliderRange.getBoundingClientRect().top;
+        let newTop = event.clientY - shiftY - this.getRange().getBoundingClientRect().top;
 
         if (newTop < -that.getThumbLengthInPx() / 2) {
           newTop = -that.getThumbLengthInPx() / 2;
@@ -586,11 +586,10 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
       let shiftX = e.clientX - this.getThumbFrom().getBoundingClientRect().left;
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
-      let sliderRange = this.getRange();
       let that = this;
 
       function onMouseMove(e) {
-        let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
+        let newLeft = e.clientX - shiftX - that.getRange().getBoundingClientRect().left;
 
         if (newLeft < -that.getThumbFrom().offsetWidth / 2) {
           newLeft = -that.getThumbFrom().offsetWidth / 2;
@@ -633,12 +632,10 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
       let shiftY = e.clientY - this.getThumbTo().getBoundingClientRect().top;
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
-      let sliderRange = this.getRange();
-      let thumb = this.getThumbTo();
       let that = this;
 
       function onMouseMove(event) {
-        let newTop = event.clientY - shiftY - sliderRange.getBoundingClientRect().top;
+        let newTop = event.clientY - shiftY - this.getRange().getBoundingClientRect().top;
         let fromPos = that.getThumbFrom().getBoundingClientRect().top - (that.getRange().getBoundingClientRect().top - that.getThumbLengthInPx() / 2);
 
         if (newTop < fromPos) {
@@ -673,11 +670,10 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
       let shiftX = e.clientX - this.getThumbTo().getBoundingClientRect().left;
       document.addEventListener('mousemove', onMouseMove);
       document.addEventListener('mouseup', onMouseUp);
-      let sliderRange = this.getRange();
       let that = this;
 
       function onMouseMove(e) {
-        let newLeft = e.clientX - shiftX - sliderRange.getBoundingClientRect().left;
+        let newLeft = e.clientX - shiftX - that.getRange().getBoundingClientRect().left;
         let fromPos = that.getThumbFrom().getBoundingClientRect().left - (that.getRange().getBoundingClientRect().left - that.getThumbLengthInPx() / 2);
 
         if (newLeft < fromPos) {
@@ -709,85 +705,175 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
         document.removeEventListener('mousemove', onMouseMove);
       }
     }
-  } // mouseRangeHandler(e: MouseEvent) {
-  //  if (this.settings.isVertical) {
-  //   if (this.settings.isRange) {
-  //    let shiftY = e.clientY - this.getRange().getBoundingClientRect().top;
-  //    if (shiftY < this.model.getFromInPx()) {
-  //     // this.model.setFromInPx(shiftY);
-  //     // this.setValueToThumb();
-  //     // this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
-  //     //todo
-  //    }
-  //    else if (shiftY > this.model.getToInPx()) {
-  //     // this.model.setToInPx(shiftY);
-  //     // this.setValueToThumb();
-  //     // this.view.refreshView(Messages.TO_IN_PX_IS_SET, this.model.getSettings());
-  //     //todo
-  //    }
-  //    else if (shiftY >= this.model.getFromInPx() && shiftY <= this.model.getToInPx()) {
-  //     let pivot = (this.model.getToInPx() - this.model.getFromInPx());
-  //     if (shiftY < pivot) {
-  //      // this.model.setFromInPx(shiftY);
-  //      // this.setValueToThumb();
-  //      // this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
-  //      //todo
-  //     }
-  //     else if (shiftY >= pivot) {
-  //      // this.model.setToInPx(shiftY);
-  //      // this.setValueToThumb();
-  //      // this.view.refreshView(Messages.TO_IN_PX_IS_SET, this.model.getSettings());
-  //      //todo
-  //     }
-  //    }
-  //   }
-  //   else {
-  //    let shiftY = e.clientY - this.view.getRange().getBoundingClientRect().top;
-  //    // this.model.setFromInPx(shiftY);
-  //    // this.setValueToThumb();
-  //    // this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
-  //    //todo
-  //   }
-  //  } else {
-  //   let shiftX = e.clientX - this.view.getRange().getBoundingClientRect().left;
-  //   if (this.settings.isRange) {
-  //    if (shiftX < this.model.getFromInPx()) {
-  //     // this.model.setFromInPx(shiftX);
-  //     // this.setValueToThumb();
-  //     // this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
-  //     //todo
-  //    }
-  //    else if (shiftX > this.model.getToInPx()) {
-  //     // this.model.setToInPx(shiftX);
-  //     // this.setValueToThumb();
-  //     // this.view.refreshView(Messages.TO_IN_PX_IS_SET, this.model.getSettings());
-  //     //todo
-  //    }
-  //    else if (shiftX >= this.model.getFromInPx() && shiftX <= this.model.getToInPx()) {
-  //     let pivot = (this.model.getToInPx() - this.model.getFromInPx());
-  //     if (shiftX < pivot) {
-  //      // this.model.setFromInPx(shiftX);
-  //      // this.setValueToThumb();
-  //      // this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
-  //      //todo
-  //     }
-  //     else if (shiftX >= pivot) {
-  //      // this.model.setToInPx(shiftX);
-  //      // this.setValueToThumb();
-  //      // this.view.refreshView(Messages.TO_IN_PX_IS_SET, this.model.getSettings());
-  //      //todo
-  //     }
-  //    }
-  //   }
-  //   else {
-  //    // this.model.setFromInPx(shiftX);
-  //    // this.setValueToThumb();
-  //    // this.view.refreshView(Messages.FROM_IN_PX_IS_SET, this.model.getSettings());
-  //    //todo
-  //   }
-  //  }
-  // }
+  }
 
+  mouseRangeHandler(e) {
+    if (this.settings.isVertical) {
+      //vertical mode
+      let shiftY = e.clientY - this.getRange().getBoundingClientRect().top;
+      let fromPos = this.getThumbFrom().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbLengthInPx() / 2);
+
+      if (this.settings.isRange) {
+        let toPos = this.getThumbTo().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbLengthInPx() / 2);
+
+        if (shiftY < fromPos) {
+          this.resPercentage = this.convertFromPxToPercent(shiftY);
+          this.getThumbFrom().style.top = this.resPercentage + '%';
+          this.notifyObservers(4
+          /* SET_FROM */
+          , {
+            from: this.resPercentage,
+            to: 0,
+            min: this.settings.min,
+            max: this.settings.max
+          });
+          this.setColoredRange();
+        } else if (shiftY > toPos) {
+          this.resPercentage = this.convertFromPxToPercent(shiftY);
+          this.getThumbTo().style.top = this.resPercentage + '%';
+          this.notifyObservers(5
+          /* SET_TO */
+          , {
+            to: this.resPercentage,
+            from: 0,
+            min: this.settings.min,
+            max: this.settings.max
+          });
+          this.setColoredRange();
+        } else if (shiftY >= fromPos && shiftY <= toPos) {
+          let pivot = toPos - fromPos;
+
+          if (shiftY < pivot) {
+            this.resPercentage = this.convertFromPxToPercent(shiftY);
+            this.getThumbFrom().style.top = this.resPercentage + '%';
+            this.notifyObservers(4
+            /* SET_FROM */
+            , {
+              from: this.resPercentage,
+              to: 0,
+              min: this.settings.min,
+              max: this.settings.max
+            });
+            this.setColoredRange();
+          } else if (shiftY >= pivot) {
+            this.resPercentage = this.convertFromPxToPercent(shiftY);
+            this.getThumbTo().style.top = this.resPercentage + '%';
+            this.notifyObservers(5
+            /* SET_TO */
+            , {
+              to: this.resPercentage,
+              from: 0,
+              min: this.settings.min,
+              max: this.settings.max
+            });
+            this.setColoredRange();
+          }
+        }
+      } else {
+        if (shiftY < fromPos) {
+          this.resPercentage = this.convertFromPxToPercent(shiftY);
+          this.getThumbFrom().style.top = this.resPercentage + '%';
+          this.notifyObservers(4
+          /* SET_FROM */
+          , {
+            from: this.resPercentage,
+            to: 0,
+            min: this.settings.min,
+            max: this.settings.max
+          });
+          this.setColoredRange();
+        } else {
+          //vertical mode single thumb 
+          this.resPercentage = this.convertFromPxToPercent(shiftY);
+          this.getThumbFrom().style.top = this.resPercentage + '%';
+          this.notifyObservers(4
+          /* SET_FROM */
+          , {
+            from: this.resPercentage,
+            to: 0,
+            min: this.settings.min,
+            max: this.settings.max
+          });
+          this.setColoredRange();
+        }
+      }
+    } else {
+      //horizontal mode
+      let shiftX = e.clientX - this.getRange().getBoundingClientRect().left;
+      let fromPos = this.getThumbFrom().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbLengthInPx() / 2);
+
+      if (this.settings.isRange) {
+        let toPos = this.getThumbTo().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbLengthInPx() / 2);
+
+        if (shiftX < fromPos) {
+          this.resPercentage = this.convertFromPxToPercent(shiftX);
+          this.getThumbFrom().style.left = this.resPercentage + '%';
+          this.notifyObservers(4
+          /* SET_FROM */
+          , {
+            from: this.resPercentage,
+            to: 0,
+            min: this.settings.min,
+            max: this.settings.max
+          });
+          this.setColoredRange();
+        } else if (shiftX > toPos) {
+          this.resPercentage = this.convertFromPxToPercent(shiftX);
+          this.getThumbTo().style.left = this.resPercentage + '%';
+          this.notifyObservers(5
+          /* SET_TO */
+          , {
+            to: this.resPercentage,
+            from: 0,
+            min: this.settings.min,
+            max: this.settings.max
+          });
+          this.setColoredRange();
+        } else if (shiftX >= fromPos && shiftX <= toPos) {
+          let pivot = toPos - fromPos;
+
+          if (shiftX < pivot) {
+            this.resPercentage = this.convertFromPxToPercent(shiftX);
+            this.getThumbFrom().style.left = this.resPercentage + '%';
+            this.notifyObservers(4
+            /* SET_FROM */
+            , {
+              from: this.resPercentage,
+              to: 0,
+              min: this.settings.min,
+              max: this.settings.max
+            });
+            this.setColoredRange();
+          } else if (shiftX >= pivot) {
+            this.resPercentage = this.convertFromPxToPercent(shiftX);
+            this.getThumbTo().style.left = this.resPercentage + '%';
+            this.notifyObservers(5
+            /* SET_TO */
+            , {
+              to: this.resPercentage,
+              from: 0,
+              min: this.settings.min,
+              max: this.settings.max
+            });
+            this.setColoredRange();
+          }
+        }
+      } else {
+        //horizontal mode single thumb
+        this.resPercentage = this.convertFromPxToPercent(shiftX);
+        this.getThumbFrom().style.left = this.resPercentage + '%';
+        this.notifyObservers(4
+        /* SET_FROM */
+        , {
+          from: this.resPercentage,
+          to: 0,
+          min: this.settings.min,
+          max: this.settings.max
+        });
+        this.setColoredRange();
+      }
+    }
+  }
 
   convertFromPxToPercent(valueInPX) {
     return valueInPX / this.getSliderLengthInPx() * 100;
@@ -1196,7 +1282,7 @@ $sl1.fsdSlider({
  to: -11,
  isVertical: true,
  hideThumbLabel: false,
- isRange: true,
+ isRange: false,
  onChange: callback,
 });
 // var sl1_instance = $sl1.data("fsdSlider");
@@ -1382,4 +1468,4 @@ function callback2(result2) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.21cbe9956c5b6333ab77.js.map
+//# sourceMappingURL=main.42c3d5dfc81242df3aac.js.map

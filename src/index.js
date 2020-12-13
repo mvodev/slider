@@ -9,7 +9,7 @@ $sl1.fsdSlider({
  to: -11,
  isVertical: true,
  hideThumbLabel: false,
- isRange: true,
+ isRange: false,
  onChange: callback,
 });
 // var sl1_instance = $sl1.data("fsdSlider");
