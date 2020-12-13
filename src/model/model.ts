@@ -2,6 +2,7 @@ import { Messages } from '../utils/Messages';
 import { IModelFacade } from './IModelFacade';
 import { ISettings } from './ISettings';
 import { EventObservable } from '../observers/EventObservable';
+import { Utils } from '../utils/Utils';
 export class Model extends EventObservable implements IModelFacade {
  //todo  delete this method after all subscribed
 
@@ -41,14 +42,14 @@ export class Model extends EventObservable implements IModelFacade {
  showThumbLabel(): boolean | undefined {
   return !this.settings.hideThumbLabel;
  }
- setFrom(pos: number) {
-  this.settings.from = pos;
+ setFrom(valueInPercent: number): void {
+  this.settings.from = this.convertFromPercentToValue(valueInPercent);
  }
  getFrom(): number {
   return this.settings.from;
  }
- setTo(value: number): void {
-  this.settings.to = value;
+ setTo(valueInPercent: number): void {
+  this.settings.to = this.convertFromPercentToValue(valueInPercent);;
  }
  getTo(): number | undefined {
   return this.settings.to;
@@ -121,5 +122,15 @@ export class Model extends EventObservable implements IModelFacade {
    console.error('unacceptable value,callback onUpdate must be function');
    this.settings.onDestroy = undefined;
   }
+ }
+ private convertFromPercentToValue(valueInPercent: number) {
+  if (valueInPercent <= 0) {
+   return this.getMin();
+  }
+  if (valueInPercent >= 100) {
+   return this.getMax();
+  }
+  let del = 1.0 /this.getStep();
+  return Math.round(+((Math.abs(this.getMax() - this.getMin()) * valueInPercent / 100) + this.getMin()).toFixed(Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
  }
 }

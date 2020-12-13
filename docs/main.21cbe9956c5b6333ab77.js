@@ -17,7 +17,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Model": () => /* binding */ Model
 /* harmony export */ });
 /* harmony import */ var _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
+/* harmony import */ var _utils_Utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/Utils */ "./utils/Utils.ts");
 ;
+
 class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.EventObservable {
   constructor(settings) {
     super();
@@ -42,7 +44,7 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
   updateSettings(settings) {
     this.settings = Object.assign(this.settings, settings);
     this.validateSettings(this.settings);
-    this.notifyObservers(3
+    this.notifyObservers(1
     /* UPDATE */
     , this.settings);
   }
@@ -63,16 +65,17 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
     return !this.settings.hideThumbLabel;
   }
 
-  setFrom(pos) {
-    this.settings.from = pos;
+  setFrom(valueInPercent) {
+    this.settings.from = this.convertFromPercentToValue(valueInPercent);
   }
 
   getFrom() {
     return this.settings.from;
   }
 
-  setTo(value) {
-    this.settings.to = value;
+  setTo(valueInPercent) {
+    this.settings.to = this.convertFromPercentToValue(valueInPercent);
+    ;
   }
 
   getTo() {
@@ -165,6 +168,19 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
     }
   }
 
+  convertFromPercentToValue(valueInPercent) {
+    if (valueInPercent <= 0) {
+      return this.getMin();
+    }
+
+    if (valueInPercent >= 100) {
+      return this.getMax();
+    }
+
+    let del = 1.0 / this.getStep();
+    return Math.round(+(Math.abs(this.getMax() - this.getMin()) * valueInPercent / 100 + this.getMin()).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_1__.Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
+  }
+
 }
 
 /***/ }),
@@ -236,21 +252,35 @@ class Presenter {
     ) {
         this.initialize();
       } else if (msg === 1
-    /* FROM_IS_SET */
+    /* UPDATE */
     ) {
-        this.model.setFrom(s.from); //console.log('inside handle event FROM IS SET' + this.model.getFrom());
-
         this.view.refreshView(1
-        /* FROM_IS_SET */
+        /* UPDATE */
         , s);
-      } else if (msg === 2
-    /* TO_IS_SET */
+      } else if (msg === 4
+    /* SET_FROM */
     ) {
-        this.model.setTo(s.to); //console.log('inside handle event TO IS SET' + this.model.getTo());
-
+        this.model.setFrom(s.from);
         this.view.refreshView(2
+        /* FROM_IS_SET */
+        , {
+          from: this.model.getFrom(),
+          to: 0,
+          min: 0,
+          max: 0
+        });
+      } else if (msg === 5
+    /* SET_TO */
+    ) {
+        this.model.setTo(s.to);
+        this.view.refreshView(3
         /* TO_IS_SET */
-        , s);
+        , {
+          to: this.model.getTo(),
+          from: 0,
+          min: 0,
+          max: 0
+        });
       }
   }
 
@@ -270,7 +300,7 @@ class Presenter {
   }
 
   update(newSettings) {
-    this.view.refreshView(3
+    this.view.refreshView(1
     /* UPDATE */
     , newSettings);
   }
@@ -362,9 +392,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _modules_Slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/Slider */ "./view/modules/Slider.ts");
 /* harmony import */ var _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
-/* harmony import */ var _utils_Utils__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../utils/Utils */ "./utils/Utils.ts");
 ;
-
 
 class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.EventObservable {
   constructor(settings, root) {
@@ -379,6 +407,8 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
     } else {
       this.thumbInPercentage = Math.abs(this.getThumbFrom().offsetWidth / this.slider.getRange().offsetWidth) * 100;
     }
+
+    this.resPercentage = 0;
   }
 
   render() {
@@ -442,7 +472,7 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
   refreshView(msg, s) {
     if (msg === 0
     /* INIT */
-    || msg === 3
+    || msg === 1
     /* UPDATE */
     ) {
         if (!this.settings.hideThumbLabel) {
@@ -477,12 +507,12 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
             this.getThumbFrom().style.left = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
           }
         }
-      } else if (msg === 1
+      } else if (msg === 2
     /* FROM_IS_SET */
     ) {
         this.slider.setValueToLabelThumbFrom(s.from);
         this.setColoredRange();
-      } else if (msg === 2
+      } else if (msg === 3
     /* TO_IS_SET */
     ) {
         this.slider.setValueToLabelThumbTo(s.to);
@@ -536,11 +566,12 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
           newTop = bottom;
         }
 
-        that.getThumbFrom().style.top = that.convertFromPxToPercent(newTop) + '%';
-        that.notifyObservers(1
-        /* FROM_IS_SET */
+        that.resPercentage = that.convertFromPxToPercent(newTop);
+        that.getThumbFrom().style.top = that.resPercentage + '%';
+        that.notifyObservers(4
+        /* SET_FROM */
         , {
-          from: that.convertFromPxToValue(newTop),
+          from: that.resPercentage,
           min: that.settings.min,
           max: that.settings.max
         });
@@ -576,11 +607,12 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
           newLeft = rightEdge;
         }
 
-        that.getThumbFrom().style.left = that.convertFromPxToPercent(newLeft) + '%';
-        that.notifyObservers(1
-        /* FROM_IS_SET */
+        that.resPercentage = that.convertFromPxToPercent(newLeft);
+        that.getThumbFrom().style.left = that.resPercentage + '%';
+        that.notifyObservers(4
+        /* SET_FROM */
         , {
-          from: that.convertFromPxToValue(newLeft),
+          from: that.resPercentage,
           min: that.settings.min,
           max: that.settings.max
         });
@@ -620,12 +652,13 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
           newTop = bottom;
         }
 
-        that.getThumbTo().style.top = that.convertFromPxToPercent(newTop) + '%';
-        that.notifyObservers(2
-        /* TO_IS_SET */
+        that.resPercentage = that.convertFromPxToPercent(newTop);
+        that.getThumbTo().style.top = that.resPercentage + '%';
+        that.notifyObservers(5
+        /* SET_TO */
         , {
           from: 0,
-          to: that.convertFromPxToValue(newTop),
+          to: that.resPercentage,
           min: that.settings.min,
           max: that.settings.max
         });
@@ -658,12 +691,13 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
           newLeft = rightEdge;
         }
 
-        that.getThumbTo().style.left = that.convertFromPxToPercent(newLeft) + '%';
-        that.notifyObservers(2
-        /* TO_IS_SET */
+        that.resPercentage = that.convertFromPxToPercent(newLeft);
+        that.getThumbTo().style.left = that.resPercentage + '%';
+        that.notifyObservers(5
+        /* SET_TO */
         , {
           from: 0,
-          to: that.convertFromPxToValue(newLeft),
+          to: that.resPercentage,
           min: that.settings.min,
           max: that.settings.max
         });
@@ -755,27 +789,12 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
   // }
 
 
-  convertFromPxToValue(valueInPx) {
-    if (valueInPx < 0) valueInPx = 0;
-    if (valueInPx > this.getSliderLengthInPx() + this.getThumbLengthInPx() / 2) valueInPx = this.getSliderLengthInPx() + this.getThumbLengthInPx() / 2;
-
-    if (this.settings.isVertical) {
-      return +(valueInPx / (this.getSliderLengthInPx() - this.getThumbLengthInPx() / 2) * Math.abs(this.settings.max - this.settings.min) + this.settings.min).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_2__.Utils.numDigitsAfterDecimal(this.settings.step));
-    } else {
-      return +(valueInPx / (this.getSliderLengthInPx() - this.getThumbLengthInPx() / 2) * Math.abs(this.settings.max - this.settings.min) + this.settings.min).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_2__.Utils.numDigitsAfterDecimal(this.settings.step));
-    }
-  }
-
   convertFromPxToPercent(valueInPX) {
     return valueInPX / this.getSliderLengthInPx() * 100;
   }
 
   convertFromValueToPercent(value) {
     return 100 / Math.abs(this.settings.max - this.settings.min) * Math.abs(value - this.settings.min);
-  }
-
-  convertFromValueToPx(value) {
-    return this.getSliderLengthInPx() / Math.abs(this.settings.max - this.settings.min) * Math.abs(value - this.settings.min);
   }
 
   setThumbToValue(type) {
@@ -1363,4 +1382,4 @@ function callback2(result2) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.1398f80fd4849395c556.js.map
+//# sourceMappingURL=main.21cbe9956c5b6333ab77.js.map

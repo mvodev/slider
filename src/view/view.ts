@@ -9,6 +9,7 @@ export class View extends EventObservable {
  private rootElem: HTMLDivElement;
  private numberOfMarking: number = 10;
  private thumbInPercentage: number;
+ private resPercentage: number;
  constructor(settings: ISettings, root: HTMLInputElement,) {
   super();
   this.settings = settings;
@@ -20,6 +21,7 @@ export class View extends EventObservable {
   else {
    this.thumbInPercentage = Math.abs(this.getThumbFrom().offsetWidth / this.slider.getRange().offsetWidth) * 100;
   }
+  this.resPercentage = 0;
  }
  render() {
   this.slider.render();
@@ -116,8 +118,8 @@ export class View extends EventObservable {
  private setColoredRange() {
   if (this.settings.isRange) {
    if (this.settings.isVertical) {
-    this.slider.getColoredRange().style.top = (this.getThumbFrom().getBoundingClientRect().top - 2*this.getThumbLengthInPx()) + 'px';
-    this.slider.getColoredRange().style.height = (this.getThumbTo().getBoundingClientRect().top - this.getThumbFrom().getBoundingClientRect().top + this.getThumbLengthInPx()/2) + 'px';
+    this.slider.getColoredRange().style.top = (this.getThumbFrom().getBoundingClientRect().top - 2 * this.getThumbLengthInPx()) + 'px';
+    this.slider.getColoredRange().style.height = (this.getThumbTo().getBoundingClientRect().top - this.getThumbFrom().getBoundingClientRect().top + this.getThumbLengthInPx() / 2) + 'px';
    }
    else {
     this.slider.getColoredRange().style.left = (this.getThumbFrom().getBoundingClientRect().left - 1.2 * this.getThumbLengthInPx()) + 'px';
@@ -155,8 +157,9 @@ export class View extends EventObservable {
     if (newTop > bottom) {
      newTop = bottom;
     }
-    that.getThumbFrom().style.top = that.convertFromPxToPercent(newTop) + '%';
-    that.notifyObservers(Messages.FROM_IS_SET, { from: that.convertFromPxToValue(newTop), min: that.settings.min, max: that.settings.max });
+    that.resPercentage = that.convertFromPxToPercent(newTop);
+    that.getThumbFrom().style.top = that.resPercentage + '%';
+    that.notifyObservers(Messages.SET_FROM, { from: that.resPercentage, min: that.settings.min, max: that.settings.max });
     that.setColoredRange();
    }
 
@@ -184,8 +187,9 @@ export class View extends EventObservable {
     if (newLeft > rightEdge) {
      newLeft = rightEdge;
     }
-    that.getThumbFrom().style.left = that.convertFromPxToPercent(newLeft) + '%';
-    that.notifyObservers(Messages.FROM_IS_SET, { from: that.convertFromPxToValue(newLeft), min: that.settings.min, max: that.settings.max });
+    that.resPercentage = that.convertFromPxToPercent(newLeft);
+    that.getThumbFrom().style.left = that.resPercentage + '%';
+    that.notifyObservers(Messages.SET_FROM, { from: that.resPercentage, min: that.settings.min, max: that.settings.max });
     that.setColoredRange();
    }
    function onMouseUp() {
@@ -215,8 +219,9 @@ export class View extends EventObservable {
     if (newTop > bottom) {
      newTop = bottom;
     }
-    that.getThumbTo().style.top = that.convertFromPxToPercent(newTop) + '%';
-    that.notifyObservers(Messages.TO_IS_SET, { from: 0, to: that.convertFromPxToValue(newTop), min: that.settings.min, max: that.settings.max });
+    that.resPercentage = that.convertFromPxToPercent(newTop);
+    that.getThumbTo().style.top = that.resPercentage + '%';
+    that.notifyObservers(Messages.SET_TO, { from: 0, to: that.resPercentage, min: that.settings.min, max: that.settings.max });
     that.setColoredRange();
    }
 
@@ -241,8 +246,9 @@ export class View extends EventObservable {
     if (newLeft > rightEdge) {
      newLeft = rightEdge;
     }
-    that.getThumbTo().style.left = that.convertFromPxToPercent(newLeft) + '%';
-    that.notifyObservers(Messages.TO_IS_SET, { from: 0, to: that.convertFromPxToValue(newLeft), min: that.settings.min, max: that.settings.max });
+    that.resPercentage = that.convertFromPxToPercent(newLeft);
+    that.getThumbTo().style.left = that.resPercentage + '%';
+    that.notifyObservers(Messages.SET_TO, { from: 0, to: that.resPercentage, min: that.settings.min, max: that.settings.max });
     that.setColoredRange();
    }
    function onMouseUp() {
@@ -329,25 +335,13 @@ export class View extends EventObservable {
  //   }
  //  }
  // }
- private convertFromPxToValue(valueInPx: number) {
-  if (valueInPx < 0) valueInPx = 0
-  if (valueInPx > this.getSliderLengthInPx() + this.getThumbLengthInPx() / 2) valueInPx = this.getSliderLengthInPx() + this.getThumbLengthInPx() / 2;
-  if (this.settings.isVertical) {
-   return +((valueInPx / (this.getSliderLengthInPx() - this.getThumbLengthInPx() / 2)) * Math.abs(this.settings.max - this.settings.min) + this.settings.min).toFixed(Utils.numDigitsAfterDecimal(this.settings.step));
-  }
-  else {
-   return +((valueInPx / (this.getSliderLengthInPx() - this.getThumbLengthInPx() / 2)) * Math.abs(this.settings.max - this.settings.min) + this.settings.min).toFixed(Utils.numDigitsAfterDecimal(this.settings.step));
-  }
- }
+
  private convertFromPxToPercent(valueInPX: number) {
   return (valueInPX / this.getSliderLengthInPx()) * 100;
  }
 
  private convertFromValueToPercent(value: number): number {
   return (100 / Math.abs(this.settings.max - this.settings.min)) * (Math.abs(value - this.settings.min));
- }
- private convertFromValueToPx(value: number) {
-  return (this.getSliderLengthInPx() / Math.abs(this.settings.max - this.settings.min)) * (Math.abs(value - this.settings.min));
  }
  setThumbToValue(type: string) {
   if (type === 'thumbFrom') {

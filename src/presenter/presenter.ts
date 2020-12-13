@@ -27,15 +27,16 @@ export class Presenter implements IObserver {
     if (msg === Messages.INIT) {
       this.initialize();
     }
-    else if (msg === Messages.FROM_IS_SET) {
-      this.model.setFrom(s.from);
-      //console.log('inside handle event FROM IS SET' + this.model.getFrom());
-      this.view.refreshView(Messages.FROM_IS_SET, s);
+    else if (msg === Messages.UPDATE) {
+      this.view.refreshView(Messages.UPDATE, s);
     }
-    else if (msg === Messages.TO_IS_SET) {
+    else if (msg === Messages.SET_FROM) {
+      this.model.setFrom(s.from);
+      this.view.refreshView(Messages.FROM_IS_SET, { from: this.model.getFrom(), to: 0, min: 0, max: 0 });
+    }
+    else if (msg === Messages.SET_TO) {
       this.model.setTo(s.to);
-      //console.log('inside handle event TO IS SET' + this.model.getTo());
-      this.view.refreshView(Messages.TO_IS_SET, s);
+      this.view.refreshView(Messages.TO_IS_SET, { to: this.model.getTo(), from: 0, min: 0, max: 0 });
     }
   }
 
