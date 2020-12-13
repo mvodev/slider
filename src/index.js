@@ -7,13 +7,14 @@ $sl1.fsdSlider({
  from: -14,
  step: 0.2,
  to: -11,
- isVertical: true,
+ isVertical: false,
  hideThumbLabel: false,
- isRange: false,
+ isRange: true,
  onChange: callback,
+ onStart: callback,
 });
-// var sl1_instance = $sl1.data("fsdSlider");
-// sl1_instance.update({ min: 0, max: 22, from: -5, });
+var sl1_instance = $sl1.data("fsdSlider");
+sl1_instance.update({ min: 0, max: 22, from: -5, });
 // var $sl2 = $('.slider2');
 // $sl2.fsdSlider({
 //  min: 5,

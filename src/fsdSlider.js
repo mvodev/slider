@@ -9,7 +9,6 @@ import { Presenter } from './presenter/presenter';
   model.addObserver(this.presenter);
   view.addObserver(this.presenter);
   this.presenter.initialize();
-  //presenter.handleEvent(0,settings);
  };
  FsdSlider.prototype = {
   update: function (newSettings) {

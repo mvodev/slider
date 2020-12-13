@@ -1,7 +1,6 @@
 export interface IModelFacade {
  getMin(): number;
- getMax();
- getOnChangeCallback();
+ getMax():number;
  showThumbLabel(): boolean | undefined;
  setFrom(pos: number);
  getFrom(): number;
@@ -9,9 +8,7 @@ export interface IModelFacade {
  getTo(): number | undefined;
  isRange(): boolean | undefined;
  isVertical(): boolean | undefined;
- getStep();
- getOnStart():Function|undefined;
+ getStep():number;
  getOnChange(): Function | undefined;
  getOnUpdate(): Function | undefined;
- getOnDestroy(): Function | undefined;
 }

@@ -4,11 +4,6 @@ import { ISettings } from './ISettings';
 import { EventObservable } from '../observers/EventObservable';
 import { Utils } from '../utils/Utils';
 export class Model extends EventObservable implements IModelFacade {
- //todo  delete this method after all subscribed
-
- getSettings(): ISettings {
-  return this.settings;
- }
 
  private settings: ISettings;
  private defaultSettings: ISettings = {
@@ -18,12 +13,14 @@ export class Model extends EventObservable implements IModelFacade {
   isRange: false,
   isVertical: false,
   hideThumbLabel: false,
-  callBack: undefined,
  };
  constructor(settings: ISettings) {
   super();
   this.settings = Object.assign(this.defaultSettings, settings);
   this.validateSettings(this.settings);
+ }
+ getSettings(): ISettings {
+  return Object.assign({}, this.settings);
  }
  updateSettings(settings: ISettings) {
   this.settings = Object.assign(this.settings, settings);
@@ -36,14 +33,12 @@ export class Model extends EventObservable implements IModelFacade {
  getMax() {
   return this.settings.max;
  }
- getOnChangeCallback() {
-  return this.settings.onChange;
- }
  showThumbLabel(): boolean | undefined {
   return !this.settings.hideThumbLabel;
  }
  setFrom(valueInPercent: number): void {
   this.settings.from = this.convertFromPercentToValue(valueInPercent);
+
  }
  getFrom(): number {
   return this.settings.from;
@@ -71,9 +66,6 @@ export class Model extends EventObservable implements IModelFacade {
  }
  getOnUpdate(): Function | undefined {
   return this.settings.onUpdate;
- }
- getOnDestroy(): Function | undefined {
-  return this.settings.onDestroy;
  }
  private validateSettings(settings: ISettings) {
   if (settings.min >= settings.max) {
@@ -106,10 +98,6 @@ export class Model extends EventObservable implements IModelFacade {
    console.error('unacceptable value,from must be lower than to');
    this.settings.to = this.settings.from + this.settings.step ? this.settings.step : 0;
   }
-  if (settings.onStart && typeof settings.onStart != 'function') {
-   console.error('unacceptable value,callback must be function');
-   this.settings.onStart = undefined;
-  }
   if (settings.onChange && typeof settings.onChange != 'function') {
    console.error('unacceptable value,callback onChange must be function');
    this.settings.onChange = undefined;
@@ -118,19 +106,17 @@ export class Model extends EventObservable implements IModelFacade {
    console.error('unacceptable value,callback onUpdate must be function');
    this.settings.onUpdate = undefined;
   }
-  if (settings.onDestroy && typeof settings.onDestroy != 'function') {
-   console.error('unacceptable value,callback onUpdate must be function');
-   this.settings.onDestroy = undefined;
-  }
  }
  private convertFromPercentToValue(valueInPercent: number) {
+  console.log('inside convertFromPercentToValue ' + valueInPercent);
   if (valueInPercent <= 0) {
    return this.getMin();
   }
   if (valueInPercent >= 100) {
    return this.getMax();
   }
-  let del = 1.0 /this.getStep();
+  let del = 1.0 / this.getStep();
+  //console.log('inside convertFromPercentToValue ' + valueInPercent);
   return Math.round(+((Math.abs(this.getMax() - this.getMin()) * valueInPercent / 100) + this.getMin()).toFixed(Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
  }
 }

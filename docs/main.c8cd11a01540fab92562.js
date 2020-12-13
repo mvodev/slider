@@ -29,16 +29,14 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
       from: 5,
       isRange: false,
       isVertical: false,
-      hideThumbLabel: false,
-      callBack: undefined
+      hideThumbLabel: false
     };
     this.settings = Object.assign(this.defaultSettings, settings);
     this.validateSettings(this.settings);
-  } //todo  delete this method after all subscribed
-
+  }
 
   getSettings() {
-    return this.settings;
+    return Object.assign({}, this.settings);
   }
 
   updateSettings(settings) {
@@ -55,10 +53,6 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
 
   getMax() {
     return this.settings.max;
-  }
-
-  getOnChangeCallback() {
-    return this.settings.onChange;
   }
 
   showThumbLabel() {
@@ -106,10 +100,6 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
     return this.settings.onUpdate;
   }
 
-  getOnDestroy() {
-    return this.settings.onDestroy;
-  }
-
   validateSettings(settings) {
     if (settings.min >= settings.max) {
       console.error('unacceptable value,min value in settings more than max value');
@@ -147,11 +137,6 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
       this.settings.to = this.settings.from + this.settings.step ? this.settings.step : 0;
     }
 
-    if (settings.onStart && typeof settings.onStart != 'function') {
-      console.error('unacceptable value,callback must be function');
-      this.settings.onStart = undefined;
-    }
-
     if (settings.onChange && typeof settings.onChange != 'function') {
       console.error('unacceptable value,callback onChange must be function');
       this.settings.onChange = undefined;
@@ -161,14 +146,11 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
       console.error('unacceptable value,callback onUpdate must be function');
       this.settings.onUpdate = undefined;
     }
-
-    if (settings.onDestroy && typeof settings.onDestroy != 'function') {
-      console.error('unacceptable value,callback onUpdate must be function');
-      this.settings.onDestroy = undefined;
-    }
   }
 
   convertFromPercentToValue(valueInPercent) {
+    console.log('inside convertFromPercentToValue ' + valueInPercent);
+
     if (valueInPercent <= 0) {
       return this.getMin();
     }
@@ -177,7 +159,8 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
       return this.getMax();
     }
 
-    let del = 1.0 / this.getStep();
+    let del = 1.0 / this.getStep(); //console.log('inside convertFromPercentToValue ' + valueInPercent);
+
     return Math.round(+(Math.abs(this.getMax() - this.getMin()) * valueInPercent / 100 + this.getMin()).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_1__.Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
   }
 
@@ -239,11 +222,6 @@ class Presenter {
     this.view = view;
     this.model = model;
     this.isUpdated = false;
-    this.result = {
-      min: 0,
-      max: 0,
-      from: 0
-    };
   }
 
   handleEvent(msg, s) {
@@ -251,12 +229,20 @@ class Presenter {
     /* INIT */
     ) {
         this.initialize();
+
+        if (this.model.getOnStart()) {
+          this.model.getOnStart().call(s);
+        }
       } else if (msg === 1
     /* UPDATE */
     ) {
         this.view.refreshView(1
         /* UPDATE */
         , s);
+
+        if (this.model.getOnUpdate()) {
+          this.model.getOnUpdate().call(s);
+        }
       } else if (msg === 4
     /* SET_FROM */
     ) {
@@ -269,6 +255,10 @@ class Presenter {
           min: 0,
           max: 0
         });
+
+        if (this.model.getOnChange()) {
+          this.model.getOnChange().call(this, this.model.getSettings());
+        }
       } else if (msg === 5
     /* SET_TO */
     ) {
@@ -281,6 +271,10 @@ class Presenter {
           min: 0,
           max: 0
         });
+
+        if (this.model.getOnChange()) {
+          this.model.getOnChange().call(this, this.model.getSettings());
+        }
       }
   }
 
@@ -291,18 +285,8 @@ class Presenter {
     , this.model.getSettings());
   }
 
-  isUpdate() {
-    return this.isUpdated;
-  }
-
-  setIsUpdate(value) {
-    this.isUpdated = value;
-  }
-
   update(newSettings) {
-    this.view.refreshView(1
-    /* UPDATE */
-    , newSettings);
+    this.model.updateSettings(newSettings);
   }
 
   isVerticalSlider() {
@@ -315,35 +299,6 @@ class Presenter {
 
   withThumbLabel() {
     return this.model.showThumbLabel();
-  } // getPosInPxFromValue(value: number): number {
-  //   return (this.view.getSliderLengthInPx() / Math.abs(this.model.getMax() - this.model.getMin())) * (Math.abs(value - this.model.getMin()));
-  // }
-  // getValueFromPosInPx(valueInPx: number): number {
-  //   return +(Math.floor(valueInPx /
-  //     (
-  //       this.view.getSliderLengthInPx()
-  //       /
-  //       (
-  //         (Math.abs(this.model.getMax() - this.model.getMin())) / this.model.getStep()
-  //       )
-  //     )) * this.model.getStep()
-  //     + this.model.getMin()).toFixed(Utils.numDigitsAfterDecimal(this.model.getStep()));
-  // }
-  // refreshView() {
-  //   this.view.refreshView(this.model.getSettings());
-  // }
-
-
-  callOnChange() {
-    this.result.from = this.model.getFrom();
-
-    if (this.model.isRange) {
-      this.result.to = this.model.getTo();
-    }
-
-    if (this.model.getOnChangeCallback()) {
-      this.model.getOnChangeCallback().call(this, this.result);
-    }
   }
 
 }
@@ -454,6 +409,14 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
     }
   }
 
+  getThumbLengthInPercentage() {
+    if (this.settings.isVertical) {
+      return +(this.getThumbFrom().offsetHeight / this.getSliderLengthInPx() * 100).toFixed(1);
+    } else {
+      return +(this.getThumbFrom().offsetWidth / this.getSliderLengthInPx() * 100).toFixed(1);
+    }
+  }
+
   getRange() {
     return this.slider.getRange();
   }
@@ -490,23 +453,24 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
 
         if (s.isRange) {
           this.slider.setValueToLabelThumbTo(s.to);
-          this.setColoredRange();
 
           if (s.isVertical) {
-            this.getThumbTo().style.top = Math.abs(s.to - s.min) / Math.abs(s.max - s.min) * 100 + '%';
+            this.getThumbTo().style.top = Math.abs(s.to - s.min) / Math.abs(s.max - s.min) * 100 - this.getThumbLengthInPercentage() + '%';
             this.getThumbFrom().style.top = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
           } else {
-            this.getThumbTo().style.left = Math.abs(s.to - s.min) / Math.abs(s.max - s.min) * 100 + '%';
+            this.getThumbTo().style.left = Math.abs(s.to - s.min) / Math.abs(s.max - s.min) * 100 - this.getThumbLengthInPercentage() + '%';
             this.getThumbFrom().style.left = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
           }
+
+          this.setColoredRange();
         } else {
-          this.setColoredRange();
-
           if (s.isVertical) {
             this.getThumbFrom().style.top = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
           } else {
             this.getThumbFrom().style.left = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
           }
+
+          this.setColoredRange();
         }
       } else if (msg === 2
     /* FROM_IS_SET */
@@ -642,8 +606,7 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
           newTop = fromPos;
         }
 
-        let bottom = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth / 2;
-        ;
+        let bottom = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth;
 
         if (newTop > bottom) {
           newTop = bottom;
@@ -680,8 +643,7 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
           newLeft = fromPos;
         }
 
-        let rightEdge = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth / 2;
-        ;
+        let rightEdge = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth;
 
         if (newLeft > rightEdge) {
           newLeft = rightEdge;
@@ -890,12 +852,16 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
       } else {
         this.getThumbFrom().style.left = this.convertFromValueToPercent(this.settings.from) + '%';
       }
+
+      this.setColoredRange();
     } else {
       if (this.settings.isVertical) {
         this.getThumbTo().style.top = this.convertFromValueToPercent(this.settings.to) + '%';
       } else {
         this.getThumbTo().style.left = this.convertFromValueToPercent(this.settings.to) + '%';
       }
+
+      this.setColoredRange();
     }
   }
 
@@ -1240,7 +1206,6 @@ __webpack_require__.r(__webpack_exports__);
   model.addObserver(this.presenter);
   view.addObserver(this.presenter);
   this.presenter.initialize();
-  //presenter.handleEvent(0,settings);
  };
  FsdSlider.prototype = {
   update: function (newSettings) {
@@ -1280,13 +1245,14 @@ $sl1.fsdSlider({
  from: -14,
  step: 0.2,
  to: -11,
- isVertical: true,
+ isVertical: false,
  hideThumbLabel: false,
- isRange: false,
+ isRange: true,
  onChange: callback,
+ onStart: callback,
 });
-// var sl1_instance = $sl1.data("fsdSlider");
-// sl1_instance.update({ min: 0, max: 22, from: -5, });
+var sl1_instance = $sl1.data("fsdSlider");
+sl1_instance.update({ min: 0, max: 22, from: -5, });
 // var $sl2 = $('.slider2');
 // $sl2.fsdSlider({
 //  min: 5,
@@ -1468,4 +1434,4 @@ function callback2(result2) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.42c3d5dfc81242df3aac.js.map
+//# sourceMappingURL=main.c8cd11a01540fab92562.js.map

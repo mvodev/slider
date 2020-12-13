@@ -58,6 +58,15 @@ export class View extends EventObservable {
    return this.getThumbFrom().offsetWidth;
   }
  }
+ private getThumbLengthInPercentage() {
+  if (this.settings.isVertical) {
+   return +((this.getThumbFrom().offsetHeight/this.getSliderLengthInPx())*100).toFixed(1);
+  }
+  else {
+   return +((this.getThumbFrom().offsetWidth / this.getSliderLengthInPx()) * 100).toFixed(1);
+  }
+ }
+
 
  getRange() {
   return this.slider.getRange();
@@ -84,24 +93,25 @@ export class View extends EventObservable {
    this.slider.setValueToLabelThumbFrom(s.from);
    if (s.isRange) {
     this.slider.setValueToLabelThumbTo(s.to);
-    this.setColoredRange();
+    
     if (s.isVertical) {
-     this.getThumbTo().style.top = (Math.abs(s.to - s.min) / Math.abs(s.max - s.min)) * 100 + '%';
+     this.getThumbTo().style.top = ((Math.abs(s.to - s.min) / Math.abs(s.max - s.min)) * 100 - this.getThumbLengthInPercentage()) + '%';
      this.getThumbFrom().style.top = (Math.abs(s.from - s.min) / Math.abs(s.max - s.min)) * 100 + '%';
     }
     else {
-     this.getThumbTo().style.left = (Math.abs(s.to - s.min) / Math.abs(s.max - s.min)) * 100 + '%';
+     this.getThumbTo().style.left = ((Math.abs(s.to - s.min) / Math.abs(s.max - s.min)) * 100 - this.getThumbLengthInPercentage()) + '%';
      this.getThumbFrom().style.left = (Math.abs(s.from - s.min) / Math.abs(s.max - s.min)) * 100 + '%';
     }
+    this.setColoredRange();
    }
    else {
-    this.setColoredRange();
     if (s.isVertical) {
      this.getThumbFrom().style.top = (Math.abs(s.from - s.min) / Math.abs(s.max - s.min)) * 100 + '%';
     }
     else {
      this.getThumbFrom().style.left = (Math.abs(s.from - s.min) / Math.abs(s.max - s.min)) * 100 + '%';
     }
+    this.setColoredRange();
    }
   }
   else if (msg === Messages.FROM_IS_SET) {
@@ -207,7 +217,7 @@ export class View extends EventObservable {
     if (newTop < fromPos) {
      newTop = fromPos;
     }
-    let bottom = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth / 2;;
+    let bottom = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth;
     if (newTop > bottom) {
      newTop = bottom;
     }
@@ -233,7 +243,7 @@ export class View extends EventObservable {
     if (newLeft < fromPos) {
      newLeft = fromPos;
     }
-    let rightEdge = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth / 2;;
+    let rightEdge = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth;
     if (newLeft > rightEdge) {
      newLeft = rightEdge;
     }
@@ -353,6 +363,7 @@ private mouseRangeHandler(e: MouseEvent) {
    else {
     this.getThumbFrom().style.left = this.convertFromValueToPercent(this.settings.from) + '%';
    }
+   this.setColoredRange();
   }
   else {
    if (this.settings.isVertical) {
@@ -363,6 +374,7 @@ private mouseRangeHandler(e: MouseEvent) {
     this.getThumbTo().style.left = this.convertFromValueToPercent
      (this.settings.to) + '%';
    }
+   this.setColoredRange();
   }
  }
 }
