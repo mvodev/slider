@@ -13,6 +13,9 @@ export class Model extends EventObservable implements IModelFacade {
   isRange: false,
   isVertical: false,
   hideThumbLabel: false,
+  onStart: undefined,
+  onChange: undefined,
+  onUpdate: undefined,
  };
  constructor(settings: ISettings) {
   super();
@@ -88,15 +91,15 @@ export class Model extends EventObservable implements IModelFacade {
    this.settings.to = settings.max;
    console.error('unacceptable value,`to` value must be between min and max');
   }
-  if(this.getStep()<0){
+  if (this.getStep() < 0) {
    console.error('unacceptable value,`step` value must be positive number');
-   this.settings.step = this.settings.step*(-1);
+   this.settings.step = this.settings.step * (-1);
   }
-  if(this.getStep()>Math.abs(this.getMax()-this.getMin())){
+  if (this.getStep() > Math.abs(this.getMax() - this.getMin())) {
    console.error('unacceptable value,`step` value must be lower than difference between max and min');
-   this.settings.step = +(Math.abs(this.getMax() - this.getMin())/2).toFixed(1);
+   this.settings.step = +(Math.abs(this.getMax() - this.getMin()) / 2).toFixed(1);
   }
-  if (settings.isRange && settings.to > settings.max) {
+  if (settings.isRange && (settings.to > settings.max)) {
    console.error('unacceptable value,to must be lower than max');
    this.settings.to = settings.max;
   }
@@ -114,7 +117,6 @@ export class Model extends EventObservable implements IModelFacade {
   }
  }
  private convertFromPercentToValue(valueInPercent: number) {
-  console.log('inside convertFromPercentToValue ' + valueInPercent);
   if (valueInPercent <= 0) {
    return this.getMin();
   }
@@ -122,7 +124,6 @@ export class Model extends EventObservable implements IModelFacade {
    return this.getMax();
   }
   let del = 1.0 / this.getStep();
-  //console.log('inside convertFromPercentToValue ' + valueInPercent);
   return Math.round(+((Math.abs(this.getMax() - this.getMin()) * valueInPercent / 100) + this.getMin()).toFixed(Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
  }
 }

@@ -27,21 +27,21 @@ export class Presenter implements IObserver {
     else if (msg === Messages.UPDATE) {
       this.view.refreshView(Messages.UPDATE, JSON.parse(s));
       if (this.model.getOnUpdate()) {
-        this.model.getOnUpdate().call(s);
+        this.model.getOnUpdate().call(JSON.parse(s));
       }
     }
     else if (msg === Messages.SET_FROM) {
       this.model.setFrom(JSON.parse(s).from);
       this.view.refreshView(Messages.FROM_IS_SET, { from: this.model.getFrom(), to: 0, min: 0, max: 0 });
       if (this.model.getOnChange()) {
-        this.model.getOnChange().call(this, this.model.getSettings());
+        this.model.getOnChange().call(this, JSON.stringify(this.model.getSettings()));
       }
     }
     else if (msg === Messages.SET_TO) {
       this.model.setTo(JSON.parse(s).to);
       this.view.refreshView(Messages.TO_IS_SET, { to: this.model.getTo(), from: 0, min: 0, max: 0 });
       if (this.model.getOnChange()) {
-        this.model.getOnChange().call(this, this.model.getSettings());
+        this.model.getOnChange().call(this, JSON.stringify(this.model.getSettings()));
       }
     }
   }

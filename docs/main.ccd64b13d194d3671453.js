@@ -29,7 +29,10 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
       from: 5,
       isRange: false,
       isVertical: false,
-      hideThumbLabel: false
+      hideThumbLabel: false,
+      onStart: undefined,
+      onChange: undefined,
+      onUpdate: undefined
     };
     this.settings = Object.assign(this.defaultSettings, settings);
     this.validateSettings(this.settings);
@@ -122,9 +125,18 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
     }
 
     if (settings.to < settings.min && settings.isRange) {
-      console.error(settings.to + ' ' + settings.min);
       this.settings.to = settings.max;
       console.error('unacceptable value,`to` value must be between min and max');
+    }
+
+    if (this.getStep() < 0) {
+      console.error('unacceptable value,`step` value must be positive number');
+      this.settings.step = this.settings.step * -1;
+    }
+
+    if (this.getStep() > Math.abs(this.getMax() - this.getMin())) {
+      console.error('unacceptable value,`step` value must be lower than difference between max and min');
+      this.settings.step = +(Math.abs(this.getMax() - this.getMin()) / 2).toFixed(1);
     }
 
     if (settings.isRange && settings.to > settings.max) {
@@ -159,8 +171,7 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
       return this.getMax();
     }
 
-    let del = 1.0 / this.getStep(); //console.log('inside convertFromPercentToValue ' + valueInPercent);
-
+    let del = 1.0 / this.getStep();
     return Math.round(+(Math.abs(this.getMax() - this.getMin()) * valueInPercent / 100 + this.getMin()).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_1__.Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
   }
 
@@ -241,7 +252,7 @@ class Presenter {
         , JSON.parse(s));
 
         if (this.model.getOnUpdate()) {
-          this.model.getOnUpdate().call(s);
+          this.model.getOnUpdate().call(JSON.parse(s));
         }
       } else if (msg === 4
     /* SET_FROM */
@@ -257,7 +268,7 @@ class Presenter {
         });
 
         if (this.model.getOnChange()) {
-          this.model.getOnChange().call(this, this.model.getSettings());
+          this.model.getOnChange().call(this, JSON.stringify(this.model.getSettings()));
         }
       } else if (msg === 5
     /* SET_TO */
@@ -273,7 +284,7 @@ class Presenter {
         });
 
         if (this.model.getOnChange()) {
-          this.model.getOnChange().call(this, this.model.getSettings());
+          this.model.getOnChange().call(this, JSON.stringify(this.model.getSettings()));
         }
       }
   }
@@ -1268,12 +1279,10 @@ sl1_instance.update({ min: 0, max: 22, from: -5, });
 // var sl2_instance = $sl2.data('fsdSlider');
 // sl2_instance.update({ min: 0, max: 6, from: 3, step: 1, });
 function callback(result) {
- $('.slider__input').val(result.from + '     ' + result.to);
+ var s = JSON.parse(result);
+ $('.slider__input').val(s.from + ' '+s.to);
 }
-var $sl2_input = $('.slider2__input');
-function callback2(result2) {
- $sl2_input.val(result2.from);
-}
+
 
 /***/ })
 
@@ -1434,4 +1443,4 @@ function callback2(result2) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.c6b8e3f8f4f147a1d2b4.js.map
+//# sourceMappingURL=main.ccd64b13d194d3671453.js.map
