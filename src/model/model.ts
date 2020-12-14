@@ -85,10 +85,16 @@ export class Model extends EventObservable implements IModelFacade {
    this.settings.from = settings.min;
   }
   if ((settings.to < settings.min) && settings.isRange) {
-   console.error(settings.to + ' ' + settings.min);
    this.settings.to = settings.max;
-
    console.error('unacceptable value,`to` value must be between min and max');
+  }
+  if(this.getStep()<0){
+   console.error('unacceptable value,`step` value must be positive number');
+   this.settings.step = this.settings.step*(-1);
+  }
+  if(this.getStep()>Math.abs(this.getMax()-this.getMin())){
+   console.error('unacceptable value,`step` value must be lower than difference between max and min');
+   this.settings.step = +(Math.abs(this.getMax() - this.getMin())/2).toFixed(1);
   }
   if (settings.isRange && settings.to > settings.max) {
    console.error('unacceptable value,to must be lower than max');
