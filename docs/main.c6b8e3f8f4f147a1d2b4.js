@@ -44,7 +44,7 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
     this.validateSettings(this.settings);
     this.notifyObservers(1
     /* UPDATE */
-    , this.settings);
+    , JSON.stringify(this.settings));
   }
 
   getMin() {
@@ -231,14 +231,14 @@ class Presenter {
         this.initialize();
 
         if (this.model.getOnStart()) {
-          this.model.getOnStart().call(s);
+          this.model.getOnStart().call(JSON.parse(s));
         }
       } else if (msg === 1
     /* UPDATE */
     ) {
         this.view.refreshView(1
         /* UPDATE */
-        , s);
+        , JSON.parse(s));
 
         if (this.model.getOnUpdate()) {
           this.model.getOnUpdate().call(s);
@@ -246,7 +246,7 @@ class Presenter {
       } else if (msg === 4
     /* SET_FROM */
     ) {
-        this.model.setFrom(s.from);
+        this.model.setFrom(JSON.parse(s).from);
         this.view.refreshView(2
         /* FROM_IS_SET */
         , {
@@ -262,7 +262,7 @@ class Presenter {
       } else if (msg === 5
     /* SET_TO */
     ) {
-        this.model.setTo(s.to);
+        this.model.setTo(JSON.parse(s).to);
         this.view.refreshView(3
         /* TO_IS_SET */
         , {
@@ -534,11 +534,11 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
         that.getThumbFrom().style.top = that.resPercentage + '%';
         that.notifyObservers(4
         /* SET_FROM */
-        , {
+        , JSON.stringify({
           from: that.resPercentage,
           min: that.settings.min,
           max: that.settings.max
-        });
+        }));
         that.setColoredRange();
       }
 
@@ -574,11 +574,11 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
         that.getThumbFrom().style.left = that.resPercentage + '%';
         that.notifyObservers(4
         /* SET_FROM */
-        , {
+        , JSON.stringify({
           from: that.resPercentage,
           min: that.settings.min,
           max: that.settings.max
-        });
+        }));
         that.setColoredRange();
       }
 
@@ -616,12 +616,12 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
         that.getThumbTo().style.top = that.resPercentage + '%';
         that.notifyObservers(5
         /* SET_TO */
-        , {
+        , JSON.stringify({
           from: 0,
           to: that.resPercentage,
           min: that.settings.min,
           max: that.settings.max
-        });
+        }));
         that.setColoredRange();
       }
 
@@ -653,12 +653,12 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
         that.getThumbTo().style.left = that.resPercentage + '%';
         that.notifyObservers(5
         /* SET_TO */
-        , {
+        , JSON.stringify({
           from: 0,
           to: that.resPercentage,
           min: that.settings.min,
           max: that.settings.max
-        });
+        }));
         that.setColoredRange();
       }
 
@@ -683,24 +683,24 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
           this.getThumbFrom().style.top = this.resPercentage + '%';
           this.notifyObservers(4
           /* SET_FROM */
-          , {
+          , JSON.stringify({
             from: this.resPercentage,
             to: 0,
             min: this.settings.min,
             max: this.settings.max
-          });
+          }));
           this.setColoredRange();
         } else if (shiftY > toPos) {
           this.resPercentage = this.convertFromPxToPercent(shiftY);
           this.getThumbTo().style.top = this.resPercentage + '%';
           this.notifyObservers(5
           /* SET_TO */
-          , {
+          , JSON.stringify({
             to: this.resPercentage,
             from: 0,
             min: this.settings.min,
             max: this.settings.max
-          });
+          }));
           this.setColoredRange();
         } else if (shiftY >= fromPos && shiftY <= toPos) {
           let pivot = toPos - fromPos;
@@ -710,24 +710,24 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
             this.getThumbFrom().style.top = this.resPercentage + '%';
             this.notifyObservers(4
             /* SET_FROM */
-            , {
+            , JSON.stringify({
               from: this.resPercentage,
               to: 0,
               min: this.settings.min,
               max: this.settings.max
-            });
+            }));
             this.setColoredRange();
           } else if (shiftY >= pivot) {
             this.resPercentage = this.convertFromPxToPercent(shiftY);
             this.getThumbTo().style.top = this.resPercentage + '%';
             this.notifyObservers(5
             /* SET_TO */
-            , {
+            , JSON.stringify({
               to: this.resPercentage,
               from: 0,
               min: this.settings.min,
               max: this.settings.max
-            });
+            }));
             this.setColoredRange();
           }
         }
@@ -737,12 +737,12 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
           this.getThumbFrom().style.top = this.resPercentage + '%';
           this.notifyObservers(4
           /* SET_FROM */
-          , {
+          , JSON.stringify({
             from: this.resPercentage,
             to: 0,
             min: this.settings.min,
             max: this.settings.max
-          });
+          }));
           this.setColoredRange();
         } else {
           //vertical mode single thumb 
@@ -750,12 +750,12 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
           this.getThumbFrom().style.top = this.resPercentage + '%';
           this.notifyObservers(4
           /* SET_FROM */
-          , {
+          , JSON.stringify({
             from: this.resPercentage,
             to: 0,
             min: this.settings.min,
             max: this.settings.max
-          });
+          }));
           this.setColoredRange();
         }
       }
@@ -772,24 +772,24 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
           this.getThumbFrom().style.left = this.resPercentage + '%';
           this.notifyObservers(4
           /* SET_FROM */
-          , {
+          , JSON.stringify({
             from: this.resPercentage,
             to: 0,
             min: this.settings.min,
             max: this.settings.max
-          });
+          }));
           this.setColoredRange();
         } else if (shiftX > toPos) {
           this.resPercentage = this.convertFromPxToPercent(shiftX);
           this.getThumbTo().style.left = this.resPercentage + '%';
           this.notifyObservers(5
           /* SET_TO */
-          , {
+          , JSON.stringify({
             to: this.resPercentage,
             from: 0,
             min: this.settings.min,
             max: this.settings.max
-          });
+          }));
           this.setColoredRange();
         } else if (shiftX >= fromPos && shiftX <= toPos) {
           let pivot = toPos - fromPos;
@@ -799,24 +799,24 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
             this.getThumbFrom().style.left = this.resPercentage + '%';
             this.notifyObservers(4
             /* SET_FROM */
-            , {
+            , JSON.stringify({
               from: this.resPercentage,
               to: 0,
               min: this.settings.min,
               max: this.settings.max
-            });
+            }));
             this.setColoredRange();
           } else if (shiftX >= pivot) {
             this.resPercentage = this.convertFromPxToPercent(shiftX);
             this.getThumbTo().style.left = this.resPercentage + '%';
             this.notifyObservers(5
             /* SET_TO */
-            , {
+            , JSON.stringify({
               to: this.resPercentage,
               from: 0,
               min: this.settings.min,
               max: this.settings.max
-            });
+            }));
             this.setColoredRange();
           }
         }
@@ -826,12 +826,12 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
         this.getThumbFrom().style.left = this.resPercentage + '%';
         this.notifyObservers(4
         /* SET_FROM */
-        , {
+        , JSON.stringify({
           from: this.resPercentage,
           to: 0,
           min: this.settings.min,
           max: this.settings.max
-        });
+        }));
         this.setColoredRange();
       }
     }
@@ -1434,4 +1434,4 @@ function callback2(result2) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.c8cd11a01540fab92562.js.map
+//# sourceMappingURL=main.c6b8e3f8f4f147a1d2b4.js.map

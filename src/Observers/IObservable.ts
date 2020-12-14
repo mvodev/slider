@@ -3,5 +3,5 @@ import { Messages } from '../utils/Messages';
 export interface IObservable {
  addObserver(o: IObserver);
  removeObserver(o: IObserver);
- notifyObservers(type: Messages, data: Object);
+ notifyObservers(type: Messages, data: string);
 }

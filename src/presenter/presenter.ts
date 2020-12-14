@@ -17,28 +17,28 @@ export class Presenter implements IObserver {
     this.isUpdated = false;
   }
 
-  handleEvent(msg: Messages, s: ISettings) {
+  handleEvent(msg: Messages, s: string) {
     if (msg === Messages.INIT) {
       this.initialize();
       if (this.model.getOnStart()) {
-        this.model.getOnStart().call(s);
+        this.model.getOnStart().call(JSON.parse(s));
       }
     }
     else if (msg === Messages.UPDATE) {
-      this.view.refreshView(Messages.UPDATE, s);
+      this.view.refreshView(Messages.UPDATE, JSON.parse(s));
       if (this.model.getOnUpdate()) {
         this.model.getOnUpdate().call(s);
       }
     }
     else if (msg === Messages.SET_FROM) {
-      this.model.setFrom(s.from);
+      this.model.setFrom(JSON.parse(s).from);
       this.view.refreshView(Messages.FROM_IS_SET, { from: this.model.getFrom(), to: 0, min: 0, max: 0 });
       if (this.model.getOnChange()) {
         this.model.getOnChange().call(this, this.model.getSettings());
       }
     }
     else if (msg === Messages.SET_TO) {
-      this.model.setTo(s.to);
+      this.model.setTo(JSON.parse(s).to);
       this.view.refreshView(Messages.TO_IS_SET, { to: this.model.getTo(), from: 0, min: 0, max: 0 });
       if (this.model.getOnChange()) {
         this.model.getOnChange().call(this, this.model.getSettings());

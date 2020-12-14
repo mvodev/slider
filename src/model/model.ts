@@ -25,7 +25,7 @@ export class Model extends EventObservable implements IModelFacade {
  updateSettings(settings: ISettings) {
   this.settings = Object.assign(this.settings, settings);
   this.validateSettings(this.settings);
-  this.notifyObservers(Messages.UPDATE, this.settings);
+  this.notifyObservers(Messages.UPDATE, JSON.stringify(this.settings));
  }
  getMin(): number {
   return this.settings.min;

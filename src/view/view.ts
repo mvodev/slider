@@ -60,7 +60,7 @@ export class View extends EventObservable {
  }
  private getThumbLengthInPercentage() {
   if (this.settings.isVertical) {
-   return +((this.getThumbFrom().offsetHeight/this.getSliderLengthInPx())*100).toFixed(1);
+   return +((this.getThumbFrom().offsetHeight / this.getSliderLengthInPx()) * 100).toFixed(1);
   }
   else {
    return +((this.getThumbFrom().offsetWidth / this.getSliderLengthInPx()) * 100).toFixed(1);
@@ -93,7 +93,7 @@ export class View extends EventObservable {
    this.slider.setValueToLabelThumbFrom(s.from);
    if (s.isRange) {
     this.slider.setValueToLabelThumbTo(s.to);
-    
+
     if (s.isVertical) {
      this.getThumbTo().style.top = ((Math.abs(s.to - s.min) / Math.abs(s.max - s.min)) * 100 - this.getThumbLengthInPercentage()) + '%';
      this.getThumbFrom().style.top = (Math.abs(s.from - s.min) / Math.abs(s.max - s.min)) * 100 + '%';
@@ -166,7 +166,7 @@ export class View extends EventObservable {
     }
     that.resPercentage = that.convertFromPxToPercent(newTop);
     that.getThumbFrom().style.top = that.resPercentage + '%';
-    that.notifyObservers(Messages.SET_FROM, { from: that.resPercentage, min: that.settings.min, max: that.settings.max });
+    that.notifyObservers(Messages.SET_FROM, JSON.stringify({ from: that.resPercentage, min: that.settings.min, max: that.settings.max }));
     that.setColoredRange();
    }
 
@@ -195,7 +195,7 @@ export class View extends EventObservable {
     }
     that.resPercentage = that.convertFromPxToPercent(newLeft);
     that.getThumbFrom().style.left = that.resPercentage + '%';
-    that.notifyObservers(Messages.SET_FROM, { from: that.resPercentage, min: that.settings.min, max: that.settings.max });
+    that.notifyObservers(Messages.SET_FROM, JSON.stringify({ from: that.resPercentage, min: that.settings.min, max: that.settings.max }));
     that.setColoredRange();
    }
    function onMouseUp() {
@@ -223,7 +223,7 @@ export class View extends EventObservable {
     }
     that.resPercentage = that.convertFromPxToPercent(newTop);
     that.getThumbTo().style.top = that.resPercentage + '%';
-    that.notifyObservers(Messages.SET_TO, { from: 0, to: that.resPercentage, min: that.settings.min, max: that.settings.max });
+    that.notifyObservers(Messages.SET_TO, JSON.stringify({ from: 0, to: that.resPercentage, min: that.settings.min, max: that.settings.max }));
     that.setColoredRange();
    }
 
@@ -249,7 +249,7 @@ export class View extends EventObservable {
     }
     that.resPercentage = that.convertFromPxToPercent(newLeft);
     that.getThumbTo().style.left = that.resPercentage + '%';
-    that.notifyObservers(Messages.SET_TO, { from: 0, to: that.resPercentage, min: that.settings.min, max: that.settings.max });
+    that.notifyObservers(Messages.SET_TO,JSON.stringify({ from: 0, to: that.resPercentage, min: that.settings.min, max: that.settings.max }));
     that.setColoredRange();
    }
    function onMouseUp() {
@@ -258,7 +258,7 @@ export class View extends EventObservable {
    }
   }
  }
-private mouseRangeHandler(e: MouseEvent) {
+ private mouseRangeHandler(e: MouseEvent) {
   if (this.settings.isVertical) {//vertical mode
    let shiftY = e.clientY - this.getRange().getBoundingClientRect().top;
    let fromPos = this.getThumbFrom().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbLengthInPx() / 2);
@@ -267,13 +267,13 @@ private mouseRangeHandler(e: MouseEvent) {
     if (shiftY < fromPos) {
      this.resPercentage = this.convertFromPxToPercent(shiftY);
      this.getThumbFrom().style.top = this.resPercentage + '%';
-     this.notifyObservers(Messages.SET_FROM, { from: this.resPercentage, to: 0, min: this.settings.min, max: this.settings.max });
+     this.notifyObservers(Messages.SET_FROM, JSON.stringify({ from: this.resPercentage, to: 0, min: this.settings.min, max: this.settings.max }));
      this.setColoredRange();
     }
     else if (shiftY > toPos) {
      this.resPercentage = this.convertFromPxToPercent(shiftY);
      this.getThumbTo().style.top = this.resPercentage + '%';
-     this.notifyObservers(Messages.SET_TO, { to: this.resPercentage, from: 0, min: this.settings.min, max: this.settings.max });
+     this.notifyObservers(Messages.SET_TO, JSON.stringify({ to: this.resPercentage, from: 0, min: this.settings.min, max: this.settings.max }));
      this.setColoredRange();
     }
     else if (shiftY >= fromPos && shiftY <= toPos) {
@@ -281,13 +281,13 @@ private mouseRangeHandler(e: MouseEvent) {
      if (shiftY < pivot) {
       this.resPercentage = this.convertFromPxToPercent(shiftY);
       this.getThumbFrom().style.top = this.resPercentage + '%';
-      this.notifyObservers(Messages.SET_FROM, { from: this.resPercentage, to: 0, min: this.settings.min, max: this.settings.max });
+      this.notifyObservers(Messages.SET_FROM, JSON.stringify({ from: this.resPercentage, to: 0, min: this.settings.min, max: this.settings.max }));
       this.setColoredRange();
      }
      else if (shiftY >= pivot) {
       this.resPercentage = this.convertFromPxToPercent(shiftY);
       this.getThumbTo().style.top = this.resPercentage + '%';
-      this.notifyObservers(Messages.SET_TO, { to: this.resPercentage, from: 0, min: this.settings.min, max: this.settings.max });
+      this.notifyObservers(Messages.SET_TO,JSON.stringify( { to: this.resPercentage, from: 0, min: this.settings.min, max: this.settings.max }));
       this.setColoredRange();
      }
     }
@@ -296,13 +296,13 @@ private mouseRangeHandler(e: MouseEvent) {
     if (shiftY < fromPos) {
      this.resPercentage = this.convertFromPxToPercent(shiftY);
      this.getThumbFrom().style.top = this.resPercentage + '%';
-     this.notifyObservers(Messages.SET_FROM, { from: this.resPercentage, to: 0, min: this.settings.min, max: this.settings.max });
+     this.notifyObservers(Messages.SET_FROM,JSON.stringify( { from: this.resPercentage, to: 0, min: this.settings.min, max: this.settings.max }));
      this.setColoredRange();
     }
     else {   //vertical mode single thumb 
      this.resPercentage = this.convertFromPxToPercent(shiftY);
      this.getThumbFrom().style.top = this.resPercentage + '%';
-     this.notifyObservers(Messages.SET_FROM, { from: this.resPercentage, to: 0, min: this.settings.min, max: this.settings.max });
+     this.notifyObservers(Messages.SET_FROM,JSON.stringify( { from: this.resPercentage, to: 0, min: this.settings.min, max: this.settings.max }));
      this.setColoredRange();
     }
    }
@@ -314,13 +314,13 @@ private mouseRangeHandler(e: MouseEvent) {
     if (shiftX < fromPos) {
      this.resPercentage = this.convertFromPxToPercent(shiftX);
      this.getThumbFrom().style.left = this.resPercentage + '%';
-     this.notifyObservers(Messages.SET_FROM, { from: this.resPercentage, to: 0, min: this.settings.min, max: this.settings.max });
+     this.notifyObservers(Messages.SET_FROM,JSON.stringify({ from: this.resPercentage, to: 0, min: this.settings.min, max: this.settings.max }));
      this.setColoredRange();
     }
     else if (shiftX > toPos) {
      this.resPercentage = this.convertFromPxToPercent(shiftX);
      this.getThumbTo().style.left = this.resPercentage + '%';
-     this.notifyObservers(Messages.SET_TO, { to: this.resPercentage, from: 0, min: this.settings.min, max: this.settings.max });
+     this.notifyObservers(Messages.SET_TO,JSON.stringify({ to: this.resPercentage, from: 0, min: this.settings.min, max: this.settings.max }));
      this.setColoredRange();
     }
     else if (shiftX >= fromPos && shiftX <= toPos) {
@@ -328,13 +328,13 @@ private mouseRangeHandler(e: MouseEvent) {
      if (shiftX < pivot) {
       this.resPercentage = this.convertFromPxToPercent(shiftX);
       this.getThumbFrom().style.left = this.resPercentage + '%';
-      this.notifyObservers(Messages.SET_FROM, { from: this.resPercentage, to: 0, min: this.settings.min, max: this.settings.max });
+      this.notifyObservers(Messages.SET_FROM,JSON.stringify({ from: this.resPercentage, to: 0, min: this.settings.min, max: this.settings.max }));
       this.setColoredRange();
      }
      else if (shiftX >= pivot) {
       this.resPercentage = this.convertFromPxToPercent(shiftX);
       this.getThumbTo().style.left = this.resPercentage + '%';
-      this.notifyObservers(Messages.SET_TO, { to: this.resPercentage, from: 0, min: this.settings.min, max: this.settings.max });
+      this.notifyObservers(Messages.SET_TO,JSON.stringify({ to: this.resPercentage, from: 0, min: this.settings.min, max: this.settings.max }));
       this.setColoredRange();
      }
     }
@@ -342,7 +342,7 @@ private mouseRangeHandler(e: MouseEvent) {
    else { //horizontal mode single thumb
     this.resPercentage = this.convertFromPxToPercent(shiftX);
     this.getThumbFrom().style.left = this.resPercentage + '%';
-    this.notifyObservers(Messages.SET_FROM, { from: this.resPercentage, to: 0, min: this.settings.min, max: this.settings.max });
+    this.notifyObservers(Messages.SET_FROM,JSON.stringify( { from: this.resPercentage, to: 0, min: this.settings.min, max: this.settings.max }));
     this.setColoredRange();
    }
   }
