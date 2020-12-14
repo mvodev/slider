@@ -11,4 +11,5 @@ export interface IModelFacade {
  getStep():number;
  getOnChange(): Function | undefined;
  getOnUpdate(): Function | undefined;
+ getOnStart(): Function | undefined;
 }
