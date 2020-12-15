@@ -1,17 +1,17 @@
 mixin controlpanel(options)
  .control-panel
   label='MIN'
-   input(type="text" name="min" placeholder="min")
+   input(type="text" name="min" placeholder="min" class='control-panel__min'+options.id)
   label='MAX'
-   input(type="text" name="max" placeholder="max")
+   input(type="text" name="max" placeholder="max" class='control-panel__max'+options.id)
   label='FROM'
-   input(type="text" name="from" placeholder="from")
+   input(type="text" name="from" placeholder="from" class='control-panel__from'+options.id)
   label='TO'
-   input(type="text" name="to" placeholder="to")
+   input(type="text" name="to" placeholder="to" class='control-panel__to'+options.id)
   label='IS_RANGE'
-   input(type="checkbox", name="isRange")
+   input(type="checkbox", name="isRange" class='control-panel__is-range'+options.id)
   label='IS_VERTICAL'
-   input(type="checkbox", name="isVertical")
+   input(type="checkbox", name="isVertical" class='control-panel__is-vertical'+options.id)
   label='HIDE_THUMB_LABEL'
-   input(type="checkbox", name="hideThumbLabel")
+   input(type="checkbox", name="hideThumbLabel" class='control-panel__hide-thumb-label'+options.id)
   
