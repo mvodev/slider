@@ -103,6 +103,8 @@
 .sliders {
   font-family: "Arial";
   font-weight: 500;
+  background-color: lightgreen;
+  margin-top: 50px;
 }
 
 .sliders input {
@@ -110,16 +112,15 @@
 }
 
 .sliders__elem {
-  margin: 50px;
   display: flex;
   flex-direction: column;
-  max-height: 300px;
 }
 
 .sliders__elem-slider-container {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  margin-bottom: 50px;
 }
 
 .fsd-slider {
@@ -129,4 +130,4 @@
   margin-top: 30px;
 }
 
-/*# sourceMappingURL=main.51e6ef75824ca1e57239.css.map*/
+/*# sourceMappingURL=main.437e54ace31a1334b451.css.map*/
