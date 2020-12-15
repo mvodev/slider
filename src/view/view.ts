@@ -68,7 +68,7 @@ export class View extends EventObservable {
  }
 
 
- getRange() {
+ private getRange() {
   return this.slider.getRange();
  }
  getThumbFrom() {
@@ -131,8 +131,8 @@ export class View extends EventObservable {
     this.slider.getColoredRange().style.height = (this.getThumbTo().getBoundingClientRect().top - this.getThumbFrom().getBoundingClientRect().top + this.getThumbLengthInPx() / 2) + 'px';
    }
    else {
-    this.slider.getColoredRange().style.left = (this.getThumbFrom().getBoundingClientRect().left - 1.2 * this.getThumbLengthInPx()) + 'px';
-    this.slider.getColoredRange().style.width = (this.getThumbTo().getBoundingClientRect().left - this.getThumbFrom().getBoundingClientRect().left - this.getThumbLengthInPx() / 2) + 'px';
+    this.slider.getColoredRange().style.left = (this.getThumbFrom().getBoundingClientRect().left - this.getRange().getBoundingClientRect().left ) + 'px';
+    this.slider.getColoredRange().style.width = (this.getThumbTo().getBoundingClientRect().left - (this.getThumbFrom().getBoundingClientRect().left - this.getThumbLengthInPx()/2)) + 'px';
    }
   }
   else {
@@ -152,7 +152,7 @@ export class View extends EventObservable {
    document.addEventListener('mouseup', onMouseUp);
    let that = this;
    function onMouseMove(event: MouseEvent) {
-    let newTop = event.clientY - shiftY - this.getRange().getBoundingClientRect().top;
+    let newTop = event.clientY - shiftY - that.getRange().getBoundingClientRect().top;
     if (newTop < - that.getThumbLengthInPx() / 2) {
      newTop = - that.getThumbLengthInPx() / 2;
     }
@@ -212,7 +212,7 @@ export class View extends EventObservable {
    document.addEventListener('mouseup', onMouseUp);
    let that = this;
    function onMouseMove(event: MouseEvent) {
-    let newTop = event.clientY - shiftY - this.getRange().getBoundingClientRect().top;
+    let newTop = event.clientY - shiftY - that.getRange().getBoundingClientRect().top;
     let fromPos = that.getThumbFrom().getBoundingClientRect().top - (that.getRange().getBoundingClientRect().top - that.getThumbLengthInPx() / 2);
     if (newTop < fromPos) {
      newTop = fromPos;

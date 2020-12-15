@@ -1,12 +1,27 @@
 @import './styles/fsdSlider.scss';
-.slider,
-.slider2{
-  margin-top: 50px;
-  margin-left: 50px;
-  max-width: 300px;
-  max-height: 400px;
+@import './modules/controlpanel/controlpanel.scss';
+.sliders{
+font-family: "Arial";
+font-weight: 500;
+}
+.sliders input{
+  max-height: 20px;
+}
+.sliders__elem{
+  margin: 50px;
+  display: flex;
+  flex-direction: column;
+  max-height: 300px;
  }
- .slider2{
-   max-width: 600px;
+ .sliders__elem-slider-container{
+   display: flex;
+   flex-direction: row;
+   justify-content: space-around;
+ }
+ .fsd-slider{
+   width: 300px;
+   height: 300px;
+   margin-right: 30px;
+   margin-top: 30px;
  }
 

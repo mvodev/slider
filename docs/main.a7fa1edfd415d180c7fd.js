@@ -161,8 +161,6 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
   }
 
   convertFromPercentToValue(valueInPercent) {
-    console.log('inside convertFromPercentToValue ' + valueInPercent);
-
     if (valueInPercent <= 0) {
       return this.getMin();
     }
@@ -502,8 +500,8 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
         this.slider.getColoredRange().style.top = this.getThumbFrom().getBoundingClientRect().top - 2 * this.getThumbLengthInPx() + 'px';
         this.slider.getColoredRange().style.height = this.getThumbTo().getBoundingClientRect().top - this.getThumbFrom().getBoundingClientRect().top + this.getThumbLengthInPx() / 2 + 'px';
       } else {
-        this.slider.getColoredRange().style.left = this.getThumbFrom().getBoundingClientRect().left - 1.2 * this.getThumbLengthInPx() + 'px';
-        this.slider.getColoredRange().style.width = this.getThumbTo().getBoundingClientRect().left - this.getThumbFrom().getBoundingClientRect().left - this.getThumbLengthInPx() / 2 + 'px';
+        this.slider.getColoredRange().style.left = this.getThumbFrom().getBoundingClientRect().left - this.getRange().getBoundingClientRect().left + 'px';
+        this.slider.getColoredRange().style.width = this.getThumbTo().getBoundingClientRect().left - (this.getThumbFrom().getBoundingClientRect().left - this.getThumbLengthInPx() / 2) + 'px';
       }
     } else {
       if (this.settings.isVertical) {
@@ -524,7 +522,7 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
       let that = this;
 
       function onMouseMove(event) {
-        let newTop = event.clientY - shiftY - this.getRange().getBoundingClientRect().top;
+        let newTop = event.clientY - shiftY - that.getRange().getBoundingClientRect().top;
 
         if (newTop < -that.getThumbLengthInPx() / 2) {
           newTop = -that.getThumbLengthInPx() / 2;
@@ -610,7 +608,7 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
       let that = this;
 
       function onMouseMove(event) {
-        let newTop = event.clientY - shiftY - this.getRange().getBoundingClientRect().top;
+        let newTop = event.clientY - shiftY - that.getRange().getBoundingClientRect().top;
         let fromPos = that.getThumbFrom().getBoundingClientRect().top - (that.getRange().getBoundingClientRect().top - that.getThumbLengthInPx() / 2);
 
         if (newTop < fromPos) {
@@ -1245,11 +1243,11 @@ __webpack_require__.r(__webpack_exports__);
 
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.scss */ "./index.scss");
-/* harmony import */ var _fsdSlider__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fsdSlider */ "./fsdSlider.js");
+/* harmony import */ var _fsdSlider_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fsdSlider.js */ "./fsdSlider.js");
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js");
 ;
 
-var $sl1 = $('.slider');
+var $sl1 = $('.sliders__elem-slider1');
 $sl1.fsdSlider({
  min: -15,
  max: -10,
@@ -1263,7 +1261,33 @@ $sl1.fsdSlider({
  onStart: callback,
 });
 var sl1_instance = $sl1.data("fsdSlider");
-sl1_instance.update({ min: 0, max: 22, from: -5, });
+var $sl2 = $('.sliders__elem-slider2');
+$sl2.fsdSlider({
+ min: 5,
+ max: 10,
+ from: 7,
+ step: 0.2,
+ to: -11,
+ isVertical: true,
+ hideThumbLabel: false,
+ isRange: false,
+ onChange: callback,
+ onStart: callback,
+});
+var $sl3 = $('.sliders__elem-slider3');
+$sl3.fsdSlider({
+ min: -15,
+ max: 100,
+ from: -14,
+ step: 4,
+ to: 11,
+ isVertical: false,
+ hideThumbLabel: false,
+ isRange: true,
+ onChange: callback,
+ onStart: callback,
+});
+//sl1_instance.update({ min: 0, max: 22, from: -5, });
 // var $sl2 = $('.slider2');
 // $sl2.fsdSlider({
 //  min: 5,
@@ -1280,7 +1304,7 @@ sl1_instance.update({ min: 0, max: 22, from: -5, });
 // sl2_instance.update({ min: 0, max: 6, from: 3, step: 1, });
 function callback(result) {
  var s = JSON.parse(result);
- $('.slider__input').val(s.from + ' '+s.to);
+ $('.slider__elem-result').val(s.from + '  -  ' + s.to);
 }
 
 
@@ -1443,4 +1467,4 @@ function callback(result) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.ccd64b13d194d3671453.js.map
+//# sourceMappingURL=main.a7fa1edfd415d180c7fd.js.map
