@@ -1,7 +1,6 @@
 import { IObservable } from "./IObservable";
 import { IObserver } from "./IObserver";
 import { Messages } from '../utils/Messages';
-import { ISettings } from "../model/ISettings";
 
 export class EventObservable implements IObservable {
  private observers: Array<IObserver>;
