@@ -1,5 +1,6 @@
 import './index.scss';
 import './fsdSlider.js';
+import test from '../src/test/test';
 var $sl1 = $('.sliders__elem-slider1');
 $sl1.fsdSlider({
  min: -15,

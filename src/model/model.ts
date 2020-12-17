@@ -124,6 +124,9 @@ export class Model extends EventObservable implements IModelFacade {
    return this.getMax();
   }
   let del = 1.0 / this.getStep();
-  return Math.round(+((Math.abs(this.getMax() - this.getMin()) * valueInPercent / 100) + this.getMin()).toFixed(Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
+  let res = Math.round(+((Math.abs(this.getMax() - this.getMin()) * valueInPercent / 100) + this.getMin()).toFixed(Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
+  if (res < this.getMin()) return this.getMin();
+  if (res > this.getMax()) return this.getMax();
+  return res;
  }
 }

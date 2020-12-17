@@ -22,6 +22,7 @@ module.exports = {
   mode: 'development',
   entry: {
     main: './index.js',
+    //test: './test.js',
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
@@ -61,6 +62,11 @@ module.exports = {
       {
         test: /\.pug$/,
         use: ["pug-loader"],
+      },
+      {
+        test: /test\.js$/,
+        use: 'mocha-loader',
+        exclude: /node_modules/,
       },
       {
         test: /\.(png|jpg|svg|gif)$/,
