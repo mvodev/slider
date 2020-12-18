@@ -6,19 +6,17 @@ html(lang="en")
   title Slider
  body.sliders
   .sliders__elem
-   .sliders__elem-slider-container
-    input(type="text" class="slider__elem-result1" )
-    .sliders__elem-slider1
-    .sliders__elem-control-panel
-     +controlpanel({id:'slider1'})
-   .sliders__elem-slider-container
-    input(type="text" class="slider__elem-result2" )
-    .sliders__elem-slider2
-    .sliders__elem-control-panel
-     +controlpanel({id:'slider2'})
-   .sliders__elem-slider-container
-    input(type="text" class="slider__elem-result1" )
-    .sliders__elem-slider3
-    .sliders__elem-control-panel
-     +controlpanel({id:'slider3'})
-   
+    input(type="text" class="result1" )
+    .slider1
+    .control-panel
+      +controlpanel({id:'slider1'})
+  .sliders__elem
+    input(type="text" class="result2" )
+    .slider2
+    .control-panel
+      +controlpanel({id:'slider2'})
+  .sliders__elem
+    input(type="text" class="result3" )
+    .slider3
+    .control-panel
+      +controlpanel({id:'slider3'})

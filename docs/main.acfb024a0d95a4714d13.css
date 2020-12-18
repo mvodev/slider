@@ -105,6 +105,8 @@
   font-weight: 500;
   background-color: lightgreen;
   margin-top: 50px;
+  display: flex;
+  flex-direction: column;
 }
 
 .sliders input {
@@ -112,11 +114,6 @@
 }
 
 .sliders__elem {
-  display: flex;
-  flex-direction: column;
-}
-
-.sliders__elem-slider-container {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -456,4 +453,4 @@ body {
 }
 
 
-/*# sourceMappingURL=main.5cedb50401396b743665.css.map*/
+/*# sourceMappingURL=main.acfb024a0d95a4714d13.css.map*/

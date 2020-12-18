@@ -1489,7 +1489,7 @@ __webpack_require__.r(__webpack_exports__);
 ;
 
 
-var $sl1 = $('.sliders__elem-slider1');
+var $sl1 = $('.slider1');
 $sl1.fsdSlider({
  min: -15,
  max: -10,
@@ -1503,7 +1503,7 @@ $sl1.fsdSlider({
  onStart: callback,
 });
 var sl1_instance = $sl1.data("fsdSlider");
-var $sl2 = $('.sliders__elem-slider2');
+var $sl2 = $('.slider2');
 $sl2.fsdSlider({
  min: 5,
  max: 10,
@@ -1516,7 +1516,7 @@ $sl2.fsdSlider({
  onChange: callback,
  onStart: callback,
 });
-var $sl3 = $('.sliders__elem-slider3');
+var $sl3 = $('.slider3');
 $sl3.fsdSlider({
  min: -15,
  max: 100,
@@ -1546,7 +1546,7 @@ $sl3.fsdSlider({
 // sl2_instance.update({ min: 0, max: 6, from: 3, step: 1, });
 function callback(result) {
  var s = JSON.parse(result);
- $('.slider__elem-result').val(s.from + '  -  ' + s.to);
+ $('.result1').val(s.from + '  -  ' + s.to);
 }
 
 
@@ -1574,18 +1574,21 @@ let assert = chai__WEBPACK_IMPORTED_MODULE_1__.assert;
 
 describe("Model set settings", function () {
  const model = new _model_model__WEBPACK_IMPORTED_MODULE_0__.Model({
-  min: -15,
+  min: 15,
   max: -10,
   from: -14,
-  step: 0.2,
+  step: -0.2,
   to: -11,
   isVertical: false,
   hideThumbLabel: false,
   isRange: true,
  });
 
- it("Model return correct value", function () {
-  assert.equal(model.getTo(), -11);
+ it("Model return correct min after validation settings", function () {
+  assert.equal(model.getMin(), -20);
+ });
+ it("Model return correct step after validation settings", function () {
+  assert.equal(model.getStep(), 0.2);
  });
 });
 
@@ -1772,4 +1775,4 @@ describe("Model set settings", function () {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.5bb51abc6638394ee1f8.js.map
+//# sourceMappingURL=main.c0e00d4bbf4a173a7414.js.map

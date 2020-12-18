@@ -5,24 +5,22 @@ font-family: "Arial";
 font-weight: 500;
 background-color:lightgreen;
 margin-top: 50px;
+display: flex;
+flex-direction: column;
 }
 .sliders input{
   max-height: 20px;
 }
 .sliders__elem{
   display: flex;
-  flex-direction: column;
- }
- .sliders__elem-slider-container{
-   display: flex;
-   flex-direction: row;
-   justify-content: space-around;
-   margin-bottom: 50px;
+  flex-direction: row;
+  justify-content: space-around;
+  margin-bottom: 50px;
  }
  .fsd-slider{
-   width: 300px;
-   height: 300px;
-   margin-right: 30px;
-   margin-top: 30px;
+  width: 300px;
+  height: 300px;
+  margin-right: 30px;
+  margin-top: 30px;
  }
 
