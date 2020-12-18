@@ -1377,22 +1377,6 @@ class ThumbLabel {
 
 /***/ }),
 
-/***/ "./test/test.css":
-/*!***********************!*\
-  !*** ./test/test.css ***!
-  \***********************/
-/*! namespace exports */
-/*! exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-// extracted by mini-css-extract-plugin
-
-
-/***/ }),
-
 /***/ "./index.scss":
 /*!********************!*\
   !*** ./index.scss ***!
@@ -1409,10 +1393,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./test/test.js?89f2":
-/*!**********************!*\
-  !*** ./test/test.js ***!
-  \**********************/
+/***/ "./test/model.test.js?f02e":
+/*!****************************!*\
+  !*** ./test/model.test.js ***!
+  \****************************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: __webpack_require__ */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
@@ -1421,7 +1405,7 @@ __webpack_require__(/*! !!style-loader!css-loader!../node_modules/mocha/mocha.cs
 var mochaModule = __webpack_require__(/*! !!../node_modules/mocha/mocha.js */ "../node_modules/mocha/mocha.js");
 var mochaInstance = window.mocha || mochaModule;
 mochaInstance.setup({"ui":"bdd"});
-__webpack_require__(/*! !!./test/test.js */ "./test/test.js?37ac");
+__webpack_require__(/*! !!./test/model.test.js */ "./test/model.test.js?abbd");
 __webpack_require__(/*! !!../node_modules/mocha-loader/dist/start.js */ "../node_modules/mocha-loader/dist/start.js");
 if(false) {}
 
@@ -1483,8 +1467,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.scss */ "./index.scss");
 /* harmony import */ var _fsdSlider_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fsdSlider.js */ "./fsdSlider.js");
-/* harmony import */ var _src_test_test__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../src/test/test */ "./test/test.js?89f2");
-/* harmony import */ var _src_test_test__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_src_test_test__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _test_model_test__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./test/model.test */ "./test/model.test.js?f02e");
+/* harmony import */ var _test_model_test__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_test_model_test__WEBPACK_IMPORTED_MODULE_2__);
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js");
 ;
 
@@ -1552,10 +1536,10 @@ function callback(result) {
 
 /***/ }),
 
-/***/ "./test/test.js?37ac":
-/*!**********************!*\
-  !*** ./test/test.js ***!
-  \**********************/
+/***/ "./test/model.test.js?abbd":
+/*!****************************!*\
+  !*** ./test/model.test.js ***!
+  \****************************/
 /*! namespace exports */
 /*! exports [not provided] [no usage info] */
 /*! runtime requirements: __webpack_require__, __webpack_require__.n, __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
@@ -1566,9 +1550,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _model_model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../model/model */ "./model/model.ts");
 /* harmony import */ var chai__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! chai */ "../node_modules/chai/index.js");
 /* harmony import */ var chai__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(chai__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _test_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./test.css */ "./test/test.css");
 ;
-
 
 let assert = chai__WEBPACK_IMPORTED_MODULE_1__.assert;
 
@@ -1587,9 +1569,23 @@ describe("Model set settings", function () {
  it("Model return correct min after validation settings", function () {
   assert.equal(model.getMin(), -20);
  });
- // it("Model return correct step after validation settings", function () {
- //  assert.equal(model.getStep(), 0.2);
- // });
+ it("Model return correct step after validation settings", function () {
+  assert.equal(model.getStep(), 0.2);
+ });
+ it("Model return correct range value after validation settings", function () {
+  assert.equal(model.isRange(), true);
+ });
+ it("Model return correct hideThumbLabel value after validation settings", function () {
+  assert.equal(model.getSettings().hideThumbLabel, false);
+ });
+ it("Model return correct from after setFrom method", function () {
+  model.setFrom(50);
+  assert.equal(model.getFrom(), -15);
+ });
+ it("Model return correct from after setFrom method", function () {
+  model.setFrom(-10);
+  assert.equal(model.getFrom(), -20);
+ });
 });
 
 /***/ })
@@ -1775,4 +1771,4 @@ describe("Model set settings", function () {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.201a5217b512694ea574.js.map
+//# sourceMappingURL=main.1a2067c986860da965b0.js.map
