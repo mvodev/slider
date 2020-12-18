@@ -59,7 +59,7 @@ export class Model extends EventObservable implements IModelFacade {
   return this.settings.isVertical;
  }
  getStep() {
-  return this.settings.step ? this.settings.step : 1;
+  return this.settings.step ? this.settings.step : 0;
  }
  getOnStart(): Function | undefined {
   return this.settings.onStart;
@@ -123,7 +123,10 @@ export class Model extends EventObservable implements IModelFacade {
   if (valueInPercent >= 100) {
    return this.getMax();
   }
-  let del = 1.0 / this.getStep();
+  let del = 1;
+  if (this.getStep() != 0) {
+   del = 1.0 / this.getStep();
+  }
   let res = Math.round(+((Math.abs(this.getMax() - this.getMin()) * valueInPercent / 100) + this.getMin()).toFixed(Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
   if (res < this.getMin()) return this.getMin();
   if (res > this.getMax()) return this.getMax();

@@ -6,7 +6,7 @@ $sl1.fsdSlider({
  min: -15,
  max: -10,
  from: -14,
- step: 0.2,
+ step: 0,
  to: -11,
  isVertical: false,
  hideThumbLabel: false,

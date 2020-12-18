@@ -88,7 +88,7 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
   }
 
   getStep() {
-    return this.settings.step ? this.settings.step : 1;
+    return this.settings.step ? this.settings.step : 0;
   }
 
   getOnStart() {
@@ -169,7 +169,12 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
       return this.getMax();
     }
 
-    let del = 1.0 / this.getStep();
+    let del = 1;
+
+    if (this.getStep() != 0) {
+      del = 1.0 / this.getStep();
+    }
+
     let res = Math.round(+(Math.abs(this.getMax() - this.getMin()) * valueInPercent / 100 + this.getMin()).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_1__.Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
     if (res < this.getMin()) return this.getMin();
     if (res > this.getMax()) return this.getMax();
@@ -267,7 +272,7 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
   }
 
   getStep() {
-    return this.settings.step ? this.settings.step : 1;
+    return this.settings.step ? this.settings.step : 0;
   }
 
   getOnStart() {
@@ -348,7 +353,12 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
       return this.getMax();
     }
 
-    let del = 1.0 / this.getStep();
+    let del = 1;
+
+    if (this.getStep() != 0) {
+      del = 1.0 / this.getStep();
+    }
+
     let res = Math.round(+(Math.abs(this.getMax() - this.getMin()) * valueInPercent / 100 + this.getMin()).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_1__.Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
     if (res < this.getMin()) return this.getMin();
     if (res > this.getMax()) return this.getMax();
@@ -1484,7 +1494,7 @@ $sl1.fsdSlider({
  min: -15,
  max: -10,
  from: -14,
- step: 0.2,
+ step: 0,
  to: -11,
  isVertical: false,
  hideThumbLabel: false,
@@ -1762,4 +1772,4 @@ describe("Model set settings", function () {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.ee4bf8dd0eab17a1b62d.js.map
+//# sourceMappingURL=main.5bb51abc6638394ee1f8.js.map
