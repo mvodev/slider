@@ -1,5 +1,5 @@
 mixin controlpanel(options)
- .control-panel
+ .control-panel__elem
   label='MIN'
    input(type="text" name="min" placeholder="min" class='control-panel__min'+options.id)
   label='MAX'
@@ -14,4 +14,5 @@ mixin controlpanel(options)
    input(type="checkbox", name="isVertical" class='control-panel__is-vertical'+options.id)
   label='HIDE_THUMB_LABEL'
    input(type="checkbox", name="hideThumbLabel" class='control-panel__hide-thumb-label'+options.id)
+  button(class='control-panel__update'+options.id)='UPDATE SETTINGS'
   

@@ -1,8 +1,8 @@
-.control-panel{
+.control-panel__elem{
  display: flex;
  flex-direction: column;
  text-align: right;
 }
-.control-panel input{
+.control-panel__elem input{
  margin-bottom: 5px;
 }

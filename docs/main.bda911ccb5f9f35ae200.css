@@ -90,13 +90,13 @@
   height: auto;
 }
 
-.control-panel {
+.control-panel__elem {
   display: flex;
   flex-direction: column;
   text-align: right;
 }
 
-.control-panel input {
+.control-panel__elem input {
   margin-bottom: 5px;
 }
 
@@ -453,4 +453,4 @@ body {
 }
 
 
-/*# sourceMappingURL=main.acfb024a0d95a4714d13.css.map*/
+/*# sourceMappingURL=main.bda911ccb5f9f35ae200.css.map*/

@@ -1587,9 +1587,9 @@ describe("Model set settings", function () {
  it("Model return correct min after validation settings", function () {
   assert.equal(model.getMin(), -20);
  });
- it("Model return correct step after validation settings", function () {
-  assert.equal(model.getStep(), 0.2);
- });
+ // it("Model return correct step after validation settings", function () {
+ //  assert.equal(model.getStep(), 0.2);
+ // });
 });
 
 /***/ })
@@ -1775,4 +1775,4 @@ describe("Model set settings", function () {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.c0e00d4bbf4a173a7414.js.map
+//# sourceMappingURL=main.201a5217b512694ea574.js.map
