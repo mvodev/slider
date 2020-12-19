@@ -36,10 +36,11 @@ describe("Model set settings", function () {
  });
 });
 import { View } from '../view/view';
+import { Messages } from '../utils/Messages';
 document.body.innerHTML = '<div id="slider-test"></div>';
 //document.body.insertAdjacentHTML = '<div id="slider-test"></div>';
 const root = document.querySelector('#slider-test');
-const view = new View({
+let s = {
  min: 15,
  max: 25,
  from: 17,
@@ -47,5 +48,17 @@ const view = new View({
  isVertical: true,
  hideThumbLabel: true,
  isRange: false,
-}, root);
-view.render();
+};
+let sUpdated = {
+ min: 15,
+ max: 25,
+ from: 17,
+ step: 2,
+ isVertical: true,
+ hideThumbLabel: false,
+ isRange: false,
+};
+const view = new View(s, root);
+view.refreshView(0, s);
+view.refreshView(1, sUpdated);
+view.refreshView(1, s);

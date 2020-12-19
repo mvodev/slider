@@ -26,6 +26,9 @@ export class View extends EventObservable {
     this.slider.render();
     if (this.settings.hideThumbLabel) {
       this.slider.getThumbLabelFrom().hideLabel();
+      if (this.settings.isRange) {
+        this.slider.getThumbLabelTo().hideLabel();
+      }
     }
     if (this.settings.isVertical) {
       this.slider.setVertical();
@@ -85,10 +88,18 @@ export class View extends EventObservable {
       this.render();
     }
     if (msg === Messages.INIT || msg === Messages.UPDATE) {
-      if (!this.settings.hideThumbLabel) {
+      if (!s.hideThumbLabel) {
+        this.slider.getThumbLabelFrom().showLabel();
         this.setThumbToValue('thumbFrom');
-        if (this.settings.isRange) {
+        if (s.isRange) {
           this.setThumbToValue('thumbTo');
+          this.slider.getThumbLabelTo().showLabel();
+        }
+      }
+      else {
+        this.slider.getThumbLabelFrom().hideLabel();
+        if (s.isRange) {
+          this.slider.getThumbLabelTo().hideLabel();
         }
       }
       this.slider.setMinRange(s.min);

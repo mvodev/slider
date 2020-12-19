@@ -482,7 +482,6 @@ class Presenter {
   }
 
   initialize() {
-    this.view.render();
     this.view.refreshView(0
     /* INIT */
     , this.model.getSettings());
@@ -505,6 +504,21 @@ class Presenter {
   }
 
 }
+
+/***/ }),
+
+/***/ "./utils/Messages.ts":
+/*!***************************!*\
+  !*** ./utils/Messages.ts ***!
+  \***************************/
+/*! namespace exports */
+/*! exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+
 
 /***/ }),
 
@@ -576,6 +590,10 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
 
     if (this.settings.hideThumbLabel) {
       this.slider.getThumbLabelFrom().hideLabel();
+
+      if (this.settings.isRange) {
+        this.slider.getThumbLabelTo().hideLabel();
+      }
     }
 
     if (this.settings.isVertical) {
@@ -641,14 +659,28 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
   refreshView(msg, s) {
     if (msg === 0
     /* INIT */
+    ) {
+        this.render();
+      }
+
+    if (msg === 0
+    /* INIT */
     || msg === 1
     /* UPDATE */
     ) {
-        if (!this.settings.hideThumbLabel) {
+        if (!s.hideThumbLabel) {
+          this.slider.getThumbLabelFrom().showLabel();
           this.setThumbToValue('thumbFrom');
 
-          if (this.settings.isRange) {
+          if (s.isRange) {
             this.setThumbToValue('thumbTo');
+            this.slider.getThumbLabelTo().showLabel();
+          }
+        } else {
+          this.slider.getThumbLabelFrom().hideLabel();
+
+          if (s.isRange) {
+            this.slider.getThumbLabelTo().hideLabel();
           }
         }
 
@@ -1418,6 +1450,10 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
 
     if (this.settings.hideThumbLabel) {
       this.slider.getThumbLabelFrom().hideLabel();
+
+      if (this.settings.isRange) {
+        this.slider.getThumbLabelTo().hideLabel();
+      }
     }
 
     if (this.settings.isVertical) {
@@ -1483,14 +1519,28 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
   refreshView(msg, s) {
     if (msg === 0
     /* INIT */
+    ) {
+        this.render();
+      }
+
+    if (msg === 0
+    /* INIT */
     || msg === 1
     /* UPDATE */
     ) {
-        if (!this.settings.hideThumbLabel) {
+        if (!s.hideThumbLabel) {
+          this.slider.getThumbLabelFrom().showLabel();
           this.setThumbToValue('thumbFrom');
 
-          if (this.settings.isRange) {
+          if (s.isRange) {
             this.setThumbToValue('thumbTo');
+            this.slider.getThumbLabelTo().showLabel();
+          }
+        } else {
+          this.slider.getThumbLabelFrom().hideLabel();
+
+          if (s.isRange) {
+            this.slider.getThumbLabelTo().hideLabel();
           }
         }
 
@@ -2090,6 +2140,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var chai__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! chai */ "../node_modules/chai/index.js");
 /* harmony import */ var chai__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(chai__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _view_view__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../view/view */ "./view/view.ts");
+/* harmony import */ var _utils_Messages__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/Messages */ "./utils/Messages.ts");
 ;
 
 let assert = chai__WEBPACK_IMPORTED_MODULE_1__.assert;
@@ -2128,10 +2179,11 @@ describe("Model set settings", function () {
  });
 });
 
+
 document.body.innerHTML = '<div id="slider-test"></div>';
 //document.body.insertAdjacentHTML = '<div id="slider-test"></div>';
 const root = document.querySelector('#slider-test');
-const view = new _view_view__WEBPACK_IMPORTED_MODULE_2__.View({
+let s = {
  min: 15,
  max: 25,
  from: 17,
@@ -2139,8 +2191,21 @@ const view = new _view_view__WEBPACK_IMPORTED_MODULE_2__.View({
  isVertical: true,
  hideThumbLabel: true,
  isRange: false,
-}, root);
-view.render();
+};
+let sUpdated = {
+ min: 15,
+ max: 25,
+ from: 17,
+ step: 2,
+ isVertical: true,
+ hideThumbLabel: false,
+ isRange: false,
+};
+const view = new _view_view__WEBPACK_IMPORTED_MODULE_2__.View(s, root);
+view.refreshView(0, s);
+view.refreshView(1, sUpdated);
+view.refreshView(1, s);
+
 
 /***/ })
 
@@ -2325,4 +2390,4 @@ view.render();
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.fab332099e15cf99df80.js.map
+//# sourceMappingURL=main.07634318bc9e738658d5.js.map
