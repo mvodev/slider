@@ -64,7 +64,7 @@ module.exports = {
         use: ["pug-loader"],
       },
       {
-        test: /test\.js$/,
+        test: /test\.ts$/,
         use: 'mocha-loader',
         exclude: /node_modules/,
       },

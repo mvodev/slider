@@ -507,18 +507,102 @@ class Presenter {
 
 /***/ }),
 
-/***/ "./utils/Messages.ts":
-/*!***************************!*\
-  !*** ./utils/Messages.ts ***!
-  \***************************/
+/***/ "../node_modules/babel-loader/lib/index.js!../node_modules/ts-loader/index.js!./test/test.ts":
+/*!***************************************************************************************************!*\
+  !*** ../node_modules/babel-loader/lib/index.js!../node_modules/ts-loader/index.js!./test/test.ts ***!
+  \***************************************************************************************************/
 /*! namespace exports */
 /*! exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
+/*! runtime requirements: __webpack_require__, __webpack_require__.n, __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _model_model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../model/model */ "./model/model.ts");
+/* harmony import */ var chai__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! chai */ "../node_modules/chai/index.js");
+/* harmony import */ var chai__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(chai__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _view_view__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../view/view */ "./view/view.ts");
+;
 
+
+let assert = chai__WEBPACK_IMPORTED_MODULE_1__.assert;
+describe("Model", function () {
+  const model = new _model_model__WEBPACK_IMPORTED_MODULE_0__.Model({
+    min: 15,
+    max: -10,
+    from: -14,
+    step: -0.2,
+    to: -11,
+    isVertical: false,
+    hideThumbLabel: false,
+    isRange: true
+  });
+  it("Model return correct min after validation settings", function () {
+    assert.equal(model.getMin(), -20);
+  });
+  it("Model return correct step after validation settings", function () {
+    assert.equal(model.getStep(), 0.2);
+  });
+  it("Model return correct range value after validation settings", function () {
+    assert.equal(model.isRange(), true);
+  });
+  it("Model return correct hideThumbLabel value after validation settings", function () {
+    assert.equal(model.getSettings().hideThumbLabel, false);
+  });
+  it("Model return correct from after setFrom method", function () {
+    model.setFrom(50);
+    assert.equal(model.getFrom(), -15);
+  });
+  it("Model return correct from after setFrom method", function () {
+    model.setFrom(-10);
+    assert.equal(model.getFrom(), -20);
+  });
+});
+document.body.innerHTML = '<div id="slider-test"></div>';
+const root = document.querySelector('#slider-test');
+let s = {
+  min: 15,
+  max: 25,
+  from: 17,
+  step: 2,
+  isVertical: true,
+  hideThumbLabel: true,
+  isRange: false
+};
+const view = new _view_view__WEBPACK_IMPORTED_MODULE_2__.View(s, root);
+describe("View", function () {
+  view.refreshView(0
+  /* INIT */
+  , s);
+  it("View set correct classes for range label in vertical mode", function () {
+    assert.equal(view.getSlider().getRangeLabel().classList.contains('fsd-slider__range-label_is_vertical'), true);
+  });
+  it("View set correct classes for range in vertical mode", function () {
+    assert.equal(view.getSlider().getRange().classList.contains('fsd-slider__range_is_vertical'), true);
+  });
+  it("View set correct min value", function () {
+    assert.equal(view.getSlider().getRangeLabel().firstElementChild.innerHTML, "" + s.min);
+  });
+  it("View set correct style for ThumbLabel", function () {
+    assert.equal(view.getSlider().getThumbLabelFrom().getThumbLabelContainer().style.display, "none");
+  });
+  let sUpdated = {
+    min: 10,
+    max: 25,
+    from: 17,
+    step: 2,
+    isVertical: true,
+    hideThumbLabel: false,
+    isRange: false
+  };
+  it("View set correct style for ThumbLabel after update", function () {
+    view.refreshView(1, sUpdated);
+    assert.equal(view.getSlider().getThumbLabelFrom().getThumbLabelContainer().style.display, "block");
+    it("View set correct min value", function () {
+      assert.equal(view.getSlider().getRangeLabel().firstElementChild.innerHTML, "" + sUpdated.min);
+    });
+  });
+});
 
 /***/ }),
 
@@ -614,6 +698,10 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
 
   getRangeLabel() {
     return this.slider.getRangeLabel();
+  }
+
+  getSlider() {
+    return this.slider;
   }
 
   getSliderLengthInPx() {
@@ -1195,6 +1283,14 @@ class Slider {
     this.rangeLabel.setMinRange(value);
   }
 
+  getMinRange() {
+    return this.rangeLabel.getMinRange();
+  }
+
+  getMaxRange() {
+    return this.rangeLabel.getMaxRange();
+  }
+
   setValueToLabelThumbFrom(value) {
     this.thumbLabelFrom.setValueToLabel(value);
   }
@@ -1328,6 +1424,14 @@ class RangeLabel {
 
   setMaxRange(value) {
     this.maxLabel.innerText = '' + value;
+  }
+
+  getMinRange() {
+    return this.minLabel;
+  }
+
+  getMaxRange() {
+    return this.maxLabel;
   }
 
 }
@@ -1474,6 +1578,10 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
 
   getRangeLabel() {
     return this.slider.getRangeLabel();
+  }
+
+  getSlider() {
+    return this.slider;
   }
 
   getSliderLengthInPx() {
@@ -1982,9 +2090,9 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./test/test.js?89f2":
+/***/ "./test/test.ts":
 /*!**********************!*\
-  !*** ./test/test.js ***!
+  !*** ./test/test.ts ***!
   \**********************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: __webpack_require__ */
@@ -1994,7 +2102,7 @@ __webpack_require__(/*! !!style-loader!css-loader!../node_modules/mocha/mocha.cs
 var mochaModule = __webpack_require__(/*! !!../node_modules/mocha/mocha.js */ "../node_modules/mocha/mocha.js");
 var mochaInstance = window.mocha || mochaModule;
 mochaInstance.setup({"ui":"bdd"});
-__webpack_require__(/*! !!./test/test.js */ "./test/test.js?37ac");
+__webpack_require__(/*! !!../node_modules/babel-loader/lib/index.js!../node_modules/ts-loader/index.js!./test/test.ts */ "../node_modules/babel-loader/lib/index.js!../node_modules/ts-loader/index.js!./test/test.ts");
 __webpack_require__(/*! !!../node_modules/mocha-loader/dist/start.js */ "../node_modules/mocha-loader/dist/start.js");
 if(false) {}
 
@@ -2056,7 +2164,7 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.scss */ "./index.scss");
 /* harmony import */ var _fsdSlider_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fsdSlider.js */ "./fsdSlider.js");
-/* harmony import */ var _test_test__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./test/test */ "./test/test.js?89f2");
+/* harmony import */ var _test_test__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./test/test */ "./test/test.ts");
 /* harmony import */ var _test_test__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_test_test__WEBPACK_IMPORTED_MODULE_2__);
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js");
 ;
@@ -2121,90 +2229,6 @@ function callback(result) {
  var s = JSON.parse(result);
  $('.result1').val(s.from + '  -  ' + s.to);
 }
-
-
-/***/ }),
-
-/***/ "./test/test.js?37ac":
-/*!**********************!*\
-  !*** ./test/test.js ***!
-  \**********************/
-/*! namespace exports */
-/*! exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__, __webpack_require__.n, __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _model_model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../model/model */ "./model/model.ts");
-/* harmony import */ var chai__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! chai */ "../node_modules/chai/index.js");
-/* harmony import */ var chai__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(chai__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _view_view__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../view/view */ "./view/view.ts");
-/* harmony import */ var _utils_Messages__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils/Messages */ "./utils/Messages.ts");
-;
-
-let assert = chai__WEBPACK_IMPORTED_MODULE_1__.assert;
-
-describe("Model set settings", function () {
- const model = new _model_model__WEBPACK_IMPORTED_MODULE_0__.Model({
-  min: 15,
-  max: -10,
-  from: -14,
-  step: -0.2,
-  to: -11,
-  isVertical: false,
-  hideThumbLabel: false,
-  isRange: true,
- });
-
- it("Model return correct min after validation settings", function () {
-  assert.equal(model.getMin(), -20);
- });
- it("Model return correct step after validation settings", function () {
-  assert.equal(model.getStep(), 0.2);
- });
- it("Model return correct range value after validation settings", function () {
-  assert.equal(model.isRange(), true);
- });
- it("Model return correct hideThumbLabel value after validation settings", function () {
-  assert.equal(model.getSettings().hideThumbLabel, false);
- });
- it("Model return correct from after setFrom method", function () {
-  model.setFrom(50);
-  assert.equal(model.getFrom(), -15);
- });
- it("Model return correct from after setFrom method", function () {
-  model.setFrom(-10);
-  assert.equal(model.getFrom(), -20);
- });
-});
-
-
-document.body.innerHTML = '<div id="slider-test"></div>';
-//document.body.insertAdjacentHTML = '<div id="slider-test"></div>';
-const root = document.querySelector('#slider-test');
-let s = {
- min: 15,
- max: 25,
- from: 17,
- step: 2,
- isVertical: true,
- hideThumbLabel: true,
- isRange: false,
-};
-let sUpdated = {
- min: 15,
- max: 25,
- from: 17,
- step: 2,
- isVertical: true,
- hideThumbLabel: false,
- isRange: false,
-};
-const view = new _view_view__WEBPACK_IMPORTED_MODULE_2__.View(s, root);
-view.refreshView(0, s);
-view.refreshView(1, sUpdated);
-view.refreshView(1, s);
 
 
 /***/ })
@@ -2390,4 +2414,4 @@ view.refreshView(1, s);
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.07634318bc9e738658d5.js.map
+//# sourceMappingURL=main.f30d520392b46ad6fba4.js.map

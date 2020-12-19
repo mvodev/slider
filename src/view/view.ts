@@ -9,7 +9,7 @@ export class View extends EventObservable {
   private numberOfMarking: number = 10;
   private thumbInPercentage: number;
   private resPercentage: number;
-  constructor(settings: ISettings, root: HTMLInputElement,) {
+  constructor(settings: ISettings, root: HTMLDivElement,) {
     super();
     this.settings = settings;
     this.rootElem = root;
@@ -44,6 +44,9 @@ export class View extends EventObservable {
   }
   getRangeLabel() {
     return this.slider.getRangeLabel();
+  }
+  getSlider(){
+    return this.slider;
   }
   private getSliderLengthInPx() {
     if (this.settings.isVertical) {
