@@ -46,7 +46,6 @@ export class Presenter implements IObserver {
     }
   }
   initialize() {
-    this.view.render();
     this.view.refreshView(Messages.INIT, this.model.getSettings());
   }
   update(newSettings: ISettings) {

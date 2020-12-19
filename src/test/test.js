@@ -35,3 +35,17 @@ describe("Model set settings", function () {
   assert.equal(model.getFrom(), -20);
  });
 });
+import { View } from '../view/view';
+document.body.innerHTML = '<div id="slider-test"></div>';
+//document.body.insertAdjacentHTML = '<div id="slider-test"></div>';
+const root = document.querySelector('#slider-test');
+const view = new View({
+ min: 15,
+ max: 25,
+ from: 17,
+ step: 2,
+ isVertical: true,
+ hideThumbLabel: true,
+ isRange: false,
+}, root);
+view.render();

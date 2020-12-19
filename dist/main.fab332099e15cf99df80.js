@@ -1377,6 +1377,545 @@ class ThumbLabel {
 
 /***/ }),
 
+/***/ "./view/view.ts":
+/*!**********************!*\
+  !*** ./view/view.ts ***!
+  \**********************/
+/*! namespace exports */
+/*! export View [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "View": () => /* binding */ View
+/* harmony export */ });
+/* harmony import */ var _modules_Slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/Slider */ "./view/modules/Slider.ts");
+/* harmony import */ var _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
+;
+
+class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.EventObservable {
+  constructor(settings, root) {
+    super();
+    this.numberOfMarking = 10;
+    this.settings = settings;
+    this.rootElem = root;
+    this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.settings, this.numberOfMarking);
+
+    if (this.settings.isVertical) {
+      this.thumbInPercentage = Math.abs(this.getThumbFrom().offsetHeight / this.slider.getRange().offsetHeight) * 100;
+    } else {
+      this.thumbInPercentage = Math.abs(this.getThumbFrom().offsetWidth / this.slider.getRange().offsetWidth) * 100;
+    }
+
+    this.resPercentage = 0;
+  }
+
+  render() {
+    this.slider.render();
+
+    if (this.settings.hideThumbLabel) {
+      this.slider.getThumbLabelFrom().hideLabel();
+    }
+
+    if (this.settings.isVertical) {
+      this.slider.setVertical();
+    }
+
+    this.bindEvents();
+  }
+
+  bindEvents() {
+    this.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this);
+    this.getRangeLabel().onmousedown = this.mouseRangeHandler.bind(this);
+
+    if (this.settings.isRange) {
+      this.getThumbTo().onmousedown = this.mouseToHandler.bind(this);
+    }
+  }
+
+  getRangeLabel() {
+    return this.slider.getRangeLabel();
+  }
+
+  getSliderLengthInPx() {
+    if (this.settings.isVertical) {
+      return this.getRange().offsetHeight + this.getThumbFrom().offsetHeight;
+    } else {
+      return this.getRange().offsetWidth + this.getThumbFrom().offsetWidth;
+    }
+  }
+
+  getThumbLengthInPx() {
+    if (this.settings.isVertical) {
+      return this.getThumbFrom().offsetHeight;
+    } else {
+      return this.getThumbFrom().offsetWidth;
+    }
+  }
+
+  getThumbLengthInPercentage() {
+    if (this.settings.isVertical) {
+      return +(this.getThumbFrom().offsetHeight / this.getSliderLengthInPx() * 100).toFixed(1);
+    } else {
+      return +(this.getThumbFrom().offsetWidth / this.getSliderLengthInPx() * 100).toFixed(1);
+    }
+  }
+
+  getRange() {
+    return this.slider.getRange();
+  }
+
+  getThumbFrom() {
+    return this.slider.getThumbFrom();
+  }
+
+  setValueToThumbLabelTo(value) {
+    this.slider.setValueToLabelThumbTo(value);
+  }
+
+  getThumbTo() {
+    return this.slider.getThumbTo();
+  }
+
+  refreshView(msg, s) {
+    if (msg === 0
+    /* INIT */
+    || msg === 1
+    /* UPDATE */
+    ) {
+        if (!this.settings.hideThumbLabel) {
+          this.setThumbToValue('thumbFrom');
+
+          if (this.settings.isRange) {
+            this.setThumbToValue('thumbTo');
+          }
+        }
+
+        this.slider.setMinRange(s.min);
+        this.slider.setMaxRange(s.max);
+        this.slider.setValueToLabelThumbFrom(s.from);
+
+        if (s.isRange) {
+          this.slider.setValueToLabelThumbTo(s.to);
+
+          if (s.isVertical) {
+            this.getThumbTo().style.top = Math.abs(s.to - s.min) / Math.abs(s.max - s.min) * 100 - this.getThumbLengthInPercentage() + '%';
+            this.getThumbFrom().style.top = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
+          } else {
+            this.getThumbTo().style.left = Math.abs(s.to - s.min) / Math.abs(s.max - s.min) * 100 - this.getThumbLengthInPercentage() + '%';
+            this.getThumbFrom().style.left = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
+          }
+
+          this.setColoredRange();
+        } else {
+          if (s.isVertical) {
+            this.getThumbFrom().style.top = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
+          } else {
+            this.getThumbFrom().style.left = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
+          }
+
+          this.setColoredRange();
+        }
+      } else if (msg === 2
+    /* FROM_IS_SET */
+    ) {
+        this.slider.setValueToLabelThumbFrom(s.from);
+        this.setColoredRange();
+      } else if (msg === 3
+    /* TO_IS_SET */
+    ) {
+        this.slider.setValueToLabelThumbTo(s.to);
+        this.setColoredRange();
+      }
+  }
+
+  setColoredRange() {
+    if (this.settings.isRange) {
+      if (this.settings.isVertical) {
+        this.slider.getColoredRange().style.top = this.getThumbFrom().getBoundingClientRect().top - 2 * this.getThumbLengthInPx() + 'px';
+        this.slider.getColoredRange().style.height = this.getThumbTo().getBoundingClientRect().top - this.getThumbFrom().getBoundingClientRect().top + this.getThumbLengthInPx() / 2 + 'px';
+      } else {
+        this.slider.getColoredRange().style.left = this.getThumbFrom().getBoundingClientRect().left - this.getRange().getBoundingClientRect().left + 'px';
+        this.slider.getColoredRange().style.width = this.getThumbTo().getBoundingClientRect().left - (this.getThumbFrom().getBoundingClientRect().left - this.getThumbLengthInPx() / 2) + 'px';
+      }
+    } else {
+      if (this.settings.isVertical) {
+        this.slider.getColoredRange().style.height = this.getThumbFrom().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbLengthInPx() / 2) + 'px';
+      } else {
+        this.slider.getColoredRange().style.width = this.getThumbFrom().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbLengthInPx() / 2) + 'px';
+      }
+    }
+  }
+
+  mouseFromHandler(e) {
+    e.preventDefault();
+
+    if (this.settings.isVertical) {
+      let shiftY = e.clientY - this.getThumbFrom().getBoundingClientRect().top;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      let that = this;
+
+      function onMouseMove(event) {
+        let newTop = event.clientY - shiftY - that.getRange().getBoundingClientRect().top;
+
+        if (newTop < -that.getThumbLengthInPx() / 2) {
+          newTop = -that.getThumbLengthInPx() / 2;
+        }
+
+        let bottom = that.getSliderLengthInPx() - that.getThumbLengthInPx() / 4;
+
+        if (that.settings.isRange) {
+          let toPos = that.getThumbTo().getBoundingClientRect().top - (that.getRange().getBoundingClientRect().top - that.getThumbLengthInPx() / 4);
+          bottom = toPos;
+        }
+
+        if (newTop > bottom) {
+          newTop = bottom;
+        }
+
+        that.resPercentage = that.convertFromPxToPercent(newTop);
+        that.getThumbFrom().style.top = that.resPercentage + '%';
+        that.notifyObservers(4
+        /* SET_FROM */
+        , JSON.stringify({
+          from: that.resPercentage,
+          min: that.settings.min,
+          max: that.settings.max
+        }));
+        that.setColoredRange();
+      }
+
+      function onMouseUp() {
+        document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('mousemove', onMouseMove);
+      }
+    } else {
+      let shiftX = e.clientX - this.getThumbFrom().getBoundingClientRect().left;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      let that = this;
+
+      function onMouseMove(e) {
+        let newLeft = e.clientX - shiftX - that.getRange().getBoundingClientRect().left;
+
+        if (newLeft < -that.getThumbFrom().offsetWidth / 2) {
+          newLeft = -that.getThumbFrom().offsetWidth / 2;
+        }
+
+        let rightEdge = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth / 4;
+
+        if (that.settings.isRange) {
+          let toPos = that.getThumbTo().getBoundingClientRect().left - (that.getRange().getBoundingClientRect().left - that.getThumbLengthInPx() / 4);
+          rightEdge = toPos;
+        }
+
+        if (newLeft > rightEdge) {
+          newLeft = rightEdge;
+        }
+
+        that.resPercentage = that.convertFromPxToPercent(newLeft);
+        that.getThumbFrom().style.left = that.resPercentage + '%';
+        that.notifyObservers(4
+        /* SET_FROM */
+        , JSON.stringify({
+          from: that.resPercentage,
+          min: that.settings.min,
+          max: that.settings.max
+        }));
+        that.setColoredRange();
+      }
+
+      function onMouseUp() {
+        document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('mousemove', onMouseMove);
+      }
+    }
+  }
+
+  mouseToHandler(e) {
+    e.preventDefault();
+
+    if (this.settings.isVertical) {
+      let shiftY = e.clientY - this.getThumbTo().getBoundingClientRect().top;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      let that = this;
+
+      function onMouseMove(event) {
+        let newTop = event.clientY - shiftY - that.getRange().getBoundingClientRect().top;
+        let fromPos = that.getThumbFrom().getBoundingClientRect().top - (that.getRange().getBoundingClientRect().top - that.getThumbLengthInPx() / 2);
+
+        if (newTop < fromPos) {
+          newTop = fromPos;
+        }
+
+        let bottom = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth / 4;
+
+        if (newTop > bottom) {
+          newTop = bottom;
+        }
+
+        that.resPercentage = that.convertFromPxToPercent(newTop);
+        that.getThumbTo().style.top = that.resPercentage + '%';
+        that.notifyObservers(5
+        /* SET_TO */
+        , JSON.stringify({
+          from: 0,
+          to: that.resPercentage,
+          min: that.settings.min,
+          max: that.settings.max
+        }));
+        that.setColoredRange();
+      }
+
+      function onMouseUp() {
+        document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('mousemove', onMouseMove);
+      }
+    } else {
+      let shiftX = e.clientX - this.getThumbTo().getBoundingClientRect().left;
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+      let that = this;
+
+      function onMouseMove(e) {
+        let newLeft = e.clientX - shiftX - that.getRange().getBoundingClientRect().left;
+        let fromPos = that.getThumbFrom().getBoundingClientRect().left - (that.getRange().getBoundingClientRect().left - that.getThumbLengthInPx() / 2);
+
+        if (newLeft < fromPos) {
+          newLeft = fromPos;
+        }
+
+        let rightEdge = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth / 4;
+
+        if (newLeft > rightEdge) {
+          newLeft = rightEdge;
+        }
+
+        that.resPercentage = that.convertFromPxToPercent(newLeft);
+        that.getThumbTo().style.left = that.resPercentage + '%';
+        that.notifyObservers(5
+        /* SET_TO */
+        , JSON.stringify({
+          from: 0,
+          to: that.resPercentage,
+          min: that.settings.min,
+          max: that.settings.max
+        }));
+        that.setColoredRange();
+      }
+
+      function onMouseUp() {
+        document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('mousemove', onMouseMove);
+      }
+    }
+  }
+
+  mouseRangeHandler(e) {
+    if (this.settings.isVertical) {
+      //vertical mode
+      let shiftY = e.clientY - this.getRange().getBoundingClientRect().top;
+      let fromPos = this.getThumbFrom().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbLengthInPx() / 2);
+
+      if (this.settings.isRange) {
+        let toPos = this.getThumbTo().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbLengthInPx() / 2);
+
+        if (shiftY < fromPos) {
+          this.resPercentage = this.convertFromPxToPercent(shiftY);
+          this.getThumbFrom().style.top = this.resPercentage + '%';
+          this.notifyObservers(4
+          /* SET_FROM */
+          , JSON.stringify({
+            from: this.resPercentage,
+            to: 0,
+            min: this.settings.min,
+            max: this.settings.max
+          }));
+          this.setColoredRange();
+        } else if (shiftY > toPos) {
+          this.resPercentage = this.convertFromPxToPercent(shiftY);
+          this.getThumbTo().style.top = this.resPercentage + '%';
+          this.notifyObservers(5
+          /* SET_TO */
+          , JSON.stringify({
+            to: this.resPercentage,
+            from: 0,
+            min: this.settings.min,
+            max: this.settings.max
+          }));
+          this.setColoredRange();
+        } else if (shiftY >= fromPos && shiftY <= toPos) {
+          let pivot = toPos - fromPos;
+
+          if (shiftY < pivot) {
+            this.resPercentage = this.convertFromPxToPercent(shiftY);
+            this.getThumbFrom().style.top = this.resPercentage + '%';
+            this.notifyObservers(4
+            /* SET_FROM */
+            , JSON.stringify({
+              from: this.resPercentage,
+              to: 0,
+              min: this.settings.min,
+              max: this.settings.max
+            }));
+            this.setColoredRange();
+          } else if (shiftY >= pivot) {
+            this.resPercentage = this.convertFromPxToPercent(shiftY);
+            this.getThumbTo().style.top = this.resPercentage + '%';
+            this.notifyObservers(5
+            /* SET_TO */
+            , JSON.stringify({
+              to: this.resPercentage,
+              from: 0,
+              min: this.settings.min,
+              max: this.settings.max
+            }));
+            this.setColoredRange();
+          }
+        }
+      } else {
+        if (shiftY < fromPos) {
+          this.resPercentage = this.convertFromPxToPercent(shiftY);
+          this.getThumbFrom().style.top = this.resPercentage + '%';
+          this.notifyObservers(4
+          /* SET_FROM */
+          , JSON.stringify({
+            from: this.resPercentage,
+            to: 0,
+            min: this.settings.min,
+            max: this.settings.max
+          }));
+          this.setColoredRange();
+        } else {
+          //vertical mode single thumb 
+          this.resPercentage = this.convertFromPxToPercent(shiftY);
+          this.getThumbFrom().style.top = this.resPercentage + '%';
+          this.notifyObservers(4
+          /* SET_FROM */
+          , JSON.stringify({
+            from: this.resPercentage,
+            to: 0,
+            min: this.settings.min,
+            max: this.settings.max
+          }));
+          this.setColoredRange();
+        }
+      }
+    } else {
+      //horizontal mode
+      let shiftX = e.clientX - this.getRange().getBoundingClientRect().left;
+      let fromPos = this.getThumbFrom().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbLengthInPx() / 2);
+
+      if (this.settings.isRange) {
+        let toPos = this.getThumbTo().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbLengthInPx() / 2);
+
+        if (shiftX < fromPos) {
+          this.resPercentage = this.convertFromPxToPercent(shiftX);
+          this.getThumbFrom().style.left = this.resPercentage + '%';
+          this.notifyObservers(4
+          /* SET_FROM */
+          , JSON.stringify({
+            from: this.resPercentage,
+            to: 0,
+            min: this.settings.min,
+            max: this.settings.max
+          }));
+          this.setColoredRange();
+        } else if (shiftX > toPos) {
+          this.resPercentage = this.convertFromPxToPercent(shiftX);
+          this.getThumbTo().style.left = this.resPercentage + '%';
+          this.notifyObservers(5
+          /* SET_TO */
+          , JSON.stringify({
+            to: this.resPercentage,
+            from: 0,
+            min: this.settings.min,
+            max: this.settings.max
+          }));
+          this.setColoredRange();
+        } else if (shiftX >= fromPos && shiftX <= toPos) {
+          let pivot = toPos - fromPos;
+
+          if (shiftX < pivot) {
+            this.resPercentage = this.convertFromPxToPercent(shiftX);
+            this.getThumbFrom().style.left = this.resPercentage + '%';
+            this.notifyObservers(4
+            /* SET_FROM */
+            , JSON.stringify({
+              from: this.resPercentage,
+              to: 0,
+              min: this.settings.min,
+              max: this.settings.max
+            }));
+            this.setColoredRange();
+          } else if (shiftX >= pivot) {
+            this.resPercentage = this.convertFromPxToPercent(shiftX);
+            this.getThumbTo().style.left = this.resPercentage + '%';
+            this.notifyObservers(5
+            /* SET_TO */
+            , JSON.stringify({
+              to: this.resPercentage,
+              from: 0,
+              min: this.settings.min,
+              max: this.settings.max
+            }));
+            this.setColoredRange();
+          }
+        }
+      } else {
+        //horizontal mode single thumb
+        this.resPercentage = this.convertFromPxToPercent(shiftX);
+        this.getThumbFrom().style.left = this.resPercentage + '%';
+        this.notifyObservers(4
+        /* SET_FROM */
+        , JSON.stringify({
+          from: this.resPercentage,
+          to: 0,
+          min: this.settings.min,
+          max: this.settings.max
+        }));
+        this.setColoredRange();
+      }
+    }
+  }
+
+  convertFromPxToPercent(valueInPX) {
+    return valueInPX / this.getSliderLengthInPx() * 100;
+  }
+
+  convertFromValueToPercent(value) {
+    return 100 / Math.abs(this.settings.max - this.settings.min) * Math.abs(value - this.settings.min);
+  }
+
+  setThumbToValue(type) {
+    if (type === 'thumbFrom') {
+      if (this.settings.isVertical) {
+        this.getThumbFrom().style.top = this.convertFromValueToPercent(this.settings.from) + '%';
+      } else {
+        this.getThumbFrom().style.left = this.convertFromValueToPercent(this.settings.from) + '%';
+      }
+
+      this.setColoredRange();
+    } else {
+      if (this.settings.isVertical) {
+        this.getThumbTo().style.top = this.convertFromValueToPercent(this.settings.to) + '%';
+      } else {
+        this.getThumbTo().style.left = this.convertFromValueToPercent(this.settings.to) + '%';
+      }
+
+      this.setColoredRange();
+    }
+  }
+
+}
+
+/***/ }),
+
 /***/ "./index.scss":
 /*!********************!*\
   !*** ./index.scss ***!
@@ -1393,10 +1932,10 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ "./test/model.test.js?f02e":
-/*!****************************!*\
-  !*** ./test/model.test.js ***!
-  \****************************/
+/***/ "./test/test.js?89f2":
+/*!**********************!*\
+  !*** ./test/test.js ***!
+  \**********************/
 /*! unknown exports (runtime-defined) */
 /*! runtime requirements: __webpack_require__ */
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
@@ -1405,7 +1944,7 @@ __webpack_require__(/*! !!style-loader!css-loader!../node_modules/mocha/mocha.cs
 var mochaModule = __webpack_require__(/*! !!../node_modules/mocha/mocha.js */ "../node_modules/mocha/mocha.js");
 var mochaInstance = window.mocha || mochaModule;
 mochaInstance.setup({"ui":"bdd"});
-__webpack_require__(/*! !!./test/model.test.js */ "./test/model.test.js?abbd");
+__webpack_require__(/*! !!./test/test.js */ "./test/test.js?37ac");
 __webpack_require__(/*! !!../node_modules/mocha-loader/dist/start.js */ "../node_modules/mocha-loader/dist/start.js");
 if(false) {}
 
@@ -1467,8 +2006,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _index_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.scss */ "./index.scss");
 /* harmony import */ var _fsdSlider_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fsdSlider.js */ "./fsdSlider.js");
-/* harmony import */ var _test_model_test__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./test/model.test */ "./test/model.test.js?f02e");
-/* harmony import */ var _test_model_test__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_test_model_test__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _test_test__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./test/test */ "./test/test.js?89f2");
+/* harmony import */ var _test_test__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_test_test__WEBPACK_IMPORTED_MODULE_2__);
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js");
 ;
 
@@ -1536,10 +2075,10 @@ function callback(result) {
 
 /***/ }),
 
-/***/ "./test/model.test.js?abbd":
-/*!****************************!*\
-  !*** ./test/model.test.js ***!
-  \****************************/
+/***/ "./test/test.js?37ac":
+/*!**********************!*\
+  !*** ./test/test.js ***!
+  \**********************/
 /*! namespace exports */
 /*! exports [not provided] [no usage info] */
 /*! runtime requirements: __webpack_require__, __webpack_require__.n, __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
@@ -1550,6 +2089,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _model_model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../model/model */ "./model/model.ts");
 /* harmony import */ var chai__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! chai */ "../node_modules/chai/index.js");
 /* harmony import */ var chai__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(chai__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _view_view__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../view/view */ "./view/view.ts");
 ;
 
 let assert = chai__WEBPACK_IMPORTED_MODULE_1__.assert;
@@ -1587,6 +2127,20 @@ describe("Model set settings", function () {
   assert.equal(model.getFrom(), -20);
  });
 });
+
+document.body.innerHTML = '<div id="slider-test"></div>';
+//document.body.insertAdjacentHTML = '<div id="slider-test"></div>';
+const root = document.querySelector('#slider-test');
+const view = new _view_view__WEBPACK_IMPORTED_MODULE_2__.View({
+ min: 15,
+ max: 25,
+ from: 17,
+ step: 2,
+ isVertical: true,
+ hideThumbLabel: true,
+ isRange: false,
+}, root);
+view.render();
 
 /***/ })
 
@@ -1771,4 +2325,4 @@ describe("Model set settings", function () {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.1a2067c986860da965b0.js.map
+//# sourceMappingURL=main.fab332099e15cf99df80.js.map

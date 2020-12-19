@@ -22,7 +22,7 @@ export class View extends EventObservable {
     }
     this.resPercentage = 0;
   }
-  render() {
+  private render() {
     this.slider.render();
     if (this.settings.hideThumbLabel) {
       this.slider.getThumbLabelFrom().hideLabel();
@@ -81,6 +81,9 @@ export class View extends EventObservable {
     return this.slider.getThumbTo();
   }
   refreshView(msg: Messages, s: ISettings) {
+    if (msg === Messages.INIT) {
+      this.render();
+    }
     if (msg === Messages.INIT || msg === Messages.UPDATE) {
       if (!this.settings.hideThumbLabel) {
         this.setThumbToValue('thumbFrom');

@@ -4,19 +4,20 @@ html(lang="en")
   meta(charset="UTF-8")
   meta(name="viewport", content="width=device-width, initial-scale=1.0")
   title Slider
- body.sliders
-  .sliders__elem
-    input(type="text" class="result1" )
-    .slider1
-    .control-panel
-      +controlpanel({id:'slider1'})
-  .sliders__elem
-    input(type="text" class="result2" )
-    .slider2
-    .control-panel
-      +controlpanel({id:'slider2'})
-  .sliders__elem
-    input(type="text" class="result3" )
-    .slider3
-    .control-panel
-      +controlpanel({id:'slider3'})
+ body
+  .sliders
+    .sliders__elem
+      input(type="text" class="result1" )
+      .slider1
+      .control-panel
+        +controlpanel({id:'slider1'})
+    .sliders__elem
+      input(type="text" class="result2" )
+      .slider2
+      .control-panel
+        +controlpanel({id:'slider2'})
+    .sliders__elem
+      input(type="text" class="result3" )
+      .slider3
+      .control-panel
+        +controlpanel({id:'slider3'})
