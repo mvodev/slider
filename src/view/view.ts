@@ -45,7 +45,7 @@ export class View extends EventObservable {
   getRangeLabel() {
     return this.slider.getRangeLabel();
   }
-  getSlider(){
+  getSlider() {
     return this.slider;
   }
   private getSliderLengthInPx() {

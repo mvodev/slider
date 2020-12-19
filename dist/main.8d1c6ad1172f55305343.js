@@ -522,10 +522,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var chai__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! chai */ "../node_modules/chai/index.js");
 /* harmony import */ var chai__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(chai__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _view_view__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../view/view */ "./view/view.ts");
+/* harmony import */ var _presenter_presenter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../presenter/presenter */ "./presenter/presenter.ts");
 ;
 
 
+
 let assert = chai__WEBPACK_IMPORTED_MODULE_1__.assert;
+document.body.innerHTML = '<div id="slider-test"></div><div id="slider-test2"></div>';
+const root2 = document.querySelector('#slider-test2');
 describe("Model", function () {
   const model = new _model_model__WEBPACK_IMPORTED_MODULE_0__.Model({
     min: 15,
@@ -558,19 +562,18 @@ describe("Model", function () {
     assert.equal(model.getFrom(), -20);
   });
 });
-document.body.innerHTML = '<div id="slider-test"></div>';
-const root = document.querySelector('#slider-test');
-let s = {
-  min: 15,
-  max: 25,
-  from: 17,
-  step: 2,
-  isVertical: true,
-  hideThumbLabel: true,
-  isRange: false
-};
-const view = new _view_view__WEBPACK_IMPORTED_MODULE_2__.View(s, root);
 describe("View", function () {
+  let s = {
+    min: 15,
+    max: 25,
+    from: 17,
+    step: 2,
+    isVertical: true,
+    hideThumbLabel: true,
+    isRange: false
+  };
+  const root = document.querySelector('#slider-test');
+  const view = new _view_view__WEBPACK_IMPORTED_MODULE_2__.View(s, root);
   view.refreshView(0
   /* INIT */
   , s);
@@ -596,11 +599,64 @@ describe("View", function () {
     isRange: false
   };
   it("View set correct style for ThumbLabel after update", function () {
-    view.refreshView(1, sUpdated);
+    view.refreshView(1
+    /* UPDATE */
+    , sUpdated);
     assert.equal(view.getSlider().getThumbLabelFrom().getThumbLabelContainer().style.display, "block");
-    it("View set correct min value", function () {
-      assert.equal(view.getSlider().getRangeLabel().firstElementChild.innerHTML, "" + sUpdated.min);
-    });
+  });
+  it("View set correct value for min label after update", function () {
+    view.refreshView(1
+    /* UPDATE */
+    , sUpdated);
+    assert.equal(view.getSlider().getRangeLabel().firstElementChild.innerHTML, "" + sUpdated.min);
+  });
+});
+describe("Presenter", function () {
+  let settings = {
+    min: 0,
+    max: 25,
+    from: 17,
+    step: 5,
+    isVertical: false,
+    hideThumbLabel: true,
+    isRange: true
+  };
+  let settingsUpdated = {
+    min: -10,
+    max: 25,
+    from: 17,
+    step: -3,
+    isVertical: false,
+    hideThumbLabel: false,
+    isRange: true
+  };
+  const model = new _model_model__WEBPACK_IMPORTED_MODULE_0__.Model(settings);
+  const view = new _view_view__WEBPACK_IMPORTED_MODULE_2__.View(settings, root2);
+  const presenter = new _presenter_presenter__WEBPACK_IMPORTED_MODULE_3__.Presenter(view, model);
+  model.addObserver(presenter);
+  view.addObserver(presenter);
+  presenter.initialize();
+  it("Slider is correctly set min after presenter update", function () {
+    presenter.update(settingsUpdated);
+    assert.equal(model.getMin(), -10);
+  });
+  it("Slider is correctly set step after presenter update", function () {
+    presenter.update(settingsUpdated);
+    assert.equal(model.getStep(), 3);
+  });
+  it("Slider is correctly set styles for ThumbLabel after presenter update", function () {
+    presenter.update(settingsUpdated);
+    assert.equal(view.getSlider().getThumbLabelFrom().getThumbLabelContainer().style.display, "block");
+    assert.equal(view.getSlider().getThumbLabelTo().getThumbLabelContainer().style.display, "block");
+    assert.equal(view.getSlider().getRangeLabel().firstElementChild.innerHTML, "" + settingsUpdated.min);
+  });
+  it("Slider is correctly set min value in rangeLabel after presenter update", function () {
+    presenter.update(settingsUpdated);
+    assert.equal(view.getSlider().getRangeLabel().firstElementChild.innerHTML, "" + settingsUpdated.min);
+  });
+  it("Slider is correctly set position thumbFrom after update", function () {
+    presenter.update(settingsUpdated);
+    assert.equal(view.getSlider().getThumbFrom().style.left, "77.1429%");
   });
 });
 
@@ -2414,4 +2470,4 @@ function callback(result) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.f30d520392b46ad6fba4.js.map
+//# sourceMappingURL=main.8d1c6ad1172f55305343.js.map
