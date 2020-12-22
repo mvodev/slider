@@ -47,7 +47,7 @@ export class Slider {
   this.container.appendChild(this.rangeLabel.getRangeLabel());
   this.rootElem.appendChild(this.container);
  }
- getRange() {
+  getRange() {
   return this.range.getRange();
  }
  getThumbFrom() {
@@ -70,12 +70,6 @@ export class Slider {
  }
  setMinRange(value: number) {
   this.rangeLabel.setMinRange(value);
- }
- private getMinRange(){
-  return this.rangeLabel.getMinRange();
- }
- private getMaxRange() {
-  return this.rangeLabel.getMaxRange();
  }
  setValueToLabelThumbFrom(value: number) {
   this.thumbLabelFrom.setValueToLabel(value);

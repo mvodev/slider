@@ -35,14 +35,14 @@ export class View extends EventObservable {
     }
     this.bindEvents();
   }
-  bindEvents() {
+   bindEvents() {
     this.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this);
     this.getRangeLabel().onmousedown = this.mouseRangeHandler.bind(this);
     if (this.settings.isRange) {
       this.getThumbTo().onmousedown = this.mouseToHandler.bind(this);
     }
   }
-  getRangeLabel():HTMLDivElement {
+  private getRangeLabel():HTMLDivElement {
     return this.slider.getRangeLabel();
   }
   getSlider() {
@@ -77,11 +77,11 @@ export class View extends EventObservable {
   private getRange() {
     return this.slider.getRange();
   }
-  getThumbFrom() {
+  private getThumbFrom() {
     return this.slider.getThumbFrom();
   }
 
-  getThumbTo() {
+  private getThumbTo() {
     return this.slider.getThumbTo();
   }
   refreshView(msg: Messages, s: ISettings) {
@@ -370,7 +370,7 @@ export class View extends EventObservable {
   private convertFromValueToPercent(value: number): number {
     return (100 / Math.abs(this.settings.max - this.settings.min)) * (Math.abs(value - this.settings.min));
   }
-  setThumbToValue(type: string) {
+  private setThumbToValue(type: string) {
     if (type === 'thumbFrom') {
       if (this.settings.isVertical) {
         this.getThumbFrom().style.top = this.convertFromValueToPercent(this.settings.from) + '%';
