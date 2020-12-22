@@ -1,210 +1,30 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./model/Model.ts":
-/*!************************!*\
-  !*** ./model/Model.ts ***!
-  \************************/
-/*! namespace exports */
-/*! export Model [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Model": () => /* binding */ Model
-/* harmony export */ });
-/* harmony import */ var _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
-/* harmony import */ var _utils_Utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/Utils */ "./utils/Utils.ts");
-;
-
-class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.EventObservable {
-  constructor(settings) {
-    super();
-    this.defaultSettings = {
-      min: 0,
-      max: 10,
-      from: 5,
-      isRange: false,
-      isVertical: false,
-      hideThumbLabel: false,
-      onStart: undefined,
-      onChange: undefined,
-      onUpdate: undefined
-    };
-    this.settings = Object.assign(this.defaultSettings, settings);
-    this.validateSettings(this.settings);
-  }
-
-  getSettings() {
-    return Object.assign({}, this.settings);
-  }
-
-  updateSettings(settings) {
-    this.settings = Object.assign(this.settings, settings);
-    this.validateSettings(this.settings);
-    this.notifyObservers(1
-    /* UPDATE */
-    , JSON.stringify(this.settings));
-  }
-
-  getMin() {
-    return this.settings.min;
-  }
-
-  getMax() {
-    return this.settings.max;
-  }
-
-  showThumbLabel() {
-    return !this.settings.hideThumbLabel;
-  }
-
-  setFrom(valueInPercent) {
-    this.settings.from = this.convertFromPercentToValue(valueInPercent);
-  }
-
-  getFrom() {
-    return this.settings.from;
-  }
-
-  setTo(valueInPercent) {
-    this.settings.to = this.convertFromPercentToValue(valueInPercent);
-    ;
-  }
-
-  getTo() {
-    return this.settings.to;
-  }
-
-  isRange() {
-    return this.settings.isRange;
-  }
-
-  isVertical() {
-    return this.settings.isVertical;
-  }
-
-  getStep() {
-    return this.settings.step ? this.settings.step : 0;
-  }
-
-  getOnStart() {
-    return this.settings.onStart;
-  }
-
-  getOnChange() {
-    return this.settings.onChange;
-  }
-
-  getOnUpdate() {
-    return this.settings.onUpdate;
-  }
-
-  validateSettings(settings) {
-    if (settings.min >= settings.max) {
-      console.error('unacceptable value,min value in settings more than max value');
-      this.settings.min = settings.max - 10;
-    }
-
-    if (!settings.to && settings.isRange) {
-      this.settings.to = settings.max;
-      console.error('unacceptable value,`to` value must be established');
-    }
-
-    if (settings.from < settings.min) {
-      console.error('unacceptable value,from must be more than min');
-      this.settings.from = settings.min;
-    }
-
-    if (settings.from > settings.max) {
-      console.error('unacceptable value,from must be lower than max');
-      this.settings.from = settings.min;
-    }
-
-    if (settings.to < settings.min && settings.isRange) {
-      this.settings.to = settings.max;
-      console.error('unacceptable value,`to` value must be between min and max');
-    }
-
-    if (this.getStep() < 0) {
-      console.error('unacceptable value,`step` value must be positive number');
-      this.settings.step = this.settings.step * -1;
-    }
-
-    if (this.getStep() > Math.abs(this.getMax() - this.getMin())) {
-      console.error('unacceptable value,`step` value must be lower than difference between max and min');
-      this.settings.step = +(Math.abs(this.getMax() - this.getMin()) / 2).toFixed(1);
-    }
-
-    if (settings.isRange && settings.to > settings.max) {
-      console.error('unacceptable value,to must be lower than max');
-      this.settings.to = settings.max;
-    }
-
-    if (settings.isRange && settings.from >= settings.to) {
-      console.error('unacceptable value,from must be lower than to');
-      this.settings.to = this.settings.from + this.settings.step ? this.settings.step : 0;
-    }
-
-    if (settings.onChange && typeof settings.onChange != 'function') {
-      console.error('unacceptable value,callback onChange must be function');
-      this.settings.onChange = undefined;
-    }
-
-    if (settings.onUpdate && typeof settings.onUpdate != 'function') {
-      console.error('unacceptable value,callback onUpdate must be function');
-      this.settings.onUpdate = undefined;
-    }
-  }
-
-  convertFromPercentToValue(valueInPercent) {
-    if (valueInPercent <= 0) {
-      return this.getMin();
-    }
-
-    if (valueInPercent >= 100) {
-      return this.getMax();
-    }
-
-    let del = 1;
-
-    if (this.getStep() != 0) {
-      del = 1.0 / this.getStep();
-    }
-
-    let res = Math.round(+(Math.abs(this.getMax() - this.getMin()) * valueInPercent / 100 + this.getMin()).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_1__.Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
-    if (res < this.getMin()) return this.getMin();
-    if (res > this.getMax()) return this.getMax();
-    return res;
-  }
-
-}
-
-/***/ }),
-
 /***/ "./model/model.ts":
 /*!************************!*\
   !*** ./model/model.ts ***!
   \************************/
-/*! namespace exports */
+/*! flagged exports */
 /*! export Model [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/*! runtime requirements: __webpack_exports__, __webpack_require__ */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Model": () => /* binding */ Model
-/* harmony export */ });
-/* harmony import */ var _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
-/* harmony import */ var _utils_Utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/Utils */ "./utils/Utils.ts");
-;
 
-class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.EventObservable {
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.Model = void 0;
+
+const EventObservable_1 = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
+
+const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./utils/Utils.ts");
+
+class Model extends EventObservable_1.EventObservable {
   constructor(settings) {
     super();
     this.defaultSettings = {
@@ -359,13 +179,15 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
       del = 1.0 / this.getStep();
     }
 
-    let res = Math.round(+(Math.abs(this.getMax() - this.getMin()) * valueInPercent / 100 + this.getMin()).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_1__.Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
+    let res = Math.round(+(Math.abs(this.getMax() - this.getMin()) * valueInPercent / 100 + this.getMin()).toFixed(Utils_1.Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
     if (res < this.getMin()) return this.getMin();
     if (res > this.getMax()) return this.getMax();
     return res;
   }
 
 }
+
+exports.Model = Model;
 
 /***/ }),
 
@@ -373,17 +195,21 @@ class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__.Even
 /*!**************************************!*\
   !*** ./observers/EventObservable.ts ***!
   \**************************************/
-/*! namespace exports */
+/*! flagged exports */
 /*! export EventObservable [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/*! runtime requirements: __webpack_exports__ */
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "EventObservable": () => /* binding */ EventObservable
-/* harmony export */ });
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.EventObservable = void 0;
+
 class EventObservable {
   constructor() {
     this.observers = [];
@@ -403,23 +229,29 @@ class EventObservable {
 
 }
 
+exports.EventObservable = EventObservable;
+
 /***/ }),
 
 /***/ "./presenter/presenter.ts":
 /*!********************************!*\
   !*** ./presenter/presenter.ts ***!
   \********************************/
-/*! namespace exports */
+/*! flagged exports */
 /*! export Presenter [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/*! runtime requirements: __webpack_exports__ */
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Presenter": () => /* binding */ Presenter
-/* harmony export */ });
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.Presenter = void 0;
+
 class Presenter {
   constructor(view, model) {
     this.view = view;
@@ -505,33 +337,43 @@ class Presenter {
 
 }
 
+exports.Presenter = Presenter;
+
 /***/ }),
 
 /***/ "../node_modules/babel-loader/lib/index.js!../node_modules/ts-loader/index.js!./test/test.ts":
 /*!***************************************************************************************************!*\
   !*** ../node_modules/babel-loader/lib/index.js!../node_modules/ts-loader/index.js!./test/test.ts ***!
   \***************************************************************************************************/
-/*! namespace exports */
-/*! exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__, __webpack_require__.n, __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/*! flagged exports */
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_exports__, __webpack_require__ */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _model_model__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../model/model */ "./model/model.ts");
-/* harmony import */ var chai__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! chai */ "../node_modules/chai/index.js");
-/* harmony import */ var chai__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(chai__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _view_view__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../view/view */ "./view/view.ts");
-/* harmony import */ var _presenter_presenter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../presenter/presenter */ "./presenter/presenter.ts");
-;
 
 
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
 
-let assert = chai__WEBPACK_IMPORTED_MODULE_1__.assert;
+const model_1 = __webpack_require__(/*! ../model/model */ "./model/model.ts");
+
+const chai = __webpack_require__(/*! chai */ "../node_modules/chai/index.js");
+
+const view_1 = __webpack_require__(/*! ../view/view */ "./view/view.ts");
+
+const presenter_1 = __webpack_require__(/*! ../presenter/presenter */ "./presenter/presenter.ts");
+
+__webpack_require__(/*! ../styles/fsdSlider.scss */ "./styles/fsdSlider.scss");
+
+let assert = chai.assert; //let describe = mocha.describe;
+//mocha.run();
+
 document.body.innerHTML = '<div id="slider-test"></div><div id="slider-test2"></div>';
-const root2 = document.querySelector('#slider-test2');
 describe("Model", function () {
-  const model = new _model_model__WEBPACK_IMPORTED_MODULE_0__.Model({
+  const model = new model_1.Model({
     min: 15,
     max: -10,
     from: -14,
@@ -573,7 +415,7 @@ describe("View", function () {
     isRange: false
   };
   const root = document.querySelector('#slider-test');
-  const view = new _view_view__WEBPACK_IMPORTED_MODULE_2__.View(s, root);
+  const view = new view_1.View(s, root);
   view.refreshView(0
   /* INIT */
   , s);
@@ -612,6 +454,7 @@ describe("View", function () {
   });
 });
 describe("Presenter", function () {
+  const root2 = document.querySelector('#slider-test2');
   let settings = {
     min: 0,
     max: 25,
@@ -630,9 +473,9 @@ describe("Presenter", function () {
     hideThumbLabel: false,
     isRange: true
   };
-  const model = new _model_model__WEBPACK_IMPORTED_MODULE_0__.Model(settings);
-  const view = new _view_view__WEBPACK_IMPORTED_MODULE_2__.View(settings, root2);
-  const presenter = new _presenter_presenter__WEBPACK_IMPORTED_MODULE_3__.Presenter(view, model);
+  const model = new model_1.Model(settings);
+  const view = new view_1.View(settings, root2);
+  const presenter = new presenter_1.Presenter(view, model);
   model.addObserver(presenter);
   view.addObserver(presenter);
   presenter.initialize();
@@ -666,17 +509,21 @@ describe("Presenter", function () {
 /*!************************!*\
   !*** ./utils/Utils.ts ***!
   \************************/
-/*! namespace exports */
+/*! flagged exports */
 /*! export Utils [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/*! runtime requirements: __webpack_exports__ */
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Utils": () => /* binding */ Utils
-/* harmony export */ });
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.Utils = void 0;
+
 class Utils {
   static numDigitsAfterDecimal(value) {
     if (value) {
@@ -687,566 +534,7 @@ class Utils {
 
 }
 
-/***/ }),
-
-/***/ "./view/View.ts":
-/*!**********************!*\
-  !*** ./view/View.ts ***!
-  \**********************/
-/*! namespace exports */
-/*! export View [provided] [no usage info] [missing usage info prevents renaming] */
-/*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "View": () => /* binding */ View
-/* harmony export */ });
-/* harmony import */ var _modules_Slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/Slider */ "./view/modules/Slider.ts");
-/* harmony import */ var _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
-;
-
-class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.EventObservable {
-  constructor(settings, root) {
-    super();
-    this.numberOfMarking = 10;
-    this.settings = settings;
-    this.rootElem = root;
-    this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.settings, this.numberOfMarking);
-
-    if (this.settings.isVertical) {
-      this.thumbInPercentage = Math.abs(this.getThumbFrom().offsetHeight / this.slider.getRange().offsetHeight) * 100;
-    } else {
-      this.thumbInPercentage = Math.abs(this.getThumbFrom().offsetWidth / this.slider.getRange().offsetWidth) * 100;
-    }
-
-    this.resPercentage = 0;
-  }
-
-  render() {
-    this.slider.render();
-
-    if (this.settings.hideThumbLabel) {
-      this.slider.getThumbLabelFrom().hideLabel();
-
-      if (this.settings.isRange) {
-        this.slider.getThumbLabelTo().hideLabel();
-      }
-    }
-
-    if (this.settings.isVertical) {
-      this.slider.setVertical();
-    }
-
-    this.bindEvents();
-  }
-
-  bindEvents() {
-    this.getThumbFrom().onmousedown = this.mouseFromHandler.bind(this);
-    this.getRangeLabel().onmousedown = this.mouseRangeHandler.bind(this);
-
-    if (this.settings.isRange) {
-      this.getThumbTo().onmousedown = this.mouseToHandler.bind(this);
-    }
-  }
-
-  getRangeLabel() {
-    return this.slider.getRangeLabel();
-  }
-
-  getSlider() {
-    return this.slider;
-  }
-
-  getSliderLengthInPx() {
-    if (this.settings.isVertical) {
-      return this.getRange().offsetHeight + this.getThumbFrom().offsetHeight;
-    } else {
-      return this.getRange().offsetWidth + this.getThumbFrom().offsetWidth;
-    }
-  }
-
-  getThumbLengthInPx() {
-    if (this.settings.isVertical) {
-      return this.getThumbFrom().offsetHeight;
-    } else {
-      return this.getThumbFrom().offsetWidth;
-    }
-  }
-
-  getThumbLengthInPercentage() {
-    if (this.settings.isVertical) {
-      return +(this.getThumbFrom().offsetHeight / this.getSliderLengthInPx() * 100).toFixed(1);
-    } else {
-      return +(this.getThumbFrom().offsetWidth / this.getSliderLengthInPx() * 100).toFixed(1);
-    }
-  }
-
-  getRange() {
-    return this.slider.getRange();
-  }
-
-  getThumbFrom() {
-    return this.slider.getThumbFrom();
-  }
-
-  setValueToThumbLabelTo(value) {
-    this.slider.setValueToLabelThumbTo(value);
-  }
-
-  getThumbTo() {
-    return this.slider.getThumbTo();
-  }
-
-  refreshView(msg, s) {
-    if (msg === 0
-    /* INIT */
-    ) {
-        this.render();
-      }
-
-    if (msg === 0
-    /* INIT */
-    || msg === 1
-    /* UPDATE */
-    ) {
-        if (!s.hideThumbLabel) {
-          this.slider.getThumbLabelFrom().showLabel();
-          this.setThumbToValue('thumbFrom');
-
-          if (s.isRange) {
-            this.setThumbToValue('thumbTo');
-            this.slider.getThumbLabelTo().showLabel();
-          }
-        } else {
-          this.slider.getThumbLabelFrom().hideLabel();
-
-          if (s.isRange) {
-            this.slider.getThumbLabelTo().hideLabel();
-          }
-        }
-
-        this.slider.setMinRange(s.min);
-        this.slider.setMaxRange(s.max);
-        this.slider.setValueToLabelThumbFrom(s.from);
-
-        if (s.isRange) {
-          this.slider.setValueToLabelThumbTo(s.to);
-
-          if (s.isVertical) {
-            this.getThumbTo().style.top = Math.abs(s.to - s.min) / Math.abs(s.max - s.min) * 100 - this.getThumbLengthInPercentage() + '%';
-            this.getThumbFrom().style.top = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
-          } else {
-            this.getThumbTo().style.left = Math.abs(s.to - s.min) / Math.abs(s.max - s.min) * 100 - this.getThumbLengthInPercentage() + '%';
-            this.getThumbFrom().style.left = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
-          }
-
-          this.setColoredRange();
-        } else {
-          if (s.isVertical) {
-            this.getThumbFrom().style.top = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
-          } else {
-            this.getThumbFrom().style.left = Math.abs(s.from - s.min) / Math.abs(s.max - s.min) * 100 + '%';
-          }
-
-          this.setColoredRange();
-        }
-      } else if (msg === 2
-    /* FROM_IS_SET */
-    ) {
-        this.slider.setValueToLabelThumbFrom(s.from);
-        this.setColoredRange();
-      } else if (msg === 3
-    /* TO_IS_SET */
-    ) {
-        this.slider.setValueToLabelThumbTo(s.to);
-        this.setColoredRange();
-      }
-  }
-
-  setColoredRange() {
-    if (this.settings.isRange) {
-      if (this.settings.isVertical) {
-        this.slider.getColoredRange().style.top = this.getThumbFrom().getBoundingClientRect().top - 2 * this.getThumbLengthInPx() + 'px';
-        this.slider.getColoredRange().style.height = this.getThumbTo().getBoundingClientRect().top - this.getThumbFrom().getBoundingClientRect().top + this.getThumbLengthInPx() / 2 + 'px';
-      } else {
-        this.slider.getColoredRange().style.left = this.getThumbFrom().getBoundingClientRect().left - this.getRange().getBoundingClientRect().left + 'px';
-        this.slider.getColoredRange().style.width = this.getThumbTo().getBoundingClientRect().left - (this.getThumbFrom().getBoundingClientRect().left - this.getThumbLengthInPx() / 2) + 'px';
-      }
-    } else {
-      if (this.settings.isVertical) {
-        this.slider.getColoredRange().style.height = this.getThumbFrom().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbLengthInPx() / 2) + 'px';
-      } else {
-        this.slider.getColoredRange().style.width = this.getThumbFrom().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbLengthInPx() / 2) + 'px';
-      }
-    }
-  }
-
-  mouseFromHandler(e) {
-    e.preventDefault();
-
-    if (this.settings.isVertical) {
-      let shiftY = e.clientY - this.getThumbFrom().getBoundingClientRect().top;
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-      let that = this;
-
-      function onMouseMove(event) {
-        let newTop = event.clientY - shiftY - that.getRange().getBoundingClientRect().top;
-
-        if (newTop < -that.getThumbLengthInPx() / 2) {
-          newTop = -that.getThumbLengthInPx() / 2;
-        }
-
-        let bottom = that.getSliderLengthInPx() - that.getThumbLengthInPx() / 4;
-
-        if (that.settings.isRange) {
-          let toPos = that.getThumbTo().getBoundingClientRect().top - (that.getRange().getBoundingClientRect().top - that.getThumbLengthInPx() / 4);
-          bottom = toPos;
-        }
-
-        if (newTop > bottom) {
-          newTop = bottom;
-        }
-
-        that.resPercentage = that.convertFromPxToPercent(newTop);
-        that.getThumbFrom().style.top = that.resPercentage + '%';
-        that.notifyObservers(4
-        /* SET_FROM */
-        , JSON.stringify({
-          from: that.resPercentage,
-          min: that.settings.min,
-          max: that.settings.max
-        }));
-        that.setColoredRange();
-      }
-
-      function onMouseUp() {
-        document.removeEventListener('mouseup', onMouseUp);
-        document.removeEventListener('mousemove', onMouseMove);
-      }
-    } else {
-      let shiftX = e.clientX - this.getThumbFrom().getBoundingClientRect().left;
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-      let that = this;
-
-      function onMouseMove(e) {
-        let newLeft = e.clientX - shiftX - that.getRange().getBoundingClientRect().left;
-
-        if (newLeft < -that.getThumbFrom().offsetWidth / 2) {
-          newLeft = -that.getThumbFrom().offsetWidth / 2;
-        }
-
-        let rightEdge = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth / 4;
-
-        if (that.settings.isRange) {
-          let toPos = that.getThumbTo().getBoundingClientRect().left - (that.getRange().getBoundingClientRect().left - that.getThumbLengthInPx() / 4);
-          rightEdge = toPos;
-        }
-
-        if (newLeft > rightEdge) {
-          newLeft = rightEdge;
-        }
-
-        that.resPercentage = that.convertFromPxToPercent(newLeft);
-        that.getThumbFrom().style.left = that.resPercentage + '%';
-        that.notifyObservers(4
-        /* SET_FROM */
-        , JSON.stringify({
-          from: that.resPercentage,
-          min: that.settings.min,
-          max: that.settings.max
-        }));
-        that.setColoredRange();
-      }
-
-      function onMouseUp() {
-        document.removeEventListener('mouseup', onMouseUp);
-        document.removeEventListener('mousemove', onMouseMove);
-      }
-    }
-  }
-
-  mouseToHandler(e) {
-    e.preventDefault();
-
-    if (this.settings.isVertical) {
-      let shiftY = e.clientY - this.getThumbTo().getBoundingClientRect().top;
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-      let that = this;
-
-      function onMouseMove(event) {
-        let newTop = event.clientY - shiftY - that.getRange().getBoundingClientRect().top;
-        let fromPos = that.getThumbFrom().getBoundingClientRect().top - (that.getRange().getBoundingClientRect().top - that.getThumbLengthInPx() / 2);
-
-        if (newTop < fromPos) {
-          newTop = fromPos;
-        }
-
-        let bottom = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth / 4;
-
-        if (newTop > bottom) {
-          newTop = bottom;
-        }
-
-        that.resPercentage = that.convertFromPxToPercent(newTop);
-        that.getThumbTo().style.top = that.resPercentage + '%';
-        that.notifyObservers(5
-        /* SET_TO */
-        , JSON.stringify({
-          from: 0,
-          to: that.resPercentage,
-          min: that.settings.min,
-          max: that.settings.max
-        }));
-        that.setColoredRange();
-      }
-
-      function onMouseUp() {
-        document.removeEventListener('mouseup', onMouseUp);
-        document.removeEventListener('mousemove', onMouseMove);
-      }
-    } else {
-      let shiftX = e.clientX - this.getThumbTo().getBoundingClientRect().left;
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-      let that = this;
-
-      function onMouseMove(e) {
-        let newLeft = e.clientX - shiftX - that.getRange().getBoundingClientRect().left;
-        let fromPos = that.getThumbFrom().getBoundingClientRect().left - (that.getRange().getBoundingClientRect().left - that.getThumbLengthInPx() / 2);
-
-        if (newLeft < fromPos) {
-          newLeft = fromPos;
-        }
-
-        let rightEdge = that.getSliderLengthInPx() - that.getThumbFrom().offsetWidth / 4;
-
-        if (newLeft > rightEdge) {
-          newLeft = rightEdge;
-        }
-
-        that.resPercentage = that.convertFromPxToPercent(newLeft);
-        that.getThumbTo().style.left = that.resPercentage + '%';
-        that.notifyObservers(5
-        /* SET_TO */
-        , JSON.stringify({
-          from: 0,
-          to: that.resPercentage,
-          min: that.settings.min,
-          max: that.settings.max
-        }));
-        that.setColoredRange();
-      }
-
-      function onMouseUp() {
-        document.removeEventListener('mouseup', onMouseUp);
-        document.removeEventListener('mousemove', onMouseMove);
-      }
-    }
-  }
-
-  mouseRangeHandler(e) {
-    if (this.settings.isVertical) {
-      //vertical mode
-      let shiftY = e.clientY - this.getRange().getBoundingClientRect().top;
-      let fromPos = this.getThumbFrom().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbLengthInPx() / 2);
-
-      if (this.settings.isRange) {
-        let toPos = this.getThumbTo().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbLengthInPx() / 2);
-
-        if (shiftY < fromPos) {
-          this.resPercentage = this.convertFromPxToPercent(shiftY);
-          this.getThumbFrom().style.top = this.resPercentage + '%';
-          this.notifyObservers(4
-          /* SET_FROM */
-          , JSON.stringify({
-            from: this.resPercentage,
-            to: 0,
-            min: this.settings.min,
-            max: this.settings.max
-          }));
-          this.setColoredRange();
-        } else if (shiftY > toPos) {
-          this.resPercentage = this.convertFromPxToPercent(shiftY);
-          this.getThumbTo().style.top = this.resPercentage + '%';
-          this.notifyObservers(5
-          /* SET_TO */
-          , JSON.stringify({
-            to: this.resPercentage,
-            from: 0,
-            min: this.settings.min,
-            max: this.settings.max
-          }));
-          this.setColoredRange();
-        } else if (shiftY >= fromPos && shiftY <= toPos) {
-          let pivot = toPos - fromPos;
-
-          if (shiftY < pivot) {
-            this.resPercentage = this.convertFromPxToPercent(shiftY);
-            this.getThumbFrom().style.top = this.resPercentage + '%';
-            this.notifyObservers(4
-            /* SET_FROM */
-            , JSON.stringify({
-              from: this.resPercentage,
-              to: 0,
-              min: this.settings.min,
-              max: this.settings.max
-            }));
-            this.setColoredRange();
-          } else if (shiftY >= pivot) {
-            this.resPercentage = this.convertFromPxToPercent(shiftY);
-            this.getThumbTo().style.top = this.resPercentage + '%';
-            this.notifyObservers(5
-            /* SET_TO */
-            , JSON.stringify({
-              to: this.resPercentage,
-              from: 0,
-              min: this.settings.min,
-              max: this.settings.max
-            }));
-            this.setColoredRange();
-          }
-        }
-      } else {
-        if (shiftY < fromPos) {
-          this.resPercentage = this.convertFromPxToPercent(shiftY);
-          this.getThumbFrom().style.top = this.resPercentage + '%';
-          this.notifyObservers(4
-          /* SET_FROM */
-          , JSON.stringify({
-            from: this.resPercentage,
-            to: 0,
-            min: this.settings.min,
-            max: this.settings.max
-          }));
-          this.setColoredRange();
-        } else {
-          //vertical mode single thumb 
-          this.resPercentage = this.convertFromPxToPercent(shiftY);
-          this.getThumbFrom().style.top = this.resPercentage + '%';
-          this.notifyObservers(4
-          /* SET_FROM */
-          , JSON.stringify({
-            from: this.resPercentage,
-            to: 0,
-            min: this.settings.min,
-            max: this.settings.max
-          }));
-          this.setColoredRange();
-        }
-      }
-    } else {
-      //horizontal mode
-      let shiftX = e.clientX - this.getRange().getBoundingClientRect().left;
-      let fromPos = this.getThumbFrom().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbLengthInPx() / 2);
-
-      if (this.settings.isRange) {
-        let toPos = this.getThumbTo().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbLengthInPx() / 2);
-
-        if (shiftX < fromPos) {
-          this.resPercentage = this.convertFromPxToPercent(shiftX);
-          this.getThumbFrom().style.left = this.resPercentage + '%';
-          this.notifyObservers(4
-          /* SET_FROM */
-          , JSON.stringify({
-            from: this.resPercentage,
-            to: 0,
-            min: this.settings.min,
-            max: this.settings.max
-          }));
-          this.setColoredRange();
-        } else if (shiftX > toPos) {
-          this.resPercentage = this.convertFromPxToPercent(shiftX);
-          this.getThumbTo().style.left = this.resPercentage + '%';
-          this.notifyObservers(5
-          /* SET_TO */
-          , JSON.stringify({
-            to: this.resPercentage,
-            from: 0,
-            min: this.settings.min,
-            max: this.settings.max
-          }));
-          this.setColoredRange();
-        } else if (shiftX >= fromPos && shiftX <= toPos) {
-          let pivot = toPos - fromPos;
-
-          if (shiftX < pivot) {
-            this.resPercentage = this.convertFromPxToPercent(shiftX);
-            this.getThumbFrom().style.left = this.resPercentage + '%';
-            this.notifyObservers(4
-            /* SET_FROM */
-            , JSON.stringify({
-              from: this.resPercentage,
-              to: 0,
-              min: this.settings.min,
-              max: this.settings.max
-            }));
-            this.setColoredRange();
-          } else if (shiftX >= pivot) {
-            this.resPercentage = this.convertFromPxToPercent(shiftX);
-            this.getThumbTo().style.left = this.resPercentage + '%';
-            this.notifyObservers(5
-            /* SET_TO */
-            , JSON.stringify({
-              to: this.resPercentage,
-              from: 0,
-              min: this.settings.min,
-              max: this.settings.max
-            }));
-            this.setColoredRange();
-          }
-        }
-      } else {
-        //horizontal mode single thumb
-        this.resPercentage = this.convertFromPxToPercent(shiftX);
-        this.getThumbFrom().style.left = this.resPercentage + '%';
-        this.notifyObservers(4
-        /* SET_FROM */
-        , JSON.stringify({
-          from: this.resPercentage,
-          to: 0,
-          min: this.settings.min,
-          max: this.settings.max
-        }));
-        this.setColoredRange();
-      }
-    }
-  }
-
-  convertFromPxToPercent(valueInPX) {
-    return valueInPX / this.getSliderLengthInPx() * 100;
-  }
-
-  convertFromValueToPercent(value) {
-    return 100 / Math.abs(this.settings.max - this.settings.min) * Math.abs(value - this.settings.min);
-  }
-
-  setThumbToValue(type) {
-    if (type === 'thumbFrom') {
-      if (this.settings.isVertical) {
-        this.getThumbFrom().style.top = this.convertFromValueToPercent(this.settings.from) + '%';
-      } else {
-        this.getThumbFrom().style.left = this.convertFromValueToPercent(this.settings.from) + '%';
-      }
-
-      this.setColoredRange();
-    } else {
-      if (this.settings.isVertical) {
-        this.getThumbTo().style.top = this.convertFromValueToPercent(this.settings.to) + '%';
-      } else {
-        this.getThumbTo().style.left = this.convertFromValueToPercent(this.settings.to) + '%';
-      }
-
-      this.setColoredRange();
-    }
-  }
-
-}
+exports.Utils = Utils;
 
 /***/ }),
 
@@ -1254,26 +542,30 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
 /*!********************************!*\
   !*** ./view/modules/Slider.ts ***!
   \********************************/
-/*! namespace exports */
+/*! flagged exports */
 /*! export Slider [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/*! runtime requirements: __webpack_exports__, __webpack_require__ */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Slider": () => /* binding */ Slider
-/* harmony export */ });
-/* harmony import */ var _range__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./range */ "./view/modules/range.ts");
-/* harmony import */ var _thumb__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./thumb */ "./view/modules/thumb.ts");
-/* harmony import */ var _thumbLabel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./thumbLabel */ "./view/modules/thumbLabel.ts");
-/* harmony import */ var _rangeLabel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./rangeLabel */ "./view/modules/rangeLabel.ts");
-/* harmony import */ var _coloredRange__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./coloredRange */ "./view/modules/coloredRange.ts");
-;
 
 
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.Slider = void 0;
 
+const range_1 = __webpack_require__(/*! ./range */ "./view/modules/range.ts");
+
+const thumb_1 = __webpack_require__(/*! ./thumb */ "./view/modules/thumb.ts");
+
+const thumbLabel_1 = __webpack_require__(/*! ./thumbLabel */ "./view/modules/thumbLabel.ts");
+
+const rangeLabel_1 = __webpack_require__(/*! ./rangeLabel */ "./view/modules/rangeLabel.ts");
+
+const coloredRange_1 = __webpack_require__(/*! ./coloredRange */ "./view/modules/coloredRange.ts");
 
 class Slider {
   constructor(rootElem, s, numberOfMarking) {
@@ -1281,13 +573,13 @@ class Slider {
     this.rootElem = rootElem;
     this.numberOfMarking = numberOfMarking;
     this.numberOfMarking = this.numberOfMarking;
-    this.thumbTo = new _thumb__WEBPACK_IMPORTED_MODULE_1__.Thumb('fsd-slider__thumb-to');
-    this.thumbLabelTo = new _thumbLabel__WEBPACK_IMPORTED_MODULE_2__.ThumbLabel(this.thumbTo.getThumb());
-    this.thumbFrom = new _thumb__WEBPACK_IMPORTED_MODULE_1__.Thumb('fsd-slider__thumb-from');
-    this.thumbLabelFrom = new _thumbLabel__WEBPACK_IMPORTED_MODULE_2__.ThumbLabel(this.thumbFrom.getThumb());
-    this.range = new _range__WEBPACK_IMPORTED_MODULE_0__.Range();
-    this.coloredRange = new _coloredRange__WEBPACK_IMPORTED_MODULE_4__.ColoredRange();
-    this.rangeLabel = new _rangeLabel__WEBPACK_IMPORTED_MODULE_3__.RangeLabel(this.numberOfMarking, this.settings.isVertical);
+    this.thumbTo = new thumb_1.Thumb('fsd-slider__thumb-to');
+    this.thumbLabelTo = new thumbLabel_1.ThumbLabel(this.thumbTo.getThumb());
+    this.thumbFrom = new thumb_1.Thumb('fsd-slider__thumb-from');
+    this.thumbLabelFrom = new thumbLabel_1.ThumbLabel(this.thumbFrom.getThumb());
+    this.range = new range_1.Range();
+    this.coloredRange = new coloredRange_1.ColoredRange();
+    this.rangeLabel = new rangeLabel_1.RangeLabel(this.numberOfMarking, this.settings.isVertical);
     this.container = document.createElement('div');
   }
 
@@ -1299,7 +591,7 @@ class Slider {
     this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
 
     if (this.settings.isRange) {
-      this.thumbTo.getThumb().appendChild(this.thumbLabelTo?.getThumbLabelContainer());
+      this.thumbTo.getThumb().appendChild(this.thumbLabelTo.getThumbLabelContainer());
       this.range.getRange().appendChild(this.thumbTo.getThumb());
     }
 
@@ -1373,23 +665,29 @@ class Slider {
 
 }
 
+exports.Slider = Slider;
+
 /***/ }),
 
 /***/ "./view/modules/coloredRange.ts":
 /*!**************************************!*\
   !*** ./view/modules/coloredRange.ts ***!
   \**************************************/
-/*! namespace exports */
+/*! flagged exports */
 /*! export ColoredRange [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/*! runtime requirements: __webpack_exports__ */
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ColoredRange": () => /* binding */ ColoredRange
-/* harmony export */ });
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.ColoredRange = void 0;
+
 class ColoredRange {
   constructor() {
     this.coloredRange = document.createElement('div');
@@ -1402,23 +700,29 @@ class ColoredRange {
 
 }
 
+exports.ColoredRange = ColoredRange;
+
 /***/ }),
 
 /***/ "./view/modules/range.ts":
 /*!*******************************!*\
   !*** ./view/modules/range.ts ***!
   \*******************************/
-/*! namespace exports */
+/*! flagged exports */
 /*! export Range [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/*! runtime requirements: __webpack_exports__ */
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Range": () => /* binding */ Range
-/* harmony export */ });
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.Range = void 0;
+
 class Range {
   constructor() {
     let div = document.createElement('div');
@@ -1432,23 +736,29 @@ class Range {
 
 }
 
+exports.Range = Range;
+
 /***/ }),
 
 /***/ "./view/modules/rangeLabel.ts":
 /*!************************************!*\
   !*** ./view/modules/rangeLabel.ts ***!
   \************************************/
-/*! namespace exports */
+/*! flagged exports */
 /*! export RangeLabel [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/*! runtime requirements: __webpack_exports__ */
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "RangeLabel": () => /* binding */ RangeLabel
-/* harmony export */ });
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.RangeLabel = void 0;
+
 class RangeLabel {
   constructor(numberOfMarking, isVertical) {
     this.rangeLabelContainer = document.createElement('div');
@@ -1492,23 +802,29 @@ class RangeLabel {
 
 }
 
+exports.RangeLabel = RangeLabel;
+
 /***/ }),
 
 /***/ "./view/modules/thumb.ts":
 /*!*******************************!*\
   !*** ./view/modules/thumb.ts ***!
   \*******************************/
-/*! namespace exports */
+/*! flagged exports */
 /*! export Thumb [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/*! runtime requirements: __webpack_exports__ */
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Thumb": () => /* binding */ Thumb
-/* harmony export */ });
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.Thumb = void 0;
+
 class Thumb {
   constructor(className) {
     this.thumb = document.createElement('div');
@@ -1521,23 +837,29 @@ class Thumb {
 
 }
 
+exports.Thumb = Thumb;
+
 /***/ }),
 
 /***/ "./view/modules/thumbLabel.ts":
 /*!************************************!*\
   !*** ./view/modules/thumbLabel.ts ***!
   \************************************/
-/*! namespace exports */
+/*! flagged exports */
 /*! export ThumbLabel [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/*! runtime requirements: __webpack_exports__ */
+/***/ ((__unused_webpack_module, exports) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "ThumbLabel": () => /* binding */ ThumbLabel
-/* harmony export */ });
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.ThumbLabel = void 0;
+
 class ThumbLabel {
   constructor(thumbRootElen) {
     let div = document.createElement('div');
@@ -1567,34 +889,40 @@ class ThumbLabel {
 
 }
 
+exports.ThumbLabel = ThumbLabel;
+
 /***/ }),
 
 /***/ "./view/view.ts":
 /*!**********************!*\
   !*** ./view/view.ts ***!
   \**********************/
-/*! namespace exports */
+/*! flagged exports */
 /*! export View [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
 /*! other exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+/*! runtime requirements: __webpack_exports__, __webpack_require__ */
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "View": () => /* binding */ View
-/* harmony export */ });
-/* harmony import */ var _modules_Slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/Slider */ "./view/modules/Slider.ts");
-/* harmony import */ var _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
-;
 
-class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.EventObservable {
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.View = void 0;
+
+const Slider_1 = __webpack_require__(/*! ./modules/Slider */ "./view/modules/Slider.ts");
+
+const EventObservable_1 = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
+
+class View extends EventObservable_1.EventObservable {
   constructor(settings, root) {
     super();
     this.numberOfMarking = 10;
     this.settings = settings;
     this.rootElem = root;
-    this.slider = new _modules_Slider__WEBPACK_IMPORTED_MODULE_0__.Slider(this.rootElem, this.settings, this.numberOfMarking);
+    this.slider = new Slider_1.Slider(this.rootElem, this.settings, this.numberOfMarking);
 
     if (this.settings.isVertical) {
       this.thumbInPercentage = Math.abs(this.getThumbFrom().offsetHeight / this.slider.getRange().offsetHeight) * 100;
@@ -1670,10 +998,6 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
 
   getThumbFrom() {
     return this.slider.getThumbFrom();
-  }
-
-  setValueToThumbLabelTo(value) {
-    this.slider.setValueToLabelThumbTo(value);
   }
 
   getThumbTo() {
@@ -2128,12 +1452,14 @@ class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__.Event
 
 }
 
+exports.View = View;
+
 /***/ }),
 
-/***/ "./index.scss":
-/*!********************!*\
-  !*** ./index.scss ***!
-  \********************/
+/***/ "./styles/fsdSlider.scss":
+/*!*******************************!*\
+  !*** ./styles/fsdSlider.scss ***!
+  \*******************************/
 /*! namespace exports */
 /*! exports [not provided] [no usage info] */
 /*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
@@ -2161,131 +1487,6 @@ mochaInstance.setup({"ui":"bdd"});
 __webpack_require__(/*! !!../node_modules/babel-loader/lib/index.js!../node_modules/ts-loader/index.js!./test/test.ts */ "../node_modules/babel-loader/lib/index.js!../node_modules/ts-loader/index.js!./test/test.ts");
 __webpack_require__(/*! !!../node_modules/mocha-loader/dist/start.js */ "../node_modules/mocha-loader/dist/start.js");
 if(false) {}
-
-/***/ }),
-
-/***/ "./fsdSlider.js":
-/*!**********************!*\
-  !*** ./fsdSlider.js ***!
-  \**********************/
-/*! namespace exports */
-/*! exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__, __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _view_View__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./view/View */ "./view/View.ts");
-/* harmony import */ var _model_Model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./model/Model */ "./model/Model.ts");
-/* harmony import */ var _presenter_presenter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./presenter/presenter */ "./presenter/presenter.ts");
-/* provided dependency */ var jQuery = __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js");
-;
-
-
-(function ($) {
- var FsdSlider = function (root, settings) {
-  let model = new _model_Model__WEBPACK_IMPORTED_MODULE_1__.Model(settings);
-  let view = new _view_View__WEBPACK_IMPORTED_MODULE_0__.View(settings, root);
-  this.presenter = new _presenter_presenter__WEBPACK_IMPORTED_MODULE_2__.Presenter(view, model);
-  model.addObserver(this.presenter);
-  view.addObserver(this.presenter);
-  this.presenter.initialize();
- };
- FsdSlider.prototype = {
-  update: function (newSettings) {
-   this.presenter.update(newSettings);
-  },
- };
- $.fn.fsdSlider = function (settings) {
-  return this.each(function () {
-   if (!$.data(this, "fsdSlider")) {
-    $.data(this, "fsdSlider", new FsdSlider(this, settings));
-   }
-  });
- };
-})(jQuery);
-
-/***/ }),
-
-/***/ "./index.js":
-/*!******************!*\
-  !*** ./index.js ***!
-  \******************/
-/*! namespace exports */
-/*! exports [not provided] [no usage info] */
-/*! runtime requirements: __webpack_require__, __webpack_require__.n, __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _index_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./index.scss */ "./index.scss");
-/* harmony import */ var _fsdSlider_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./fsdSlider.js */ "./fsdSlider.js");
-/* harmony import */ var _test_test__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./test/test */ "./test/test.ts");
-/* harmony import */ var _test_test__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_test_test__WEBPACK_IMPORTED_MODULE_2__);
-/* provided dependency */ var $ = __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js");
-;
-
-
-var $sl1 = $('.slider1');
-$sl1.fsdSlider({
- min: -15,
- max: -10,
- from: -14,
- step: 0,
- to: -11,
- isVertical: false,
- hideThumbLabel: false,
- isRange: true,
- onChange: callback,
- onStart: callback,
-});
-var sl1_instance = $sl1.data("fsdSlider");
-var $sl2 = $('.slider2');
-$sl2.fsdSlider({
- min: 5,
- max: 10,
- from: 7,
- step: 0.2,
- to: -11,
- isVertical: true,
- hideThumbLabel: false,
- isRange: false,
- onChange: callback,
- onStart: callback,
-});
-var $sl3 = $('.slider3');
-$sl3.fsdSlider({
- min: -15,
- max: 100,
- from: -14,
- step: 4,
- to: 11,
- isVertical: false,
- hideThumbLabel: false,
- isRange: true,
- onChange: callback,
- onStart: callback,
-});
-//sl1_instance.update({ min: 0, max: 22, from: -5, });
-// var $sl2 = $('.slider2');
-// $sl2.fsdSlider({
-//  min: 5,
-//  max: 50,
-//  from: 7,
-//  step: 0.5,
-//  to: -11,
-//  isVertical: false,
-//  isRange: false,
-//  hideThumbLabel: false,
-//  onChange: callback2,
-// });
-// var sl2_instance = $sl2.data('fsdSlider');
-// sl2_instance.update({ min: 0, max: 6, from: 3, step: 1, });
-function callback(result) {
- var s = JSON.parse(result);
- $('.result1').val(s.from + '  -  ' + s.to);
-}
-
 
 /***/ })
 
@@ -2378,11 +1579,11 @@ function callback(result) {
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// Promise = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"main": 0
+/******/ 			"test": 0
 /******/ 		};
 /******/ 		
 /******/ 		var deferredModules = [
-/******/ 			["./index.js","vendors-node_modules_chai_index_js-node_modules_jquery_dist_jquery_js-node_modules_mocha-load-6a21bb"]
+/******/ 			["./test/test.ts","vendors-node_modules_chai_index_js-node_modules_mocha-loader_dist_start_js-node_modules_style-393429"]
 /******/ 		];
 /******/ 		// no chunk on demand loading
 /******/ 		
@@ -2470,4 +1671,4 @@ function callback(result) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.8d1c6ad1172f55305343.js.map
+//# sourceMappingURL=test.d59951e4b3a97d49fb5b.js.map

@@ -9,12 +9,10 @@ export class Presenter implements IObserver {
   private view: View;
   private model: Model;
   private callback: Function;
-  private isUpdated: boolean;
 
   constructor(view: View, model: Model) {
     this.view = view;
     this.model = model;
-    this.isUpdated = false;
   }
 
   handleEvent(msg: Messages, s: string) {

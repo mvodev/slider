@@ -42,7 +42,7 @@ export class View extends EventObservable {
       this.getThumbTo().onmousedown = this.mouseToHandler.bind(this);
     }
   }
-  getRangeLabel() {
+  getRangeLabel():HTMLDivElement {
     return this.slider.getRangeLabel();
   }
   getSlider() {
@@ -80,9 +80,7 @@ export class View extends EventObservable {
   getThumbFrom() {
     return this.slider.getThumbFrom();
   }
-  setValueToThumbLabelTo(value: number) {
-    this.slider.setValueToLabelThumbTo(value);
-  }
+
   getThumbTo() {
     return this.slider.getThumbTo();
   }

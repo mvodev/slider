@@ -22,7 +22,7 @@ module.exports = {
   mode: 'development',
   entry: {
     main: './index.js',
-    //test: './test.js',
+    test: './test/test.ts',
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
@@ -42,6 +42,13 @@ module.exports = {
       {
         template: './index.pug',
         chunks: ['main'],
+      }
+    ),
+    new HTMLWebpackPlugin(
+      {
+        template: './test/test.html',
+        filename: 'test.html',
+        chunks: ['test'],
       }
     ),
     new CleanWebpackPlugin(),

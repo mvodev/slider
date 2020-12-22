@@ -28,7 +28,7 @@ export class RangeLabel {
  setMaxRange(value: number) {
   this.maxLabel.innerText = '' + value;
  }
- getMinRange(){
+ getMinRange() {
   return this.minLabel;
  }
  getMaxRange() {

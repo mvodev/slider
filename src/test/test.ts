@@ -3,9 +3,12 @@ import * as chai from 'chai';
 import { View } from '../view/view';
 import { Messages } from '../utils/Messages';
 import { Presenter } from '../presenter/presenter';
+import * as mocha from 'mocha';
+import '../styles/fsdSlider.scss';
 let assert = chai.assert;
+//let describe = mocha.describe;
+//mocha.run();
 document.body.innerHTML = '<div id="slider-test"></div><div id="slider-test2"></div>';
-const root2: HTMLDivElement = document.querySelector('#slider-test2');
 describe("Model", function () {
  const model = new Model({
   min: 15,
@@ -85,6 +88,7 @@ describe("View", function () {
 });
 
 describe("Presenter", function () {
+ const root2: HTMLDivElement = document.querySelector('#slider-test2');
  let settings = {
   min: 0,
   max: 25,

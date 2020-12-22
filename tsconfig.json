@@ -2,7 +2,7 @@
  "compilerOptions": {
   "sourceMap": true,
   "noImplicitReturns": true,
-  "module": "ESNext",
+  "module": "commonjs",
   "moduleResolution": "node",
   "target": "ESNext",
   "lib": [
@@ -16,9 +16,13 @@
   ]
  },
  "exclude": [
-  "node_modules"
+  "./node_modules",
+  "./test",
+  "./dist",
+  "./docs",
  ],
  "include": [
-  "src/**/*.ts", "src/index.js"
- ]
+  "src/**/*.ts",
+  "src/index.js"
+, "src/test/test.ts" ]
 }

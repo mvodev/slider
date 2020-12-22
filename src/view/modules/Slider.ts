@@ -41,7 +41,7 @@ export class Slider {
   this.range.getRange().appendChild(this.thumbFrom.getThumb());
   this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
   if (this.settings.isRange) {
-   this.thumbTo.getThumb().appendChild(this.thumbLabelTo?.getThumbLabelContainer());
+   this.thumbTo.getThumb().appendChild(this.thumbLabelTo.getThumbLabelContainer());
    this.range.getRange().appendChild(this.thumbTo.getThumb());
   }
   this.container.appendChild(this.rangeLabel.getRangeLabel());
@@ -71,10 +71,10 @@ export class Slider {
  setMinRange(value: number) {
   this.rangeLabel.setMinRange(value);
  }
- getMinRange(){
+ private getMinRange(){
   return this.rangeLabel.getMinRange();
  }
- getMaxRange() {
+ private getMaxRange() {
   return this.rangeLabel.getMaxRange();
  }
  setValueToLabelThumbFrom(value: number) {
