@@ -3,7 +3,6 @@ import { Thumb } from './thumb';
 import { ThumbLabel } from './thumbLabel';
 import { RangeLabel } from './rangeLabel';
 import { ColoredRange } from './coloredRange';
-import { Model } from '../../model/Model';
 import { ISettings } from '../../model/ISettings';
 export class Slider {
 
@@ -47,7 +46,7 @@ export class Slider {
   this.container.appendChild(this.rangeLabel.getRangeLabel());
   this.rootElem.appendChild(this.container);
  }
-  getRange() {
+ getRange() {
   return this.range.getRange();
  }
  getThumbFrom() {
