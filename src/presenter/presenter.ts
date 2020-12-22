@@ -49,13 +49,13 @@ export class Presenter implements IObserver {
   update(newSettings: ISettings) {
     this.model.updateSettings(newSettings);
   }
-  isVerticalSlider(): boolean | undefined {
+  private isVerticalSlider(): boolean | undefined {
     return this.model.isVertical();
   }
-  isRangeSlider(): boolean | undefined {
+  private isRangeSlider(): boolean | undefined {
     return this.model.isRange();
   }
-  withThumbLabel(): boolean | undefined {
+  private withThumbLabel(): boolean | undefined {
     return this.model.showThumbLabel();
   }
 }

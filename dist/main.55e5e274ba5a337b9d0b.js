@@ -254,7 +254,6 @@ class Presenter {
   constructor(view, model) {
     this.view = view;
     this.model = model;
-    this.isUpdated = false;
   }
 
   handleEvent(msg, s) {
@@ -339,6 +338,31 @@ exports.Presenter = Presenter;
 
 /***/ }),
 
+/***/ "./utils/Constants.ts":
+/*!****************************!*\
+  !*** ./utils/Constants.ts ***!
+  \****************************/
+/*! flagged exports */
+/*! export Constants [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_exports__ */
+/***/ ((__unused_webpack_module, exports) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.Constants = void 0;
+var Constants;
+
+(function (Constants) {
+  Constants.NUMBER_OF_MARKING = 10;
+})(Constants = exports.Constants || (exports.Constants = {}));
+
+/***/ }),
+
 /***/ "./utils/Utils.ts":
 /*!************************!*\
   !*** ./utils/Utils.ts ***!
@@ -391,15 +415,16 @@ exports.View = void 0;
 
 const Slider_1 = __webpack_require__(/*! ./modules/Slider */ "./view/modules/Slider.ts");
 
+const Constants_1 = __webpack_require__(/*! ../utils/Constants */ "./utils/Constants.ts");
+
 const EventObservable_1 = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
 
 class View extends EventObservable_1.EventObservable {
   constructor(settings, root) {
     super();
-    this.numberOfMarking = 10;
     this.settings = settings;
     this.rootElem = root;
-    this.slider = new Slider_1.Slider(this.rootElem, this.settings, this.numberOfMarking);
+    this.slider = new Slider_1.Slider(this.rootElem, this.settings, Constants_1.Constants.NUMBER_OF_MARKING);
 
     if (this.settings.isVertical) {
       this.thumbInPercentage = Math.abs(this.getThumbFrom().offsetHeight / this.slider.getRange().offsetHeight) * 100;
@@ -1563,4 +1588,4 @@ function callback(result) {
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=main.3ae25d101e5e6c7a8382.js.map
+//# sourceMappingURL=main.55e5e274ba5a337b9d0b.js.map
