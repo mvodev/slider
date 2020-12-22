@@ -1,19 +1,19 @@
 import { ISettings } from '../model/ISettings';
 import { Slider } from './modules/Slider';
 import { Messages } from '../utils/Messages';
+import { Constants } from '../utils/Constants';
 import { EventObservable } from '../observers/EventObservable';
 export class View extends EventObservable {
   private slider: Slider;
   private settings: ISettings;
   private rootElem: HTMLDivElement;
-  private numberOfMarking: number = 10;
   private thumbInPercentage: number;
   private resPercentage: number;
   constructor(settings: ISettings, root: HTMLDivElement,) {
     super();
     this.settings = settings;
     this.rootElem = root;
-    this.slider = new Slider(this.rootElem, this.settings, this.numberOfMarking);
+    this.slider = new Slider(this.rootElem, this.settings, Constants.NUMBER_OF_MARKING);
     if (this.settings.isVertical) {
       this.thumbInPercentage = Math.abs(this.getThumbFrom().offsetHeight / this.slider.getRange().offsetHeight) * 100;
     }
