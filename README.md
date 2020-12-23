@@ -1,6 +1,6 @@
 # FSD учебный проект слайдера
 ## Ссылка на слайдеры
-https://mvodev.github.io/FSDCourse4/. 
+https://mvodev.github.io/FSDCourse4/
 ## Пример инициализации:
 ```
 var $sl1 = $('.slider');

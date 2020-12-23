@@ -2,6 +2,7 @@ const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
 const webpack = require('webpack');
 
 const cssLoaders = extra => {
@@ -51,6 +52,14 @@ module.exports = {
         chunks: ['test'],
       }
     ),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src/assets/'),
+          to: path.resolve(__dirname, 'docs')
+        },
+      ],
+    }),
     new CleanWebpackPlugin(),
     new webpack.ProvidePlugin({
       $: 'jquery',
