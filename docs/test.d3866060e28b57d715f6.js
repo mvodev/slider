@@ -656,14 +656,6 @@ class Slider {
     this.rangeLabel.setMinRange(value);
   }
 
-  getMinRange() {
-    return this.rangeLabel.getMinRange();
-  }
-
-  getMaxRange() {
-    return this.rangeLabel.getMaxRange();
-  }
-
   setValueToLabelThumbFrom(value) {
     this.thumbLabelFrom.setValueToLabel(value);
   }
@@ -1697,4 +1689,4 @@ if(false) {}
 /******/ 	return __webpack_require__.x();
 /******/ })()
 ;
-//# sourceMappingURL=test.eda4d44f100d7fef6985.js.map
+//# sourceMappingURL=test.d3866060e28b57d715f6.js.map
