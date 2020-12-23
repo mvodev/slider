@@ -74,4 +74,4 @@ function callback(result) {
  Presenter - реализует интерфейс IObserver , связующее звено между View и Model, подписан на обновления Model и View, при получении изменений обновляет View и Model.
 
  ## UML диаграмма классов:
- 
+ https://mvodev.github.io/FSDCourse4/FSDCourse4UMLDiagram.png
