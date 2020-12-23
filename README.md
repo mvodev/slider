@@ -33,6 +33,7 @@ function callback(result) {
 }
 ```
 ## Настройки по умолчанию
+```
  {
   min: 0,
   max: 10,
@@ -44,9 +45,12 @@ function callback(result) {
   onChange: undefined,
   onUpdate:undefined,
  };
+ ```
  ## API:
+ ```
  var sl1_instance = $sl1.data("fsdSlider");
  sl1_instance.update(newSettings); - возможность передать новые настройки в слайдер
+ ```
 ## Описание проекта:
 ### Основные классы:
  EventObservable -реализует интерфейс IObservable,позволяет наблюдателю подписываться на изменения класса.
