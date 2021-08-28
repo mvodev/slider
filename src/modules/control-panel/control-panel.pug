@@ -1,0 +1,13 @@
+mixin control-panel(options)
+  .control-panel
+    form(class="control-panel__form js-control-panel__form form_"+options.id action="#")
+      label='MIN'
+        input(type="number" name="min" placeholder="min" class='control-panel__min-'+options.id)
+      label='MAX'
+        input(type="number" name="max" placeholder="max" class='control-panel__max-'+options.id)
+      label='FROM'
+        input(type="number" name="from" placeholder="from" class='control-panel__from-'+options.id)
+      label='TO'
+        input(type="number" name="to" placeholder="to" class='control-panel__to-'+options.id)
+      label='HIDE_THUMB_LABEL'
+        input(type="checkbox", name="hideThumbLabel" class='control-panel__hide-thumb-label-'+options.id)

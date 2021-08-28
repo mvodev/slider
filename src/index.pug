@@ -1,0 +1,26 @@
+include ./modules/control-panel/control-panel.pug
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Slider
+  body
+    .sliders
+      .sliders__elem
+        .slider1
+        .sliders__control-panel
+          +control-panel({id:'slider1'})
+          label(for="input-result1")="Данные первого слайдера"
+            input(type="text" class="input-result1" )
+      .sliders__elem
+        .slider2
+        .sliders__control-panel
+          +control-panel({id:'slider2'})
+          label(for="input-result2")="Данные второго слайдера"
+            input(type="text" class="input-result2" )
+      .sliders__elem
+        .slider3
+        .sliders__control-panel
+          +control-panel({id:'slider3'})
+          label(for="input-result3")="Данные третьего слайдера"
+            input(type="text" class="input-result3" )

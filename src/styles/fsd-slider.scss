@@ -1,0 +1,87 @@
+.fsd-slider{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+
+  &_is_vertical{
+    flex-direction: row;
+  }
+  
+  &__range{
+    background-color: green;
+    height: 20px;
+    width: inherit;
+    position: relative;
+    border-radius: 10px;
+  }
+
+  &__range_is_vertical{
+    height: inherit;
+    width: 20px;
+  }
+
+  &__colored-range{
+    background-color: purple;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    border-radius: 10px;
+  }
+
+  &__thumb-from,
+  &__thumb-to{
+    position: absolute;
+    background-color: indigo;
+    height: 30px;
+    width: 30px;
+    top:-5px;
+    left: -5px;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+
+  &__thumb-label{
+    position: absolute;
+    display: block;
+    color: white;
+    top:-30px;
+    left: 0px;
+    min-width: 20px;
+    min-height: 20px;
+    background-color: navy;
+    border-radius: 3px;
+
+    &_is_vertical{
+      top: 5px;
+      left: -30px;
+    }
+
+  }
+
+  &__thumb-value{
+    font-size: 16px;
+    font-family: inherit;
+    display: flex;
+    justify-content: center;
+  }
+
+  &__range-label{
+    height: 20px;
+    width: auto;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    cursor: pointer;
+    margin-top: 5px;
+
+    &_is_vertical{
+      flex-direction: column;
+      width: 20px;
+      height: auto;
+      margin-left: 5px;
+      margin-top: 0;
+    }
+  }
+
+}

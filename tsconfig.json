@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true, 
+    "noFallthroughCasesInSwitch": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "strictBindCallApply": true,
+    "strictFunctionTypes": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "ES6",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+  },
+  "exclude": [
+    "node_modules",
+    "docs",
+    "./src/test",
+  ],
+}
