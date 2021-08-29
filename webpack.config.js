@@ -107,7 +107,7 @@ module.exports = [{
     },
     output: {
       filename: '[name].js',
-      path: path.resolve(__dirname, 'slider'),
+      path: path.resolve(__dirname, './slider'),
       library: 'fsd-slider',
       libraryTarget: 'umd',
       umdNamedDefine: true
@@ -139,7 +139,7 @@ module.exports = [{
         jQuery: 'jquery'
       }),
       new MiniCssExtractPlugin({
-        filename: '[name].[contenthash].css'
+        filename: '[name].css'
       }),
     ],
     module: {

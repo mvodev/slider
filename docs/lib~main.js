@@ -67,11 +67,7 @@ __webpack_require__.r(__webpack_exports__);
     },
   };
   $.fn.fsdSlider = function (settings,callback) {
-    return this.each(function () {
-      if (!$.data(this, "fsdSlider")) {
-        $.data(this, "fsdSlider", new FsdSlider(this, settings,callback));
-      }
-    });
+    return new FsdSlider(this.get(0),settings,callback);
   };
 })(jQuery);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js")))
@@ -100,7 +96,8 @@ const defaultSettings = {
   to: 8,
   isRange: false,
   isVertical: false,
-  hideThumbLabel: false
+  hideThumbLabel: false,
+  labels: []
 };
 exports.defaultSettings = defaultSettings;
 
@@ -129,11 +126,14 @@ const DefaultSettings_1 = __webpack_require__(/*! ./DefaultSettings */ "./model/
 
 const ErrorMessage_1 = __webpack_require__(/*! ../error-message/ErrorMessage */ "./error-message/ErrorMessage.ts");
 
+const Constants_1 = __webpack_require__(/*! ../utils/Constants */ "./utils/Constants.ts");
+
 class Model extends EventObservable_1.EventObservable {
   constructor(settings) {
     super();
     this.settings = Object.assign({}, DefaultSettings_1.defaultSettings);
     this.validateSettings(settings);
+    this.settings.labels = this.calculateArrayLabels();
   }
 
   getSettings() {
@@ -191,6 +191,7 @@ class Model extends EventObservable_1.EventObservable {
     this.validateStepOrError(newStep);
     this.validateIsVerticalOrError(newIsVertical);
     this.validateThumbLabelOrError(newHideThumbLabel);
+    this.settings.labels = this.calculateArrayLabels();
   }
 
   validateMinOrError(newMin) {
@@ -294,9 +295,57 @@ class Model extends EventObservable_1.EventObservable {
     return res;
   }
 
+  calculateArrayLabels() {
+    const result = [];
+    let del = 1;
+
+    if (this.getStep() != 0) {
+      del = 1.0 / this.getStep();
+    }
+
+    const step = Math.round(+(Math.abs(this.getMax() - this.getMin()) / Constants_1.Constants.NUMBER_OF_MARKINGS).toFixed(Utils_1.Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
+    let initial = this.getMin();
+
+    for (let i = 0; i < Constants_1.Constants.NUMBER_OF_MARKINGS - 1; i++) {
+      initial += step;
+      result.push(initial);
+    }
+
+    return result;
+  }
+
 }
 
 exports.Model = Model;
+
+/***/ }),
+
+/***/ "./model/defaultSettings.ts":
+/*!**********************************!*\
+  !*** ./model/defaultSettings.ts ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.defaultSettings = void 0;
+const defaultSettings = {
+  min: 0,
+  max: 10,
+  from: 5,
+  step: 1,
+  to: 8,
+  isRange: false,
+  isVertical: false,
+  hideThumbLabel: false,
+  labels: []
+};
+exports.defaultSettings = defaultSettings;
 
 /***/ }),
 
@@ -470,7 +519,7 @@ exports.Constants = void 0; // eslint-disable-next-line @typescript-eslint/no-na
 var Constants;
 
 (function (Constants) {
-  Constants.NUMBER_OF_MARKINGS = 10;
+  Constants.NUMBER_OF_MARKINGS = 8;
 })(Constants = exports.Constants || (exports.Constants = {}));
 
 /***/ }),
@@ -538,12 +587,12 @@ const Constants_1 = __webpack_require__(/*! ../utils/Constants */ "./utils/Const
 
 const EventObservable_1 = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
 
-const DefaultSettings_1 = __webpack_require__(/*! ../model/DefaultSettings */ "./model/DefaultSettings.ts");
+const defaultSettings_1 = __webpack_require__(/*! ../model/defaultSettings */ "./model/defaultSettings.ts");
 
 class View extends EventObservable_1.EventObservable {
   constructor(root) {
     super();
-    this.viewSettings = Object.assign({}, DefaultSettings_1.defaultSettings);
+    this.viewSettings = Object.assign({}, defaultSettings_1.defaultSettings);
     this.rootElem = root;
     this.slider = new Slider_1.Slider(this.rootElem, Constants_1.Constants.NUMBER_OF_MARKINGS);
   }
@@ -603,6 +652,7 @@ class View extends EventObservable_1.EventObservable {
 
         this.slider.setMinRange(settings.min);
         this.slider.setMaxRange(settings.max);
+        this.slider.setNumberLabels(settings.labels);
         this.slider.setValueToLabelThumbFrom(settings.from);
 
         if (settings.isRange) {
@@ -792,23 +842,16 @@ class RangeLabel {
     this.initComponents();
   }
 
-  render(settings, numberOfMarking) {
-    this.viewSettings = JSON.parse(settings);
-    this.minLabel = document.createElement('span');
-    this.minLabel.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
+  render(numberOfMarking) {
     this.rangeLabelContainer.appendChild(this.minLabel);
-    let step = this.viewSettings.min;
 
     for (let i = 0; i < numberOfMarking - 1; i++) {
       const marking = document.createElement('span');
       marking.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
-      step += Math.abs(this.viewSettings.max - this.viewSettings.min) / numberOfMarking;
-      marking.innerText = '' + step;
       this.rangeLabelContainer.appendChild(marking);
+      this.rangeLabels.push(marking);
     }
 
-    this.maxLabel = document.createElement('span');
-    this.maxLabel.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
     this.rangeLabelContainer.appendChild(this.maxLabel);
   }
 
@@ -824,9 +867,24 @@ class RangeLabel {
     this.maxLabel.innerText = '' + value;
   }
 
+  getRangeLabels() {
+    return this.rangeLabels;
+  }
+
+  setRangeLabels(value) {
+    this.rangeLabels.forEach(function (elem, index) {
+      elem.innerText = value[index] + '';
+    });
+  }
+
   initComponents() {
     this.rangeLabelContainer = document.createElement('div');
     this.rangeLabelContainer.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL);
+    this.rangeLabels = [];
+    this.minLabel = document.createElement('span');
+    this.minLabel.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
+    this.maxLabel = document.createElement('span');
+    this.maxLabel.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
   }
 
 }
@@ -852,7 +910,7 @@ exports.Slider = void 0;
 
 const Range_1 = __webpack_require__(/*! ./Range */ "./view/modules/Range.ts");
 
-const thumb_1 = __webpack_require__(/*! ./thumb */ "./view/modules/thumb.ts");
+const Thumb_1 = __webpack_require__(/*! ./Thumb */ "./view/modules/Thumb.ts");
 
 const ThumbLabel_1 = __webpack_require__(/*! ./ThumbLabel */ "./view/modules/ThumbLabel.ts");
 
@@ -882,7 +940,7 @@ class Slider extends EventObservable_1.EventObservable {
     this.container.appendChild(this.range.getRange());
     this.range.getRange().appendChild(this.coloredRange.getColoredRange());
     this.range.getRange().appendChild(this.thumbFrom.getThumb());
-    this.rangeLabel.render(settings, this.numberOfMarking);
+    this.rangeLabel.render(this.numberOfMarking);
     this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
 
     if (this.viewSettings.isRange) {
@@ -896,9 +954,9 @@ class Slider extends EventObservable_1.EventObservable {
   }
 
   initSliderComponents() {
-    this.thumbTo = new thumb_1.Thumb(ClassNaming_1.ClassNaming.THUMB_TO);
+    this.thumbTo = new Thumb_1.Thumb(ClassNaming_1.ClassNaming.THUMB_TO);
     this.thumbLabelTo = new ThumbLabel_1.ThumbLabel();
-    this.thumbFrom = new thumb_1.Thumb(ClassNaming_1.ClassNaming.THUMB_FROM);
+    this.thumbFrom = new Thumb_1.Thumb(ClassNaming_1.ClassNaming.THUMB_FROM);
     this.thumbLabelFrom = new ThumbLabel_1.ThumbLabel();
     this.range = new Range_1.Range();
     this.coloredRange = new ColoredRange_1.ColoredRange();
@@ -933,6 +991,10 @@ class Slider extends EventObservable_1.EventObservable {
 
   getThumbWidthInPx() {
     return this.getThumbFrom().offsetWidth;
+  }
+
+  setNumberLabels(value) {
+    this.rangeLabel.setRangeLabels(value);
   }
 
   handleThumb(thumbType, e) {
@@ -1192,6 +1254,48 @@ exports.Slider = Slider;
 
 /***/ }),
 
+/***/ "./view/modules/Thumb.ts":
+/*!*******************************!*\
+  !*** ./view/modules/Thumb.ts ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Thumb = void 0;
+
+const EventObservable_1 = __webpack_require__(/*! ../../observers/EventObservable */ "./observers/EventObservable.ts");
+
+class Thumb extends EventObservable_1.EventObservable {
+  constructor(className) {
+    super();
+    this.thumb = document.createElement('div');
+    this.thumb.classList.add(className);
+  }
+
+  getThumb() {
+    return this.thumb;
+  }
+
+  setThumbPosition(shift, isVertical) {
+    if (isVertical) {
+      this.getThumb().style.top = shift + '%';
+    } else {
+      this.getThumb().style.left = shift + '%';
+    }
+  }
+
+}
+
+exports.Thumb = Thumb;
+
+/***/ }),
+
 /***/ "./view/modules/ThumbLabel.ts":
 /*!************************************!*\
   !*** ./view/modules/ThumbLabel.ts ***!
@@ -1239,48 +1343,6 @@ class ThumbLabel {
 }
 
 exports.ThumbLabel = ThumbLabel;
-
-/***/ }),
-
-/***/ "./view/modules/thumb.ts":
-/*!*******************************!*\
-  !*** ./view/modules/thumb.ts ***!
-  \*******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Thumb = void 0;
-
-const EventObservable_1 = __webpack_require__(/*! ../../observers/EventObservable */ "./observers/EventObservable.ts");
-
-class Thumb extends EventObservable_1.EventObservable {
-  constructor(className) {
-    super();
-    this.thumb = document.createElement('div');
-    this.thumb.classList.add(className);
-  }
-
-  getThumb() {
-    return this.thumb;
-  }
-
-  setThumbPosition(shift, isVertical) {
-    if (isVertical) {
-      this.getThumb().style.top = shift + '%';
-    } else {
-      this.getThumb().style.left = shift + '%';
-    }
-  }
-
-}
-
-exports.Thumb = Thumb;
 
 /***/ })
 

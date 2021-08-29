@@ -7,5 +7,6 @@ interface ISettings {
   isVertical?: boolean;
   isRange?: boolean;
   hideThumbLabel?: boolean;
+  labels:number[];
 }
 export {ISettings}

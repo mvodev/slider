@@ -1,6 +1,6 @@
 import { Range } from './Range';
 import { Messages } from '../../utils/Messages';
-import { Thumb } from './thumb';
+import { Thumb } from './Thumb';
 import { ThumbLabel } from './ThumbLabel';
 import { RangeLabel } from './RangeLabel';
 import { ColoredRange } from './ColoredRange';
@@ -30,13 +30,14 @@ constructor(rootElem: HTMLDivElement, numberOfMarking: number) {
   this.resPercentage = 0;
   this.initSliderComponents();
 }
+
 render(settings:string) :void{
   this.viewSettings = Object.assign(this.viewSettings,JSON.parse(settings));
   this.container.classList.add(ClassNaming.ROOT);
   this.container.appendChild(this.range.getRange());
   this.range.getRange().appendChild(this.coloredRange.getColoredRange());
   this.range.getRange().appendChild(this.thumbFrom.getThumb());
-  this.rangeLabel.render(settings,this.numberOfMarking);
+  this.rangeLabel.render(this.numberOfMarking);
   this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
   if (this.viewSettings.isRange) {
     this.thumbTo.getThumb().appendChild(this.thumbLabelTo.getThumbLabelContainer());
@@ -45,7 +46,8 @@ render(settings:string) :void{
   this.container.appendChild(this.rangeLabel.getRangeLabel());
   this.rootElem.appendChild(this.container);
   this.bindEvents();
-  }
+}
+
 private initSliderComponents() {
   this.thumbTo = new Thumb(ClassNaming.THUMB_TO);
   this.thumbLabelTo = new ThumbLabel();
@@ -81,9 +83,15 @@ setColoredRange(): void {
       this.getThumbTo(),
       this.getThumbWidthInPercentage());
 }
+
 private  getThumbWidthInPx() :number{
   return this.getThumbFrom().offsetWidth;
 }
+
+setNumberLabels(value:number[]):void{
+  this.rangeLabel.setRangeLabels(value);
+}
+
 private handleThumb(thumbType: string, e: MouseEvent): void {
     e.preventDefault();
     let targetElem: HTMLDivElement = this.getThumbFrom();

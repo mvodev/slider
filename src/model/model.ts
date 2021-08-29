@@ -5,6 +5,7 @@ import { EventObservable } from '../observers/EventObservable';
 import { Utils } from '../utils/Utils';
 import {defaultSettings} from './DefaultSettings';
 import { ErrorMessage } from '../error-message/ErrorMessage';
+import { Constants } from '../utils/Constants';
 
 class Model extends EventObservable implements IModelFacade {
   private settings: ISettings
@@ -13,6 +14,7 @@ class Model extends EventObservable implements IModelFacade {
     super();
     this.settings = Object.assign({},defaultSettings);
     this.validateSettings(settings);
+    this.settings.labels=this.calculateArrayLabels();
   }
   getSettings(): string {
     return JSON.stringify(this.settings);
@@ -60,6 +62,7 @@ class Model extends EventObservable implements IModelFacade {
     this.validateStepOrError(newStep);
     this.validateIsVerticalOrError(newIsVertical);
     this.validateThumbLabelOrError(newHideThumbLabel);
+    this.settings.labels = this.calculateArrayLabels();
   }
   private validateMinOrError(newMin:number|undefined):void{
     if (newMin) {
@@ -160,6 +163,22 @@ class Model extends EventObservable implements IModelFacade {
     if (res < this.getMin()) return this.getMin();
     if (res > this.getMax()) return this.getMax();
     return res;
+  }
+
+  calculateArrayLabels():number[]{
+    const result:number[] = [];
+    let del = 1;
+    if (this.getStep() != 0) {
+      del = 1.0 / this.getStep();
+    }
+    const step = Math.round(  +(Math.abs(this.getMax()-this.getMin())/Constants.NUMBER_OF_MARKINGS).
+      toFixed(Utils.numDigitsAfterDecimal(this.getStep()))*del)/del;
+    let initial = this.getMin();
+    for(let i=0;i<Constants.NUMBER_OF_MARKINGS-1;i++){
+      initial+=step;
+      result.push(initial);
+    }
+    return result;
   }
 }
 export { Model }

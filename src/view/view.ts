@@ -3,9 +3,10 @@ import { Slider } from './modules/Slider';
 import { Messages } from '../utils/Messages';
 import { Constants } from '../utils/Constants';
 import { EventObservable } from '../observers/EventObservable';
-import { defaultSettings } from '../model/DefaultSettings';
+import { defaultSettings } from '../model/defaultSettings';
 import { IViewSettings } from '../model/IViewSettings';
 import { IObserver } from '../observers/IObserver';
+
 class View extends EventObservable implements IObserver{
   private slider: Slider;
   private viewSettings: IViewSettings;
@@ -17,9 +18,11 @@ class View extends EventObservable implements IObserver{
     this.rootElem = root;
     this.slider = new Slider(this.rootElem, Constants.NUMBER_OF_MARKINGS);
   }
+
   handleEvent(msg: Messages, settings: string): void {
     this.notifyObservers(msg,settings,this.getThumbWidthInPercentage());
   }
+
   private render(s:IViewSettings):void {
     this.slider.addObserver(this);
     this.slider.render(JSON.stringify(s));
@@ -33,6 +36,7 @@ class View extends EventObservable implements IObserver{
       this.slider.setVertical();
     }
   }
+
   refreshView(msg: Messages, settings: ISettings):void {
     if (msg === Messages.INIT) {
       this.updateViewSettings(settings);
@@ -58,6 +62,7 @@ class View extends EventObservable implements IObserver{
       }
       this.slider.setMinRange(settings.min);
       this.slider.setMaxRange(settings.max);
+      this.slider.setNumberLabels(settings.labels);
       this.slider.setValueToLabelThumbFrom(settings.from);
       if (settings.isRange) {
         this.slider.setValueToLabelThumbTo(settings.to !== undefined ? settings.to : settings.from);
@@ -89,12 +94,15 @@ class View extends EventObservable implements IObserver{
       this.slider.setValueToLabelThumbTo(settings.to !== undefined ? settings.to : settings.from);
     }
   }
+
   private setColoredRange(){
     this.slider.setColoredRange();
   }
+
   private convertFromValueToPercent(s:ISettings,value: number): string {
     return (((100-this.getThumbWidthInPercentage()) / Math.abs(s.max - s.min)) * (Math.abs(value - s.min)))+'%';
   }
+
   private setThumbToValue(s:ISettings,type: string) :void{
     if (type === 'thumbFrom') {
       if (this.viewSettings.isVertical) {
@@ -115,6 +123,7 @@ class View extends EventObservable implements IObserver{
       }
     }
   }
+
   getSlider(): Slider {
     return this.slider;
   }
@@ -122,15 +131,19 @@ class View extends EventObservable implements IObserver{
   private getThumbWidthInPercentage() {
     return this.slider.getThumbWidthInPercentage();
   }
+
   private getThumbFrom() {
     return this.slider.getThumbFrom();
   }
+
   private getThumbTo() {
     return this.slider.getThumbTo();
   }
+
   private updateViewSettings(s: ISettings) {
     this.viewSettings = Object.assign(this.viewSettings, s);
   }
+
 }
 
 export {View}

@@ -8,6 +8,7 @@ const defaultSettings: ISettings = {
   isRange: false,
   isVertical: false,
   hideThumbLabel: false,
+  labels:[],
 };
 
 export {defaultSettings};
