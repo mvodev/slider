@@ -17,6 +17,10 @@ import { Presenter } from './presenter/Presenter';
     },
   };
   $.fn.fsdSlider = function (settings,callback) {
-    return new FsdSlider(this.get(0),settings,callback);
+    return this.each(function () {
+      if (!$.data(this, "fsd-slider")) {
+        $.data(this, "fsd-slider", new FsdSlider(this, settings, callback));
+      }
+    });
   };
 })(jQuery);

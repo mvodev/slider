@@ -44,7 +44,7 @@ class View extends EventObservable implements IObserver{
       this.setColoredRange();
     }
     if (msg === Messages.INIT || msg === Messages.UPDATE) {
-      
+      console.log('class View refreshView inside');
       this.updateViewSettings(settings);
       if (!settings.hideThumbLabel) {
         this.slider.getThumbLabelFrom().showLabel();

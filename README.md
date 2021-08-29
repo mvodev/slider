@@ -78,7 +78,7 @@ var $sl1_input = $('.input-result1');
  ```
  ## API:
  ```
- var sl1_instance = $sl1.data("fsdSlider");
+ var sl1_instance = $sl1.data("fsd-slider");
  sl1_instance.update(newSettings); - возможность передать новые настройки в слайдер
  ```
 ## Описание проекта:

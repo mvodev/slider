@@ -67,7 +67,11 @@ __webpack_require__.r(__webpack_exports__);
     },
   };
   $.fn.fsdSlider = function (settings,callback) {
-    return new FsdSlider(this.get(0),settings,callback);
+    return this.each(function () {
+      if (!$.data(this, "fsd-slider")) {
+        $.data(this, "fsd-slider", new FsdSlider(this, settings, callback));
+      }
+    });
   };
 })(jQuery);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "../node_modules/jquery/dist/jquery.js")))
@@ -632,6 +636,7 @@ class View extends EventObservable_1.EventObservable {
     || msg === 1
     /* UPDATE */
     ) {
+        console.log('class View refreshView inside');
         this.updateViewSettings(settings);
 
         if (!settings.hideThumbLabel) {
