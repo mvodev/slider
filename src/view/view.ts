@@ -1,7 +1,6 @@
 import { ISettings } from '../model/ISettings';
 import { Slider } from './modules/Slider';
 import { Messages } from '../utils/Messages';
-import { Constants } from '../utils/Constants';
 import { EventObservable } from '../observers/EventObservable';
 import { defaultSettings } from '../model/defaultSettings';
 import { IViewSettings } from '../model/IViewSettings';
@@ -16,7 +15,7 @@ class View extends EventObservable implements IObserver{
     super();
     this.viewSettings = Object.assign({},defaultSettings);
     this.rootElem = root;
-    this.slider = new Slider(this.rootElem, Constants.NUMBER_OF_MARKINGS);
+    this.slider = new Slider(this.rootElem);
   }
 
   handleEvent(msg: Messages, settings: string): void {
@@ -44,7 +43,6 @@ class View extends EventObservable implements IObserver{
       this.setColoredRange();
     }
     if (msg === Messages.INIT || msg === Messages.UPDATE) {
-      console.log('class View refreshView inside');
       this.updateViewSettings(settings);
       if (!settings.hideThumbLabel) {
         this.slider.getThumbLabelFrom().showLabel();

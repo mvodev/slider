@@ -13,5 +13,6 @@ const ClassNaming = {
   COLORED_RANGE_IS_VERTICAL:'fsd-slider__colored-range_is_vertical',
   RANGE_LABEL_IS_VERTICAL:'fsd-slider__range-label_is_vertical',
   THUMB_LABEL_IS_VERTICAL:'fsd-slider__thumb-label_is_vertical',
+  HIDE_ELEMENT:'fsd-slider_element_is_hidden',
 }
 export { ClassNaming }

@@ -72,6 +72,9 @@
   margin-left: 5px;
   margin-top: 0;
 }
+.fsd-slider_element_is_hidden {
+  display: none;
+}
 
 .control-panel__form {
   display: flex;
@@ -126,4 +129,4 @@ body {
   width: 350px;
 }
 
-/*# sourceMappingURL=main.435d70cb61c6f602c219.css.map*/
+/*# sourceMappingURL=main.c3479c9a4c94d79af93b.css.map*/

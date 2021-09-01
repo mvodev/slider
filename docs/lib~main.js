@@ -499,7 +499,8 @@ const ClassNaming = {
   RANGE_IS_VERTICAL: 'fsd-slider__range_is_vertical',
   COLORED_RANGE_IS_VERTICAL: 'fsd-slider__colored-range_is_vertical',
   RANGE_LABEL_IS_VERTICAL: 'fsd-slider__range-label_is_vertical',
-  THUMB_LABEL_IS_VERTICAL: 'fsd-slider__thumb-label_is_vertical'
+  THUMB_LABEL_IS_VERTICAL: 'fsd-slider__thumb-label_is_vertical',
+  HIDE_ELEMENT: 'fsd-slider_element_is_hidden'
 };
 exports.ClassNaming = ClassNaming;
 
@@ -587,8 +588,6 @@ exports.View = void 0;
 
 const Slider_1 = __webpack_require__(/*! ./modules/Slider */ "./view/modules/Slider.ts");
 
-const Constants_1 = __webpack_require__(/*! ../utils/Constants */ "./utils/Constants.ts");
-
 const EventObservable_1 = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
 
 const defaultSettings_1 = __webpack_require__(/*! ../model/defaultSettings */ "./model/defaultSettings.ts");
@@ -598,7 +597,7 @@ class View extends EventObservable_1.EventObservable {
     super();
     this.viewSettings = Object.assign({}, defaultSettings_1.defaultSettings);
     this.rootElem = root;
-    this.slider = new Slider_1.Slider(this.rootElem, Constants_1.Constants.NUMBER_OF_MARKINGS);
+    this.slider = new Slider_1.Slider(this.rootElem);
   }
 
   handleEvent(msg, settings) {
@@ -845,12 +844,13 @@ const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./util
 class RangeLabel {
   constructor() {
     this.initComponents();
+    this.render();
   }
 
-  render(numberOfMarking) {
+  render() {
     this.rangeLabelContainer.appendChild(this.minLabel);
 
-    for (let i = 0; i < numberOfMarking - 1; i++) {
+    for (let i = 0; i < this.rangeLabels.length; i++) {
       const marking = document.createElement('span');
       marking.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
       this.rangeLabelContainer.appendChild(marking);
@@ -892,6 +892,14 @@ class RangeLabel {
     this.maxLabel.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
   }
 
+  hideRangeLabels() {
+    this.rangeLabelContainer.classList.add(ClassNaming_1.ClassNaming.HIDE_ELEMENT);
+  }
+
+  showRangeLabels() {
+    this.rangeLabelContainer.classList.remove(ClassNaming_1.ClassNaming.HIDE_ELEMENT);
+  }
+
 }
 
 exports.RangeLabel = RangeLabel;
@@ -930,11 +938,10 @@ const EventObservable_1 = __webpack_require__(/*! ../../observers/EventObservabl
 const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
 
 class Slider extends EventObservable_1.EventObservable {
-  constructor(rootElem, numberOfMarking) {
+  constructor(rootElem) {
     super();
     this.viewSettings = Object.assign({}, DefaultSettings_1.defaultSettings);
     this.rootElem = rootElem;
-    this.numberOfMarking = numberOfMarking;
     this.resPercentage = 0;
     this.initSliderComponents();
   }
@@ -945,7 +952,6 @@ class Slider extends EventObservable_1.EventObservable {
     this.container.appendChild(this.range.getRange());
     this.range.getRange().appendChild(this.coloredRange.getColoredRange());
     this.range.getRange().appendChild(this.thumbFrom.getThumb());
-    this.rangeLabel.render(this.numberOfMarking);
     this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
 
     if (this.viewSettings.isRange) {

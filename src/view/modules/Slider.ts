@@ -20,13 +20,11 @@ private rootElem!: HTMLDivElement;
 private container!: HTMLDivElement;
 private coloredRange!: ColoredRange;
 private viewSettings: IViewSettings;
-private numberOfMarking: number;
 private resPercentage: number;
-constructor(rootElem: HTMLDivElement, numberOfMarking: number) {
+constructor(rootElem: HTMLDivElement) {
   super();
   this.viewSettings = Object.assign({},defaultSettings);
   this.rootElem = rootElem;
-  this.numberOfMarking = numberOfMarking;
   this.resPercentage = 0;
   this.initSliderComponents();
 }
@@ -37,7 +35,6 @@ render(settings:string) :void{
   this.container.appendChild(this.range.getRange());
   this.range.getRange().appendChild(this.coloredRange.getColoredRange());
   this.range.getRange().appendChild(this.thumbFrom.getThumb());
-  this.rangeLabel.render(this.numberOfMarking);
   this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
   if (this.viewSettings.isRange) {
     this.thumbTo.getThumb().appendChild(this.thumbLabelTo.getThumbLabelContainer());

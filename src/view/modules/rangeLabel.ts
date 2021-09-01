@@ -8,10 +8,11 @@ class RangeLabel{
 
   constructor() {
     this.initComponents();
+    this.render();
   }
-  render(numberOfMarking:number):void{
+  private render():void{
     this.rangeLabelContainer.appendChild(this.minLabel);
-    for (let i = 0; i < numberOfMarking-1; i++) {
+    for (let i = 0; i < this.rangeLabels.length; i++) {
       const marking = document.createElement('span');
       marking.classList.add(ClassNaming.RANGE_LABEL_SCALE);
       this.rangeLabelContainer.appendChild(marking);
@@ -49,6 +50,14 @@ class RangeLabel{
     this.minLabel.classList.add(ClassNaming.RANGE_LABEL_SCALE);
     this.maxLabel = document.createElement('span');
     this.maxLabel.classList.add(ClassNaming.RANGE_LABEL_SCALE);
+  }
+
+  hideRangeLabels():void{
+    this.rangeLabelContainer.classList.add(ClassNaming.HIDE_ELEMENT);
+  }
+
+  showRangeLabels():void{
+    this.rangeLabelContainer.classList.remove(ClassNaming.HIDE_ELEMENT);
   }
   
 }
