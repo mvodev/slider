@@ -21,6 +21,7 @@ private container!: HTMLDivElement;
 private coloredRange!: ColoredRange;
 private viewSettings: IViewSettings;
 private resPercentage: number;
+
 constructor(rootElem: HTMLDivElement) {
   super();
   this.viewSettings = Object.assign({},defaultSettings);
@@ -71,6 +72,17 @@ setVertical():void {
   this.thumbLabelFrom.getThumbLabelContainer().classList.add(ClassNaming.THUMB_LABEL_IS_VERTICAL);
   if (this.viewSettings.isRange) {
     this.thumbLabelTo.getThumbLabelContainer().classList.add(ClassNaming.THUMB_LABEL_IS_VERTICAL);
+  }
+}
+
+setHorizontal():void{
+  this.container.classList.remove(ClassNaming.SLIDER_IS_VERTICAL);
+  this.range.getRange().classList.remove(ClassNaming.RANGE_IS_VERTICAL);
+  this.coloredRange.getColoredRange().classList.remove(ClassNaming.COLORED_RANGE_IS_VERTICAL);
+  this.rangeLabel.getRangeLabel().classList.remove(ClassNaming.RANGE_LABEL_IS_VERTICAL);
+  this.thumbLabelFrom.getThumbLabelContainer().classList.remove(ClassNaming.THUMB_LABEL_IS_VERTICAL);
+  if (this.viewSettings.isRange) {
+    this.thumbLabelTo.getThumbLabelContainer().classList.remove(ClassNaming.THUMB_LABEL_IS_VERTICAL);
   }
 }
 
@@ -162,7 +174,8 @@ private handleThumb(thumbType: string, e: MouseEvent): void {
         }
         let rightEdge = that.getSliderLengthInPx() - that.getThumbWidthInPx();
         if (that.viewSettings.isRange) {
-          const toPos = that.getThumbTo().getBoundingClientRect().left - that.getRange().getBoundingClientRect().left;
+          const toPos = that.getThumbTo().getBoundingClientRect().left
+                        - that.getRange().getBoundingClientRect().left;
           if (thumbType === "thumbFrom") {
             rightEdge = toPos;
           }
@@ -180,6 +193,7 @@ private handleThumb(thumbType: string, e: MouseEvent): void {
   }
   this.setColoredRange();
 }
+
 private handleRange(e: MouseEvent) {
   let shift: number, fromPos: number;
   if (this.viewSettings.isVertical) {
@@ -243,9 +257,11 @@ private handleRange(e: MouseEvent) {
   }
   this.setColoredRange();
 }
+
 private convertFromPxToPercent(valueInPX: number) {
   return (valueInPX / this.getSliderLengthInPx()) * 100;
 }
+
 getThumbWidthInPercentage() :number{
   if (this.viewSettings.isVertical) {
     return ((this.getThumbFrom().offsetHeight / this.getSliderLengthInPx()) * 100);
@@ -254,6 +270,7 @@ getThumbWidthInPercentage() :number{
     return ((this.getThumbFrom().offsetWidth / this.getSliderLengthInPx()) * 100);
   }
 }
+
 private getSliderLengthInPx() {
   if (this.viewSettings.isVertical) {
     return this.getRange().offsetHeight;
@@ -262,6 +279,7 @@ private getSliderLengthInPx() {
     return this.getRange().offsetWidth;
   }
 }
+
 private dispatchEvent(shift: number, type: string) {
   this.resPercentage = this.convertFromPxToPercent(shift);
   if (type === "thumbFrom") {
@@ -274,35 +292,45 @@ private dispatchEvent(shift: number, type: string) {
   }
   this.setColoredRange();
 }
+
 getRange(): HTMLDivElement {
   return this.range.getRange();
 }
+
 getThumbFrom(): HTMLDivElement {
   return this.thumbFrom.getThumb();
 }
+
 getThumbTo(): HTMLDivElement {
   return this.thumbTo.getThumb();
 }
+
 getThumbLabelFrom(): ThumbLabel {
   return this.thumbLabelFrom;
 }
 getThumbLabelTo(): ThumbLabel {
   return this.thumbLabelTo;
 }
+
 setMaxRange(value: number): void {
   this.rangeLabel.setMaxRange(value);
 }
+
 setMinRange(value: number): void {
   this.rangeLabel.setMinRange(value);
 }
+
 setValueToLabelThumbFrom(value: number): void {
   this.thumbLabelFrom.setValueToLabel(value);
 }
+
 setValueToLabelThumbTo(value: number): void {
   this.thumbLabelTo.setValueToLabel(value);
 }
+
 getRangeLabel(): HTMLDivElement {
   return this.rangeLabel.getRangeLabel();
 }
+
 }
 export {Slider}

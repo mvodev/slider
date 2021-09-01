@@ -34,6 +34,9 @@ class View extends EventObservable implements IObserver{
     if (this.viewSettings.isVertical) {
       this.slider.setVertical();
     }
+    else{
+      this.slider.setHorizontal();
+    }
   }
 
   refreshView(msg: Messages, settings: ISettings):void {
@@ -44,6 +47,7 @@ class View extends EventObservable implements IObserver{
     }
     if (msg === Messages.INIT || msg === Messages.UPDATE) {
       this.updateViewSettings(settings);
+      this.render(this.viewSettings);
       if (!settings.hideThumbLabel) {
         this.slider.getThumbLabelFrom().showLabel();
         this.setThumbToValue(settings,'thumbFrom');
@@ -54,8 +58,10 @@ class View extends EventObservable implements IObserver{
       }
       else {
         this.slider.getThumbLabelFrom().hideLabel();
+        this.setThumbToValue(settings, 'thumbFrom');
         if (settings.isRange) {
           this.slider.getThumbLabelTo().hideLabel();
+          this.setThumbToValue(settings, 'thumbTo');
         }
       }
       this.slider.setMinRange(settings.min);
@@ -103,21 +109,26 @@ class View extends EventObservable implements IObserver{
 
   private setThumbToValue(s:ISettings,type: string) :void{
     if (type === 'thumbFrom') {
-      if (this.viewSettings.isVertical) {
+      if (s.isVertical) {
         this.getThumbFrom().style.top = this.convertFromValueToPercent(s,s.from);
+        this.getThumbFrom().style.left = '-5px';
       }
       else {
         this.getThumbFrom().style.left = this.convertFromValueToPercent(s,s.from);
+        this.getThumbFrom().style.top = '-5px';
       }
     }
     else {
-      if (this.viewSettings.isVertical) {
+      if (s.isVertical) {
+        console.log('this.convertFromValueToPercent(s,s.to !== undefined ? s.to : s.from)  ' + this.convertFromValueToPercent(s, s.to !== undefined ? s.to : s.from));
         this.getThumbTo().style.top = 
           this.convertFromValueToPercent(s,s.to !== undefined ? s.to : s.from);
+        this.getThumbTo().style.left = '-5px';
       }
       else {
         this.getThumbTo().style.left 
-        = this.convertFromValueToPercent(s,s.to!==undefined?s.to:s.from);
+        = this.convertFromValueToPercent(s,s.to!==undefined?s.to : s.from);
+        this.getThumbTo().style.top = '-5px';
       }
     }
   }

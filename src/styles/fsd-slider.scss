@@ -68,12 +68,12 @@
 
   &__range-label{
     height: 20px;
-    width: auto;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     flex-direction: row;
     cursor: pointer;
-    margin-top: 5px;
+    margin-top: 10px;
 
     &_is_vertical{
       flex-direction: column;

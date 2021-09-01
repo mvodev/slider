@@ -58,12 +58,12 @@
 }
 .fsd-slider__range-label {
   height: 20px;
-  width: auto;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   flex-direction: row;
   cursor: pointer;
-  margin-top: 5px;
+  margin-top: 10px;
 }
 .fsd-slider__range-label_is_vertical {
   flex-direction: column;
@@ -129,4 +129,4 @@ body {
   width: 350px;
 }
 
-/*# sourceMappingURL=main.c3479c9a4c94d79af93b.css.map*/
+/*# sourceMappingURL=main.e014722a1d592a7008d4.css.map*/

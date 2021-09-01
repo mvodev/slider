@@ -93,5 +93,6 @@ function collectData(sliderNumber) {
     from: $('.control-panel__from-' + sliderNumber).val(),
     to: $('.control-panel__to-' + sliderNumber).val(),
     hideThumbLabel: $('.control-panel__hide-thumb-label-' + sliderNumber).is(':checked'),
+    isVertical: $('.control-panel__is-vertical-' + sliderNumber).is(':checked')
   }
 }

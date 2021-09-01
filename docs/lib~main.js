@@ -307,10 +307,10 @@ class Model extends EventObservable_1.EventObservable {
       del = 1.0 / this.getStep();
     }
 
-    const step = Math.round(+(Math.abs(this.getMax() - this.getMin()) / Constants_1.Constants.NUMBER_OF_MARKINGS).toFixed(Utils_1.Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
+    const step = Math.round(+(Math.abs(this.getMax() - this.getMin()) / Constants_1.Constants.NUMBER_OF_LABELS).toFixed(Utils_1.Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
     let initial = this.getMin();
 
-    for (let i = 0; i < Constants_1.Constants.NUMBER_OF_MARKINGS - 1; i++) {
+    for (let i = 0; i < Constants_1.Constants.NUMBER_OF_LABELS - 1; i++) {
       initial += step;
       result.push(initial);
     }
@@ -524,7 +524,7 @@ exports.Constants = void 0; // eslint-disable-next-line @typescript-eslint/no-na
 var Constants;
 
 (function (Constants) {
-  Constants.NUMBER_OF_MARKINGS = 8;
+  Constants.NUMBER_OF_LABELS = 8;
 })(Constants = exports.Constants || (exports.Constants = {}));
 
 /***/ }),
@@ -618,6 +618,8 @@ class View extends EventObservable_1.EventObservable {
 
     if (this.viewSettings.isVertical) {
       this.slider.setVertical();
+    } else {
+      this.slider.setHorizontal();
     }
   }
 
@@ -636,6 +638,7 @@ class View extends EventObservable_1.EventObservable {
     /* UPDATE */
     ) {
         this.updateViewSettings(settings);
+        this.render(this.viewSettings);
 
         if (!settings.hideThumbLabel) {
           this.slider.getThumbLabelFrom().showLabel();
@@ -647,9 +650,11 @@ class View extends EventObservable_1.EventObservable {
           }
         } else {
           this.slider.getThumbLabelFrom().hideLabel();
+          this.setThumbToValue(settings, 'thumbFrom');
 
           if (settings.isRange) {
             this.slider.getThumbLabelTo().hideLabel();
+            this.setThumbToValue(settings, 'thumbTo');
           }
         }
 
@@ -698,16 +703,21 @@ class View extends EventObservable_1.EventObservable {
 
   setThumbToValue(s, type) {
     if (type === 'thumbFrom') {
-      if (this.viewSettings.isVertical) {
+      if (s.isVertical) {
         this.getThumbFrom().style.top = this.convertFromValueToPercent(s, s.from);
+        this.getThumbFrom().style.left = '-5px';
       } else {
         this.getThumbFrom().style.left = this.convertFromValueToPercent(s, s.from);
+        this.getThumbFrom().style.top = '-5px';
       }
     } else {
-      if (this.viewSettings.isVertical) {
+      if (s.isVertical) {
+        console.log('this.convertFromValueToPercent(s,s.to !== undefined ? s.to : s.from)  ' + this.convertFromValueToPercent(s, s.to !== undefined ? s.to : s.from));
         this.getThumbTo().style.top = this.convertFromValueToPercent(s, s.to !== undefined ? s.to : s.from);
+        this.getThumbTo().style.left = '-5px';
       } else {
         this.getThumbTo().style.left = this.convertFromValueToPercent(s, s.to !== undefined ? s.to : s.from);
+        this.getThumbTo().style.top = '-5px';
       }
     }
   }
@@ -769,16 +779,24 @@ class ColoredRange {
     if (viewSettings.isRange) {
       if (viewSettings.isVertical) {
         this.getColoredRange().style.top = thumbFrom.style.top;
+        this.getColoredRange().style.left = 0 + '%';
+        this.getColoredRange().style.width = 100 + '%';
         this.getColoredRange().style.height = Number.parseInt(thumbTo.style.top) - Number.parseInt(thumbFrom.style.top) + thumbLength / 2 + '%';
       } else {
         this.getColoredRange().style.left = thumbFrom.style.left;
+        this.getColoredRange().style.top = 0 + '%';
+        this.getColoredRange().style.height = 100 + '%';
         this.getColoredRange().style.width = Number.parseInt(thumbTo.style.left) - Number.parseInt(thumbFrom.style.left) + thumbLength / 2 + '%';
       }
     } else {
       if (viewSettings.isVertical) {
+        this.getColoredRange().style.left = 0 + '%';
+        this.getColoredRange().style.width = 100 + '%';
         this.getColoredRange().style.height = Number.parseInt(thumbFrom.style.top) + thumbLength / 2 + '%';
       } else {
         this.getColoredRange().style.width = Number.parseInt(thumbFrom.style.left) + thumbLength / 2 + '%';
+        this.getColoredRange().style.top = 0 + '%';
+        this.getColoredRange().style.height = 100 + '%';
       }
     }
   }
@@ -848,11 +866,14 @@ class RangeLabel {
   render(settings) {
     this.rangeLabelContainer.appendChild(this.minLabel);
 
-    for (let i = 0; i < settings.labels.length; i++) {
-      const marking = document.createElement('span');
-      marking.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
-      this.rangeLabelContainer.appendChild(marking);
-      this.rangeLabels.push(marking);
+    if (this.rangeLabels.length === 0) {
+      for (let i = 0; i < settings.labels.length; i++) {
+        const marking = document.createElement('span');
+        marking.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
+        marking.innerText = settings.labels[i] + '';
+        this.rangeLabelContainer.appendChild(marking);
+        this.rangeLabels.push(marking);
+      }
     }
 
     this.rangeLabelContainer.appendChild(this.maxLabel);
@@ -992,6 +1013,18 @@ class Slider extends EventObservable_1.EventObservable {
 
     if (this.viewSettings.isRange) {
       this.thumbLabelTo.getThumbLabelContainer().classList.add(ClassNaming_1.ClassNaming.THUMB_LABEL_IS_VERTICAL);
+    }
+  }
+
+  setHorizontal() {
+    this.container.classList.remove(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
+    this.range.getRange().classList.remove(ClassNaming_1.ClassNaming.RANGE_IS_VERTICAL);
+    this.coloredRange.getColoredRange().classList.remove(ClassNaming_1.ClassNaming.COLORED_RANGE_IS_VERTICAL);
+    this.rangeLabel.getRangeLabel().classList.remove(ClassNaming_1.ClassNaming.RANGE_LABEL_IS_VERTICAL);
+    this.thumbLabelFrom.getThumbLabelContainer().classList.remove(ClassNaming_1.ClassNaming.THUMB_LABEL_IS_VERTICAL);
+
+    if (this.viewSettings.isRange) {
+      this.thumbLabelTo.getThumbLabelContainer().classList.remove(ClassNaming_1.ClassNaming.THUMB_LABEL_IS_VERTICAL);
     }
   }
 

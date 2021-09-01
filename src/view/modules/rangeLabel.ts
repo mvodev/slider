@@ -12,11 +12,14 @@ class RangeLabel{
   }
   render(settings: IViewSettings):void{
     this.rangeLabelContainer.appendChild(this.minLabel);
-    for (let i = 0; i < settings.labels.length; i++) {
-      const marking = document.createElement('span');
-      marking.classList.add(ClassNaming.RANGE_LABEL_SCALE);
-      this.rangeLabelContainer.appendChild(marking);
-      this.rangeLabels.push(marking);
+    if(this.rangeLabels.length===0){
+      for (let i = 0; i < settings.labels.length; i++) {
+        const marking = document.createElement('span');
+        marking.classList.add(ClassNaming.RANGE_LABEL_SCALE);
+        marking.innerText = settings.labels[i] + '';
+        this.rangeLabelContainer.appendChild(marking);
+        this.rangeLabels.push(marking);
+      }
     }
     this.rangeLabelContainer.appendChild(this.maxLabel);
   }
