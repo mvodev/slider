@@ -635,7 +635,6 @@ class View extends EventObservable_1.EventObservable {
     || msg === 1
     /* UPDATE */
     ) {
-        console.log('class View refreshView inside');
         this.updateViewSettings(settings);
 
         if (!settings.hideThumbLabel) {
@@ -844,13 +843,12 @@ const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./util
 class RangeLabel {
   constructor() {
     this.initComponents();
-    this.render();
   }
 
-  render() {
+  render(settings) {
     this.rangeLabelContainer.appendChild(this.minLabel);
 
-    for (let i = 0; i < this.rangeLabels.length; i++) {
+    for (let i = 0; i < settings.labels.length; i++) {
       const marking = document.createElement('span');
       marking.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
       this.rangeLabelContainer.appendChild(marking);
@@ -959,6 +957,7 @@ class Slider extends EventObservable_1.EventObservable {
       this.range.getRange().appendChild(this.thumbTo.getThumb());
     }
 
+    this.rangeLabel.render(JSON.parse(settings));
     this.container.appendChild(this.rangeLabel.getRangeLabel());
     this.rootElem.appendChild(this.container);
     this.bindEvents();

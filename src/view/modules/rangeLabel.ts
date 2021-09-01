@@ -1,3 +1,4 @@
+import { IViewSettings } from '../../model/IViewSettings';
 import { ClassNaming } from '../../utils/ClassNaming';
 
 class RangeLabel{
@@ -8,11 +9,10 @@ class RangeLabel{
 
   constructor() {
     this.initComponents();
-    this.render();
   }
-  private render():void{
+  render(settings: IViewSettings):void{
     this.rangeLabelContainer.appendChild(this.minLabel);
-    for (let i = 0; i < this.rangeLabels.length; i++) {
+    for (let i = 0; i < settings.labels.length; i++) {
       const marking = document.createElement('span');
       marking.classList.add(ClassNaming.RANGE_LABEL_SCALE);
       this.rangeLabelContainer.appendChild(marking);

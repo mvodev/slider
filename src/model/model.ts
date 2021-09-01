@@ -171,10 +171,10 @@ class Model extends EventObservable implements IModelFacade {
     if (this.getStep() != 0) {
       del = 1.0 / this.getStep();
     }
-    const step = Math.round(  +(Math.abs(this.getMax()-this.getMin())/Constants.NUMBER_OF_MARKINGS).
+    const step = Math.round(  +(Math.abs(this.getMax()-this.getMin())/Constants.NUMBER_OF_LABELS).
       toFixed(Utils.numDigitsAfterDecimal(this.getStep()))*del)/del;
     let initial = this.getMin();
-    for(let i=0;i<Constants.NUMBER_OF_MARKINGS-1;i++){
+    for(let i=0;i<Constants.NUMBER_OF_LABELS-1;i++){
       initial+=step;
       result.push(initial);
     }

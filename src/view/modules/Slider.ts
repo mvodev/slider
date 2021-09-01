@@ -40,6 +40,7 @@ render(settings:string) :void{
     this.thumbTo.getThumb().appendChild(this.thumbLabelTo.getThumbLabelContainer());
     this.range.getRange().appendChild(this.thumbTo.getThumb());
   }
+  this.rangeLabel.render(JSON.parse(settings));
   this.container.appendChild(this.rangeLabel.getRangeLabel());
   this.rootElem.appendChild(this.container);
   this.bindEvents();
