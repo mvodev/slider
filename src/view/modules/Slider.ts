@@ -21,12 +21,14 @@ private container!: HTMLDivElement;
 private coloredRange!: ColoredRange;
 private viewSettings: IViewSettings;
 private resPercentage: number;
+private stepInPx:number;
 
 constructor(rootElem: HTMLDivElement) {
   super();
   this.viewSettings = Object.assign({},defaultSettings);
   this.rootElem = rootElem;
   this.resPercentage = 0;
+  this.stepInPx = 0;
   this.initSliderComponents();
 }
 
@@ -44,6 +46,8 @@ render(settings:string) :void{
   this.rangeLabel.render(JSON.parse(settings));
   this.container.appendChild(this.rangeLabel.getRangeLabel());
   this.rootElem.appendChild(this.container);
+  this.stepInPx = this.getSliderLengthInPx()/(Math.abs((this.viewSettings.max-this.viewSettings.min)/this.viewSettings.step));
+  console.log('inside render slider '+this.stepInPx);
   this.bindEvents();
 }
 
@@ -145,7 +149,10 @@ private handleThumb(thumbType: string, e: MouseEvent): void {
       if (newPos > bottom) {
         newPos = bottom;
       }
-      that.dispatchEvent(newPos, thumbType);
+      if(Math.abs(that.stepInPx-newPos)>=0){
+        that.dispatchEvent(newPos, thumbType);
+      }
+      
     }
    // eslint-disable-next-line no-inner-declarations
     function onMouseUp() {
@@ -183,7 +190,9 @@ private handleThumb(thumbType: string, e: MouseEvent): void {
         if (newPos >= rightEdge) {
           newPos = rightEdge;
         }
-        that.dispatchEvent(newPos, thumbType);
+        if (Math.abs(that.stepInPx - newPos) >= 0) {
+          that.dispatchEvent(newPos, thumbType);
+        }
       }
     // eslint-disable-next-line no-inner-declarations
       function onMouseUp() {
@@ -264,6 +273,7 @@ private convertFromPxToPercent(valueInPX: number) {
 
 getThumbWidthInPercentage() :number{
   if (this.viewSettings.isVertical) {
+    console.log('inside getThumbWidthInPercentage() Slider' + this.getThumbFrom().offsetHeight + ' ' + this.getSliderLengthInPx());
     return ((this.getThumbFrom().offsetHeight / this.getSliderLengthInPx()) * 100);
   }
   else {
@@ -272,6 +282,7 @@ getThumbWidthInPercentage() :number{
 }
 
 private getSliderLengthInPx() {
+  console.log('inside getSliderLengthInPx() ' + this.getRange().offsetHeight + '    ' + this.getRange().offsetWidth);
   if (this.viewSettings.isVertical) {
     return this.getRange().offsetHeight;
   }

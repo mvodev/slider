@@ -2,7 +2,9 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  height: auto;
+  min-height: 300px;
+  min-width: 300px;
 }
 .fsd-slider_is_vertical {
   flex-direction: row;
@@ -117,16 +119,4 @@ body {
   height: 400px;
 }
 
-.slider1,
-.slider2 {
-  width: 300px;
-  height: 300px;
-  display: flex;
-  align-items: center;
-}
-
-.slider3 {
-  width: 350px;
-}
-
-/*# sourceMappingURL=main.e014722a1d592a7008d4.css.map*/
+/*# sourceMappingURL=main.fb28c7aa6cfebb8d09b3.css.map*/

@@ -14,7 +14,7 @@ class Model extends EventObservable implements IModelFacade {
     super();
     this.settings = Object.assign({},defaultSettings);
     this.validateSettings(settings);
-    this.settings.labels=this.calculateArrayLabels();
+    this.settings.labels=this.calculateLabels();
   }
   getSettings(): string {
     return JSON.stringify(this.settings);
@@ -62,7 +62,7 @@ class Model extends EventObservable implements IModelFacade {
     this.validateStepOrError(newStep);
     this.validateIsVerticalOrError(newIsVertical);
     this.validateThumbLabelOrError(newHideThumbLabel);
-    this.settings.labels = this.calculateArrayLabels();
+    this.settings.labels = this.calculateLabels();
   }
   private validateMinOrError(newMin:number|undefined):void{
     if (newMin) {
@@ -165,7 +165,7 @@ class Model extends EventObservable implements IModelFacade {
     return res;
   }
 
-  calculateArrayLabels():number[]{
+  calculateLabels():number[]{
     const result:number[] = [];
     let del = 1;
     if (this.getStep() != 0) {

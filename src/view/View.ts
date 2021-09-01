@@ -104,6 +104,7 @@ class View extends EventObservable implements IObserver{
   }
 
   private convertFromValueToPercent(s:ISettings,value: number): string {
+    console.log('inside convertFromValueToPercent ' + this.getThumbWidthInPercentage());
     return (((100-this.getThumbWidthInPercentage()) / Math.abs(s.max - s.min)) * (Math.abs(value - s.min)))+'%';
   }
 

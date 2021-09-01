@@ -2,7 +2,9 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  height: auto;
+  min-height: 300px;
+  min-width: 300px;
 
   &_is_vertical{
     flex-direction: row;

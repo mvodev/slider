@@ -4,6 +4,7 @@ interface IViewSettings {
   hideThumbLabel?: boolean;
   min:number;
   max:number;
+  step:number;
   labels:number[];
 }
 export { IViewSettings }

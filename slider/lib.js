@@ -302,7 +302,7 @@ class Model extends EventObservable_1.EventObservable {
     super();
     this.settings = Object.assign({}, DefaultSettings_1.defaultSettings);
     this.validateSettings(settings);
-    this.settings.labels = this.calculateArrayLabels();
+    this.settings.labels = this.calculateLabels();
   }
 
   getSettings() {
@@ -360,7 +360,7 @@ class Model extends EventObservable_1.EventObservable {
     this.validateStepOrError(newStep);
     this.validateIsVerticalOrError(newIsVertical);
     this.validateThumbLabelOrError(newHideThumbLabel);
-    this.settings.labels = this.calculateArrayLabels();
+    this.settings.labels = this.calculateLabels();
   }
 
   validateMinOrError(newMin) {
@@ -464,7 +464,7 @@ class Model extends EventObservable_1.EventObservable {
     return res;
   }
 
-  calculateArrayLabels() {
+  calculateLabels() {
     const result = [];
     let del = 1;
 
@@ -863,6 +863,7 @@ class View extends EventObservable_1.EventObservable {
   }
 
   convertFromValueToPercent(s, value) {
+    console.log('inside convertFromValueToPercent ' + this.getThumbWidthInPercentage());
     return (100 - this.getThumbWidthInPercentage()) / Math.abs(s.max - s.min) * Math.abs(value - s.min) + '%';
   }
 
@@ -1127,6 +1128,7 @@ class Slider extends EventObservable_1.EventObservable {
     this.viewSettings = Object.assign({}, DefaultSettings_1.defaultSettings);
     this.rootElem = rootElem;
     this.resPercentage = 0;
+    this.stepInPx = 0;
     this.initSliderComponents();
   }
 
@@ -1146,6 +1148,8 @@ class Slider extends EventObservable_1.EventObservable {
     this.rangeLabel.render(JSON.parse(settings));
     this.container.appendChild(this.rangeLabel.getRangeLabel());
     this.rootElem.appendChild(this.container);
+    this.stepInPx = this.getSliderLengthInPx() / Math.abs((this.viewSettings.max - this.viewSettings.min) / this.viewSettings.step);
+    console.log('inside render slider ' + this.stepInPx);
     this.bindEvents();
   }
 
@@ -1256,7 +1260,9 @@ class Slider extends EventObservable_1.EventObservable {
           newPos = bottom;
         }
 
-        that.dispatchEvent(newPos, thumbType);
+        if (Math.abs(that.stepInPx - newPos) >= 0) {
+          that.dispatchEvent(newPos, thumbType);
+        }
       } // eslint-disable-next-line no-inner-declarations
 
 
@@ -1299,7 +1305,9 @@ class Slider extends EventObservable_1.EventObservable {
           newPos = rightEdge;
         }
 
-        that.dispatchEvent(newPos, thumbType);
+        if (Math.abs(that.stepInPx - newPos) >= 0) {
+          that.dispatchEvent(newPos, thumbType);
+        }
       } // eslint-disable-next-line no-inner-declarations
 
 
@@ -1380,6 +1388,7 @@ class Slider extends EventObservable_1.EventObservable {
 
   getThumbWidthInPercentage() {
     if (this.viewSettings.isVertical) {
+      console.log('inside getThumbWidthInPercentage() Slider' + this.getThumbFrom().offsetHeight + ' ' + this.getSliderLengthInPx());
       return this.getThumbFrom().offsetHeight / this.getSliderLengthInPx() * 100;
     } else {
       return this.getThumbFrom().offsetWidth / this.getSliderLengthInPx() * 100;
@@ -1387,6 +1396,8 @@ class Slider extends EventObservable_1.EventObservable {
   }
 
   getSliderLengthInPx() {
+    console.log('inside getSliderLengthInPx() ' + this.getRange().offsetHeight + '    ' + this.getRange().offsetWidth);
+
     if (this.viewSettings.isVertical) {
       return this.getRange().offsetHeight;
     } else {
