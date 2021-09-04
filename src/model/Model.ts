@@ -5,7 +5,6 @@ import { EventObservable } from '../observers/EventObservable';
 import { Utils } from '../utils/Utils';
 import {defaultSettings} from './DefaultSettings';
 import { ErrorMessage } from '../error-message/ErrorMessage';
-import { Constants } from '../utils/Constants';
 
 class Model extends EventObservable implements IModelFacade {
   private settings: ISettings
@@ -167,16 +166,10 @@ class Model extends EventObservable implements IModelFacade {
 
   calculateLabels():number[]{
     const result:number[] = [];
-    let del = 1;
-    if (this.getStep() != 0) {
-      del = 1.0 / this.getStep();
-    }
-    const step = Math.round(  +(Math.abs(this.getMax()-this.getMin())/Constants.NUMBER_OF_LABELS).
-      toFixed(Utils.numDigitsAfterDecimal(this.getStep()))*del)/del;
-    let initial = this.getMin();
-    for(let i=0;i<Constants.NUMBER_OF_LABELS-1;i++){
-      initial+=step;
-      result.push(initial);
+    let initial:number = this.getMin();
+    while(initial<(this.getMax()-this.getStep())){
+      initial=this.getStep()+initial;
+      result.push(+(Math.round(initial * 100) / 100).toFixed(Utils.numDigitsAfterDecimal(this.getStep())));
     }
     return result;
   }

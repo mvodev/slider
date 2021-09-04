@@ -104,7 +104,6 @@ class View extends EventObservable implements IObserver{
   }
 
   private convertFromValueToPercent(s:ISettings,value: number): string {
-    console.log('inside convertFromValueToPercent ' + this.getThumbWidthInPercentage());
     return (((100-this.getThumbWidthInPercentage()) / Math.abs(s.max - s.min)) * (Math.abs(value - s.min)))+'%';
   }
 
@@ -121,7 +120,6 @@ class View extends EventObservable implements IObserver{
     }
     else {
       if (s.isVertical) {
-        console.log('this.convertFromValueToPercent(s,s.to !== undefined ? s.to : s.from)  ' + this.convertFromValueToPercent(s, s.to !== undefined ? s.to : s.from));
         this.getThumbTo().style.top = 
           this.convertFromValueToPercent(s,s.to !== undefined ? s.to : s.from);
         this.getThumbTo().style.left = '-5px';

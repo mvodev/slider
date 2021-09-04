@@ -74,6 +74,13 @@
   margin-left: 5px;
   margin-top: 0;
 }
+.fsd-slider__range-label_is_vertical .fsd-slider__range-labes-container {
+  flex-direction: column;
+}
+.fsd-slider__range-labes-container {
+  display: flex;
+  justify-content: space-around;
+}
 .fsd-slider_element_is_hidden {
   display: none;
 }
@@ -114,9 +121,11 @@ body {
   align-items: center;
   margin-bottom: 50px;
   background-color: white;
-  max-width: 900px;
+  max-width: 1200px;
   width: 100%;
-  height: 400px;
+  min-height: 400px;
+  height: 100%;
+  padding: 10px;
 }
 
-/*# sourceMappingURL=main.fb28c7aa6cfebb8d09b3.css.map*/
+/*# sourceMappingURL=main.5da51b2e6b20fb467e44.css.map*/

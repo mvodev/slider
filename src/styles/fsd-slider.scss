@@ -83,7 +83,15 @@
       height: auto;
       margin-left: 5px;
       margin-top: 0;
+      
+      & .fsd-slider__range-labes-container{
+        flex-direction: column;
+      }
     }
+  }
+  &__range-labes-container{
+    display: flex;
+    justify-content: space-around;
   }
 
   &_element_is_hidden{

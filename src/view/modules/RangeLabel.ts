@@ -6,22 +6,22 @@ class RangeLabel{
   private minLabel!: HTMLSpanElement;
   private maxLabel!: HTMLSpanElement;
   private rangeLabels!:HTMLSpanElement[];
+  private labelsContainer!:HTMLSpanElement;
 
   constructor() {
     this.initComponents();
   }
   render(settings: IViewSettings):void{
-    this.rangeLabelContainer.appendChild(this.minLabel);
+    
     if(this.rangeLabels.length===0){
       for (let i = 0; i < settings.labels.length; i++) {
         const marking = document.createElement('span');
         marking.classList.add(ClassNaming.RANGE_LABEL_SCALE);
         marking.innerText = settings.labels[i] + '';
-        this.rangeLabelContainer.appendChild(marking);
+        this.labelsContainer.appendChild(marking);
         this.rangeLabels.push(marking);
       }
     }
-    this.rangeLabelContainer.appendChild(this.maxLabel);
   }
   getRangeLabel():HTMLDivElement {
     return this.rangeLabelContainer;
@@ -53,6 +53,11 @@ class RangeLabel{
     this.minLabel.classList.add(ClassNaming.RANGE_LABEL_SCALE);
     this.maxLabel = document.createElement('span');
     this.maxLabel.classList.add(ClassNaming.RANGE_LABEL_SCALE);
+    this.labelsContainer = document.createElement('span');
+    this.labelsContainer.classList.add(ClassNaming.RANGE_LABEL_SCALE_CONTAINER);
+    this.rangeLabelContainer.appendChild(this.minLabel);
+    this.rangeLabelContainer.appendChild(this.labelsContainer);
+    this.rangeLabelContainer.appendChild(this.maxLabel);
   }
 
   hideRangeLabels():void{

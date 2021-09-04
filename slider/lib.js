@@ -295,8 +295,6 @@ const DefaultSettings_1 = __webpack_require__(/*! ./DefaultSettings */ "./model/
 
 const ErrorMessage_1 = __webpack_require__(/*! ../error-message/ErrorMessage */ "./error-message/ErrorMessage.ts");
 
-const Constants_1 = __webpack_require__(/*! ../utils/Constants */ "./utils/Constants.ts");
-
 class Model extends EventObservable_1.EventObservable {
   constructor(settings) {
     super();
@@ -466,18 +464,11 @@ class Model extends EventObservable_1.EventObservable {
 
   calculateLabels() {
     const result = [];
-    let del = 1;
-
-    if (this.getStep() != 0) {
-      del = 1.0 / this.getStep();
-    }
-
-    const step = Math.round(+(Math.abs(this.getMax() - this.getMin()) / Constants_1.Constants.NUMBER_OF_LABELS).toFixed(Utils_1.Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
     let initial = this.getMin();
 
-    for (let i = 0; i < Constants_1.Constants.NUMBER_OF_LABELS - 1; i++) {
-      initial += step;
-      result.push(initial);
+    while (initial < this.getMax() - this.getStep()) {
+      initial = this.getStep() + initial;
+      result.push(+(Math.round(initial * 100) / 100).toFixed(Utils_1.Utils.numDigitsAfterDecimal(this.getStep())));
     }
 
     return result;
@@ -655,6 +646,7 @@ const ClassNaming = {
   RANGE: 'fsd-slider__range',
   RANGE_LABEL: 'fsd-slider__range-label',
   RANGE_LABEL_SCALE: 'fsd-slider__range-label-scale',
+  RANGE_LABEL_SCALE_CONTAINER: 'fsd-slider__range-labes-container',
   COLORED_RANGE: 'fsd-slider__colored-range',
   THUMB_TO: 'fsd-slider__thumb-to',
   THUMB_FROM: 'fsd-slider__thumb-from',
@@ -668,29 +660,6 @@ const ClassNaming = {
   HIDE_ELEMENT: 'fsd-slider_element_is_hidden'
 };
 exports.ClassNaming = ClassNaming;
-
-/***/ }),
-
-/***/ "./utils/Constants.ts":
-/*!****************************!*\
-  !*** ./utils/Constants.ts ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Constants = void 0; // eslint-disable-next-line @typescript-eslint/no-namespace
-
-var Constants;
-
-(function (Constants) {
-  Constants.NUMBER_OF_LABELS = 8;
-})(Constants = exports.Constants || (exports.Constants = {}));
 
 /***/ }),
 
@@ -863,7 +832,6 @@ class View extends EventObservable_1.EventObservable {
   }
 
   convertFromValueToPercent(s, value) {
-    console.log('inside convertFromValueToPercent ' + this.getThumbWidthInPercentage());
     return (100 - this.getThumbWidthInPercentage()) / Math.abs(s.max - s.min) * Math.abs(value - s.min) + '%';
   }
 
@@ -878,7 +846,6 @@ class View extends EventObservable_1.EventObservable {
       }
     } else {
       if (s.isVertical) {
-        console.log('this.convertFromValueToPercent(s,s.to !== undefined ? s.to : s.from)  ' + this.convertFromValueToPercent(s, s.to !== undefined ? s.to : s.from));
         this.getThumbTo().style.top = this.convertFromValueToPercent(s, s.to !== undefined ? s.to : s.from);
         this.getThumbTo().style.left = '-5px';
       } else {
@@ -1030,19 +997,15 @@ class RangeLabel {
   }
 
   render(settings) {
-    this.rangeLabelContainer.appendChild(this.minLabel);
-
     if (this.rangeLabels.length === 0) {
       for (let i = 0; i < settings.labels.length; i++) {
         const marking = document.createElement('span');
         marking.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
         marking.innerText = settings.labels[i] + '';
-        this.rangeLabelContainer.appendChild(marking);
+        this.labelsContainer.appendChild(marking);
         this.rangeLabels.push(marking);
       }
     }
-
-    this.rangeLabelContainer.appendChild(this.maxLabel);
   }
 
   getRangeLabel() {
@@ -1075,6 +1038,11 @@ class RangeLabel {
     this.minLabel.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
     this.maxLabel = document.createElement('span');
     this.maxLabel.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
+    this.labelsContainer = document.createElement('span');
+    this.labelsContainer.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE_CONTAINER);
+    this.rangeLabelContainer.appendChild(this.minLabel);
+    this.rangeLabelContainer.appendChild(this.labelsContainer);
+    this.rangeLabelContainer.appendChild(this.maxLabel);
   }
 
   hideRangeLabels() {
@@ -1149,7 +1117,6 @@ class Slider extends EventObservable_1.EventObservable {
     this.container.appendChild(this.rangeLabel.getRangeLabel());
     this.rootElem.appendChild(this.container);
     this.stepInPx = this.getSliderLengthInPx() / Math.abs((this.viewSettings.max - this.viewSettings.min) / this.viewSettings.step);
-    console.log('inside render slider ' + this.stepInPx);
     this.bindEvents();
   }
 
@@ -1388,7 +1355,6 @@ class Slider extends EventObservable_1.EventObservable {
 
   getThumbWidthInPercentage() {
     if (this.viewSettings.isVertical) {
-      console.log('inside getThumbWidthInPercentage() Slider' + this.getThumbFrom().offsetHeight + ' ' + this.getSliderLengthInPx());
       return this.getThumbFrom().offsetHeight / this.getSliderLengthInPx() * 100;
     } else {
       return this.getThumbFrom().offsetWidth / this.getSliderLengthInPx() * 100;
@@ -1396,8 +1362,6 @@ class Slider extends EventObservable_1.EventObservable {
   }
 
   getSliderLengthInPx() {
-    console.log('inside getSliderLengthInPx() ' + this.getRange().offsetHeight + '    ' + this.getRange().offsetWidth);
-
     if (this.viewSettings.isVertical) {
       return this.getRange().offsetHeight;
     } else {

@@ -47,7 +47,6 @@ render(settings:string) :void{
   this.container.appendChild(this.rangeLabel.getRangeLabel());
   this.rootElem.appendChild(this.container);
   this.stepInPx = this.getSliderLengthInPx()/(Math.abs((this.viewSettings.max-this.viewSettings.min)/this.viewSettings.step));
-  console.log('inside render slider '+this.stepInPx);
   this.bindEvents();
 }
 
@@ -273,7 +272,6 @@ private convertFromPxToPercent(valueInPX: number) {
 
 getThumbWidthInPercentage() :number{
   if (this.viewSettings.isVertical) {
-    console.log('inside getThumbWidthInPercentage() Slider' + this.getThumbFrom().offsetHeight + ' ' + this.getSliderLengthInPx());
     return ((this.getThumbFrom().offsetHeight / this.getSliderLengthInPx()) * 100);
   }
   else {
@@ -282,7 +280,6 @@ getThumbWidthInPercentage() :number{
 }
 
 private getSliderLengthInPx() {
-  console.log('inside getSliderLengthInPx() ' + this.getRange().offsetHeight + '    ' + this.getRange().offsetWidth);
   if (this.viewSettings.isVertical) {
     return this.getRange().offsetHeight;
   }
