@@ -1071,6 +1071,14 @@ class RangeLabel {
     this.rangeLabelContainer.appendChild(this.maxLabel);
   }
 
+  setVertical() {
+    this.getRangeLabel().classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_IS_VERTICAL);
+  }
+
+  setHorizontal() {
+    this.getRangeLabel().classList.remove(ClassNaming_1.ClassNaming.RANGE_LABEL_IS_VERTICAL);
+  }
+
 }
 
 exports.RangeLabel = RangeLabel;
@@ -1152,7 +1160,7 @@ class Slider extends EventObservable_1.EventObservable {
   setVertical() {
     this.container.classList.add(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
     this.range.setVertical();
-    this.rangeLabel.getRangeLabel().classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_IS_VERTICAL);
+    this.rangeLabel.setVertical();
     this.thumbFrom.setVertical();
 
     if (this.viewSettings.isRange) {
@@ -1163,7 +1171,7 @@ class Slider extends EventObservable_1.EventObservable {
   setHorizontal() {
     this.container.classList.remove(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
     this.range.setHorizontal();
-    this.rangeLabel.getRangeLabel().classList.remove(ClassNaming_1.ClassNaming.RANGE_LABEL_IS_VERTICAL);
+    this.rangeLabel.setHorizontal();
     this.thumbFrom.setHorizontal();
 
     if (this.viewSettings.isRange) {

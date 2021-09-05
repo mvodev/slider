@@ -31,7 +31,6 @@ render(settings:string) :void{
   this.viewSettings = Object.assign(this.viewSettings,JSON.parse(settings));
   this.container.classList.add(ClassNaming.ROOT);
   this.container.appendChild(this.range.getRange());
-  
   this.range.getRange().appendChild(this.thumbFrom.getThumb());
   this.range.render(settings);
   if (this.viewSettings.isRange) {
@@ -59,10 +58,11 @@ private bindEvents(): void {
     this.getThumbTo().addEventListener('mousedown', this.handleThumb.bind(this, "thumbTo"));
   }
 }
+
 setVertical():void {
   this.container.classList.add(ClassNaming.SLIDER_IS_VERTICAL);
   this.range.setVertical();
-  this.rangeLabel.getRangeLabel().classList.add(ClassNaming.RANGE_LABEL_IS_VERTICAL);
+  this.rangeLabel.setVertical();
   this.thumbFrom.setVertical();
   if (this.viewSettings.isRange) {
     this.thumbTo.setVertical();
@@ -72,7 +72,7 @@ setVertical():void {
 setHorizontal():void{
   this.container.classList.remove(ClassNaming.SLIDER_IS_VERTICAL);
   this.range.setHorizontal();
-  this.rangeLabel.getRangeLabel().classList.remove(ClassNaming.RANGE_LABEL_IS_VERTICAL);
+  this.rangeLabel.setHorizontal();
   this.thumbFrom.setHorizontal();
   if (this.viewSettings.isRange) {
     this.thumbTo.setHorizontal();

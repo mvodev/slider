@@ -59,5 +59,12 @@ class RangeLabel{
     this.rangeLabelContainer.appendChild(this.maxLabel);
   }
 
+  setVertical():void{
+    this.getRangeLabel().classList.add(ClassNaming.RANGE_LABEL_IS_VERTICAL);
+  }
+  setHorizontal():void{
+    this.getRangeLabel().classList.remove(ClassNaming.RANGE_LABEL_IS_VERTICAL);
+  }
+
 }
 export {RangeLabel}
