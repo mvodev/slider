@@ -1,7 +1,6 @@
 import { Range } from './Range';
 import { Messages } from '../../utils/Messages';
 import { Thumb } from './Thumb';
-import { ThumbLabel } from './ThumbLabel';
 import { RangeLabel } from './RangeLabel';
 import { IViewSettings } from '../../model/IViewSettings';
 import { defaultSettings } from '../../model/DefaultSettings';
@@ -12,8 +11,6 @@ class Slider extends EventObservable{
 private thumbFrom!: Thumb;
 private thumbTo!: Thumb;
 private range!: Range;
-private thumbLabelFrom!: ThumbLabel;
-private thumbLabelTo!: ThumbLabel;
 private rangeLabel!: RangeLabel;
 private rootElem!: HTMLDivElement;
 private container!: HTMLDivElement;
@@ -37,9 +34,7 @@ render(settings:string) :void{
   
   this.range.getRange().appendChild(this.thumbFrom.getThumb());
   this.range.render(settings);
-  this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
   if (this.viewSettings.isRange) {
-    this.thumbTo.getThumb().appendChild(this.thumbLabelTo.getThumbLabelContainer());
     this.range.getRange().appendChild(this.thumbTo.getThumb());
   }
   this.rangeLabel.render(JSON.parse(settings));
@@ -51,9 +46,7 @@ render(settings:string) :void{
 
 private initSliderComponents() {
   this.thumbTo = new Thumb(ClassNaming.THUMB_TO);
-  this.thumbLabelTo = new ThumbLabel();
   this.thumbFrom = new Thumb(ClassNaming.THUMB_FROM);
-  this.thumbLabelFrom = new ThumbLabel();
   this.range = new Range(this.viewSettings);
   this.rangeLabel = new RangeLabel(this.viewSettings);
   this.container = document.createElement('div');
@@ -71,9 +64,9 @@ setVertical():void {
   this.range.getRange().classList.add(ClassNaming.RANGE_IS_VERTICAL);
   this.range.setVertical();
   this.rangeLabel.getRangeLabel().classList.add(ClassNaming.RANGE_LABEL_IS_VERTICAL);
-  this.thumbLabelFrom.getThumbLabelContainer().classList.add(ClassNaming.THUMB_LABEL_IS_VERTICAL);
+  this.thumbFrom.setVertical();
   if (this.viewSettings.isRange) {
-    this.thumbLabelTo.getThumbLabelContainer().classList.add(ClassNaming.THUMB_LABEL_IS_VERTICAL);
+    this.thumbTo.setVertical();
   }
 }
 
@@ -82,9 +75,9 @@ setHorizontal():void{
   this.range.getRange().classList.remove(ClassNaming.RANGE_IS_VERTICAL);
   this.range.setHorizontal();
   this.rangeLabel.getRangeLabel().classList.remove(ClassNaming.RANGE_LABEL_IS_VERTICAL);
-  this.thumbLabelFrom.getThumbLabelContainer().classList.remove(ClassNaming.THUMB_LABEL_IS_VERTICAL);
+  this.thumbFrom.setHorizontal();
   if (this.viewSettings.isRange) {
-    this.thumbLabelTo.getThumbLabelContainer().classList.remove(ClassNaming.THUMB_LABEL_IS_VERTICAL);
+    this.thumbTo.setHorizontal();
   }
 }
 
@@ -304,20 +297,32 @@ getThumbFrom(): HTMLDivElement {
 getThumbTo(): HTMLDivElement {
   return this.thumbTo.getThumb();
 }
+hideLabel():void{
+  this.thumbFrom.hideLabel();
+  if(this.viewSettings.isRange){
+    this.thumbTo.hideLabel();
+  }
+}
+showLabel():void{
+  this.thumbFrom.showLabel();
+  if (this.viewSettings.isRange) {
+    this.thumbTo.showLabel();
+  }
+}
 
-getThumbLabelFrom(): ThumbLabel {
-  return this.thumbLabelFrom;
-}
-getThumbLabelTo(): ThumbLabel {
-  return this.thumbLabelTo;
-}
+// getThumbLabelFrom(): ThumbLabel {
+//   return this.thumbLabelFrom;
+// }
+// getThumbLabelTo(): ThumbLabel {
+//   return this.thumbLabelTo;
+// }
 
 setValueToLabelThumbFrom(value: number): void {
-  this.thumbLabelFrom.setValueToLabel(value);
+  this.thumbFrom.setValueToLabel(value);
 }
 
 setValueToLabelThumbTo(value: number): void {
-  this.thumbLabelTo.setValueToLabel(value);
+  this.thumbTo.setValueToLabel(value);
 }
 
 getRangeLabel(): HTMLDivElement {

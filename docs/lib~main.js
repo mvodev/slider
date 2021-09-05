@@ -586,11 +586,7 @@ class View extends EventObservable_1.EventObservable {
     this.slider.render(JSON.stringify(s));
 
     if (this.viewSettings.hideThumbLabel) {
-      this.slider.getThumbLabelFrom().hideLabel();
-
-      if (this.viewSettings.isRange) {
-        this.slider.getThumbLabelTo().hideLabel();
-      }
+      this.slider.hideLabel();
     }
 
     if (this.viewSettings.isVertical) {
@@ -618,19 +614,17 @@ class View extends EventObservable_1.EventObservable {
         this.render(this.viewSettings);
 
         if (!settings.hideThumbLabel) {
-          this.slider.getThumbLabelFrom().showLabel();
+          this.slider.showLabel();
           this.setThumbToValue(settings, 'thumbFrom');
 
           if (settings.isRange) {
             this.setThumbToValue(settings, 'thumbTo');
-            this.slider.getThumbLabelTo().showLabel();
           }
         } else {
-          this.slider.getThumbLabelFrom().hideLabel();
+          this.slider.hideLabel();
           this.setThumbToValue(settings, 'thumbFrom');
 
           if (settings.isRange) {
-            this.slider.getThumbLabelTo().hideLabel();
             this.setThumbToValue(settings, 'thumbTo');
           }
         }
@@ -944,8 +938,6 @@ const Range_1 = __webpack_require__(/*! ./Range */ "./view/modules/Range.ts");
 
 const Thumb_1 = __webpack_require__(/*! ./Thumb */ "./view/modules/Thumb.ts");
 
-const ThumbLabel_1 = __webpack_require__(/*! ./ThumbLabel */ "./view/modules/ThumbLabel.ts");
-
 const RangeLabel_1 = __webpack_require__(/*! ./RangeLabel */ "./view/modules/RangeLabel.ts");
 
 const DefaultSettings_1 = __webpack_require__(/*! ../../model/DefaultSettings */ "./model/DefaultSettings.ts");
@@ -970,10 +962,8 @@ class Slider extends EventObservable_1.EventObservable {
     this.container.appendChild(this.range.getRange());
     this.range.getRange().appendChild(this.thumbFrom.getThumb());
     this.range.render(settings);
-    this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
 
     if (this.viewSettings.isRange) {
-      this.thumbTo.getThumb().appendChild(this.thumbLabelTo.getThumbLabelContainer());
       this.range.getRange().appendChild(this.thumbTo.getThumb());
     }
 
@@ -986,9 +976,7 @@ class Slider extends EventObservable_1.EventObservable {
 
   initSliderComponents() {
     this.thumbTo = new Thumb_1.Thumb(ClassNaming_1.ClassNaming.THUMB_TO);
-    this.thumbLabelTo = new ThumbLabel_1.ThumbLabel();
     this.thumbFrom = new Thumb_1.Thumb(ClassNaming_1.ClassNaming.THUMB_FROM);
-    this.thumbLabelFrom = new ThumbLabel_1.ThumbLabel();
     this.range = new Range_1.Range(this.viewSettings);
     this.rangeLabel = new RangeLabel_1.RangeLabel(this.viewSettings);
     this.container = document.createElement('div');
@@ -1008,10 +996,10 @@ class Slider extends EventObservable_1.EventObservable {
     this.range.getRange().classList.add(ClassNaming_1.ClassNaming.RANGE_IS_VERTICAL);
     this.range.setVertical();
     this.rangeLabel.getRangeLabel().classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_IS_VERTICAL);
-    this.thumbLabelFrom.getThumbLabelContainer().classList.add(ClassNaming_1.ClassNaming.THUMB_LABEL_IS_VERTICAL);
+    this.thumbFrom.setVertical();
 
     if (this.viewSettings.isRange) {
-      this.thumbLabelTo.getThumbLabelContainer().classList.add(ClassNaming_1.ClassNaming.THUMB_LABEL_IS_VERTICAL);
+      this.thumbTo.setVertical();
     }
   }
 
@@ -1020,10 +1008,10 @@ class Slider extends EventObservable_1.EventObservable {
     this.range.getRange().classList.remove(ClassNaming_1.ClassNaming.RANGE_IS_VERTICAL);
     this.range.setHorizontal();
     this.rangeLabel.getRangeLabel().classList.remove(ClassNaming_1.ClassNaming.RANGE_LABEL_IS_VERTICAL);
-    this.thumbLabelFrom.getThumbLabelContainer().classList.remove(ClassNaming_1.ClassNaming.THUMB_LABEL_IS_VERTICAL);
+    this.thumbFrom.setHorizontal();
 
     if (this.viewSettings.isRange) {
-      this.thumbLabelTo.getThumbLabelContainer().classList.remove(ClassNaming_1.ClassNaming.THUMB_LABEL_IS_VERTICAL);
+      this.thumbTo.setHorizontal();
     }
   }
 
@@ -1262,20 +1250,34 @@ class Slider extends EventObservable_1.EventObservable {
     return this.thumbTo.getThumb();
   }
 
-  getThumbLabelFrom() {
-    return this.thumbLabelFrom;
+  hideLabel() {
+    this.thumbFrom.hideLabel();
+
+    if (this.viewSettings.isRange) {
+      this.thumbTo.hideLabel();
+    }
   }
 
-  getThumbLabelTo() {
-    return this.thumbLabelTo;
-  }
+  showLabel() {
+    this.thumbFrom.showLabel();
+
+    if (this.viewSettings.isRange) {
+      this.thumbTo.showLabel();
+    }
+  } // getThumbLabelFrom(): ThumbLabel {
+  //   return this.thumbLabelFrom;
+  // }
+  // getThumbLabelTo(): ThumbLabel {
+  //   return this.thumbLabelTo;
+  // }
+
 
   setValueToLabelThumbFrom(value) {
-    this.thumbLabelFrom.setValueToLabel(value);
+    this.thumbFrom.setValueToLabel(value);
   }
 
   setValueToLabelThumbTo(value) {
-    this.thumbLabelTo.setValueToLabel(value);
+    this.thumbTo.setValueToLabel(value);
   }
 
   getRangeLabel() {
@@ -1305,15 +1307,24 @@ exports.Thumb = void 0;
 
 const EventObservable_1 = __webpack_require__(/*! ../../observers/EventObservable */ "./observers/EventObservable.ts");
 
+const ThumbLabel_1 = __webpack_require__(/*! ./ThumbLabel */ "./view/modules/ThumbLabel.ts");
+
 class Thumb extends EventObservable_1.EventObservable {
   constructor(className) {
     super();
     this.thumb = document.createElement('div');
     this.thumb.classList.add(className);
+    this.thumbLabel = new ThumbLabel_1.ThumbLabel();
+    this.thumbLabelHTML = this.thumbLabel.getThumbLabelContainer();
+    this.thumb.appendChild(this.thumbLabelHTML);
   }
 
   getThumb() {
     return this.thumb;
+  }
+
+  getThumbLabel() {
+    return this.thumbLabelHTML;
   }
 
   setThumbPosition(shift, isVertical) {
@@ -1322,6 +1333,26 @@ class Thumb extends EventObservable_1.EventObservable {
     } else {
       this.getThumb().style.left = shift + '%';
     }
+  }
+
+  setVertical() {
+    this.thumbLabel.setVertical();
+  }
+
+  setHorizontal() {
+    this.thumbLabel.setHorizontal();
+  }
+
+  hideLabel() {
+    this.thumbLabel.hideLabel();
+  }
+
+  showLabel() {
+    this.thumbLabel.showLabel();
+  }
+
+  setValueToLabel(value) {
+    this.thumbLabel.setValueToLabel(value);
   }
 
 }
@@ -1372,6 +1403,14 @@ class ThumbLabel {
 
   showLabel() {
     this.thumbLabelContainer.classList.remove(ClassNaming_1.ClassNaming.HIDE_ELEMENT);
+  }
+
+  setVertical() {
+    this.thumbLabelContainer.classList.add(ClassNaming_1.ClassNaming.THUMB_LABEL_IS_VERTICAL);
+  }
+
+  setHorizontal() {
+    this.thumbLabelContainer.classList.remove(ClassNaming_1.ClassNaming.THUMB_LABEL_IS_VERTICAL);
   }
 
 }

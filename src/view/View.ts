@@ -27,10 +27,7 @@ class View extends EventObservable implements IObserver{
     
     this.slider.render(JSON.stringify(s));
     if (this.viewSettings.hideThumbLabel) {
-      this.slider.getThumbLabelFrom().hideLabel();
-      if (this.viewSettings.isRange) {
-        this.slider.getThumbLabelTo().hideLabel();
-      }
+      this.slider.hideLabel();
     }
     if (this.viewSettings.isVertical) {
       this.slider.setVertical();
@@ -50,18 +47,16 @@ class View extends EventObservable implements IObserver{
       this.updateViewSettings(settings);
       this.render(this.viewSettings);
       if (!settings.hideThumbLabel) {
-        this.slider.getThumbLabelFrom().showLabel();
+        this.slider.showLabel();
         this.setThumbToValue(settings,'thumbFrom');
         if (settings.isRange) {
           this.setThumbToValue(settings,'thumbTo');
-          this.slider.getThumbLabelTo().showLabel();
         }
       }
       else {
-        this.slider.getThumbLabelFrom().hideLabel();
+        this.slider.hideLabel();
         this.setThumbToValue(settings, 'thumbFrom');
         if (settings.isRange) {
-          this.slider.getThumbLabelTo().hideLabel();
           this.setThumbToValue(settings, 'thumbTo');
         }
       }
