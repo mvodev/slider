@@ -10,26 +10,25 @@ class RangeLabel{
   private maxLabel!: HTMLSpanElement;
   //private thumbWidthInPercentage:number;
   private labels:HTMLSpanElement[];
-  private settings!:IViewSettings;
+  private viewSettings!:IViewSettings;
 
   constructor(viewSettings:IViewSettings) {
     this.labels = [];
     //this.thumbWidthInPercentage = thumbWidthInPercentage;
-    this.settings = Object.assign(defaultSettings, viewSettings);
+    this.viewSettings = Object.assign(defaultSettings, viewSettings);
     this.initComponents();
   }
 
   render(settings:IViewSettings):void{
-    this.settings = Object.assign(this.settings, settings);
-    this.setMinRange(this.settings.min);
-    this.setMaxRange(this.settings.max);
-    //Math.round(initial * 100) / 100).toFixed(Utils.numDigitsAfterDecimal(this.getStep()));
-    const diapason = Math.abs(this.settings.max - this.settings.min);
+    this.viewSettings = Object.assign(this.viewSettings, settings);
+    this.setMinRange(this.viewSettings.min);
+    this.setMaxRange(this.viewSettings.max);
+    const diapason = Math.abs(this.viewSettings.max - this.viewSettings.min);
     const step = diapason / (Constants.NUMBER_OF_LABELS + 1);
-    let initialValue = this.settings.min;
+    let initialValue = this.viewSettings.min;
     for(let i=0; i<this.labels.length; i++){
       initialValue+=step;
-      this.labels[i].innerText = Number(Math.round(initialValue * 100) / 100).toFixed(Utils.numDigitsAfterDecimal(this.settings.step));
+      this.labels[i].innerText = Number(Math.round(initialValue * 100) / 100).toFixed(Utils.numDigitsAfterDecimal(this.viewSettings.step));
     }
   }
   getRangeLabel():HTMLDivElement {
@@ -69,6 +68,5 @@ class RangeLabel{
   showRangeLabels():void{
     this.rangeLabelContainer.classList.remove(ClassNaming.HIDE_ELEMENT);
   }
-  
 }
 export {RangeLabel}

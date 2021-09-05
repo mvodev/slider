@@ -632,7 +632,6 @@ const ClassNaming = {
   RANGE: 'fsd-slider__range',
   RANGE_LABEL: 'fsd-slider__range-label',
   RANGE_LABEL_SCALE: 'fsd-slider__range-label-scale',
-  RANGE_LABEL_SCALE_CONTAINER: 'fsd-slider__range-labes-container',
   COLORED_RANGE: 'fsd-slider__colored-range',
   THUMB_TO: 'fsd-slider__thumb-to',
   THUMB_FROM: 'fsd-slider__thumb-from',
@@ -741,6 +740,7 @@ class View extends EventObservable_1.EventObservable {
     this.viewSettings = Object.assign({}, defaultSettings_1.defaultSettings);
     this.rootElem = root;
     this.slider = new Slider_1.Slider(this.rootElem);
+    this.slider.addObserver(this);
   }
 
   handleEvent(msg, settings) {
@@ -748,7 +748,6 @@ class View extends EventObservable_1.EventObservable {
   }
 
   render(s) {
-    this.slider.addObserver(this);
     this.slider.render(JSON.stringify(s));
 
     if (this.viewSettings.hideThumbLabel) {
@@ -964,14 +963,19 @@ exports.Range = void 0;
 const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
 
 class Range {
-  constructor() {
+  constructor(settings) {
     const div = document.createElement('div');
     div.classList.add(ClassNaming_1.ClassNaming.RANGE);
     this.range = div;
+    this.viewSettings = settings;
   }
 
   getRange() {
     return this.range;
+  }
+
+  render(settings) {
+    Object.assign(this.viewSettings, JSON.parse(settings));
   }
 
 }
@@ -1007,22 +1011,21 @@ class RangeLabel {
   constructor(viewSettings) {
     this.labels = []; //this.thumbWidthInPercentage = thumbWidthInPercentage;
 
-    this.settings = Object.assign(defaultSettings_1.defaultSettings, viewSettings);
+    this.viewSettings = Object.assign(defaultSettings_1.defaultSettings, viewSettings);
     this.initComponents();
   }
 
   render(settings) {
-    this.settings = Object.assign(this.settings, settings);
-    this.setMinRange(this.settings.min);
-    this.setMaxRange(this.settings.max); //Math.round(initial * 100) / 100).toFixed(Utils.numDigitsAfterDecimal(this.getStep()));
-
-    const diapason = Math.abs(this.settings.max - this.settings.min);
+    this.viewSettings = Object.assign(this.viewSettings, settings);
+    this.setMinRange(this.viewSettings.min);
+    this.setMaxRange(this.viewSettings.max);
+    const diapason = Math.abs(this.viewSettings.max - this.viewSettings.min);
     const step = diapason / (Constants_1.Constants.NUMBER_OF_LABELS + 1);
-    let initialValue = this.settings.min;
+    let initialValue = this.viewSettings.min;
 
     for (let i = 0; i < this.labels.length; i++) {
       initialValue += step;
-      this.labels[i].innerText = Number(Math.round(initialValue * 100) / 100).toFixed(Utils_1.Utils.numDigitsAfterDecimal(this.settings.step));
+      this.labels[i].innerText = Number(Math.round(initialValue * 100) / 100).toFixed(Utils_1.Utils.numDigitsAfterDecimal(this.viewSettings.step));
     }
   }
 
@@ -1118,6 +1121,7 @@ class Slider extends EventObservable_1.EventObservable {
     this.container.appendChild(this.range.getRange());
     this.range.getRange().appendChild(this.coloredRange.getColoredRange());
     this.range.getRange().appendChild(this.thumbFrom.getThumb());
+    this.range.render(settings);
     this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
 
     if (this.viewSettings.isRange) {
@@ -1137,14 +1141,14 @@ class Slider extends EventObservable_1.EventObservable {
     this.thumbLabelTo = new ThumbLabel_1.ThumbLabel();
     this.thumbFrom = new Thumb_1.Thumb(ClassNaming_1.ClassNaming.THUMB_FROM);
     this.thumbLabelFrom = new ThumbLabel_1.ThumbLabel();
-    this.range = new Range_1.Range();
+    this.range = new Range_1.Range(this.viewSettings);
     this.coloredRange = new ColoredRange_1.ColoredRange();
     this.rangeLabel = new RangeLabel_1.RangeLabel(this.viewSettings);
     this.container = document.createElement('div');
   }
 
   bindEvents() {
-    this.getRangeLabel().addEventListener('mousedown', this.handleRange.bind(this));
+    this.getRangeLabel().addEventListener('mousedown', this.handleRangeLabel.bind(this));
     this.getThumbFrom().addEventListener('mousedown', this.handleThumb.bind(this, "thumbFrom"));
 
     if (this.viewSettings.isRange) {
@@ -1235,7 +1239,7 @@ class Slider extends EventObservable_1.EventObservable {
           newPos = bottom;
         }
 
-        if (Math.abs(that.stepInPx - newPos) >= 0) {
+        if (Math.abs(newPos % that.stepInPx) <= 0.1 * that.stepInPx) {
           that.dispatchEvent(newPos, thumbType);
         }
       } // eslint-disable-next-line no-inner-declarations
@@ -1280,7 +1284,7 @@ class Slider extends EventObservable_1.EventObservable {
           newPos = rightEdge;
         }
 
-        if (Math.abs(that.stepInPx - newPos) >= 0) {
+        if (Math.abs(newPos % that.stepInPx) <= 0.1 * that.stepInPx) {
           that.dispatchEvent(newPos, thumbType);
         }
       } // eslint-disable-next-line no-inner-declarations
@@ -1295,7 +1299,7 @@ class Slider extends EventObservable_1.EventObservable {
     this.setColoredRange();
   }
 
-  handleRange(e) {
+  handleRangeLabel(e) {
     let shift, fromPos;
 
     if (this.viewSettings.isVertical) {

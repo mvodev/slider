@@ -3,7 +3,6 @@ const ClassNaming = {
   RANGE: 'fsd-slider__range',
   RANGE_LABEL:'fsd-slider__range-label',
   RANGE_LABEL_SCALE: 'fsd-slider__range-label-scale',
-  RANGE_LABEL_SCALE_CONTAINER:'fsd-slider__range-labes-container',
   COLORED_RANGE: 'fsd-slider__colored-range',
   THUMB_TO:'fsd-slider__thumb-to',
   THUMB_FROM: 'fsd-slider__thumb-from',

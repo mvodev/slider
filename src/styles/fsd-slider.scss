@@ -18,6 +18,7 @@
     width: inherit;
     position: relative;
     border-radius: 10px;
+    cursor: pointer;
   }
 
   &__range_is_vertical{
@@ -31,6 +32,7 @@
     width: 100%;
     position: relative;
     border-radius: 10px;
+    cursor: pointer;
   }
 
   &__thumb-from,
@@ -85,15 +87,7 @@
       height: auto;
       margin-left: 10px;
       margin-top: 0;
-      
-      & .fsd-slider__range-labes-container{
-        flex-direction: column;
-      }
     }
-  }
-  &__range-labes-container{
-    display: flex;
-    justify-content: space-around;
   }
 
   &_element_is_hidden{

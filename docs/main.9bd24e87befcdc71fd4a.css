@@ -17,6 +17,7 @@
   width: inherit;
   position: relative;
   border-radius: 10px;
+  cursor: pointer;
 }
 .fsd-slider__range_is_vertical {
   height: inherit;
@@ -28,6 +29,7 @@
   width: 100%;
   position: relative;
   border-radius: 10px;
+  cursor: pointer;
 }
 .fsd-slider__thumb-from, .fsd-slider__thumb-to {
   position: absolute;
@@ -76,13 +78,6 @@
   margin-left: 10px;
   margin-top: 0;
 }
-.fsd-slider__range-label_is_vertical .fsd-slider__range-labes-container {
-  flex-direction: column;
-}
-.fsd-slider__range-labes-container {
-  display: flex;
-  justify-content: space-around;
-}
 .fsd-slider_element_is_hidden {
   display: none;
 }
@@ -130,4 +125,4 @@ body {
   padding: 10px;
 }
 
-/*# sourceMappingURL=main.8a959c42ddcceb64f30f.css.map*/
+/*# sourceMappingURL=main.9bd24e87befcdc71fd4a.css.map*/

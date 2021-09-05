@@ -16,6 +16,7 @@ class View extends EventObservable implements IObserver{
     this.viewSettings = Object.assign({},defaultSettings);
     this.rootElem = root;
     this.slider = new Slider(this.rootElem);
+    this.slider.addObserver(this);
   }
 
   handleEvent(msg: Messages, settings: string): void {
@@ -23,7 +24,7 @@ class View extends EventObservable implements IObserver{
   }
 
   private render(s:IViewSettings):void {
-    this.slider.addObserver(this);
+    
     this.slider.render(JSON.stringify(s));
     if (this.viewSettings.hideThumbLabel) {
       this.slider.getThumbLabelFrom().hideLabel();

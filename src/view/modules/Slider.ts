@@ -38,6 +38,7 @@ render(settings:string) :void{
   this.container.appendChild(this.range.getRange());
   this.range.getRange().appendChild(this.coloredRange.getColoredRange());
   this.range.getRange().appendChild(this.thumbFrom.getThumb());
+  this.range.render(settings);
   this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
   if (this.viewSettings.isRange) {
     this.thumbTo.getThumb().appendChild(this.thumbLabelTo.getThumbLabelContainer());
@@ -55,13 +56,14 @@ private initSliderComponents() {
   this.thumbLabelTo = new ThumbLabel();
   this.thumbFrom = new Thumb(ClassNaming.THUMB_FROM);
   this.thumbLabelFrom = new ThumbLabel();
-  this.range = new Range();
+  this.range = new Range(this.viewSettings);
   this.coloredRange = new ColoredRange();
   this.rangeLabel = new RangeLabel(this.viewSettings);
   this.container = document.createElement('div');
 }
+
 private bindEvents(): void {
-  this.getRangeLabel().addEventListener('mousedown', this.handleRange.bind(this));
+  this.getRangeLabel().addEventListener('mousedown', this.handleRangeLabel.bind(this));
   this.getThumbFrom().addEventListener('mousedown', this.handleThumb.bind(this, "thumbFrom"));
   if (this.viewSettings.isRange) {
     this.getThumbTo().addEventListener('mousedown', this.handleThumb.bind(this, "thumbTo"));
@@ -145,16 +147,16 @@ private handleThumb(thumbType: string, e: MouseEvent): void {
       if (newPos > bottom) {
         newPos = bottom;
       }
-      if(Math.abs(that.stepInPx-newPos)>=0){
+      if(Math.abs(newPos%that.stepInPx)<=0.1*that.stepInPx){
         that.dispatchEvent(newPos, thumbType);
       }
       
     }
    // eslint-disable-next-line no-inner-declarations
-    function onMouseUp() {
-      document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mousemove', onMouseMove);
-    }
+      function onMouseUp() {
+        document.removeEventListener('mouseup', onMouseUp);
+        document.removeEventListener('mousemove', onMouseMove);
+      }
     }
     else {
       document.addEventListener('mousemove', onMouseMove);
@@ -186,7 +188,8 @@ private handleThumb(thumbType: string, e: MouseEvent): void {
         if (newPos >= rightEdge) {
           newPos = rightEdge;
         }
-        if (Math.abs(that.stepInPx - newPos) >= 0) {
+
+        if (Math.abs(newPos % that.stepInPx) <= 0.1 * that.stepInPx) {
           that.dispatchEvent(newPos, thumbType);
         }
       }
@@ -199,7 +202,7 @@ private handleThumb(thumbType: string, e: MouseEvent): void {
   this.setColoredRange();
 }
 
-private handleRange(e: MouseEvent) {
+private handleRangeLabel(e: MouseEvent) {
   let shift: number, fromPos: number;
   if (this.viewSettings.isVertical) {
     shift = e.clientY - this.getRange().getBoundingClientRect().top;
