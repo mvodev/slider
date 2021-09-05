@@ -39,7 +39,6 @@ class ThumbLabel {
     this.thumbLabelContainer.classList.remove(ClassNaming.THUMB_LABEL_IS_VERTICAL);
   }
 
-
-
 }
+
 export { ThumbLabel }

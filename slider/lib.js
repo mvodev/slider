@@ -977,10 +977,12 @@ class Range {
   }
 
   setVertical() {
+    this.range.classList.add(ClassNaming_1.ClassNaming.RANGE_IS_VERTICAL);
     this.coloredRange.getColoredRange().classList.add(ClassNaming_1.ClassNaming.COLORED_RANGE_IS_VERTICAL);
   }
 
   setHorizontal() {
+    this.range.classList.remove(ClassNaming_1.ClassNaming.RANGE_IS_VERTICAL);
     this.coloredRange.getColoredRange().classList.remove(ClassNaming_1.ClassNaming.COLORED_RANGE_IS_VERTICAL);
   }
 
@@ -1019,8 +1021,7 @@ const Utils_1 = __webpack_require__(/*! ../../utils/Utils */ "./utils/Utils.ts")
 
 class RangeLabel {
   constructor(viewSettings) {
-    this.labels = []; //this.thumbWidthInPercentage = thumbWidthInPercentage;
-
+    this.labels = [];
     this.viewSettings = Object.assign(defaultSettings_1.defaultSettings, viewSettings);
     this.initComponents();
   }
@@ -1068,14 +1069,6 @@ class RangeLabel {
     }
 
     this.rangeLabelContainer.appendChild(this.maxLabel);
-  }
-
-  hideRangeLabels() {
-    this.rangeLabelContainer.classList.add(ClassNaming_1.ClassNaming.HIDE_ELEMENT);
-  }
-
-  showRangeLabels() {
-    this.rangeLabelContainer.classList.remove(ClassNaming_1.ClassNaming.HIDE_ELEMENT);
   }
 
 }
@@ -1158,7 +1151,6 @@ class Slider extends EventObservable_1.EventObservable {
 
   setVertical() {
     this.container.classList.add(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
-    this.range.getRange().classList.add(ClassNaming_1.ClassNaming.RANGE_IS_VERTICAL);
     this.range.setVertical();
     this.rangeLabel.getRangeLabel().classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_IS_VERTICAL);
     this.thumbFrom.setVertical();
@@ -1170,7 +1162,6 @@ class Slider extends EventObservable_1.EventObservable {
 
   setHorizontal() {
     this.container.classList.remove(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
-    this.range.getRange().classList.remove(ClassNaming_1.ClassNaming.RANGE_IS_VERTICAL);
     this.range.setHorizontal();
     this.rangeLabel.getRangeLabel().classList.remove(ClassNaming_1.ClassNaming.RANGE_LABEL_IS_VERTICAL);
     this.thumbFrom.setHorizontal();
@@ -1470,13 +1461,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Thumb = void 0;
 
-const EventObservable_1 = __webpack_require__(/*! ../../observers/EventObservable */ "./observers/EventObservable.ts");
-
 const ThumbLabel_1 = __webpack_require__(/*! ./ThumbLabel */ "./view/modules/ThumbLabel.ts");
 
-class Thumb extends EventObservable_1.EventObservable {
+class Thumb {
   constructor(className) {
-    super();
     this.thumb = document.createElement('div');
     this.thumb.classList.add(className);
     this.thumbLabel = new ThumbLabel_1.ThumbLabel();
@@ -1486,10 +1474,6 @@ class Thumb extends EventObservable_1.EventObservable {
 
   getThumb() {
     return this.thumb;
-  }
-
-  getThumbLabel() {
-    return this.thumbLabelHTML;
   }
 
   setThumbPosition(shift, isVertical) {

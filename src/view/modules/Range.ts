@@ -22,9 +22,11 @@ class Range{
     Object.assign(this.viewSettings, JSON.parse(settings));
   }
   setVertical():void{
+    this.range.classList.add(ClassNaming.RANGE_IS_VERTICAL);
     this.coloredRange.getColoredRange().classList.add(ClassNaming.COLORED_RANGE_IS_VERTICAL);
   }
   setHorizontal():void{
+    this.range.classList.remove(ClassNaming.RANGE_IS_VERTICAL);
     this.coloredRange.getColoredRange().classList.remove(ClassNaming.COLORED_RANGE_IS_VERTICAL);
   }
   setColoredRange(thumbFrom: HTMLDivElement, thumbTo: HTMLDivElement,widthThumb:number):void{

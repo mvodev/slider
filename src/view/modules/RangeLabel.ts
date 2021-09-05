@@ -8,13 +8,11 @@ class RangeLabel{
   private rangeLabelContainer!: HTMLDivElement;
   private minLabel!: HTMLSpanElement;
   private maxLabel!: HTMLSpanElement;
-  //private thumbWidthInPercentage:number;
   private labels:HTMLSpanElement[];
   private viewSettings!:IViewSettings;
 
   constructor(viewSettings:IViewSettings) {
     this.labels = [];
-    //this.thumbWidthInPercentage = thumbWidthInPercentage;
     this.viewSettings = Object.assign(defaultSettings, viewSettings);
     this.initComponents();
   }
@@ -61,12 +59,5 @@ class RangeLabel{
     this.rangeLabelContainer.appendChild(this.maxLabel);
   }
 
-  hideRangeLabels():void{
-    this.rangeLabelContainer.classList.add(ClassNaming.HIDE_ELEMENT);
-  }
-
-  showRangeLabels():void{
-    this.rangeLabelContainer.classList.remove(ClassNaming.HIDE_ELEMENT);
-  }
 }
 export {RangeLabel}

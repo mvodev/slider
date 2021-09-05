@@ -61,7 +61,6 @@ private bindEvents(): void {
 }
 setVertical():void {
   this.container.classList.add(ClassNaming.SLIDER_IS_VERTICAL);
-  this.range.getRange().classList.add(ClassNaming.RANGE_IS_VERTICAL);
   this.range.setVertical();
   this.rangeLabel.getRangeLabel().classList.add(ClassNaming.RANGE_LABEL_IS_VERTICAL);
   this.thumbFrom.setVertical();
@@ -72,7 +71,6 @@ setVertical():void {
 
 setHorizontal():void{
   this.container.classList.remove(ClassNaming.SLIDER_IS_VERTICAL);
-  this.range.getRange().classList.remove(ClassNaming.RANGE_IS_VERTICAL);
   this.range.setHorizontal();
   this.rangeLabel.getRangeLabel().classList.remove(ClassNaming.RANGE_LABEL_IS_VERTICAL);
   this.thumbFrom.setHorizontal();
