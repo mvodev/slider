@@ -13,7 +13,6 @@ class Model extends EventObservable implements IModelFacade {
     super();
     this.settings = Object.assign({},defaultSettings);
     this.validateSettings(settings);
-    this.settings.labels=this.calculateLabels();
   }
   getSettings(): string {
     return JSON.stringify(this.settings);
@@ -61,7 +60,6 @@ class Model extends EventObservable implements IModelFacade {
     this.validateStepOrError(newStep);
     this.validateIsVerticalOrError(newIsVertical);
     this.validateThumbLabelOrError(newHideThumbLabel);
-    this.settings.labels = this.calculateLabels();
   }
   private validateMinOrError(newMin:number|undefined):void{
     if (newMin) {
@@ -164,14 +162,5 @@ class Model extends EventObservable implements IModelFacade {
     return res;
   }
 
-  calculateLabels():number[]{
-    const result:number[] = [];
-    let initial:number = this.getMin();
-    while(initial<(this.getMax()-this.getStep())){
-      initial=this.getStep()+initial;
-      result.push(+(Math.round(initial * 100) / 100).toFixed(Utils.numDigitsAfterDecimal(this.getStep())));
-    }
-    return result;
-  }
 }
 export { Model }

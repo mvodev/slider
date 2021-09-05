@@ -57,7 +57,7 @@ private initSliderComponents() {
   this.thumbLabelFrom = new ThumbLabel();
   this.range = new Range();
   this.coloredRange = new ColoredRange();
-  this.rangeLabel = new RangeLabel();
+  this.rangeLabel = new RangeLabel(this.viewSettings);
   this.container = document.createElement('div');
 }
 private bindEvents(): void {
@@ -101,9 +101,6 @@ private  getThumbWidthInPx() :number{
   return this.getThumbFrom().offsetWidth;
 }
 
-setNumberLabels(value:number[]):void{
-  this.rangeLabel.setRangeLabels(value);
-}
 
 private handleThumb(thumbType: string, e: MouseEvent): void {
     e.preventDefault();
@@ -318,14 +315,6 @@ getThumbLabelFrom(): ThumbLabel {
 }
 getThumbLabelTo(): ThumbLabel {
   return this.thumbLabelTo;
-}
-
-setMaxRange(value: number): void {
-  this.rangeLabel.setMaxRange(value);
-}
-
-setMinRange(value: number): void {
-  this.rangeLabel.setMinRange(value);
 }
 
 setValueToLabelThumbFrom(value: number): void {

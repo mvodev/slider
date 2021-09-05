@@ -5,6 +5,5 @@ interface IViewSettings {
   min:number;
   max:number;
   step:number;
-  labels:number[];
 }
 export { IViewSettings }

@@ -64,9 +64,6 @@ class View extends EventObservable implements IObserver{
           this.setThumbToValue(settings, 'thumbTo');
         }
       }
-      this.slider.setMinRange(settings.min);
-      this.slider.setMaxRange(settings.max);
-      this.slider.setNumberLabels(settings.labels);
       this.slider.setValueToLabelThumbFrom(settings.from);
       if (settings.isRange) {
         this.slider.setValueToLabelThumbTo(settings.to !== undefined ? settings.to : settings.from);

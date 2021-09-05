@@ -3,11 +3,13 @@
   flex-direction: column;
   width: 100%;
   height: auto;
-  min-height: 300px;
   min-width: 300px;
 }
 .fsd-slider_is_vertical {
   flex-direction: row;
+  min-height: 300px;
+  min-width: auto;
+  width: auto;
 }
 .fsd-slider__range {
   background-color: green;
@@ -71,7 +73,7 @@
   flex-direction: column;
   width: 20px;
   height: auto;
-  margin-left: 5px;
+  margin-left: 10px;
   margin-top: 0;
 }
 .fsd-slider__range-label_is_vertical .fsd-slider__range-labes-container {
@@ -128,4 +130,4 @@ body {
   padding: 10px;
 }
 
-/*# sourceMappingURL=main.5da51b2e6b20fb467e44.css.map*/
+/*# sourceMappingURL=main.8a959c42ddcceb64f30f.css.map*/

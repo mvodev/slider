@@ -135,7 +135,6 @@ class Model extends EventObservable_1.EventObservable {
     super();
     this.settings = Object.assign({}, DefaultSettings_1.defaultSettings);
     this.validateSettings(settings);
-    this.settings.labels = this.calculateLabels();
   }
 
   getSettings() {
@@ -193,7 +192,6 @@ class Model extends EventObservable_1.EventObservable {
     this.validateStepOrError(newStep);
     this.validateIsVerticalOrError(newIsVertical);
     this.validateThumbLabelOrError(newHideThumbLabel);
-    this.settings.labels = this.calculateLabels();
   }
 
   validateMinOrError(newMin) {
@@ -295,18 +293,6 @@ class Model extends EventObservable_1.EventObservable {
     if (res < this.getMin()) return this.getMin();
     if (res > this.getMax()) return this.getMax();
     return res;
-  }
-
-  calculateLabels() {
-    const result = [];
-    let initial = this.getMin();
-
-    while (initial < this.getMax() - this.getStep()) {
-      initial = this.getStep() + initial;
-      result.push(+(Math.round(initial * 100) / 100).toFixed(Utils_1.Utils.numDigitsAfterDecimal(this.getStep())));
-    }
-
-    return result;
   }
 
 }
@@ -498,6 +484,29 @@ exports.ClassNaming = ClassNaming;
 
 /***/ }),
 
+/***/ "./utils/Constants.ts":
+/*!****************************!*\
+  !*** ./utils/Constants.ts ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Constants = void 0; // eslint-disable-next-line @typescript-eslint/no-namespace
+
+var Constants;
+
+(function (Constants) {
+  Constants.NUMBER_OF_LABELS = 8;
+})(Constants = exports.Constants || (exports.Constants = {}));
+
+/***/ }),
+
 /***/ "./utils/Utils.ts":
 /*!************************!*\
   !*** ./utils/Utils.ts ***!
@@ -627,9 +636,6 @@ class View extends EventObservable_1.EventObservable {
           }
         }
 
-        this.slider.setMinRange(settings.min);
-        this.slider.setMaxRange(settings.max);
-        this.slider.setNumberLabels(settings.labels);
         this.slider.setValueToLabelThumbFrom(settings.from);
 
         if (settings.isRange) {
@@ -824,22 +830,34 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.RangeLabel = void 0;
 
+const defaultSettings_1 = __webpack_require__(/*! ../../model/defaultSettings */ "./model/defaultSettings.ts");
+
 const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
 
+const Constants_1 = __webpack_require__(/*! ../../utils/Constants */ "./utils/Constants.ts");
+
+const Utils_1 = __webpack_require__(/*! ../../utils/Utils */ "./utils/Utils.ts");
+
 class RangeLabel {
-  constructor() {
+  constructor(viewSettings) {
+    this.labels = []; //this.thumbWidthInPercentage = thumbWidthInPercentage;
+
+    this.settings = Object.assign(defaultSettings_1.defaultSettings, viewSettings);
     this.initComponents();
   }
 
   render(settings) {
-    if (this.rangeLabels.length === 0) {
-      for (let i = 0; i < settings.labels.length; i++) {
-        const marking = document.createElement('span');
-        marking.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
-        marking.innerText = settings.labels[i] + '';
-        this.labelsContainer.appendChild(marking);
-        this.rangeLabels.push(marking);
-      }
+    this.settings = Object.assign(this.settings, settings);
+    this.setMinRange(this.settings.min);
+    this.setMaxRange(this.settings.max); //Math.round(initial * 100) / 100).toFixed(Utils.numDigitsAfterDecimal(this.getStep()));
+
+    const diapason = Math.abs(this.settings.max - this.settings.min);
+    const step = diapason / (Constants_1.Constants.NUMBER_OF_LABELS + 1);
+    let initialValue = this.settings.min;
+
+    for (let i = 0; i < this.labels.length; i++) {
+      initialValue += step;
+      this.labels[i].innerText = Number(Math.round(initialValue * 100) / 100).toFixed(Utils_1.Utils.numDigitsAfterDecimal(this.settings.step));
     }
   }
 
@@ -855,28 +873,22 @@ class RangeLabel {
     this.maxLabel.innerText = '' + value;
   }
 
-  getRangeLabels() {
-    return this.rangeLabels;
-  }
-
-  setRangeLabels(value) {
-    this.rangeLabels.forEach(function (elem, index) {
-      elem.innerText = value[index] + '';
-    });
-  }
-
   initComponents() {
     this.rangeLabelContainer = document.createElement('div');
     this.rangeLabelContainer.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL);
-    this.rangeLabels = [];
     this.minLabel = document.createElement('span');
     this.minLabel.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
     this.maxLabel = document.createElement('span');
     this.maxLabel.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
-    this.labelsContainer = document.createElement('span');
-    this.labelsContainer.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE_CONTAINER);
     this.rangeLabelContainer.appendChild(this.minLabel);
-    this.rangeLabelContainer.appendChild(this.labelsContainer);
+
+    for (let i = 0; i < Constants_1.Constants.NUMBER_OF_LABELS; i++) {
+      const mark = document.createElement('span');
+      mark.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
+      this.labels.push(mark);
+      this.rangeLabelContainer.appendChild(mark);
+    }
+
     this.rangeLabelContainer.appendChild(this.maxLabel);
   }
 
@@ -962,7 +974,7 @@ class Slider extends EventObservable_1.EventObservable {
     this.thumbLabelFrom = new ThumbLabel_1.ThumbLabel();
     this.range = new Range_1.Range();
     this.coloredRange = new ColoredRange_1.ColoredRange();
-    this.rangeLabel = new RangeLabel_1.RangeLabel();
+    this.rangeLabel = new RangeLabel_1.RangeLabel(this.viewSettings);
     this.container = document.createElement('div');
   }
 
@@ -1005,10 +1017,6 @@ class Slider extends EventObservable_1.EventObservable {
 
   getThumbWidthInPx() {
     return this.getThumbFrom().offsetWidth;
-  }
-
-  setNumberLabels(value) {
-    this.rangeLabel.setRangeLabels(value);
   }
 
   handleThumb(thumbType, e) {
@@ -1244,14 +1252,6 @@ class Slider extends EventObservable_1.EventObservable {
 
   getThumbLabelTo() {
     return this.thumbLabelTo;
-  }
-
-  setMaxRange(value) {
-    this.rangeLabel.setMaxRange(value);
-  }
-
-  setMinRange(value) {
-    this.rangeLabel.setMinRange(value);
   }
 
   setValueToLabelThumbFrom(value) {

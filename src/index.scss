@@ -21,15 +21,15 @@ body{
 }
 
 .sliders__elem{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-    margin-bottom: 50px;
-    background-color: white;
-    max-width: 1200px;
-    width: 100%;
-    min-height: 400px;
-    height: 100%;
-    padding: 10px;
-  }
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  margin-bottom: 50px;
+  background-color: white;
+  max-width: 1200px;
+  width: 100%;
+  min-height: 400px;
+  height: 100%;
+  padding: 10px;
+}
