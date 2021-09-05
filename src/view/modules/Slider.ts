@@ -3,7 +3,6 @@ import { Messages } from '../../utils/Messages';
 import { Thumb } from './Thumb';
 import { ThumbLabel } from './ThumbLabel';
 import { RangeLabel } from './RangeLabel';
-import { ColoredRange } from './ColoredRange';
 import { IViewSettings } from '../../model/IViewSettings';
 import { defaultSettings } from '../../model/DefaultSettings';
 import { EventObservable } from '../../observers/EventObservable';
@@ -18,7 +17,6 @@ private thumbLabelTo!: ThumbLabel;
 private rangeLabel!: RangeLabel;
 private rootElem!: HTMLDivElement;
 private container!: HTMLDivElement;
-private coloredRange!: ColoredRange;
 private viewSettings: IViewSettings;
 private resPercentage: number;
 private stepInPx:number;
@@ -36,7 +34,7 @@ render(settings:string) :void{
   this.viewSettings = Object.assign(this.viewSettings,JSON.parse(settings));
   this.container.classList.add(ClassNaming.ROOT);
   this.container.appendChild(this.range.getRange());
-  this.range.getRange().appendChild(this.coloredRange.getColoredRange());
+  
   this.range.getRange().appendChild(this.thumbFrom.getThumb());
   this.range.render(settings);
   this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
@@ -57,7 +55,6 @@ private initSliderComponents() {
   this.thumbFrom = new Thumb(ClassNaming.THUMB_FROM);
   this.thumbLabelFrom = new ThumbLabel();
   this.range = new Range(this.viewSettings);
-  this.coloredRange = new ColoredRange();
   this.rangeLabel = new RangeLabel(this.viewSettings);
   this.container = document.createElement('div');
 }
@@ -72,7 +69,7 @@ private bindEvents(): void {
 setVertical():void {
   this.container.classList.add(ClassNaming.SLIDER_IS_VERTICAL);
   this.range.getRange().classList.add(ClassNaming.RANGE_IS_VERTICAL);
-  this.coloredRange.getColoredRange().classList.add(ClassNaming.COLORED_RANGE_IS_VERTICAL);
+  this.range.setVertical();
   this.rangeLabel.getRangeLabel().classList.add(ClassNaming.RANGE_LABEL_IS_VERTICAL);
   this.thumbLabelFrom.getThumbLabelContainer().classList.add(ClassNaming.THUMB_LABEL_IS_VERTICAL);
   if (this.viewSettings.isRange) {
@@ -83,7 +80,7 @@ setVertical():void {
 setHorizontal():void{
   this.container.classList.remove(ClassNaming.SLIDER_IS_VERTICAL);
   this.range.getRange().classList.remove(ClassNaming.RANGE_IS_VERTICAL);
-  this.coloredRange.getColoredRange().classList.remove(ClassNaming.COLORED_RANGE_IS_VERTICAL);
+  this.range.setHorizontal();
   this.rangeLabel.getRangeLabel().classList.remove(ClassNaming.RANGE_LABEL_IS_VERTICAL);
   this.thumbLabelFrom.getThumbLabelContainer().classList.remove(ClassNaming.THUMB_LABEL_IS_VERTICAL);
   if (this.viewSettings.isRange) {
@@ -92,17 +89,12 @@ setHorizontal():void{
 }
 
 setColoredRange(): void {
-  this.coloredRange.setColoredRange(
-      this.viewSettings,
-      this.getThumbFrom(),
-      this.getThumbTo(),
-      this.getThumbWidthInPercentage());
+  this.range.setColoredRange(this.getThumbFrom(),this.getThumbTo(),this.getThumbWidthInPercentage());
 }
 
 private  getThumbWidthInPx() :number{
   return this.getThumbFrom().offsetWidth;
 }
-
 
 private handleThumb(thumbType: string, e: MouseEvent): void {
     e.preventDefault();

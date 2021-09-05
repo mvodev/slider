@@ -962,12 +962,16 @@ exports.Range = void 0;
 
 const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
 
+const ColoredRange_1 = __webpack_require__(/*! ./ColoredRange */ "./view/modules/ColoredRange.ts");
+
 class Range {
   constructor(settings) {
     const div = document.createElement('div');
     div.classList.add(ClassNaming_1.ClassNaming.RANGE);
     this.range = div;
     this.viewSettings = settings;
+    this.coloredRange = new ColoredRange_1.ColoredRange();
+    this.getRange().appendChild(this.coloredRange.getColoredRange());
   }
 
   getRange() {
@@ -976,6 +980,18 @@ class Range {
 
   render(settings) {
     Object.assign(this.viewSettings, JSON.parse(settings));
+  }
+
+  setVertical() {
+    this.coloredRange.getColoredRange().classList.add(ClassNaming_1.ClassNaming.COLORED_RANGE_IS_VERTICAL);
+  }
+
+  setHorizontal() {
+    this.coloredRange.getColoredRange().classList.remove(ClassNaming_1.ClassNaming.COLORED_RANGE_IS_VERTICAL);
+  }
+
+  setColoredRange(thumbFrom, thumbTo, widthThumb) {
+    this.coloredRange.setColoredRange(this.viewSettings, thumbFrom, thumbTo, widthThumb);
   }
 
 }
@@ -1097,8 +1113,6 @@ const ThumbLabel_1 = __webpack_require__(/*! ./ThumbLabel */ "./view/modules/Thu
 
 const RangeLabel_1 = __webpack_require__(/*! ./RangeLabel */ "./view/modules/RangeLabel.ts");
 
-const ColoredRange_1 = __webpack_require__(/*! ./ColoredRange */ "./view/modules/ColoredRange.ts");
-
 const DefaultSettings_1 = __webpack_require__(/*! ../../model/DefaultSettings */ "./model/DefaultSettings.ts");
 
 const EventObservable_1 = __webpack_require__(/*! ../../observers/EventObservable */ "./observers/EventObservable.ts");
@@ -1119,7 +1133,6 @@ class Slider extends EventObservable_1.EventObservable {
     this.viewSettings = Object.assign(this.viewSettings, JSON.parse(settings));
     this.container.classList.add(ClassNaming_1.ClassNaming.ROOT);
     this.container.appendChild(this.range.getRange());
-    this.range.getRange().appendChild(this.coloredRange.getColoredRange());
     this.range.getRange().appendChild(this.thumbFrom.getThumb());
     this.range.render(settings);
     this.thumbFrom.getThumb().appendChild(this.thumbLabelFrom.getThumbLabelContainer());
@@ -1142,7 +1155,6 @@ class Slider extends EventObservable_1.EventObservable {
     this.thumbFrom = new Thumb_1.Thumb(ClassNaming_1.ClassNaming.THUMB_FROM);
     this.thumbLabelFrom = new ThumbLabel_1.ThumbLabel();
     this.range = new Range_1.Range(this.viewSettings);
-    this.coloredRange = new ColoredRange_1.ColoredRange();
     this.rangeLabel = new RangeLabel_1.RangeLabel(this.viewSettings);
     this.container = document.createElement('div');
   }
@@ -1159,7 +1171,7 @@ class Slider extends EventObservable_1.EventObservable {
   setVertical() {
     this.container.classList.add(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
     this.range.getRange().classList.add(ClassNaming_1.ClassNaming.RANGE_IS_VERTICAL);
-    this.coloredRange.getColoredRange().classList.add(ClassNaming_1.ClassNaming.COLORED_RANGE_IS_VERTICAL);
+    this.range.setVertical();
     this.rangeLabel.getRangeLabel().classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_IS_VERTICAL);
     this.thumbLabelFrom.getThumbLabelContainer().classList.add(ClassNaming_1.ClassNaming.THUMB_LABEL_IS_VERTICAL);
 
@@ -1171,7 +1183,7 @@ class Slider extends EventObservable_1.EventObservable {
   setHorizontal() {
     this.container.classList.remove(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
     this.range.getRange().classList.remove(ClassNaming_1.ClassNaming.RANGE_IS_VERTICAL);
-    this.coloredRange.getColoredRange().classList.remove(ClassNaming_1.ClassNaming.COLORED_RANGE_IS_VERTICAL);
+    this.range.setHorizontal();
     this.rangeLabel.getRangeLabel().classList.remove(ClassNaming_1.ClassNaming.RANGE_LABEL_IS_VERTICAL);
     this.thumbLabelFrom.getThumbLabelContainer().classList.remove(ClassNaming_1.ClassNaming.THUMB_LABEL_IS_VERTICAL);
 
@@ -1181,7 +1193,7 @@ class Slider extends EventObservable_1.EventObservable {
   }
 
   setColoredRange() {
-    this.coloredRange.setColoredRange(this.viewSettings, this.getThumbFrom(), this.getThumbTo(), this.getThumbWidthInPercentage());
+    this.range.setColoredRange(this.getThumbFrom(), this.getThumbTo(), this.getThumbWidthInPercentage());
   }
 
   getThumbWidthInPx() {
