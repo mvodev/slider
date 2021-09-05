@@ -1355,11 +1355,11 @@ class ThumbLabel {
   }
 
   hideLabel() {
-    this.thumbLabelContainer.style.display = 'none';
+    this.thumbLabelContainer.classList.add(ClassNaming_1.ClassNaming.HIDE_ELEMENT);
   }
 
   showLabel() {
-    this.thumbLabelContainer.style.display = 'block';
+    this.thumbLabelContainer.classList.remove(ClassNaming_1.ClassNaming.HIDE_ELEMENT);
   }
 
 }

@@ -19,10 +19,10 @@ class ThumbLabel {
     this.thumbLabelValue.innerText = '' + value;
   }
   hideLabel(): void {
-    this.thumbLabelContainer.style.display = 'none';
+    this.thumbLabelContainer.classList.add(ClassNaming.HIDE_ELEMENT);
   }
   showLabel(): void {
-    this.thumbLabelContainer.style.display = 'block';
+    this.thumbLabelContainer.classList.remove(ClassNaming.HIDE_ELEMENT);
   }
 }
 export { ThumbLabel }
