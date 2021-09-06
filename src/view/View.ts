@@ -24,10 +24,7 @@ class View extends EventObservable implements IObserver{
   }
 
   private render(s:IViewSettings):void {
-    console.log('inside view render '+JSON.stringify(s));
-    
     this.slider.render(JSON.stringify(s));
-    
   }
 
   refreshView(msg: Messages, settings: ISettings):void {
@@ -35,14 +32,12 @@ class View extends EventObservable implements IObserver{
       this.updateViewSettings(settings);
       this.render(this.viewSettings);
       if (!settings.hideThumbLabel) {
-        this.slider.showLabel();
         this.setThumbToValue(settings,'thumbFrom');
         if (settings.isRange) {
           this.setThumbToValue(settings,'thumbTo');
         }
       }
       else {
-        this.slider.hideLabel();
         this.setThumbToValue(settings, 'thumbFrom');
         if (settings.isRange) {
           this.setThumbToValue(settings, 'thumbTo');

@@ -47,11 +47,12 @@ class Range{
       this.thumbTo.setHorizontal();
     }
   }
-  setColoredRange(thumbFrom: HTMLDivElement, thumbTo: HTMLDivElement,widthThumb:number):void{
+  
+  setColoredRange(widthThumb:number):void{
     this.coloredRange.setColoredRange(
       this.viewSettings,
-      thumbFrom,
-      thumbTo,
+      this.thumbFrom.getThumb(),
+      this.thumbTo.getThumb(),
       widthThumb);
   }
 
