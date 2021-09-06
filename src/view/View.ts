@@ -24,25 +24,13 @@ class View extends EventObservable implements IObserver{
   }
 
   private render(s:IViewSettings):void {
+    console.log('inside view render '+JSON.stringify(s));
     
     this.slider.render(JSON.stringify(s));
-    if (this.viewSettings.hideThumbLabel) {
-      this.slider.hideLabel();
-    }
-    if (this.viewSettings.isVertical) {
-      this.slider.setVertical();
-    }
-    else{
-      this.slider.setHorizontal();
-    }
+    
   }
 
   refreshView(msg: Messages, settings: ISettings):void {
-    if (msg === Messages.INIT) {
-      this.updateViewSettings(settings);
-      this.render(this.viewSettings);
-      this.setColoredRange();
-    }
     if (msg === Messages.INIT || msg === Messages.UPDATE) {
       this.updateViewSettings(settings);
       this.render(this.viewSettings);

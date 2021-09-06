@@ -265,8 +265,7 @@ const defaultSettings = {
   to: 8,
   isRange: false,
   isVertical: false,
-  hideThumbLabel: false,
-  labels: []
+  hideThumbLabel: false
 };
 exports.defaultSettings = defaultSettings;
 
@@ -488,8 +487,7 @@ const defaultSettings = {
   to: 8,
   isRange: false,
   isVertical: false,
-  hideThumbLabel: false,
-  labels: []
+  hideThumbLabel: false
 };
 exports.defaultSettings = defaultSettings;
 
@@ -748,28 +746,11 @@ class View extends EventObservable_1.EventObservable {
   }
 
   render(s) {
+    console.log('inside view render ' + JSON.stringify(s));
     this.slider.render(JSON.stringify(s));
-
-    if (this.viewSettings.hideThumbLabel) {
-      this.slider.hideLabel();
-    }
-
-    if (this.viewSettings.isVertical) {
-      this.slider.setVertical();
-    } else {
-      this.slider.setHorizontal();
-    }
   }
 
   refreshView(msg, settings) {
-    if (msg === 0
-    /* INIT */
-    ) {
-        this.updateViewSettings(settings);
-        this.render(this.viewSettings);
-        this.setColoredRange();
-      }
-
     if (msg === 0
     /* INIT */
     || msg === 1
@@ -958,6 +939,8 @@ const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./util
 
 const ColoredRange_1 = __webpack_require__(/*! ./ColoredRange */ "./view/modules/ColoredRange.ts");
 
+const Thumb_1 = __webpack_require__(/*! ./Thumb */ "./view/modules/Thumb.ts");
+
 class Range {
   constructor(settings) {
     const div = document.createElement('div');
@@ -965,6 +948,8 @@ class Range {
     this.range = div;
     this.viewSettings = settings;
     this.coloredRange = new ColoredRange_1.ColoredRange();
+    this.thumbTo = new Thumb_1.Thumb(ClassNaming_1.ClassNaming.THUMB_TO);
+    this.thumbFrom = new Thumb_1.Thumb(ClassNaming_1.ClassNaming.THUMB_FROM);
     this.getRange().appendChild(this.coloredRange.getColoredRange());
   }
 
@@ -974,20 +959,75 @@ class Range {
 
   render(settings) {
     Object.assign(this.viewSettings, JSON.parse(settings));
+    this.getRange().appendChild(this.thumbFrom.getThumb());
+
+    if (this.viewSettings.isRange) {
+      this.getRange().appendChild(this.thumbTo.getThumb());
+    }
   }
 
   setVertical() {
     this.range.classList.add(ClassNaming_1.ClassNaming.RANGE_IS_VERTICAL);
     this.coloredRange.getColoredRange().classList.add(ClassNaming_1.ClassNaming.COLORED_RANGE_IS_VERTICAL);
+    this.thumbFrom.setVertical();
+
+    if (this.viewSettings.isRange) {
+      this.thumbTo.setVertical();
+    }
   }
 
   setHorizontal() {
     this.range.classList.remove(ClassNaming_1.ClassNaming.RANGE_IS_VERTICAL);
     this.coloredRange.getColoredRange().classList.remove(ClassNaming_1.ClassNaming.COLORED_RANGE_IS_VERTICAL);
+    this.thumbFrom.setHorizontal();
+
+    if (this.viewSettings.isRange) {
+      this.thumbTo.setHorizontal();
+    }
   }
 
   setColoredRange(thumbFrom, thumbTo, widthThumb) {
     this.coloredRange.setColoredRange(this.viewSettings, thumbFrom, thumbTo, widthThumb);
+  }
+
+  getThumbFrom() {
+    return this.thumbFrom.getThumb();
+  }
+
+  getThumbTo() {
+    return this.thumbTo.getThumb();
+  }
+
+  hideLabel() {
+    this.thumbFrom.hideLabel();
+
+    if (this.viewSettings.isRange) {
+      this.thumbTo.hideLabel();
+    }
+  }
+
+  showLabel() {
+    this.thumbFrom.showLabel();
+
+    if (this.viewSettings.isRange) {
+      this.thumbTo.showLabel();
+    }
+  }
+
+  setValueToLabelThumbFrom(value) {
+    this.thumbFrom.setValueToLabel(value);
+  }
+
+  setValueToLabelThumbTo(value) {
+    this.thumbTo.setValueToLabel(value);
+  }
+
+  setThumbPositionFrom(shift, isVertical) {
+    this.thumbFrom.setThumbPosition(shift, isVertical);
+  }
+
+  setThumbPositionTo(shift, isVertical) {
+    this.thumbTo.setThumbPosition(shift, isVertical);
   }
 
 }
@@ -1102,8 +1142,6 @@ exports.Slider = void 0;
 
 const Range_1 = __webpack_require__(/*! ./Range */ "./view/modules/Range.ts");
 
-const Thumb_1 = __webpack_require__(/*! ./Thumb */ "./view/modules/Thumb.ts");
-
 const RangeLabel_1 = __webpack_require__(/*! ./RangeLabel */ "./view/modules/RangeLabel.ts");
 
 const DefaultSettings_1 = __webpack_require__(/*! ../../model/DefaultSettings */ "./model/DefaultSettings.ts");
@@ -1119,6 +1157,7 @@ class Slider extends EventObservable_1.EventObservable {
     this.rootElem = rootElem;
     this.resPercentage = 0;
     this.stepInPx = 0;
+    this.sliderLengthInPx = 0;
     this.initSliderComponents();
   }
 
@@ -1126,23 +1165,28 @@ class Slider extends EventObservable_1.EventObservable {
     this.viewSettings = Object.assign(this.viewSettings, JSON.parse(settings));
     this.container.classList.add(ClassNaming_1.ClassNaming.ROOT);
     this.container.appendChild(this.range.getRange());
-    this.range.getRange().appendChild(this.thumbFrom.getThumb());
     this.range.render(settings);
-
-    if (this.viewSettings.isRange) {
-      this.range.getRange().appendChild(this.thumbTo.getThumb());
-    }
-
     this.rangeLabel.render(JSON.parse(settings));
     this.container.appendChild(this.rangeLabel.getRangeLabel());
     this.rootElem.appendChild(this.container);
-    this.stepInPx = this.getSliderLengthInPx() / Math.abs((this.viewSettings.max - this.viewSettings.min) / this.viewSettings.step);
+
+    if (this.viewSettings.hideThumbLabel) {
+      this.range.hideLabel();
+    }
+
+    if (this.viewSettings.isVertical) {
+      this.setVertical();
+    } else {
+      this.setHorizontal();
+    }
+
     this.bindEvents();
+    this.stepInPx = this.getSliderLengthInPx() / Math.abs((this.viewSettings.max - this.viewSettings.min) / this.viewSettings.step);
+    this.sliderLengthInPx = this.getSliderLengthInPx();
+    console.log('inside slider render ' + this.stepInPx + ' ' + this.sliderLengthInPx);
   }
 
   initSliderComponents() {
-    this.thumbTo = new Thumb_1.Thumb(ClassNaming_1.ClassNaming.THUMB_TO);
-    this.thumbFrom = new Thumb_1.Thumb(ClassNaming_1.ClassNaming.THUMB_FROM);
     this.range = new Range_1.Range(this.viewSettings);
     this.rangeLabel = new RangeLabel_1.RangeLabel(this.viewSettings);
     this.container = document.createElement('div');
@@ -1157,26 +1201,24 @@ class Slider extends EventObservable_1.EventObservable {
     }
   }
 
+  getThumbFrom() {
+    return this.range.getThumbFrom();
+  }
+
+  getThumbTo() {
+    return this.range.getThumbTo();
+  }
+
   setVertical() {
     this.container.classList.add(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
     this.range.setVertical();
     this.rangeLabel.setVertical();
-    this.thumbFrom.setVertical();
-
-    if (this.viewSettings.isRange) {
-      this.thumbTo.setVertical();
-    }
   }
 
   setHorizontal() {
     this.container.classList.remove(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
     this.range.setHorizontal();
     this.rangeLabel.setHorizontal();
-    this.thumbFrom.setHorizontal();
-
-    if (this.viewSettings.isRange) {
-      this.thumbTo.setHorizontal();
-    }
   }
 
   setColoredRange() {
@@ -1224,7 +1266,7 @@ class Slider extends EventObservable_1.EventObservable {
           }
         }
 
-        let bottom = that.getSliderLengthInPx() - that.getThumbWidthInPx();
+        let bottom = that.sliderLengthInPx - that.getThumbWidthInPx();
 
         if (that.viewSettings.isRange) {
           const toPos = that.getThumbTo().getBoundingClientRect().top - that.getRange().getBoundingClientRect().top;
@@ -1238,7 +1280,9 @@ class Slider extends EventObservable_1.EventObservable {
           newPos = bottom;
         }
 
-        if (Math.abs(newPos % that.stepInPx) <= 0.1 * that.stepInPx) {
+        console.log('that.stepInPx=' + that.stepInPx);
+
+        if (Math.abs(newPos % that.stepInPx) <= 0.2 * that.stepInPx) {
           that.dispatchEvent(newPos, thumbType);
         }
       } // eslint-disable-next-line no-inner-declarations
@@ -1269,7 +1313,7 @@ class Slider extends EventObservable_1.EventObservable {
           }
         }
 
-        let rightEdge = that.getSliderLengthInPx() - that.getThumbWidthInPx();
+        let rightEdge = that.sliderLengthInPx - that.getThumbWidthInPx();
 
         if (that.viewSettings.isRange) {
           const toPos = that.getThumbTo().getBoundingClientRect().left - that.getRange().getBoundingClientRect().left;
@@ -1283,7 +1327,7 @@ class Slider extends EventObservable_1.EventObservable {
           newPos = rightEdge;
         }
 
-        if (Math.abs(newPos % that.stepInPx) <= 0.1 * that.stepInPx) {
+        if (Math.abs(newPos % that.stepInPx) <= 0.2 * that.stepInPx) {
           that.dispatchEvent(newPos, thumbType);
         }
       } // eslint-disable-next-line no-inner-declarations
@@ -1361,19 +1405,22 @@ class Slider extends EventObservable_1.EventObservable {
   }
 
   convertFromPxToPercent(valueInPX) {
-    return valueInPX / this.getSliderLengthInPx() * 100;
+    return valueInPX / this.sliderLengthInPx * 100;
   }
 
   getThumbWidthInPercentage() {
     if (this.viewSettings.isVertical) {
-      return this.getThumbFrom().offsetHeight / this.getSliderLengthInPx() * 100;
+      return this.getThumbFrom().offsetHeight / this.sliderLengthInPx * 100;
     } else {
-      return this.getThumbFrom().offsetWidth / this.getSliderLengthInPx() * 100;
+      return this.getThumbFrom().offsetWidth / this.sliderLengthInPx * 100;
     }
   }
 
   getSliderLengthInPx() {
+    console.log('inside getSliderLengthInPx ');
+
     if (this.viewSettings.isVertical) {
+      console.log('getSliderLengthInPx this.viewSettings.isVertical' + this.getRange().offsetHeight);
       return this.getRange().offsetHeight;
     } else {
       return this.getRange().offsetWidth;
@@ -1381,17 +1428,18 @@ class Slider extends EventObservable_1.EventObservable {
   }
 
   dispatchEvent(shift, type) {
+    console.log('dispatch event ' + shift + type);
     this.resPercentage = this.convertFromPxToPercent(shift);
 
     if (type === "thumbFrom") {
-      this.thumbFrom.setThumbPosition(this.resPercentage, this.viewSettings.isVertical);
+      this.range.setThumbPositionFrom(this.resPercentage, this.viewSettings.isVertical);
       this.notifyObservers(4
       /* SET_FROM */
       , JSON.stringify({
         from: this.resPercentage
       }), 0);
     } else {
-      this.thumbTo.setThumbPosition(this.resPercentage, this.viewSettings.isVertical);
+      this.range.setThumbPositionTo(this.resPercentage, this.viewSettings.isVertical);
       this.notifyObservers(5
       /* SET_TO */
       , JSON.stringify({
@@ -1406,28 +1454,12 @@ class Slider extends EventObservable_1.EventObservable {
     return this.range.getRange();
   }
 
-  getThumbFrom() {
-    return this.thumbFrom.getThumb();
-  }
-
-  getThumbTo() {
-    return this.thumbTo.getThumb();
-  }
-
   hideLabel() {
-    this.thumbFrom.hideLabel();
-
-    if (this.viewSettings.isRange) {
-      this.thumbTo.hideLabel();
-    }
+    this.range.hideLabel();
   }
 
   showLabel() {
-    this.thumbFrom.showLabel();
-
-    if (this.viewSettings.isRange) {
-      this.thumbTo.showLabel();
-    }
+    this.range.showLabel();
   } // getThumbLabelFrom(): ThumbLabel {
   //   return this.thumbLabelFrom;
   // }
@@ -1437,11 +1469,11 @@ class Slider extends EventObservable_1.EventObservable {
 
 
   setValueToLabelThumbFrom(value) {
-    this.thumbFrom.setValueToLabel(value);
+    this.range.setValueToLabelThumbFrom(value);
   }
 
   setValueToLabelThumbTo(value) {
-    this.thumbTo.setValueToLabel(value);
+    this.range.setValueToLabelThumbTo(value);
   }
 
   getRangeLabel() {
