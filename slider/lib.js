@@ -778,17 +778,17 @@ class View extends EventObservable_1.EventObservable {
           this.slider.setValueToLabelThumbTo(settings.to !== undefined ? settings.to : settings.from);
 
           if (settings.isVertical) {
-            this.getThumbTo().style.top = Math.abs((settings.to !== undefined ? settings.to : settings.from) - settings.min) / Math.abs(settings.max - settings.min) * (100 - this.getThumbWidthInPercentage()) + '%';
-            this.getThumbFrom().style.top = Math.abs(settings.from - settings.min) / Math.abs(settings.max - settings.min) * 100 + '%';
+            this.getThumbTo().style.top = this.convertFromValueToPercent(settings, settings.to);
+            this.getThumbFrom().style.top = this.convertFromValueToPercent(settings, settings.from);
           } else {
-            this.getThumbTo().style.left = Math.abs((settings.to !== undefined ? settings.to : settings.from) - settings.min) / Math.abs(settings.max - settings.min) * (100 - this.getThumbWidthInPercentage()) + '%';
-            this.getThumbFrom().style.left = Math.abs(settings.from - settings.min) / Math.abs(settings.max - settings.min) * (100 - this.getThumbWidthInPercentage()) + '%';
+            this.getThumbTo().style.left = this.convertFromValueToPercent(settings, settings.to);
+            this.getThumbFrom().style.left = this.convertFromValueToPercent(settings, settings.from);
           }
         } else {
           if (settings.isVertical) {
-            this.getThumbFrom().style.top = Math.abs(settings.from - settings.min) / Math.abs(settings.max - settings.min) * (100 - this.getThumbWidthInPercentage()) + '%';
+            this.getThumbFrom().style.top = this.convertFromValueToPercent(settings, settings.from);
           } else {
-            this.getThumbFrom().style.left = Math.abs(settings.from - settings.min) / Math.abs(settings.max - settings.min) * (100 - this.getThumbWidthInPercentage()) + '%';
+            this.getThumbFrom().style.left = this.convertFromValueToPercent(settings, settings.from);
           }
         }
 
