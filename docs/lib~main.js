@@ -24,7 +24,7 @@ class ErrorMessage {
   }
 
   showMessage() {
-    console.error(this.message + ', ' + this.whoCalled + ', ' + this.timestamp);
+    console.error(this.message + ', invoked by:' + this.whoCalled + ', timestamp:' + this.timestamp);
   }
 
 }
