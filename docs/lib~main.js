@@ -1033,16 +1033,12 @@ class Slider extends EventObservable_1.EventObservable {
           }
         }
       } else {
-        if (shift < fromPos) {
-          this.dispatchEvent(shift, "thumbFrom");
-        } else {
-          //vertical mode single thumb 
-          if (shift > bottom) {
-            shift = bottom;
-          }
-
-          this.dispatchEvent(shift, "thumbFrom");
+        //vertical mode single thumb 
+        if (shift > bottom) {
+          shift = bottom;
         }
+
+        this.dispatchEvent(shift, "thumbFrom");
       }
     } else {
       if (this.viewSettings.isRange) {
@@ -1067,8 +1063,8 @@ class Slider extends EventObservable_1.EventObservable {
         }
       } else {
         //horizontal mode single thumb
-        if (shift > fromPos) {
-          shift = fromPos;
+        if (shift > bottom) {
+          shift = bottom;
         }
 
         this.dispatchEvent(shift, "thumbFrom");

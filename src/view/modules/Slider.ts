@@ -140,15 +140,11 @@ private handleRangeLabel(e: MouseEvent) {
     }
     }
     else {
-      if (shift < fromPos) {
-        this.dispatchEvent(shift, "thumbFrom");
-      }
-      else {   //vertical mode single thumb 
+ //vertical mode single thumb 
         if(shift>bottom){
           shift=bottom;
         }
         this.dispatchEvent(shift, "thumbFrom");
-      }
     }
   }
   else {
@@ -174,8 +170,8 @@ private handleRangeLabel(e: MouseEvent) {
     }
     }
     else { //horizontal mode single thumb
-      if (shift>fromPos) {
-        shift=fromPos;
+      if (shift>bottom) {
+        shift=bottom;
       }
       this.dispatchEvent(shift, "thumbFrom");
     }
