@@ -31,79 +31,14 @@ class View extends EventObservable implements IObserver{
     if (msg === Messages.INIT || msg === Messages.UPDATE) {
       this.updateViewSettings(settings);
       this.render(this.viewSettings);
-      if (!settings.hideThumbLabel) {
-        this.setThumbToValue(settings,'thumbFrom');
-        if (settings.isRange) {
-          this.setThumbToValue(settings,'thumbTo');
-        }
-      }
-      else {
-        this.setThumbToValue(settings, 'thumbFrom');
-        if (settings.isRange) {
-          this.setThumbToValue(settings, 'thumbTo');
-        }
-      }
-      this.slider.setValueToLabelThumbFrom(settings.from);
-      if (settings.isRange) {
-        this.slider.setValueToLabelThumbTo(settings.to !== undefined ? settings.to : settings.from);
 
-        if (settings.isVertical) {
-          this.getThumbTo().style.top = this.convertFromValueToPercent(settings, settings.to);
-          this.getThumbFrom().style.top = this.convertFromValueToPercent(settings, settings.from);
-        }
-        else {
-          this.getThumbTo().style.left = this.convertFromValueToPercent(settings, settings.to);
-          this.getThumbFrom().style.left = this.convertFromValueToPercent(settings, settings.from);
-        }
-      }
-      else {
-        if (settings.isVertical) {
-          this.getThumbFrom().style.top = this.convertFromValueToPercent(settings, settings.from);
-        }
-        else {
-          this.getThumbFrom().style.left = this.convertFromValueToPercent(settings,settings.from);
-        }
-      }
-      this.setColoredRange();
     }
     else if (msg === Messages.FROM_IS_SET) {
       this.slider.setValueToLabelThumbFrom(settings.from);
     }
     else if (msg === Messages.TO_IS_SET) {
+      this.render(this.viewSettings);
       this.slider.setValueToLabelThumbTo(settings.to !== undefined ? settings.to : settings.from);
-    }
-  }
-
-  private setColoredRange(){
-    this.slider.setColoredRange();
-  }
-
-  private convertFromValueToPercent(s:ISettings,value: number): string {
-    return (((100-this.getThumbWidthInPercentage()) / Math.abs(s.max - s.min)) * (Math.abs(value - s.min)))+'%';
-  }
-
-  private setThumbToValue(s:ISettings,type: string) :void{
-    if (type === 'thumbFrom') {
-      if (s.isVertical) {
-        this.getThumbFrom().style.top = this.convertFromValueToPercent(s,s.from);
-        this.getThumbFrom().style.left = '-5px';
-      }
-      else {
-        this.getThumbFrom().style.left = this.convertFromValueToPercent(s,s.from);
-        this.getThumbFrom().style.top = '-5px';
-      }
-    }
-    else {
-      if (s.isVertical) {
-        this.getThumbTo().style.top = 
-          this.convertFromValueToPercent(s,s.to !== undefined ? s.to : s.from);
-        this.getThumbTo().style.left = '-5px';
-      }
-      else {
-        this.getThumbTo().style.left 
-        = this.convertFromValueToPercent(s,s.to!==undefined?s.to : s.from);
-        this.getThumbTo().style.top = '-5px';
-      }
     }
   }
 
@@ -113,14 +48,6 @@ class View extends EventObservable implements IObserver{
   
   private getThumbWidthInPercentage() {
     return this.slider.getThumbWidthInPercentage();
-  }
-
-  private getThumbFrom() {
-    return this.slider.getThumbFrom();
-  }
-
-  private getThumbTo() {
-    return this.slider.getThumbTo();
   }
 
   private updateViewSettings(s: ISettings) {

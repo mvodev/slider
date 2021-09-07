@@ -592,79 +592,15 @@ class View extends EventObservable_1.EventObservable {
     ) {
         this.updateViewSettings(settings);
         this.render(this.viewSettings);
-
-        if (!settings.hideThumbLabel) {
-          this.setThumbToValue(settings, 'thumbFrom');
-
-          if (settings.isRange) {
-            this.setThumbToValue(settings, 'thumbTo');
-          }
-        } else {
-          this.setThumbToValue(settings, 'thumbFrom');
-
-          if (settings.isRange) {
-            this.setThumbToValue(settings, 'thumbTo');
-          }
-        }
-
-        this.slider.setValueToLabelThumbFrom(settings.from);
-
-        if (settings.isRange) {
-          this.slider.setValueToLabelThumbTo(settings.to !== undefined ? settings.to : settings.from);
-
-          if (settings.isVertical) {
-            this.getThumbTo().style.top = this.convertFromValueToPercent(settings, settings.to);
-            this.getThumbFrom().style.top = this.convertFromValueToPercent(settings, settings.from);
-          } else {
-            this.getThumbTo().style.left = this.convertFromValueToPercent(settings, settings.to);
-            this.getThumbFrom().style.left = this.convertFromValueToPercent(settings, settings.from);
-          }
-        } else {
-          if (settings.isVertical) {
-            this.getThumbFrom().style.top = this.convertFromValueToPercent(settings, settings.from);
-          } else {
-            this.getThumbFrom().style.left = this.convertFromValueToPercent(settings, settings.from);
-          }
-        }
-
-        this.setColoredRange();
       } else if (msg === 2
     /* FROM_IS_SET */
     ) {
-        this.slider.setValueToLabelThumbFrom(settings.from);
+        this.render(this.viewSettings); //this.slider.setValueToLabelThumbFrom(settings.from);
       } else if (msg === 3
     /* TO_IS_SET */
     ) {
-        this.slider.setValueToLabelThumbTo(settings.to !== undefined ? settings.to : settings.from);
+        this.render(this.viewSettings); //this.slider.setValueToLabelThumbTo(settings.to !== undefined ? settings.to : settings.from);
       }
-  }
-
-  setColoredRange() {
-    this.slider.setColoredRange();
-  }
-
-  convertFromValueToPercent(s, value) {
-    return (100 - this.getThumbWidthInPercentage()) / Math.abs(s.max - s.min) * Math.abs(value - s.min) + '%';
-  }
-
-  setThumbToValue(s, type) {
-    if (type === 'thumbFrom') {
-      if (s.isVertical) {
-        this.getThumbFrom().style.top = this.convertFromValueToPercent(s, s.from);
-        this.getThumbFrom().style.left = '-5px';
-      } else {
-        this.getThumbFrom().style.left = this.convertFromValueToPercent(s, s.from);
-        this.getThumbFrom().style.top = '-5px';
-      }
-    } else {
-      if (s.isVertical) {
-        this.getThumbTo().style.top = this.convertFromValueToPercent(s, s.to !== undefined ? s.to : s.from);
-        this.getThumbTo().style.left = '-5px';
-      } else {
-        this.getThumbTo().style.left = this.convertFromValueToPercent(s, s.to !== undefined ? s.to : s.from);
-        this.getThumbTo().style.top = '-5px';
-      }
-    }
   }
 
   getSlider() {
@@ -673,15 +609,13 @@ class View extends EventObservable_1.EventObservable {
 
   getThumbWidthInPercentage() {
     return this.slider.getThumbWidthInPercentage();
-  }
+  } // private getThumbFrom() {
+  //   return this.slider.getThumbFrom();
+  // }
+  // private getThumbTo() {
+  //   return this.slider.getThumbTo();
+  // }
 
-  getThumbFrom() {
-    return this.slider.getThumbFrom();
-  }
-
-  getThumbTo() {
-    return this.slider.getThumbTo();
-  }
 
   updateViewSettings(s) {
     this.viewSettings = Object.assign(this.viewSettings, s);
@@ -1016,7 +950,21 @@ class Slider extends EventObservable_1.EventObservable {
 
     this.bindEvents();
     this.stepInPx = this.getSliderLengthInPx() / Math.abs((this.viewSettings.max - this.viewSettings.min) / this.viewSettings.step);
-    this.sliderLengthInPx = this.getSliderLengthInPx();
+    this.sliderLengthInPx = this.getSliderLengthInPx(); ///////////////////////////////////////////////////////////////
+
+    this.range.setValueToLabelThumbFrom(this.viewSettings.from);
+    this.range.setThumbPositionFrom(this.convertFromValueToPercent(this.viewSettings.from), this.viewSettings.isVertical);
+
+    if (this.viewSettings.isRange) {
+      this.range.setValueToLabelThumbTo(this.viewSettings.to);
+      this.range.setThumbPositionTo(this.convertFromValueToPercent(this.viewSettings.to), this.viewSettings.isVertical);
+    }
+
+    this.setColoredRange(); ///////////////////////////////////////////////////////
+  }
+
+  convertFromValueToPercent(value) {
+    return (100 - this.getThumbWidthInPercentage()) / Math.abs(this.viewSettings.max - this.viewSettings.min) * Math.abs(value - this.viewSettings.min);
   }
 
   initSliderComponents() {
@@ -1346,8 +1294,10 @@ class Thumb {
   setThumbPosition(shift, isVertical) {
     if (isVertical) {
       this.getThumb().style.top = shift + '%';
+      this.getThumb().style.left = '-25%';
     } else {
       this.getThumb().style.left = shift + '%';
+      this.getThumb().style.top = '-25%';
     }
   }
 

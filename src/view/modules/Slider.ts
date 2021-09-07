@@ -52,6 +52,17 @@ render(settings:string) :void{
   this.bindEvents();
   this.stepInPx = this.getSliderLengthInPx() / (Math.abs((this.viewSettings.max - this.viewSettings.min) / this.viewSettings.step));
   this.sliderLengthInPx = this.getSliderLengthInPx();
+  this.range.setValueToLabelThumbFrom(this.viewSettings.from);
+  this.range.setThumbPositionFrom(this.convertFromValueToPercent(this.viewSettings.from),this.viewSettings.isVertical);
+  if (this.viewSettings.isRange) {
+    this.range.setValueToLabelThumbTo(this.viewSettings.to);
+    this.range.setThumbPositionTo(this.convertFromValueToPercent(this.viewSettings.to), this.viewSettings.isVertical);
+  }
+  this.setColoredRange();
+}
+
+private convertFromValueToPercent(value: number): number {
+  return (((100 - this.getThumbWidthInPercentage()) / Math.abs(this.viewSettings.max - this.viewSettings.min)) * (Math.abs(value - this.viewSettings.min)));
 }
 
 private initSliderComponents() {
@@ -99,24 +110,23 @@ private  getThumbWidthInPx() :number{
 }
 
 private handleThumb(thumbType: string, e: MouseEvent): void {
-    e.preventDefault();
-    let targetElem: HTMLDivElement = this.getThumbFrom();
-    if (thumbType === "thumbTo") {
-      targetElem = this.getThumbTo();
-    }
-    let shift: number;
-    if (this.viewSettings.isVertical) {
-      shift = e.clientY - targetElem.getBoundingClientRect().top;
-    }
-    else{
-      shift = e.clientX - targetElem.getBoundingClientRect().left;
-    }
-    if (this.viewSettings.isVertical) {
-      
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
+  e.preventDefault();
+  let targetElem: HTMLDivElement = this.getThumbFrom();
+  if (thumbType === "thumbTo") {
+    targetElem = this.getThumbTo();
+  }
+  let shift: number;
+  if (this.viewSettings.isVertical) {
+    shift = e.clientY - targetElem.getBoundingClientRect().top;
+  }
+  else{
+    shift = e.clientX - targetElem.getBoundingClientRect().left;
+  }
+  if (this.viewSettings.isVertical) {   
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
    // eslint-disable-next-line @typescript-eslint/no-this-alias
-      const that = this;
+    const that = this;
    // eslint-disable-next-line no-inner-declarations
     function onMouseMove(event: MouseEvent) {
       let newPos = event.clientY - shift - that.getRange().getBoundingClientRect().top;
@@ -147,10 +157,10 @@ private handleThumb(thumbType: string, e: MouseEvent): void {
       
     }
    // eslint-disable-next-line no-inner-declarations
-      function onMouseUp() {
-        document.removeEventListener('mouseup', onMouseUp);
-        document.removeEventListener('mousemove', onMouseMove);
-      }
+    function onMouseUp() {
+      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mousemove', onMouseMove);
+    }
     }
     else {
       document.addEventListener('mousemove', onMouseMove);
