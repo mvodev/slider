@@ -760,11 +760,11 @@ class View extends EventObservable_1.EventObservable {
       } else if (msg === 2
     /* FROM_IS_SET */
     ) {
-        this.render(this.viewSettings); //this.slider.setValueToLabelThumbFrom(settings.from);
+        this.slider.setValueToLabelThumbFrom(settings.from);
       } else if (msg === 3
     /* TO_IS_SET */
     ) {
-        this.render(this.viewSettings); //this.slider.setValueToLabelThumbTo(settings.to !== undefined ? settings.to : settings.from);
+        this.slider.setValueToLabelThumbTo(settings.to !== undefined ? settings.to : settings.from);
       }
   }
 
@@ -774,13 +774,7 @@ class View extends EventObservable_1.EventObservable {
 
   getThumbWidthInPercentage() {
     return this.slider.getThumbWidthInPercentage();
-  } // private getThumbFrom() {
-  //   return this.slider.getThumbFrom();
-  // }
-  // private getThumbTo() {
-  //   return this.slider.getThumbTo();
-  // }
-
+  }
 
   updateViewSettings(s) {
     this.viewSettings = Object.assign(this.viewSettings, s);
@@ -1115,8 +1109,7 @@ class Slider extends EventObservable_1.EventObservable {
 
     this.bindEvents();
     this.stepInPx = this.getSliderLengthInPx() / Math.abs((this.viewSettings.max - this.viewSettings.min) / this.viewSettings.step);
-    this.sliderLengthInPx = this.getSliderLengthInPx(); ///////////////////////////////////////////////////////////////
-
+    this.sliderLengthInPx = this.getSliderLengthInPx();
     this.range.setValueToLabelThumbFrom(this.viewSettings.from);
     this.range.setThumbPositionFrom(this.convertFromValueToPercent(this.viewSettings.from), this.viewSettings.isVertical);
 
@@ -1125,7 +1118,7 @@ class Slider extends EventObservable_1.EventObservable {
       this.range.setThumbPositionTo(this.convertFromValueToPercent(this.viewSettings.to), this.viewSettings.isVertical);
     }
 
-    this.setColoredRange(); ///////////////////////////////////////////////////////
+    this.setColoredRange();
   }
 
   convertFromValueToPercent(value) {

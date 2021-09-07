@@ -192,7 +192,6 @@ private handleThumb(thumbType: string, e: MouseEvent): void {
         if (newPos >= rightEdge) {
           newPos = rightEdge;
         }
-
         if (Math.abs(newPos % that.stepInPx) <= 0.2 * that.stepInPx) {
           that.dispatchEvent(newPos, thumbType);
         }
@@ -293,6 +292,7 @@ private getSliderLengthInPx() :number{
 }
 
 private dispatchEvent(shift: number, type: string) {
+
   this.resPercentage = this.convertFromPxToPercent(shift);
   if (type === "thumbFrom") {
     this.range.setThumbPositionFrom(this.resPercentage,this.viewSettings.isVertical);

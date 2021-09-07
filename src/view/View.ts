@@ -37,7 +37,6 @@ class View extends EventObservable implements IObserver{
       this.slider.setValueToLabelThumbFrom(settings.from);
     }
     else if (msg === Messages.TO_IS_SET) {
-      this.render(this.viewSettings);
       this.slider.setValueToLabelThumbTo(settings.to !== undefined ? settings.to : settings.from);
     }
   }
