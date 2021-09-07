@@ -1,5 +1,5 @@
 import { defaultSettings } from '../../model/defaultSettings';
-import { IViewSettings } from '../../model/IViewSettings';
+import { ISettings } from '../../model/ISettings';
 import { ClassNaming } from '../../utils/ClassNaming';
 import { Constants } from '../../utils/Constants';
 import { Utils } from '../../utils/Utils';
@@ -9,15 +9,15 @@ class RangeLabel{
   private minLabel!: HTMLSpanElement;
   private maxLabel!: HTMLSpanElement;
   private labels:HTMLSpanElement[];
-  private viewSettings!:IViewSettings;
+  private viewSettings!:ISettings;
 
-  constructor(viewSettings:IViewSettings) {
+  constructor(viewSettings:ISettings) {
     this.labels = [];
     this.viewSettings = Object.assign(defaultSettings, viewSettings);
     this.initComponents();
   }
 
-  render(settings:IViewSettings):void{
+  render(settings:ISettings):void{
     this.viewSettings = Object.assign(this.viewSettings, settings);
     this.setMinRange(this.viewSettings.min);
     this.setMaxRange(this.viewSettings.max);

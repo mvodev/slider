@@ -1,4 +1,4 @@
-import { IViewSettings } from '../../model/IViewSettings';
+import { ISettings } from '../../model/ISettings';
 import { ClassNaming } from '../../utils/ClassNaming';
 import { ColoredRange } from './ColoredRange';
 import { Thumb } from './Thumb';
@@ -6,11 +6,11 @@ import { Thumb } from './Thumb';
 class Range{
   private range: HTMLDivElement;
   private coloredRange!: ColoredRange;
-  private viewSettings:IViewSettings;
+  private viewSettings:ISettings;
   private thumbFrom!: Thumb;
   private thumbTo!: Thumb;
 
-  constructor(settings:IViewSettings) {
+  constructor(settings:ISettings) {
     const div = document.createElement('div');
     div.classList.add(ClassNaming.RANGE);
     this.range = div;

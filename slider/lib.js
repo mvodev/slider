@@ -1136,34 +1136,6 @@ class Slider extends EventObservable_1.EventObservable {
     this.getRange().addEventListener('mousedown', this.handleRangeLabel.bind(this));
   }
 
-  getThumbFrom() {
-    return this.range.getThumbFrom();
-  }
-
-  getThumbTo() {
-    return this.range.getThumbTo();
-  }
-
-  setVertical() {
-    this.container.classList.add(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
-    this.range.setVertical();
-    this.rangeLabel.setVertical();
-  }
-
-  setHorizontal() {
-    this.container.classList.remove(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
-    this.range.setHorizontal();
-    this.rangeLabel.setHorizontal();
-  }
-
-  setColoredRange() {
-    this.range.setColoredRange(this.getThumbWidthInPercentage());
-  }
-
-  getThumbWidthInPx() {
-    return this.getThumbFrom().offsetWidth;
-  }
-
   handleRangeLabel(e) {
     let shift, fromPos;
     const bottom = this.sliderLengthInPx - this.getThumbWidthInPx();
@@ -1295,6 +1267,34 @@ class Slider extends EventObservable_1.EventObservable {
 
   getRangeLabel() {
     return this.rangeLabel.getRangeLabel();
+  }
+
+  getThumbFrom() {
+    return this.range.getThumbFrom();
+  }
+
+  getThumbTo() {
+    return this.range.getThumbTo();
+  }
+
+  setVertical() {
+    this.container.classList.add(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
+    this.range.setVertical();
+    this.rangeLabel.setVertical();
+  }
+
+  setHorizontal() {
+    this.container.classList.remove(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
+    this.range.setHorizontal();
+    this.rangeLabel.setHorizontal();
+  }
+
+  setColoredRange() {
+    this.range.setColoredRange(this.getThumbWidthInPercentage());
+  }
+
+  getThumbWidthInPx() {
+    return this.getThumbFrom().offsetWidth;
   }
 
 }

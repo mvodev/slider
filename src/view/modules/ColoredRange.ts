@@ -1,4 +1,4 @@
-import { IViewSettings } from "../../model/IViewSettings";
+import { ISettings } from "../../model/ISettings";
 import { ClassNaming } from '../../utils/ClassNaming';
 
 class ColoredRange{
@@ -13,7 +13,7 @@ class ColoredRange{
   }
 
   setColoredRange(
-    viewSettings:IViewSettings,
+    viewSettings:ISettings,
     thumbFrom:HTMLDivElement,
     thumbTo:HTMLDivElement,
     thumbLength:number) :void {

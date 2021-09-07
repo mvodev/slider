@@ -3,12 +3,11 @@ import { Slider } from './modules/Slider';
 import { Messages } from '../utils/Messages';
 import { EventObservable } from '../observers/EventObservable';
 import { defaultSettings } from '../model/defaultSettings';
-import { IViewSettings } from '../model/IViewSettings';
 import { IObserver } from '../observers/IObserver';
 
 class View extends EventObservable implements IObserver{
   private slider: Slider;
-  private viewSettings: IViewSettings;
+  private viewSettings: ISettings;
   private rootElem: HTMLDivElement;
 
   constructor(root: HTMLDivElement) {
@@ -23,7 +22,7 @@ class View extends EventObservable implements IObserver{
     this.notifyObservers(msg,settings,this.getThumbWidthInPercentage());
   }
 
-  private render(s:IViewSettings):void {
+  private render(s:ISettings):void {
     this.slider.render(JSON.stringify(s));
   }
 
