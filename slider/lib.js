@@ -1080,8 +1080,8 @@ class Slider extends EventObservable_1.EventObservable {
     super();
     this.viewSettings = Object.assign({}, DefaultSettings_1.defaultSettings);
     this.rootElem = rootElem;
-    this.resPercentage = 0;
-    this.stepInPx = 0;
+    this.resPercentage = 0; //this.stepInPx = 0;
+
     this.sliderLengthInPx = 0;
     this.initSliderComponents();
   }
@@ -1107,8 +1107,8 @@ class Slider extends EventObservable_1.EventObservable {
       this.setHorizontal();
     }
 
-    this.bindEvents();
-    this.stepInPx = this.getSliderLengthInPx() / Math.abs((this.viewSettings.max - this.viewSettings.min) / this.viewSettings.step);
+    this.bindEvents(); //this.stepInPx = this.getSliderLengthInPx() / (Math.abs((this.viewSettings.max - this.viewSettings.min) / this.viewSettings.step));
+
     this.sliderLengthInPx = this.getSliderLengthInPx();
     this.range.setValueToLabelThumbFrom(this.viewSettings.from);
     this.range.setThumbPositionFrom(this.convertFromValueToPercent(this.viewSettings.from), this.viewSettings.isVertical);
@@ -1133,11 +1133,7 @@ class Slider extends EventObservable_1.EventObservable {
 
   bindEvents() {
     this.getRangeLabel().addEventListener('mousedown', this.handleRangeLabel.bind(this));
-    this.getThumbFrom().addEventListener('mousedown', this.handleThumb.bind(this, "thumbFrom"));
-
-    if (this.viewSettings.isRange) {
-      this.getThumbTo().addEventListener('mousedown', this.handleThumb.bind(this, "thumbTo"));
-    }
+    this.getRange().addEventListener('mousedown', this.handleRangeLabel.bind(this));
   }
 
   getThumbFrom() {
@@ -1168,119 +1164,9 @@ class Slider extends EventObservable_1.EventObservable {
     return this.getThumbFrom().offsetWidth;
   }
 
-  handleThumb(thumbType, e) {
-    e.preventDefault();
-    let targetElem = this.getThumbFrom();
-
-    if (thumbType === "thumbTo") {
-      targetElem = this.getThumbTo();
-    }
-
-    let shift;
-
-    if (this.viewSettings.isVertical) {
-      shift = e.clientY - targetElem.getBoundingClientRect().top;
-    } else {
-      shift = e.clientX - targetElem.getBoundingClientRect().left;
-    }
-
-    if (this.viewSettings.isVertical) {
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp); // eslint-disable-next-line @typescript-eslint/no-this-alias
-
-      const that = this; // eslint-disable-next-line no-inner-declarations
-
-      function onMouseMove(event) {
-        let newPos = event.clientY - shift - that.getRange().getBoundingClientRect().top;
-
-        if (thumbType === "thumbTo") {
-          const fromPos = that.getThumbFrom().getBoundingClientRect().top - that.getRange().getBoundingClientRect().top;
-
-          if (newPos < fromPos) {
-            newPos = fromPos;
-          }
-        } else {
-          if (newPos < 0) {
-            newPos = 0;
-          }
-        }
-
-        let bottom = that.sliderLengthInPx - that.getThumbWidthInPx();
-
-        if (that.viewSettings.isRange) {
-          const toPos = that.getThumbTo().getBoundingClientRect().top - that.getRange().getBoundingClientRect().top;
-
-          if (thumbType === "thumbFrom") {
-            bottom = toPos;
-          }
-        }
-
-        if (newPos > bottom) {
-          newPos = bottom;
-        }
-
-        if (Math.abs(newPos % that.stepInPx) <= 0.2 * that.stepInPx) {
-          that.dispatchEvent(newPos, thumbType);
-        }
-      } // eslint-disable-next-line no-inner-declarations
-
-
-      function onMouseUp() {
-        document.removeEventListener('mouseup', onMouseUp);
-        document.removeEventListener('mousemove', onMouseMove);
-      }
-    } else {
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp); //eslint-disable-next-line @typescript-eslint/no-this-alias
-
-      const that = this; //eslint-disable-next-line no-inner-declarations
-
-      function onMouseMove(e) {
-        let newPos = e.clientX - shift - that.getRange().getBoundingClientRect().left;
-
-        if (thumbType === "thumbTo") {
-          const fromPos = that.getThumbFrom().getBoundingClientRect().left - that.getRange().getBoundingClientRect().left;
-
-          if (newPos <= fromPos) {
-            newPos = fromPos;
-          }
-        } else {
-          if (newPos < 0) {
-            newPos = 0;
-          }
-        }
-
-        let rightEdge = that.sliderLengthInPx - that.getThumbWidthInPx();
-
-        if (that.viewSettings.isRange) {
-          const toPos = that.getThumbTo().getBoundingClientRect().left - that.getRange().getBoundingClientRect().left;
-
-          if (thumbType === "thumbFrom") {
-            rightEdge = toPos;
-          }
-        }
-
-        if (newPos >= rightEdge) {
-          newPos = rightEdge;
-        }
-
-        if (Math.abs(newPos % that.stepInPx) <= 0.2 * that.stepInPx) {
-          that.dispatchEvent(newPos, thumbType);
-        }
-      } // eslint-disable-next-line no-inner-declarations
-
-
-      function onMouseUp() {
-        document.removeEventListener('mouseup', onMouseUp);
-        document.removeEventListener('mousemove', onMouseMove);
-      }
-    }
-
-    this.setColoredRange();
-  }
-
   handleRangeLabel(e) {
     let shift, fromPos;
+    const bottom = this.sliderLengthInPx - this.getThumbWidthInPx();
 
     if (this.viewSettings.isVertical) {
       shift = e.clientY - this.getRange().getBoundingClientRect().top;
@@ -1297,6 +1183,10 @@ class Slider extends EventObservable_1.EventObservable {
         if (shift < fromPos) {
           this.dispatchEvent(shift, "thumbFrom");
         } else if (shift > toPos) {
+          if (shift > bottom) {
+            shift = bottom;
+          }
+
           this.dispatchEvent(shift, "thumbTo");
         } else if (shift >= fromPos && shift <= toPos) {
           const pivot = (toPos - fromPos) / 2;
@@ -1312,6 +1202,10 @@ class Slider extends EventObservable_1.EventObservable {
           this.dispatchEvent(shift, "thumbFrom");
         } else {
           //vertical mode single thumb 
+          if (shift > bottom) {
+            shift = bottom;
+          }
+
           this.dispatchEvent(shift, "thumbFrom");
         }
       }
@@ -1322,6 +1216,10 @@ class Slider extends EventObservable_1.EventObservable {
         if (shift < fromPos) {
           this.dispatchEvent(shift, "thumbFrom");
         } else if (shift > toPos) {
+          if (shift > bottom) {
+            shift = bottom;
+          }
+
           this.dispatchEvent(shift, "thumbTo");
         } else if (shift >= fromPos && shift <= toPos) {
           const pivot = (toPos - fromPos) / 2;
@@ -1334,6 +1232,10 @@ class Slider extends EventObservable_1.EventObservable {
         }
       } else {
         //horizontal mode single thumb
+        if (shift > fromPos) {
+          shift = fromPos;
+        }
+
         this.dispatchEvent(shift, "thumbFrom");
       }
     }
@@ -1386,20 +1288,6 @@ class Slider extends EventObservable_1.EventObservable {
   getRange() {
     return this.range.getRange();
   }
-
-  hideLabel() {
-    this.range.hideLabel();
-  }
-
-  showLabel() {
-    this.range.showLabel();
-  } // getThumbLabelFrom(): ThumbLabel {
-  //   return this.thumbLabelFrom;
-  // }
-  // getThumbLabelTo(): ThumbLabel {
-  //   return this.thumbLabelTo;
-  // }
-
 
   setValueToLabelThumbFrom(value) {
     this.range.setValueToLabelThumbFrom(value);

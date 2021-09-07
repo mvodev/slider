@@ -15,7 +15,7 @@ private rootElem!: HTMLDivElement;
 private container!: HTMLDivElement;
 private viewSettings: IViewSettings;
 private resPercentage: number;
-private stepInPx:number;
+//private stepInPx:number;
 private sliderLengthInPx:number;
 
 constructor(rootElem: HTMLDivElement) {
@@ -23,7 +23,7 @@ constructor(rootElem: HTMLDivElement) {
   this.viewSettings = Object.assign({},defaultSettings);
   this.rootElem = rootElem;
   this.resPercentage = 0;
-  this.stepInPx = 0;
+  //this.stepInPx = 0;
   this.sliderLengthInPx = 0;
   this.initSliderComponents();
 }
@@ -50,7 +50,7 @@ render(settings:string) :void{
     this.setHorizontal();
   }
   this.bindEvents();
-  this.stepInPx = this.getSliderLengthInPx() / (Math.abs((this.viewSettings.max - this.viewSettings.min) / this.viewSettings.step));
+  //this.stepInPx = this.getSliderLengthInPx() / (Math.abs((this.viewSettings.max - this.viewSettings.min) / this.viewSettings.step));
   this.sliderLengthInPx = this.getSliderLengthInPx();
   this.range.setValueToLabelThumbFrom(this.viewSettings.from);
   this.range.setThumbPositionFrom(this.convertFromValueToPercent(this.viewSettings.from),this.viewSettings.isVertical);
@@ -73,35 +73,32 @@ private initSliderComponents() {
 
 private bindEvents(): void {
   this.getRangeLabel().addEventListener('mousedown', this.handleRangeLabel.bind(this));
-  this.getThumbFrom().addEventListener('mousedown', this.handleThumb.bind(this, "thumbFrom"));
-  if (this.viewSettings.isRange) {
-    this.getThumbTo().addEventListener('mousedown', this.handleThumb.bind(this, "thumbTo"));
-  }
+  this.getRange().addEventListener('mousedown', this.handleRangeLabel.bind(this));
 }
 
-getThumbFrom():HTMLDivElement{
+private getThumbFrom():HTMLDivElement{
   return this.range.getThumbFrom();
 }
 
-getThumbTo():HTMLDivElement{
+private getThumbTo():HTMLDivElement{
   return this.range.getThumbTo();
 }
 
-setVertical():void {
+private setVertical():void {
   this.container.classList.add(ClassNaming.SLIDER_IS_VERTICAL);
   this.range.setVertical();
   this.rangeLabel.setVertical();
   
 }
 
-setHorizontal():void{
+private setHorizontal():void{
   this.container.classList.remove(ClassNaming.SLIDER_IS_VERTICAL);
   this.range.setHorizontal();
   this.rangeLabel.setHorizontal();
   
 }
 
-setColoredRange(): void {
+private setColoredRange(): void {
   this.range.setColoredRange(this.getThumbWidthInPercentage());
 }
 
@@ -109,104 +106,9 @@ private  getThumbWidthInPx() :number{
   return this.getThumbFrom().offsetWidth;
 }
 
-private handleThumb(thumbType: string, e: MouseEvent): void {
-  e.preventDefault();
-  let targetElem: HTMLDivElement = this.getThumbFrom();
-  if (thumbType === "thumbTo") {
-    targetElem = this.getThumbTo();
-  }
-  let shift: number;
-  if (this.viewSettings.isVertical) {
-    shift = e.clientY - targetElem.getBoundingClientRect().top;
-  }
-  else{
-    shift = e.clientX - targetElem.getBoundingClientRect().left;
-  }
-  if (this.viewSettings.isVertical) {   
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-   // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const that = this;
-   // eslint-disable-next-line no-inner-declarations
-    function onMouseMove(event: MouseEvent) {
-      let newPos = event.clientY - shift - that.getRange().getBoundingClientRect().top;
-      if (thumbType === "thumbTo") {
-        const fromPos = that.getThumbFrom().getBoundingClientRect().top - (that.getRange().getBoundingClientRect().top);
-        if (newPos < fromPos) {
-          newPos = fromPos;
-        }
-      }
-      else {
-        if (newPos < 0) {
-          newPos = 0;
-        }
-      }
-      let bottom = that.sliderLengthInPx -that.getThumbWidthInPx();
-      if (that.viewSettings.isRange) {
-        const toPos = that.getThumbTo().getBoundingClientRect().top - (that.getRange().getBoundingClientRect().top);
-        if (thumbType === "thumbFrom") {
-          bottom = toPos;
-        }
-      }
-      if (newPos > bottom) {
-        newPos = bottom;
-      }
-      if (Math.abs(newPos % that.stepInPx) <= 0.2 * that.stepInPx){
-        that.dispatchEvent(newPos, thumbType);
-      }
-      
-    }
-   // eslint-disable-next-line no-inner-declarations
-    function onMouseUp() {
-      document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mousemove', onMouseMove);
-    }
-    }
-    else {
-      document.addEventListener('mousemove', onMouseMove);
-      document.addEventListener('mouseup', onMouseUp);
-      //eslint-disable-next-line @typescript-eslint/no-this-alias
-      const that = this;
-      //eslint-disable-next-line no-inner-declarations
-      function onMouseMove(e: MouseEvent) {
-        let newPos = e.clientX - shift - that.getRange().getBoundingClientRect().left;
-        if (thumbType === "thumbTo") {
-          const fromPos = that.getThumbFrom().getBoundingClientRect().left - that.getRange().getBoundingClientRect().left;
-          if (newPos <= fromPos) {
-            newPos = fromPos;
-          }
-        }
-        else {
-          if (newPos < 0) {
-          newPos = 0;
-          }
-        }
-        let rightEdge = that.sliderLengthInPx - that.getThumbWidthInPx();
-        if (that.viewSettings.isRange) {
-          const toPos = that.getThumbTo().getBoundingClientRect().left
-                        - that.getRange().getBoundingClientRect().left;
-          if (thumbType === "thumbFrom") {
-            rightEdge = toPos;
-          }
-        }
-        if (newPos >= rightEdge) {
-          newPos = rightEdge;
-        }
-        if (Math.abs(newPos % that.stepInPx) <= 0.2 * that.stepInPx) {
-          that.dispatchEvent(newPos, thumbType);
-        }
-      }
-    // eslint-disable-next-line no-inner-declarations
-      function onMouseUp() {
-        document.removeEventListener('mouseup', onMouseUp);
-        document.removeEventListener('mousemove', onMouseMove);
-      }
-  }
-  this.setColoredRange();
-}
-
 private handleRangeLabel(e: MouseEvent) {
   let shift: number, fromPos: number;
+  const bottom = this.sliderLengthInPx - this.getThumbWidthInPx();
   if (this.viewSettings.isVertical) {
     shift = e.clientY - this.getRange().getBoundingClientRect().top;
     fromPos = this.getThumbFrom().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbWidthInPx()/2);
@@ -222,6 +124,9 @@ private handleRangeLabel(e: MouseEvent) {
       this.dispatchEvent(shift, "thumbFrom");
     }
     else if (shift > toPos) {
+      if(shift>bottom){
+        shift=bottom;
+      }
       this.dispatchEvent(shift, "thumbTo");
     }
     else if (shift >= fromPos && shift <= toPos) {
@@ -239,6 +144,9 @@ private handleRangeLabel(e: MouseEvent) {
         this.dispatchEvent(shift, "thumbFrom");
       }
       else {   //vertical mode single thumb 
+        if(shift>bottom){
+          shift=bottom;
+        }
         this.dispatchEvent(shift, "thumbFrom");
       }
     }
@@ -250,6 +158,9 @@ private handleRangeLabel(e: MouseEvent) {
       this.dispatchEvent(shift, "thumbFrom");
     }
     else if (shift > toPos) {
+      if (shift > bottom) {
+        shift = bottom;
+      }
       this.dispatchEvent(shift, "thumbTo");
     }
     else if (shift >= fromPos && shift <= toPos) {
@@ -263,6 +174,9 @@ private handleRangeLabel(e: MouseEvent) {
     }
     }
     else { //horizontal mode single thumb
+      if (shift>fromPos) {
+        shift=fromPos;
+      }
       this.dispatchEvent(shift, "thumbFrom");
     }
   }
@@ -305,24 +219,9 @@ private dispatchEvent(shift: number, type: string) {
   this.setColoredRange();
 }
 
-getRange(): HTMLDivElement {
+private getRange(): HTMLDivElement {
   return this.range.getRange();
 }
-
-hideLabel():void{
-  this.range.hideLabel();
-}
-
-showLabel():void{
-  this.range.showLabel();
-}
-
-// getThumbLabelFrom(): ThumbLabel {
-//   return this.thumbLabelFrom;
-// }
-// getThumbLabelTo(): ThumbLabel {
-//   return this.thumbLabelTo;
-// }
 
 setValueToLabelThumbFrom(value: number): void {
   this.range.setValueToLabelThumbFrom(value);
@@ -332,7 +231,7 @@ setValueToLabelThumbTo(value: number): void {
   this.range.setValueToLabelThumbTo(value);
 }
 
-getRangeLabel(): HTMLDivElement {
+private getRangeLabel(): HTMLDivElement {
   return this.rangeLabel.getRangeLabel();
 }
 
