@@ -2,7 +2,7 @@ class Utils {
 
   static numDigitsAfterDecimal(value: number):number {
     if(value){
-    return (value.toString().split('.')[1] || '').length;
+    return (value.toString().split('.')[1]||'').length;
     }
     else return 0;
   }
@@ -16,5 +16,6 @@ class Utils {
   static convertFromInputToBoolean(value:boolean|undefined):boolean{
     return Boolean(value);
   }
+
 }
 export {Utils}

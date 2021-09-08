@@ -103,14 +103,14 @@ module.exports = [{
       lib: './fsd-slider.js',
     },
     resolve: {
-      extensions: ['.tsx', '.ts', '.js'],
+      extensions: ['.ts', '.js'],
     },
     output: {
       filename: '[name].js',
       path: path.resolve(__dirname, './slider'),
-      library: 'fsd-slider',
-      libraryTarget: 'umd',
-      umdNamedDefine: true
+      // library: 'fsd-slider',
+      // libraryTarget: 'umd',
+      // umdNamedDefine: true
     },
     optimization: {
       splitChunks: {
@@ -122,7 +122,7 @@ module.exports = [{
       new HTMLWebpackPlugin(
         {
           template: './index.pug',
-          chunks: ['main'],
+          chunks: ['lib'],
         }
       ),
       new CopyPlugin({
@@ -134,10 +134,10 @@ module.exports = [{
         ],
       }),
       new CleanWebpackPlugin(),
-      new webpack.ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery'
-      }),
+      // new webpack.ProvidePlugin({
+      //   $: 'jquery',
+      //   jQuery: 'jquery'
+      // }),
       new MiniCssExtractPlugin({
         filename: '[name].css'
       }),
@@ -173,6 +173,6 @@ module.exports = [{
           ]
         },
       ]
-    }
+    },
   }
 ];

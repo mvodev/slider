@@ -24,7 +24,7 @@ class ErrorMessage {
   }
 
   showMessage() {
-    console.error(this.message + ', invoked by:' + this.whoCalled + ', timestamp:' + this.timestamp);
+    console.error('message: ' + this.message + ', invoked by: ' + this.whoCalled + ', timestamp: ' + this.timestamp);
   }
 
 }
@@ -48,11 +48,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _model_Model__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_model_Model__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var _presenter_Presenter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./presenter/Presenter */ "./presenter/Presenter.ts");
 /* harmony import */ var _presenter_Presenter__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_presenter_Presenter__WEBPACK_IMPORTED_MODULE_2__);
+/* eslint-disable no-undef */
 
 
 
 (function ($) {
   var FsdSlider = function (root, settings,callback) {
+    // eslint-disable-next-line no-undef
     let model = new _model_Model__WEBPACK_IMPORTED_MODULE_1__["Model"](settings);
     let view = new _view_View__WEBPACK_IMPORTED_MODULE_0__["View"](root);
     this.presenter = new _presenter_Presenter__WEBPACK_IMPORTED_MODULE_2__["Presenter"](view, model);
@@ -913,7 +915,7 @@ const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./util
 class Slider extends EventObservable_1.EventObservable {
   constructor(rootElem) {
     super();
-    this.viewSettings = Object.assign({}, DefaultSettings_1.defaultSettings);
+    this.settings = Object.assign({}, DefaultSettings_1.defaultSettings);
     this.rootElem = rootElem;
     this.resPercentage = 0; //this.stepInPx = 0;
 
@@ -922,7 +924,7 @@ class Slider extends EventObservable_1.EventObservable {
   }
 
   render(settings) {
-    this.viewSettings = Object.assign(this.viewSettings, JSON.parse(settings));
+    this.settings = Object.assign(this.settings, JSON.parse(settings));
     this.container.classList.add(ClassNaming_1.ClassNaming.ROOT);
     this.container.appendChild(this.range.getRange());
     this.range.render(settings);
@@ -930,120 +932,92 @@ class Slider extends EventObservable_1.EventObservable {
     this.container.appendChild(this.rangeLabel.getRangeLabel());
     this.rootElem.appendChild(this.container);
 
-    if (this.viewSettings.hideThumbLabel) {
+    if (this.settings.hideThumbLabel) {
       this.range.hideLabel();
     } else {
       this.range.showLabel();
     }
 
-    if (this.viewSettings.isVertical) {
+    if (this.settings.isVertical) {
       this.setVertical();
     } else {
       this.setHorizontal();
     }
 
-    this.bindEvents(); //this.stepInPx = this.getSliderLengthInPx() / (Math.abs((this.viewSettings.max - this.viewSettings.min) / this.viewSettings.step));
+    this.bindEvents(); //this.stepInPx = this.getSliderLengthInPx() / (Math.abs((this.settings.max - this.settings.min) / this.settings.step));
 
     this.sliderLengthInPx = this.getSliderLengthInPx();
-    this.range.setValueToLabelThumbFrom(this.viewSettings.from);
-    this.range.setThumbPositionFrom(this.convertFromValueToPercent(this.viewSettings.from), this.viewSettings.isVertical);
+    this.range.setValueToLabelThumbFrom(this.settings.from);
+    this.range.setThumbPositionFrom(this.convertFromValueToPercent(this.settings.from), this.settings.isVertical);
 
-    if (this.viewSettings.isRange) {
-      this.range.setValueToLabelThumbTo(this.viewSettings.to);
-      this.range.setThumbPositionTo(this.convertFromValueToPercent(this.viewSettings.to), this.viewSettings.isVertical);
+    if (this.settings.isRange) {
+      this.range.setValueToLabelThumbTo(this.settings.to);
+      this.range.setThumbPositionTo(this.convertFromValueToPercent(this.settings.to), this.settings.isVertical);
     }
 
     this.setColoredRange();
   }
 
   convertFromValueToPercent(value) {
-    return (100 - this.getThumbWidthInPercentage()) / Math.abs(this.viewSettings.max - this.viewSettings.min) * Math.abs(value - this.viewSettings.min);
+    return (100 - this.getThumbWidthInPercentage()) / Math.abs(this.settings.max - this.settings.min) * Math.abs(value - this.settings.min);
   }
 
   initSliderComponents() {
-    this.range = new Range_1.Range(this.viewSettings);
-    this.rangeLabel = new RangeLabel_1.RangeLabel(this.viewSettings);
+    this.range = new Range_1.Range(this.settings);
+    this.rangeLabel = new RangeLabel_1.RangeLabel(this.settings);
     this.container = document.createElement('div');
   }
 
   bindEvents() {
-    this.getRangeLabel().addEventListener('mousedown', this.handleRangeLabel.bind(this));
-    this.getRange().addEventListener('mousedown', this.handleRangeLabel.bind(this));
+    this.getRangeLabel().addEventListener('mousedown', this.handleRange.bind(this));
+    this.getRange().addEventListener('mousedown', this.handleRange.bind(this));
   }
 
-  handleRangeLabel(e) {
-    let shift, fromPos;
+  handleRange(e) {
+    let clickedPos, fromPos;
+    let toPos;
     const bottom = this.sliderLengthInPx - this.getThumbWidthInPx();
 
-    if (this.viewSettings.isVertical) {
-      shift = e.clientY - this.getRange().getBoundingClientRect().top;
+    if (this.settings.isVertical) {
+      clickedPos = e.clientY - this.getRange().getBoundingClientRect().top;
       fromPos = this.getThumbFrom().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbWidthInPx() / 2);
+      toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbWidthInPx() / 2) : bottom;
     } else {
-      shift = e.clientX - this.getRange().getBoundingClientRect().left;
+      clickedPos = e.clientX - this.getRange().getBoundingClientRect().left;
       fromPos = this.getThumbFrom().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbWidthInPx() / 2);
+      toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbWidthInPx() / 2) : bottom;
     }
 
-    if (this.viewSettings.isVertical) {
-      if (this.viewSettings.isRange) {
-        const toPos = this.getThumbTo().getBoundingClientRect().top - this.getRange().getBoundingClientRect().top;
+    if (clickedPos > bottom) {
+      clickedPos = bottom;
+    }
 
-        if (shift < fromPos) {
-          this.dispatchEvent(shift, "thumbFrom");
-        } else if (shift > toPos) {
-          if (shift > bottom) {
-            shift = bottom;
-          }
-
-          this.dispatchEvent(shift, "thumbTo");
-        } else if (shift >= fromPos && shift <= toPos) {
-          const pivot = (toPos - fromPos) / 2;
-
-          if (shift < pivot + fromPos) {
-            this.dispatchEvent(shift, "thumbFrom");
-          } else if (shift >= pivot + fromPos) {
-            this.dispatchEvent(shift, "thumbTo");
-          }
-        }
-      } else {
-        //vertical mode single thumb 
-        if (shift > bottom) {
-          shift = bottom;
-        }
-
-        this.dispatchEvent(shift, "thumbFrom");
+    if (this.settings.isRange) {
+      if (fromPos > toPos) {
+        fromPos = toPos;
+        this.dispatchEvent(clickedPos, 'thumbTo');
       }
+    }
+
+    if (!this.settings.isRange) {
+      this.dispatchEvent(clickedPos, 'thumbFrom');
     } else {
-      if (this.viewSettings.isRange) {
-        const toPos = this.getThumbTo().getBoundingClientRect().left - this.getRange().getBoundingClientRect().left;
+      if (clickedPos > toPos) {
+        this.dispatchEvent(clickedPos, 'thumbTo');
+      }
 
-        if (shift < fromPos) {
-          this.dispatchEvent(shift, "thumbFrom");
-        } else if (shift > toPos) {
-          if (shift > bottom) {
-            shift = bottom;
-          }
+      if (clickedPos < fromPos) {
+        this.dispatchEvent(clickedPos, 'thumbFrom');
+      } else if (clickedPos > fromPos && clickedPos < toPos) {
+        const pivot = (toPos - fromPos) / 2;
 
-          this.dispatchEvent(shift, "thumbTo");
-        } else if (shift >= fromPos && shift <= toPos) {
-          const pivot = (toPos - fromPos) / 2;
-
-          if (shift < pivot + fromPos) {
-            this.dispatchEvent(shift, "thumbFrom");
-          } else if (shift >= pivot + fromPos) {
-            this.dispatchEvent(shift, "thumbTo");
-          }
+        if (clickedPos < pivot + fromPos && clickedPos < toPos) {
+          this.dispatchEvent(clickedPos, 'thumbFrom');
+        } else if (clickedPos > pivot + fromPos && clickedPos < toPos) {
+          this.dispatchEvent(clickedPos, 'thumbTo');
         }
-      } else {
-        //horizontal mode single thumb
-        if (shift > bottom) {
-          shift = bottom;
-        }
-
-        this.dispatchEvent(shift, "thumbFrom");
       }
     }
-
-    this.setColoredRange();
   }
 
   convertFromPxToPercent(valueInPX) {
@@ -1051,7 +1025,7 @@ class Slider extends EventObservable_1.EventObservable {
   }
 
   getThumbWidthInPercentage() {
-    if (this.viewSettings.isVertical) {
+    if (this.settings.isVertical) {
       return this.getThumbFrom().offsetHeight / this.sliderLengthInPx * 100;
     } else {
       return this.getThumbFrom().offsetWidth / this.sliderLengthInPx * 100;
@@ -1059,7 +1033,7 @@ class Slider extends EventObservable_1.EventObservable {
   }
 
   getSliderLengthInPx() {
-    if (this.viewSettings.isVertical) {
+    if (this.settings.isVertical) {
       return this.getRange().offsetHeight;
     } else {
       return this.getRange().offsetWidth;
@@ -1070,14 +1044,14 @@ class Slider extends EventObservable_1.EventObservable {
     this.resPercentage = this.convertFromPxToPercent(shift);
 
     if (type === "thumbFrom") {
-      this.range.setThumbPositionFrom(this.resPercentage, this.viewSettings.isVertical);
+      this.range.setThumbPositionFrom(this.resPercentage, this.settings.isVertical);
       this.notifyObservers(4
       /* SET_FROM */
       , JSON.stringify({
         from: this.resPercentage
       }), 0);
     } else {
-      this.range.setThumbPositionTo(this.resPercentage, this.viewSettings.isVertical);
+      this.range.setThumbPositionTo(this.resPercentage, this.settings.isVertical);
       this.notifyObservers(5
       /* SET_TO */
       , JSON.stringify({

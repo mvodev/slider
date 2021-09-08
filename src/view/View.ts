@@ -5,6 +5,7 @@ import { EventObservable } from '../observers/EventObservable';
 import { defaultSettings } from '../model/defaultSettings';
 import { IObserver } from '../observers/IObserver';
 
+
 class View extends EventObservable implements IObserver{
   private slider: Slider;
   private viewSettings: ISettings;
