@@ -19,7 +19,7 @@ const cssLoaders = extra => {
   return loaders;
 }
 
-module.exports = [{
+let demoConfig = {
   context: path.resolve(__dirname, 'src'),
   mode: 'development',
   entry: {
@@ -95,84 +95,86 @@ module.exports = [{
       },
     ]
   }
-},
-  {
-    context: path.resolve(__dirname, 'src'),
-    mode: 'development',
-    entry: {
-      lib: './fsd-slider.js',
-    },
-    resolve: {
-      extensions: ['.ts', '.js'],
-    },
-    output: {
-      filename: '[name].js',
-      path: path.resolve(__dirname, './slider'),
-      // library: 'fsd-slider',
-      // libraryTarget: 'umd',
-      // umdNamedDefine: true
-    },
-    optimization: {
-      splitChunks: {
-        chunks: 'all'
+};
+
+let libConfig = {
+  context: path.resolve(__dirname, 'src'),
+  mode: 'development',
+  entry: {
+    lib: './fsd-slider.js',
+  },
+  resolve: {
+    extensions: ['.ts', '.js'],
+  },
+  output: {
+    filename: '[name].js',
+    path: path.resolve(__dirname, './slider'),
+    // library: 'fsd-slider',
+    // libraryTarget: 'umd',
+    // umdNamedDefine: true
+  },
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    }
+  },
+  devtool: 'source-map',
+  plugins: [
+    new HTMLWebpackPlugin(
+      {
+        template: './index.pug',
+        chunks: ['lib'],
       }
-    },
-    devtool: 'source-map',
-    plugins: [
-      new HTMLWebpackPlugin(
+    ),
+    new CopyPlugin({
+      patterns: [
         {
-          template: './index.pug',
-          chunks: ['lib'],
-        }
-      ),
-      new CopyPlugin({
-        patterns: [
-          {
-            from: path.resolve(__dirname, 'src/assets/'),
-            to: path.resolve(__dirname, 'docs')
-          },
-        ],
-      }),
-      new CleanWebpackPlugin(),
-      // new webpack.ProvidePlugin({
-      //   $: 'jquery',
-      //   jQuery: 'jquery'
-      // }),
-      new MiniCssExtractPlugin({
-        filename: '[name].css'
-      }),
-    ],
-    module: {
-      rules: [
-        {
-          test: /\.css$/,
-          use: cssLoaders()
+          from: path.resolve(__dirname, 'src/assets/'),
+          to: path.resolve(__dirname, 'docs')
         },
-        {
-          test: /\.pug$/,
-          use: ["pug-loader"],
-        },
-        {
-          test: /\.(png|jpg|svg|gif)$/,
-          use: ['file-loader']
-        },
-        {
-          test: /\.(ttf|woff|woff2|eot|otf)$/,
-          use: ['file-loader']
-        },
-        {
-          test: /\.s[ac]ss$/,
-          use: cssLoaders('sass-loader')
-        },
-        {
-          test: /\.ts(x?)$/,
-          exclude: ['/node_modules/'],
-          use: [
-            'babel-loader',
-            'ts-loader',
-          ]
-        },
-      ]
-    },
-  }
-];
+      ],
+    }),
+    new CleanWebpackPlugin(),
+    // new webpack.ProvidePlugin({
+    //   $: 'jquery',
+    //   jQuery: 'jquery'
+    // }),
+    new MiniCssExtractPlugin({
+      filename: '[name].css'
+    }),
+  ],
+  module: {
+    rules: [
+      {
+        test: /\.css$/,
+        use: cssLoaders()
+      },
+      {
+        test: /\.pug$/,
+        use: ["pug-loader"],
+      },
+      {
+        test: /\.(png|jpg|svg|gif)$/,
+        use: ['file-loader']
+      },
+      {
+        test: /\.(ttf|woff|woff2|eot|otf)$/,
+        use: ['file-loader']
+      },
+      {
+        test: /\.s[ac]ss$/,
+        use: cssLoaders('sass-loader')
+      },
+      {
+        test: /\.ts(x?)$/,
+        exclude: ['/node_modules/'],
+        use: [
+          'babel-loader',
+          'ts-loader',
+        ]
+      },
+    ]
+  },
+};
+
+module.exports = [demoConfig, libConfig];
