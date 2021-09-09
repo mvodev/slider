@@ -281,6 +281,9 @@ class Slider extends EventObservable{
   }
 
   private getThumbWidthInPx(): number {
+    if(this.settings.isVertical){
+      return this.getThumbFrom().offsetHeight;
+    }
     return this.getThumbFrom().offsetWidth;
   }
 

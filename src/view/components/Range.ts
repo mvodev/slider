@@ -20,9 +20,11 @@ class Range{
     this.thumbFrom = new Thumb(ClassNaming.THUMB_FROM);
     this.getRange().appendChild(this.coloredRange.getColoredRange());
   }
+
   getRange(): HTMLDivElement {
     return this.range;
   }
+
   render(settings:string):void{
     Object.assign(this.viewSettings, JSON.parse(settings));
     this.getRange().appendChild(this.thumbFrom.getThumb());
@@ -31,6 +33,7 @@ class Range{
       this.getRange().appendChild(this.thumbTo.getThumb());
     }
   }
+
   setVertical():void{
     this.range.classList.add(ClassNaming.RANGE_IS_VERTICAL);
     this.coloredRange.getColoredRange().classList.add(ClassNaming.COLORED_RANGE_IS_VERTICAL);
@@ -39,6 +42,7 @@ class Range{
       this.thumbTo.setVertical();
     }
   }
+  
   setHorizontal():void{
     this.range.classList.remove(ClassNaming.RANGE_IS_VERTICAL);
     this.coloredRange.getColoredRange().classList.remove(ClassNaming.COLORED_RANGE_IS_VERTICAL);
