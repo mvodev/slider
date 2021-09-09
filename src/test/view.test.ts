@@ -27,6 +27,6 @@ describe("View", function () {
     assert.equal(view.getSlider().getRangeLabel().firstElementChild.innerHTML, "" + s.min);
   });
   it("View set correct style for ThumbLabel", function () {
-    assert.equal(view.getSlider().getThumbLabelFrom().getThumbLabelContainer().style.display, "none");
+    assert.equal(view.getSlider().getThumbLabelFrom().style.display, "none");
   });
 });

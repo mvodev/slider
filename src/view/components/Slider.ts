@@ -240,7 +240,7 @@ class Slider extends EventObservable{
     this.setColoredRange();
   }
 
-  private getRange(): HTMLDivElement {
+  getRange(): HTMLDivElement {
     return this.range.getRange();
   }
 
@@ -252,11 +252,11 @@ class Slider extends EventObservable{
     this.range.setValueToLabelThumbTo(value);
   }
 
-  private getRangeLabel(): HTMLDivElement {
+  getRangeLabel(): HTMLDivElement {
     return this.rangeLabel.getRangeLabel();
   }
 
-  private getThumbFrom(): HTMLDivElement {
+  getThumbFrom(): HTMLDivElement {
     return this.range.getThumbFrom();
   }
 
@@ -282,6 +282,14 @@ class Slider extends EventObservable{
 
   private getThumbWidthInPx(): number {
     return this.getThumbFrom().offsetWidth;
+  }
+
+  getThumbLabelFrom():HTMLElement{
+    return this.range.getThumbFrom();
+  }
+
+  getThumbLabelTo():HTMLElement{
+    return this.range.getThumbTo();
   }
 
 }

@@ -39,8 +39,8 @@ describe("Presenter", function () {
   });
   it("Slider is correctly set styles for ThumbLabel after presenter update", function () {
     presenter.update(settingsUpdated);
-    assert.equal(view.getSlider().getThumbLabelFrom().getThumbLabelContainer().style.display, "block");
-    assert.equal(view.getSlider().getThumbLabelTo().getThumbLabelContainer().style.display, "block");
+    assert.equal(view.getSlider().getThumbLabelFrom().style.display, "block");
+    assert.equal(view.getSlider().getThumbLabelTo().style.display, "block");
     assert.equal(view.getSlider().getRangeLabel().firstElementChild.innerHTML, "" + settingsUpdated.min);
   });
   it("Slider is correctly set min value in rangeLabel after presenter update", function () {
