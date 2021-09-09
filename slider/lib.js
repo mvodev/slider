@@ -587,6 +587,8 @@ var Constants;
 
 (function (Constants) {
   Constants.NUMBER_OF_LABELS = 8;
+  Constants.THUMB_FROM = 'thumbFrom';
+  Constants.THUMB_TO = 'thumbTo';
 })(Constants = exports.Constants || (exports.Constants = {}));
 
 /***/ }),
@@ -648,7 +650,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.View = void 0;
 
-const Slider_1 = __webpack_require__(/*! ./modules/Slider */ "./view/modules/Slider.ts");
+const Slider_1 = __webpack_require__(/*! ./components/Slider */ "./view/components/Slider.ts");
 
 const EventObservable_1 = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
 
@@ -708,10 +710,10 @@ exports.View = View;
 
 /***/ }),
 
-/***/ "./view/modules/ColoredRange.ts":
-/*!**************************************!*\
-  !*** ./view/modules/ColoredRange.ts ***!
-  \**************************************/
+/***/ "./view/components/ColoredRange.ts":
+/*!*****************************************!*\
+  !*** ./view/components/ColoredRange.ts ***!
+  \*****************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -767,10 +769,10 @@ exports.ColoredRange = ColoredRange;
 
 /***/ }),
 
-/***/ "./view/modules/Range.ts":
-/*!*******************************!*\
-  !*** ./view/modules/Range.ts ***!
-  \*******************************/
+/***/ "./view/components/Range.ts":
+/*!**********************************!*\
+  !*** ./view/components/Range.ts ***!
+  \**********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -784,9 +786,9 @@ exports.Range = void 0;
 
 const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
 
-const ColoredRange_1 = __webpack_require__(/*! ./ColoredRange */ "./view/modules/ColoredRange.ts");
+const ColoredRange_1 = __webpack_require__(/*! ./ColoredRange */ "./view/components/ColoredRange.ts");
 
-const Thumb_1 = __webpack_require__(/*! ./Thumb */ "./view/modules/Thumb.ts");
+const Thumb_1 = __webpack_require__(/*! ./Thumb */ "./view/components/Thumb.ts");
 
 class Range {
   constructor(settings) {
@@ -883,10 +885,10 @@ exports.Range = Range;
 
 /***/ }),
 
-/***/ "./view/modules/RangeLabel.ts":
-/*!************************************!*\
-  !*** ./view/modules/RangeLabel.ts ***!
-  \************************************/
+/***/ "./view/components/RangeLabel.ts":
+/*!***************************************!*\
+  !*** ./view/components/RangeLabel.ts ***!
+  \***************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -972,10 +974,10 @@ exports.RangeLabel = RangeLabel;
 
 /***/ }),
 
-/***/ "./view/modules/Slider.ts":
-/*!********************************!*\
-  !*** ./view/modules/Slider.ts ***!
-  \********************************/
+/***/ "./view/components/Slider.ts":
+/*!***********************************!*\
+  !*** ./view/components/Slider.ts ***!
+  \***********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -987,9 +989,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Slider = void 0;
 
-const Range_1 = __webpack_require__(/*! ./Range */ "./view/modules/Range.ts");
+const Range_1 = __webpack_require__(/*! ./Range */ "./view/components/Range.ts");
 
-const RangeLabel_1 = __webpack_require__(/*! ./RangeLabel */ "./view/modules/RangeLabel.ts");
+const RangeLabel_1 = __webpack_require__(/*! ./RangeLabel */ "./view/components/RangeLabel.ts");
 
 const DefaultSettings_1 = __webpack_require__(/*! ../../model/DefaultSettings */ "./model/DefaultSettings.ts");
 
@@ -997,13 +999,15 @@ const EventObservable_1 = __webpack_require__(/*! ../../observers/EventObservabl
 
 const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
 
+const Constants_1 = __webpack_require__(/*! ../../utils/Constants */ "./utils/Constants.ts");
+
 class Slider extends EventObservable_1.EventObservable {
   constructor(rootElem) {
     super();
     this.settings = Object.assign({}, DefaultSettings_1.defaultSettings);
     this.rootElem = rootElem;
-    this.resPercentage = 0; //this.stepInPx = 0;
-
+    this.resPercentage = 0;
+    this.stepInPx = 0;
     this.sliderLengthInPx = 0;
     this.initSliderComponents();
   }
@@ -1029,8 +1033,8 @@ class Slider extends EventObservable_1.EventObservable {
       this.setHorizontal();
     }
 
-    this.bindEvents(); //this.stepInPx = this.getSliderLengthInPx() / (Math.abs((this.settings.max - this.settings.min) / this.settings.step));
-
+    this.bindEvents();
+    this.stepInPx = this.getSliderLengthInPx() / Math.abs((this.settings.max - this.settings.min) / this.settings.step);
     this.sliderLengthInPx = this.getSliderLengthInPx();
     this.range.setValueToLabelThumbFrom(this.settings.from);
     this.range.setThumbPositionFrom(this.convertFromValueToPercent(this.settings.from), this.settings.isVertical);
@@ -1054,55 +1058,125 @@ class Slider extends EventObservable_1.EventObservable {
   }
 
   bindEvents() {
-    this.getRangeLabel().addEventListener('mousedown', this.handleRange.bind(this));
-    this.getRange().addEventListener('mousedown', this.handleRange.bind(this));
+    this.handleRangeBinded = this.handleRange.bind(this, 'range');
+    this.handleRangeLabelBinded = this.handleRange.bind(this, 'rangeLabel');
+    this.getRangeLabel().addEventListener('mousedown', this.handleRangeLabelBinded);
+    this.getRange().addEventListener('mousedown', this.handleRangeBinded);
   }
 
-  handleRange(e) {
-    let clickedPos, fromPos;
-    let toPos;
-    const bottom = this.sliderLengthInPx - this.getThumbWidthInPx();
+  bindExtraListeners() {
+    this.moveHandlerBinded = this.moveHandler.bind(this);
+    this.removeHandlerBinded = this.removeHandler.bind(this);
+    this.getRange().addEventListener('mousemove', this.moveHandlerBinded);
+    this.getRange().addEventListener('mouseup', this.removeHandlerBinded);
+  }
 
-    if (this.settings.isVertical) {
-      clickedPos = e.clientY - this.getRange().getBoundingClientRect().top;
-      fromPos = this.getThumbFrom().getBoundingClientRect().top - this.getRange().getBoundingClientRect().top;
-      toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().top - this.getRange().getBoundingClientRect().top : bottom;
-    } else {
-      clickedPos = e.clientX - this.getRange().getBoundingClientRect().left;
-      fromPos = this.getThumbFrom().getBoundingClientRect().left - this.getRange().getBoundingClientRect().left;
-      toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().left - this.getRange().getBoundingClientRect().left : bottom;
-    }
+  handleRange(type, e) {
+    if (e instanceof MouseEvent) {
+      let clickedPos;
+      const pos = this.getElemsPos();
+      let fromPos = pos.fromPos;
+      const toPos = pos.toPos;
+      const bottom = pos.bottom;
 
-    if (clickedPos > bottom) {
-      clickedPos = bottom;
-    }
-
-    if (this.settings.isRange) {
-      if (fromPos > toPos) {
-        fromPos = toPos;
-        this.dispatchEvent(clickedPos, 'thumbTo');
-      }
-    }
-
-    if (!this.settings.isRange) {
-      this.dispatchEvent(clickedPos, 'thumbFrom');
-    } else {
-      if (clickedPos > toPos) {
-        this.dispatchEvent(clickedPos, 'thumbTo');
+      if (this.settings.isVertical) {
+        clickedPos = e.clientY - this.getRange().getBoundingClientRect().top;
+      } else {
+        clickedPos = e.clientX - this.getRange().getBoundingClientRect().left;
       }
 
-      if (clickedPos < fromPos) {
-        this.dispatchEvent(clickedPos, 'thumbFrom');
-      } else if (clickedPos > fromPos && clickedPos < toPos) {
-        const pivot = (toPos - fromPos) / 2;
+      if (clickedPos > bottom) {
+        clickedPos = bottom;
+      }
 
-        if (clickedPos < pivot + fromPos && clickedPos < toPos) {
-          this.dispatchEvent(clickedPos, 'thumbFrom');
-        } else if (clickedPos > pivot + fromPos && clickedPos < toPos) {
+      if (this.settings.isRange) {
+        if (fromPos > toPos) {
+          fromPos = toPos;
           this.dispatchEvent(clickedPos, 'thumbTo');
         }
       }
+
+      if (!this.settings.isRange) {
+        this.dispatchEvent(clickedPos, 'thumbFrom');
+      } else {
+        if (clickedPos > toPos) {
+          this.dispatchEvent(clickedPos, 'thumbTo');
+        }
+
+        if (clickedPos < fromPos) {
+          this.dispatchEvent(clickedPos, 'thumbFrom');
+        } else if (clickedPos > fromPos && clickedPos < toPos) {
+          const pivot = (toPos - fromPos) / 2;
+
+          if (clickedPos < pivot + fromPos && clickedPos < toPos) {
+            this.dispatchEvent(clickedPos, 'thumbFrom');
+          } else if (clickedPos > pivot + fromPos && clickedPos < toPos) {
+            this.dispatchEvent(clickedPos, 'thumbTo');
+          }
+        }
+      }
+
+      if (type === 'range') {
+        this.bindExtraListeners();
+      }
     }
+  }
+
+  moveHandler(e) {
+    let newPos;
+    const pos = this.getElemsPos();
+    const fromPos = pos.fromPos;
+    const toPos = pos.toPos;
+    const bottom = pos.bottom;
+    let thumbType = '';
+
+    if (e instanceof MouseEvent) {
+      if (this.settings.isVertical) {
+        newPos = e.clientY - this.getRange().getBoundingClientRect().top;
+      } else {
+        newPos = e.clientX - this.getRange().getBoundingClientRect().left;
+      }
+
+      if (!this.settings.isRange) {
+        if (newPos < 0) {
+          newPos = 0;
+        }
+
+        if (newPos > bottom) {
+          newPos = bottom;
+        }
+
+        thumbType = Constants_1.Constants.THUMB_FROM;
+        this.dispatchEvent(newPos, thumbType);
+      } else {
+        if (newPos < fromPos) thumbType = Constants_1.Constants.THUMB_FROM;
+        if (newPos > toPos) thumbType = Constants_1.Constants.THUMB_TO;
+
+        if (newPos >= fromPos && newPos <= toPos) {
+          const pivot = (toPos - fromPos) / 2;
+          if (newPos < pivot + fromPos) thumbType = Constants_1.Constants.THUMB_FROM;else if (newPos >= pivot + fromPos) thumbType = Constants_1.Constants.THUMB_TO;
+        }
+
+        if (thumbType === Constants_1.Constants.THUMB_FROM) {
+          if (newPos < 0) newPos = 0;
+          if (newPos > toPos) newPos = toPos;
+        }
+
+        if (thumbType === Constants_1.Constants.THUMB_TO) {
+          if (newPos < fromPos) newPos = fromPos;
+          if (newPos > bottom) newPos = bottom;
+        }
+
+        if (Math.abs(newPos % this.stepInPx) <= 0.2 * this.stepInPx) {
+          this.dispatchEvent(newPos, thumbType);
+        }
+      }
+    }
+  }
+
+  removeHandler() {
+    this.getRange().removeEventListener('mousemove', this.moveHandlerBinded);
+    this.getRange().removeEventListener('mouseup', this.removeHandlerBinded);
   }
 
   convertFromPxToPercent(valueInPX) {
@@ -1115,6 +1189,25 @@ class Slider extends EventObservable_1.EventObservable {
     } else {
       return this.getThumbFrom().offsetWidth / this.sliderLengthInPx * 100;
     }
+  }
+
+  getElemsPos() {
+    let fromPos, toPos;
+    const bottom = this.sliderLengthInPx - this.getThumbWidthInPx();
+
+    if (this.settings.isVertical) {
+      fromPos = this.getThumbFrom().getBoundingClientRect().top - this.getRange().getBoundingClientRect().top;
+      toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().top - this.getRange().getBoundingClientRect().top : bottom;
+    } else {
+      fromPos = this.getThumbFrom().getBoundingClientRect().left - this.getRange().getBoundingClientRect().left;
+      toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().left - this.getRange().getBoundingClientRect().left : bottom;
+    }
+
+    return {
+      fromPos,
+      toPos,
+      bottom
+    };
   }
 
   getSliderLengthInPx() {
@@ -1197,10 +1290,10 @@ exports.Slider = Slider;
 
 /***/ }),
 
-/***/ "./view/modules/Thumb.ts":
-/*!*******************************!*\
-  !*** ./view/modules/Thumb.ts ***!
-  \*******************************/
+/***/ "./view/components/Thumb.ts":
+/*!**********************************!*\
+  !*** ./view/components/Thumb.ts ***!
+  \**********************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1212,7 +1305,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Thumb = void 0;
 
-const ThumbLabel_1 = __webpack_require__(/*! ./ThumbLabel */ "./view/modules/ThumbLabel.ts");
+const ThumbLabel_1 = __webpack_require__(/*! ./ThumbLabel */ "./view/components/ThumbLabel.ts");
 
 class Thumb {
   constructor(className) {
@@ -1263,10 +1356,10 @@ exports.Thumb = Thumb;
 
 /***/ }),
 
-/***/ "./view/modules/ThumbLabel.ts":
-/*!************************************!*\
-  !*** ./view/modules/ThumbLabel.ts ***!
-  \************************************/
+/***/ "./view/components/ThumbLabel.ts":
+/*!***************************************!*\
+  !*** ./view/components/ThumbLabel.ts ***!
+  \***************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 

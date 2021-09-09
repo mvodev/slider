@@ -1,5 +1,5 @@
 import { ISettings } from '../model/ISettings';
-import { Slider } from './modules/Slider';
+import { Slider } from './components/Slider';
 import { Messages } from '../utils/Messages';
 import { EventObservable } from '../observers/EventObservable';
 import { defaultSettings } from '../model/defaultSettings';
