@@ -2,22 +2,22 @@
 const webpackConfig = require('./webpack.config');
 
 module.exports = function (config) {
- config.set({
+config.set({
   basePath: '',
   frameworks: ['jasmine'],
   files: [
-   'src/test/*.*.ts',
-   { pattern: 'src/styles/fsd-slider-copy.css', included: true, watched: false },
+    'src/test/*.*.ts',
+    { pattern: 'src/styles/fsd-slider-copy.css', included: true, watched: false },
   ],
   exclude: [],
   preprocessors: {
-   'src/test/*.ts': 'webpack',
+    'src/test/*.ts': 'webpack',
   },
   webpack: {
-   module: webpackConfig.module,
-   resolve: webpackConfig.resolve,
-   mode: webpackConfig.mode,
-   devtool: 'inline-source-map',
+    module: webpackConfig.module,
+    resolve: webpackConfig.resolve,
+    mode: webpackConfig.mode,
+    devtool: 'inline-source-map',
   },
   reporters: ['mocha'],
   port: 9876,
@@ -27,5 +27,5 @@ module.exports = function (config) {
   browsers: ['Chrome'],
   singleRun: false,
   concurrency: Infinity,
- });
+});
 };

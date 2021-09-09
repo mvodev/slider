@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import '../src/styles/fsd-slider.scss';
 import { View } from './view/View';
 import { Model } from './model/Model';
 import { Presenter } from './presenter/Presenter';

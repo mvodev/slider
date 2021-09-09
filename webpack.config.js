@@ -107,11 +107,8 @@ let libConfig = {
     extensions: ['.ts', '.js'],
   },
   output: {
-    filename: '[name].js',
+    filename: 'fsd-slider.js',
     path: path.resolve(__dirname, './slider'),
-    // library: 'fsd-slider',
-    // libraryTarget: 'umd',
-    // umdNamedDefine: true
   },
   optimization: {
     splitChunks: {
@@ -135,12 +132,8 @@ let libConfig = {
       ],
     }),
     new CleanWebpackPlugin(),
-    // new webpack.ProvidePlugin({
-    //   $: 'jquery',
-    //   jQuery: 'jquery'
-    // }),
     new MiniCssExtractPlugin({
-      filename: '[name].css'
+      filename: 'fsd-slider.css'
     }),
   ],
   module: {

@@ -90,17 +90,12 @@
 /*!***************************************!*\
   !*** ./error-message/ErrorMessage.ts ***!
   \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: ErrorMessage */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ErrorMessage = void 0;
-
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ErrorMessage", function() { return ErrorMessage; });
 class ErrorMessage {
   constructor(message, whoCalled) {
     this.message = message;
@@ -115,7 +110,7 @@ class ErrorMessage {
 
 }
 
-exports.ErrorMessage = ErrorMessage;
+
 
 /***/ }),
 
@@ -128,22 +123,21 @@ exports.ErrorMessage = ErrorMessage;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _view_View__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./view/View */ "./view/View.ts");
-/* harmony import */ var _view_View__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_view_View__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _model_Model__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./model/Model */ "./model/Model.ts");
-/* harmony import */ var _model_Model__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_model_Model__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _presenter_Presenter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./presenter/Presenter */ "./presenter/Presenter.ts");
-/* harmony import */ var _presenter_Presenter__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_presenter_Presenter__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _src_styles_fsd_slider_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../src/styles/fsd-slider.scss */ "./styles/fsd-slider.scss");
+/* harmony import */ var _view_View__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./view/View */ "./view/View.ts");
+/* harmony import */ var _model_Model__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./model/Model */ "./model/Model.ts");
+/* harmony import */ var _presenter_Presenter__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./presenter/Presenter */ "./presenter/Presenter.ts");
 /* eslint-disable no-undef */
+
 
 
 
 (function ($) {
   var FsdSlider = function (root, settings,callback) {
     // eslint-disable-next-line no-undef
-    let model = new _model_Model__WEBPACK_IMPORTED_MODULE_1__["Model"](settings);
-    let view = new _view_View__WEBPACK_IMPORTED_MODULE_0__["View"](root);
-    this.presenter = new _presenter_Presenter__WEBPACK_IMPORTED_MODULE_2__["Presenter"](view, model);
+    let model = new _model_Model__WEBPACK_IMPORTED_MODULE_2__["Model"](settings);
+    let view = new _view_View__WEBPACK_IMPORTED_MODULE_1__["View"](root);
+    this.presenter = new _presenter_Presenter__WEBPACK_IMPORTED_MODULE_3__["Presenter"](view, model);
     model.addObserver(this.presenter);
     view.addObserver(this.presenter);
     this.presenter.addObserver(callback);
@@ -169,16 +163,12 @@ __webpack_require__.r(__webpack_exports__);
 /*!**********************************!*\
   !*** ./model/DefaultSettings.ts ***!
   \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: defaultSettings */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.defaultSettings = void 0;
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultSettings", function() { return defaultSettings; });
 const defaultSettings = {
   min: 0,
   max: 10,
@@ -189,7 +179,7 @@ const defaultSettings = {
   isVertical: false,
   hideThumbLabel: false
 };
-exports.defaultSettings = defaultSettings;
+
 
 /***/ }),
 
@@ -197,29 +187,25 @@ exports.defaultSettings = defaultSettings;
 /*!************************!*\
   !*** ./model/Model.ts ***!
   \************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: Model */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Model", function() { return Model; });
+/* harmony import */ var _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
+/* harmony import */ var _utils_Utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/Utils */ "./utils/Utils.ts");
+/* harmony import */ var _DefaultSettings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./DefaultSettings */ "./model/DefaultSettings.ts");
+/* harmony import */ var _error_message_ErrorMessage__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../error-message/ErrorMessage */ "./error-message/ErrorMessage.ts");
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Model = void 0;
 
-const EventObservable_1 = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
 
-const Utils_1 = __webpack_require__(/*! ../utils/Utils */ "./utils/Utils.ts");
 
-const DefaultSettings_1 = __webpack_require__(/*! ./DefaultSettings */ "./model/DefaultSettings.ts");
-
-const ErrorMessage_1 = __webpack_require__(/*! ../error-message/ErrorMessage */ "./error-message/ErrorMessage.ts");
-
-class Model extends EventObservable_1.EventObservable {
+class Model extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__["EventObservable"] {
   constructor(settings) {
     super();
-    this.settings = Object.assign({}, DefaultSettings_1.defaultSettings);
+    this.settings = Object.assign({}, _DefaultSettings__WEBPACK_IMPORTED_MODULE_2__["defaultSettings"]);
     this.validateSettings(settings);
   }
 
@@ -263,14 +249,14 @@ class Model extends EventObservable_1.EventObservable {
   }
 
   validateSettings(settings) {
-    const newMin = Utils_1.Utils.convertFromInputToNumber(settings.min);
-    const newMax = Utils_1.Utils.convertFromInputToNumber(settings.max);
-    const newFrom = Utils_1.Utils.convertFromInputToNumber(settings.from);
-    const newTo = Utils_1.Utils.convertFromInputToNumber(settings.to);
-    const newStep = Utils_1.Utils.convertFromInputToNumber(settings.step);
-    const newIsVertical = Utils_1.Utils.convertFromInputToBoolean(settings.isVertical);
-    const newHideThumbLabel = Utils_1.Utils.convertFromInputToBoolean(settings.hideThumbLabel);
-    this.settings.isRange = settings.isRange ? Utils_1.Utils.convertFromInputToBoolean(settings.isRange) : this.settings.isRange;
+    const newMin = _utils_Utils__WEBPACK_IMPORTED_MODULE_1__["Utils"].convertFromInputToNumber(settings.min);
+    const newMax = _utils_Utils__WEBPACK_IMPORTED_MODULE_1__["Utils"].convertFromInputToNumber(settings.max);
+    const newFrom = _utils_Utils__WEBPACK_IMPORTED_MODULE_1__["Utils"].convertFromInputToNumber(settings.from);
+    const newTo = _utils_Utils__WEBPACK_IMPORTED_MODULE_1__["Utils"].convertFromInputToNumber(settings.to);
+    const newStep = _utils_Utils__WEBPACK_IMPORTED_MODULE_1__["Utils"].convertFromInputToNumber(settings.step);
+    const newIsVertical = _utils_Utils__WEBPACK_IMPORTED_MODULE_1__["Utils"].convertFromInputToBoolean(settings.isVertical);
+    const newHideThumbLabel = _utils_Utils__WEBPACK_IMPORTED_MODULE_1__["Utils"].convertFromInputToBoolean(settings.hideThumbLabel);
+    this.settings.isRange = settings.isRange ? _utils_Utils__WEBPACK_IMPORTED_MODULE_1__["Utils"].convertFromInputToBoolean(settings.isRange) : this.settings.isRange;
     this.validateMinOrError(newMin);
     this.validateMaxOrError(newMax);
     this.validateFromOrError(newFrom);
@@ -283,9 +269,9 @@ class Model extends EventObservable_1.EventObservable {
   validateMinOrError(newMin) {
     if (newMin) {
       if (newMin >= this.settings.max) {
-        new ErrorMessage_1.ErrorMessage('unacceptable value,min value in settings more than max value', 'validate settings method of Model');
+        new _error_message_ErrorMessage__WEBPACK_IMPORTED_MODULE_3__["ErrorMessage"]('unacceptable value,min value in settings more than max value', 'validate settings method of Model');
       } else if (newMin > this.settings.from) {
-        new ErrorMessage_1.ErrorMessage('unacceptable value,min value in settings more than from value', 'validate settings method of Model');
+        new _error_message_ErrorMessage__WEBPACK_IMPORTED_MODULE_3__["ErrorMessage"]('unacceptable value,min value in settings more than from value', 'validate settings method of Model');
       } else {
         this.settings.min = newMin;
       }
@@ -295,11 +281,11 @@ class Model extends EventObservable_1.EventObservable {
   validateMaxOrError(newMax) {
     if (newMax) {
       if (newMax <= this.settings.min) {
-        new ErrorMessage_1.ErrorMessage('unacceptable value,max value in settings lower than min value', 'validate settings method of Model');
+        new _error_message_ErrorMessage__WEBPACK_IMPORTED_MODULE_3__["ErrorMessage"]('unacceptable value,max value in settings lower than min value', 'validate settings method of Model');
       } else if (newMax <= this.settings.to && this.settings.isRange) {
-        new ErrorMessage_1.ErrorMessage('unacceptable value,max value in settings lower than to value', 'validate settings method of Model');
+        new _error_message_ErrorMessage__WEBPACK_IMPORTED_MODULE_3__["ErrorMessage"]('unacceptable value,max value in settings lower than to value', 'validate settings method of Model');
       } else if (newMax <= this.settings.from) {
-        new ErrorMessage_1.ErrorMessage('unacceptable value,max value in settings lower than from value', 'validate settings method of Model');
+        new _error_message_ErrorMessage__WEBPACK_IMPORTED_MODULE_3__["ErrorMessage"]('unacceptable value,max value in settings lower than from value', 'validate settings method of Model');
       } else {
         this.settings.max = newMax;
       }
@@ -311,7 +297,7 @@ class Model extends EventObservable_1.EventObservable {
       const max = this.settings.isRange ? this.settings.to : this.settings.max;
 
       if (newFrom <= this.settings.min + this.settings.step || newFrom >= max + this.settings.step) {
-        new ErrorMessage_1.ErrorMessage('from is invalid', 'validate settings method of Model');
+        new _error_message_ErrorMessage__WEBPACK_IMPORTED_MODULE_3__["ErrorMessage"]('from is invalid', 'validate settings method of Model');
         this.settings.from = this.settings.min;
       } else {
         this.settings.from = newFrom;
@@ -322,12 +308,12 @@ class Model extends EventObservable_1.EventObservable {
   validateToOrError(newTo) {
     if (newTo) {
       if (newTo > this.settings.max) {
-        new ErrorMessage_1.ErrorMessage('to must be lower than max', 'validate settings method of Model');
+        new _error_message_ErrorMessage__WEBPACK_IMPORTED_MODULE_3__["ErrorMessage"]('to must be lower than max', 'validate settings method of Model');
       } else if (newTo <= this.settings.min) {
-        new ErrorMessage_1.ErrorMessage('to must be lower than max', 'validate settings method of Model');
+        new _error_message_ErrorMessage__WEBPACK_IMPORTED_MODULE_3__["ErrorMessage"]('to must be lower than max', 'validate settings method of Model');
       } else if (this.settings.isRange) {
         if (newTo <= this.settings.from) {
-          new ErrorMessage_1.ErrorMessage('to must be lower than max', 'validate settings method of Model');
+          new _error_message_ErrorMessage__WEBPACK_IMPORTED_MODULE_3__["ErrorMessage"]('to must be lower than max', 'validate settings method of Model');
         } else {
           this.settings.to = newTo;
         }
@@ -338,9 +324,9 @@ class Model extends EventObservable_1.EventObservable {
   validateStepOrError(newStep) {
     if (newStep) {
       if (newStep < 0) {
-        new ErrorMessage_1.ErrorMessage('step must be positive', 'validate settings method of Model');
+        new _error_message_ErrorMessage__WEBPACK_IMPORTED_MODULE_3__["ErrorMessage"]('step must be positive', 'validate settings method of Model');
       } else if (newStep > Math.abs(this.settings.max - this.settings.min)) {
-        new ErrorMessage_1.ErrorMessage('step must be lower than difference between max and min', 'validate settings method of Model');
+        new _error_message_ErrorMessage__WEBPACK_IMPORTED_MODULE_3__["ErrorMessage"]('step must be lower than difference between max and min', 'validate settings method of Model');
       } else {
         this.settings.step = newStep;
       }
@@ -375,7 +361,7 @@ class Model extends EventObservable_1.EventObservable {
     }
 
     const diapason = Math.abs(this.getMax() - this.getMin());
-    const res = Math.round(+(diapason * valueInPercent / (100 - thumbWidthInPercent) + this.getMin()).toFixed(Utils_1.Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
+    const res = Math.round(+(diapason * valueInPercent / (100 - thumbWidthInPercent) + this.getMin()).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_1__["Utils"].numDigitsAfterDecimal(this.getStep())) * del) / del;
     if (res < this.getMin()) return this.getMin();
     if (res > this.getMax()) return this.getMax();
     return res;
@@ -383,7 +369,7 @@ class Model extends EventObservable_1.EventObservable {
 
 }
 
-exports.Model = Model;
+
 
 /***/ }),
 
@@ -391,16 +377,12 @@ exports.Model = Model;
 /*!**********************************!*\
   !*** ./model/defaultSettings.ts ***!
   \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: defaultSettings */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.defaultSettings = void 0;
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultSettings", function() { return defaultSettings; });
 const defaultSettings = {
   min: 0,
   max: 10,
@@ -411,7 +393,7 @@ const defaultSettings = {
   isVertical: false,
   hideThumbLabel: false
 };
-exports.defaultSettings = defaultSettings;
+
 
 /***/ }),
 
@@ -419,17 +401,12 @@ exports.defaultSettings = defaultSettings;
 /*!**************************************!*\
   !*** ./observers/EventObservable.ts ***!
   \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: EventObservable */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.EventObservable = void 0;
-
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EventObservable", function() { return EventObservable; });
 class EventObservable {
   constructor() {
     this.observers = [];
@@ -453,7 +430,7 @@ class EventObservable {
 
 }
 
-exports.EventObservable = EventObservable;
+
 
 /***/ }),
 
@@ -461,20 +438,16 @@ exports.EventObservable = EventObservable;
 /*!********************************!*\
   !*** ./presenter/Presenter.ts ***!
   \********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: Presenter */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Presenter", function() { return Presenter; });
+/* harmony import */ var _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Presenter = void 0;
-
-const EventObservable_1 = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
-
-class Presenter extends EventObservable_1.EventObservable {
+class Presenter extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_0__["EventObservable"] {
   constructor(view, model) {
     super();
     this.view = view;
@@ -529,7 +502,21 @@ class Presenter extends EventObservable_1.EventObservable {
 
 }
 
-exports.Presenter = Presenter;
+
+
+/***/ }),
+
+/***/ "./styles/fsd-slider.scss":
+/*!********************************!*\
+  !*** ./styles/fsd-slider.scss ***!
+  \********************************/
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+// extracted by mini-css-extract-plugin
+
 
 /***/ }),
 
@@ -537,16 +524,12 @@ exports.Presenter = Presenter;
 /*!******************************!*\
   !*** ./utils/ClassNaming.ts ***!
   \******************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: ClassNaming */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ClassNaming = void 0;
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ClassNaming", function() { return ClassNaming; });
 const ClassNaming = {
   ROOT: 'fsd-slider',
   RANGE: 'fsd-slider__range',
@@ -564,7 +547,7 @@ const ClassNaming = {
   THUMB_LABEL_IS_VERTICAL: 'fsd-slider__thumb-label_is_vertical',
   HIDE_ELEMENT: 'fsd-slider_element_is_hidden'
 };
-exports.ClassNaming = ClassNaming;
+
 
 /***/ }),
 
@@ -572,24 +555,20 @@ exports.ClassNaming = ClassNaming;
 /*!****************************!*\
   !*** ./utils/Constants.ts ***!
   \****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: Constants */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Constants = void 0; // eslint-disable-next-line @typescript-eslint/no-namespace
-
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Constants", function() { return Constants; });
+// eslint-disable-next-line @typescript-eslint/no-namespace
 var Constants;
 
 (function (Constants) {
   Constants.NUMBER_OF_LABELS = 8;
   Constants.THUMB_FROM = 'thumbFrom';
   Constants.THUMB_TO = 'thumbTo';
-})(Constants = exports.Constants || (exports.Constants = {}));
+})(Constants || (Constants = {}));
 
 /***/ }),
 
@@ -597,17 +576,12 @@ var Constants;
 /*!************************!*\
   !*** ./utils/Utils.ts ***!
   \************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: Utils */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Utils = void 0;
-
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Utils", function() { return Utils; });
 class Utils {
   static numDigitsAfterDecimal(value) {
     if (value) {
@@ -631,7 +605,7 @@ class Utils {
 
 }
 
-exports.Utils = Utils;
+
 
 /***/ }),
 
@@ -639,29 +613,25 @@ exports.Utils = Utils;
 /*!**********************!*\
   !*** ./view/View.ts ***!
   \**********************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: View */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "View", function() { return View; });
+/* harmony import */ var _components_Slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./components/Slider */ "./view/components/Slider.ts");
+/* harmony import */ var _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
+/* harmony import */ var _model_defaultSettings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../model/defaultSettings */ "./model/defaultSettings.ts");
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.View = void 0;
 
-const Slider_1 = __webpack_require__(/*! ./components/Slider */ "./view/components/Slider.ts");
 
-const EventObservable_1 = __webpack_require__(/*! ../observers/EventObservable */ "./observers/EventObservable.ts");
-
-const defaultSettings_1 = __webpack_require__(/*! ../model/defaultSettings */ "./model/defaultSettings.ts");
-
-class View extends EventObservable_1.EventObservable {
+class View extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_1__["EventObservable"] {
   constructor(root) {
     super();
-    this.viewSettings = Object.assign({}, defaultSettings_1.defaultSettings);
+    this.viewSettings = Object.assign({}, _model_defaultSettings__WEBPACK_IMPORTED_MODULE_2__["defaultSettings"]);
     this.rootElem = root;
-    this.slider = new Slider_1.Slider(this.rootElem);
+    this.slider = new _components_Slider__WEBPACK_IMPORTED_MODULE_0__["Slider"](this.rootElem);
     this.slider.addObserver(this);
   }
 
@@ -706,7 +676,7 @@ class View extends EventObservable_1.EventObservable {
 
 }
 
-exports.View = View;
+
 
 /***/ }),
 
@@ -714,23 +684,19 @@ exports.View = View;
 /*!*****************************************!*\
   !*** ./view/components/ColoredRange.ts ***!
   \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: ColoredRange */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ColoredRange", function() { return ColoredRange; });
+/* harmony import */ var _utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
 
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ColoredRange = void 0;
-
-const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
 
 class ColoredRange {
   constructor() {
     this.coloredRange = document.createElement('div');
-    this.coloredRange.classList.add(ClassNaming_1.ClassNaming.COLORED_RANGE);
+    this.coloredRange.classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__["ClassNaming"].COLORED_RANGE);
   }
 
   getColoredRange() {
@@ -765,7 +731,7 @@ class ColoredRange {
 
 }
 
-exports.ColoredRange = ColoredRange;
+
 
 /***/ }),
 
@@ -773,32 +739,28 @@ exports.ColoredRange = ColoredRange;
 /*!**********************************!*\
   !*** ./view/components/Range.ts ***!
   \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: Range */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Range", function() { return Range; });
+/* harmony import */ var _utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
+/* harmony import */ var _ColoredRange__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ColoredRange */ "./view/components/ColoredRange.ts");
+/* harmony import */ var _Thumb__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Thumb */ "./view/components/Thumb.ts");
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Range = void 0;
 
-const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
-
-const ColoredRange_1 = __webpack_require__(/*! ./ColoredRange */ "./view/components/ColoredRange.ts");
-
-const Thumb_1 = __webpack_require__(/*! ./Thumb */ "./view/components/Thumb.ts");
 
 class Range {
   constructor(settings) {
     const div = document.createElement('div');
-    div.classList.add(ClassNaming_1.ClassNaming.RANGE);
+    div.classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__["ClassNaming"].RANGE);
     this.range = div;
     this.viewSettings = settings;
-    this.coloredRange = new ColoredRange_1.ColoredRange();
-    this.thumbTo = new Thumb_1.Thumb(ClassNaming_1.ClassNaming.THUMB_TO);
-    this.thumbFrom = new Thumb_1.Thumb(ClassNaming_1.ClassNaming.THUMB_FROM);
+    this.coloredRange = new _ColoredRange__WEBPACK_IMPORTED_MODULE_1__["ColoredRange"]();
+    this.thumbTo = new _Thumb__WEBPACK_IMPORTED_MODULE_2__["Thumb"](_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__["ClassNaming"].THUMB_TO);
+    this.thumbFrom = new _Thumb__WEBPACK_IMPORTED_MODULE_2__["Thumb"](_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__["ClassNaming"].THUMB_FROM);
     this.getRange().appendChild(this.coloredRange.getColoredRange());
   }
 
@@ -816,8 +778,8 @@ class Range {
   }
 
   setVertical() {
-    this.range.classList.add(ClassNaming_1.ClassNaming.RANGE_IS_VERTICAL);
-    this.coloredRange.getColoredRange().classList.add(ClassNaming_1.ClassNaming.COLORED_RANGE_IS_VERTICAL);
+    this.range.classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__["ClassNaming"].RANGE_IS_VERTICAL);
+    this.coloredRange.getColoredRange().classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__["ClassNaming"].COLORED_RANGE_IS_VERTICAL);
     this.thumbFrom.setVertical();
 
     if (this.viewSettings.isRange) {
@@ -826,8 +788,8 @@ class Range {
   }
 
   setHorizontal() {
-    this.range.classList.remove(ClassNaming_1.ClassNaming.RANGE_IS_VERTICAL);
-    this.coloredRange.getColoredRange().classList.remove(ClassNaming_1.ClassNaming.COLORED_RANGE_IS_VERTICAL);
+    this.range.classList.remove(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__["ClassNaming"].RANGE_IS_VERTICAL);
+    this.coloredRange.getColoredRange().classList.remove(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__["ClassNaming"].COLORED_RANGE_IS_VERTICAL);
     this.thumbFrom.setHorizontal();
 
     if (this.viewSettings.isRange) {
@@ -881,7 +843,7 @@ class Range {
 
 }
 
-exports.Range = Range;
+
 
 /***/ }),
 
@@ -889,29 +851,25 @@ exports.Range = Range;
 /*!***************************************!*\
   !*** ./view/components/RangeLabel.ts ***!
   \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: RangeLabel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RangeLabel", function() { return RangeLabel; });
+/* harmony import */ var _model_defaultSettings__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../model/defaultSettings */ "./model/defaultSettings.ts");
+/* harmony import */ var _utils_ClassNaming__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
+/* harmony import */ var _utils_Constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../utils/Constants */ "./utils/Constants.ts");
+/* harmony import */ var _utils_Utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../utils/Utils */ "./utils/Utils.ts");
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.RangeLabel = void 0;
 
-const defaultSettings_1 = __webpack_require__(/*! ../../model/defaultSettings */ "./model/defaultSettings.ts");
 
-const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
-
-const Constants_1 = __webpack_require__(/*! ../../utils/Constants */ "./utils/Constants.ts");
-
-const Utils_1 = __webpack_require__(/*! ../../utils/Utils */ "./utils/Utils.ts");
 
 class RangeLabel {
   constructor(viewSettings) {
     this.labels = [];
-    this.viewSettings = Object.assign(defaultSettings_1.defaultSettings, viewSettings);
+    this.viewSettings = Object.assign(_model_defaultSettings__WEBPACK_IMPORTED_MODULE_0__["defaultSettings"], viewSettings);
     this.initComponents();
   }
 
@@ -920,12 +878,12 @@ class RangeLabel {
     this.setMinRange(this.viewSettings.min);
     this.setMaxRange(this.viewSettings.max);
     const diapason = Math.abs(this.viewSettings.max - this.viewSettings.min);
-    const step = diapason / (Constants_1.Constants.NUMBER_OF_LABELS + 1);
+    const step = diapason / (_utils_Constants__WEBPACK_IMPORTED_MODULE_2__["Constants"].NUMBER_OF_LABELS + 1);
     let initialValue = this.viewSettings.min;
 
     for (let i = 0; i < this.labels.length; i++) {
       initialValue += step;
-      this.labels[i].innerText = Number(Math.round(initialValue * 100) / 100).toFixed(Utils_1.Utils.numDigitsAfterDecimal(this.viewSettings.step));
+      this.labels[i].innerText = Number(Math.round(initialValue * 100) / 100).toFixed(_utils_Utils__WEBPACK_IMPORTED_MODULE_3__["Utils"].numDigitsAfterDecimal(this.viewSettings.step));
     }
   }
 
@@ -943,16 +901,16 @@ class RangeLabel {
 
   initComponents() {
     this.rangeLabelContainer = document.createElement('div');
-    this.rangeLabelContainer.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL);
+    this.rangeLabelContainer.classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_1__["ClassNaming"].RANGE_LABEL);
     this.minLabel = document.createElement('span');
-    this.minLabel.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
+    this.minLabel.classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_1__["ClassNaming"].RANGE_LABEL_SCALE);
     this.maxLabel = document.createElement('span');
-    this.maxLabel.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
+    this.maxLabel.classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_1__["ClassNaming"].RANGE_LABEL_SCALE);
     this.rangeLabelContainer.appendChild(this.minLabel);
 
-    for (let i = 0; i < Constants_1.Constants.NUMBER_OF_LABELS; i++) {
+    for (let i = 0; i < _utils_Constants__WEBPACK_IMPORTED_MODULE_2__["Constants"].NUMBER_OF_LABELS; i++) {
       const mark = document.createElement('span');
-      mark.classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_SCALE);
+      mark.classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_1__["ClassNaming"].RANGE_LABEL_SCALE);
       this.labels.push(mark);
       this.rangeLabelContainer.appendChild(mark);
     }
@@ -961,16 +919,16 @@ class RangeLabel {
   }
 
   setVertical() {
-    this.getRangeLabel().classList.add(ClassNaming_1.ClassNaming.RANGE_LABEL_IS_VERTICAL);
+    this.getRangeLabel().classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_1__["ClassNaming"].RANGE_LABEL_IS_VERTICAL);
   }
 
   setHorizontal() {
-    this.getRangeLabel().classList.remove(ClassNaming_1.ClassNaming.RANGE_LABEL_IS_VERTICAL);
+    this.getRangeLabel().classList.remove(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_1__["ClassNaming"].RANGE_LABEL_IS_VERTICAL);
   }
 
 }
 
-exports.RangeLabel = RangeLabel;
+
 
 /***/ }),
 
@@ -978,33 +936,29 @@ exports.RangeLabel = RangeLabel;
 /*!***********************************!*\
   !*** ./view/components/Slider.ts ***!
   \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: Slider */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Slider", function() { return Slider; });
+/* harmony import */ var _Range__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Range */ "./view/components/Range.ts");
+/* harmony import */ var _RangeLabel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./RangeLabel */ "./view/components/RangeLabel.ts");
+/* harmony import */ var _model_DefaultSettings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../model/DefaultSettings */ "./model/DefaultSettings.ts");
+/* harmony import */ var _observers_EventObservable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../observers/EventObservable */ "./observers/EventObservable.ts");
+/* harmony import */ var _utils_ClassNaming__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
+/* harmony import */ var _utils_Constants__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../utils/Constants */ "./utils/Constants.ts");
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Slider = void 0;
 
-const Range_1 = __webpack_require__(/*! ./Range */ "./view/components/Range.ts");
 
-const RangeLabel_1 = __webpack_require__(/*! ./RangeLabel */ "./view/components/RangeLabel.ts");
 
-const DefaultSettings_1 = __webpack_require__(/*! ../../model/DefaultSettings */ "./model/DefaultSettings.ts");
 
-const EventObservable_1 = __webpack_require__(/*! ../../observers/EventObservable */ "./observers/EventObservable.ts");
 
-const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
-
-const Constants_1 = __webpack_require__(/*! ../../utils/Constants */ "./utils/Constants.ts");
-
-class Slider extends EventObservable_1.EventObservable {
+class Slider extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_3__["EventObservable"] {
   constructor(rootElem) {
     super();
-    this.settings = Object.assign({}, DefaultSettings_1.defaultSettings);
+    this.settings = Object.assign({}, _model_DefaultSettings__WEBPACK_IMPORTED_MODULE_2__["defaultSettings"]);
     this.rootElem = rootElem;
     this.resPercentage = 0;
     this.stepInPx = 0;
@@ -1014,7 +968,7 @@ class Slider extends EventObservable_1.EventObservable {
 
   render(settings) {
     this.settings = Object.assign(this.settings, JSON.parse(settings));
-    this.container.classList.add(ClassNaming_1.ClassNaming.ROOT);
+    this.container.classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_4__["ClassNaming"].ROOT);
     this.container.appendChild(this.range.getRange());
     this.range.render(settings);
     this.rangeLabel.render(JSON.parse(settings));
@@ -1052,8 +1006,8 @@ class Slider extends EventObservable_1.EventObservable {
   }
 
   initSliderComponents() {
-    this.range = new Range_1.Range(this.settings);
-    this.rangeLabel = new RangeLabel_1.RangeLabel(this.settings);
+    this.range = new _Range__WEBPACK_IMPORTED_MODULE_0__["Range"](this.settings);
+    this.rangeLabel = new _RangeLabel__WEBPACK_IMPORTED_MODULE_1__["RangeLabel"](this.settings);
     this.container = document.createElement('div');
   }
 
@@ -1146,23 +1100,23 @@ class Slider extends EventObservable_1.EventObservable {
           newPos = bottom;
         }
 
-        thumbType = Constants_1.Constants.THUMB_FROM;
+        thumbType = _utils_Constants__WEBPACK_IMPORTED_MODULE_5__["Constants"].THUMB_FROM;
         this.dispatchEvent(newPos, thumbType);
       } else {
-        if (newPos < fromPos) thumbType = Constants_1.Constants.THUMB_FROM;
-        if (newPos > toPos) thumbType = Constants_1.Constants.THUMB_TO;
+        if (newPos < fromPos) thumbType = _utils_Constants__WEBPACK_IMPORTED_MODULE_5__["Constants"].THUMB_FROM;
+        if (newPos > toPos) thumbType = _utils_Constants__WEBPACK_IMPORTED_MODULE_5__["Constants"].THUMB_TO;
 
         if (newPos >= fromPos && newPos <= toPos) {
           const pivot = (toPos - fromPos) / 2;
-          if (newPos < pivot + fromPos) thumbType = Constants_1.Constants.THUMB_FROM;else if (newPos >= pivot + fromPos) thumbType = Constants_1.Constants.THUMB_TO;
+          if (newPos < pivot + fromPos) thumbType = _utils_Constants__WEBPACK_IMPORTED_MODULE_5__["Constants"].THUMB_FROM;else if (newPos >= pivot + fromPos) thumbType = _utils_Constants__WEBPACK_IMPORTED_MODULE_5__["Constants"].THUMB_TO;
         }
 
-        if (thumbType === Constants_1.Constants.THUMB_FROM) {
+        if (thumbType === _utils_Constants__WEBPACK_IMPORTED_MODULE_5__["Constants"].THUMB_FROM) {
           if (newPos < 0) newPos = 0;
           if (newPos > toPos) newPos = toPos;
         }
 
-        if (thumbType === Constants_1.Constants.THUMB_TO) {
+        if (thumbType === _utils_Constants__WEBPACK_IMPORTED_MODULE_5__["Constants"].THUMB_TO) {
           if (newPos < fromPos) newPos = fromPos;
           if (newPos > bottom) newPos = bottom;
         }
@@ -1265,13 +1219,13 @@ class Slider extends EventObservable_1.EventObservable {
   }
 
   setVertical() {
-    this.container.classList.add(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
+    this.container.classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_4__["ClassNaming"].SLIDER_IS_VERTICAL);
     this.range.setVertical();
     this.rangeLabel.setVertical();
   }
 
   setHorizontal() {
-    this.container.classList.remove(ClassNaming_1.ClassNaming.SLIDER_IS_VERTICAL);
+    this.container.classList.remove(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_4__["ClassNaming"].SLIDER_IS_VERTICAL);
     this.range.setHorizontal();
     this.rangeLabel.setHorizontal();
   }
@@ -1286,7 +1240,7 @@ class Slider extends EventObservable_1.EventObservable {
 
 }
 
-exports.Slider = Slider;
+
 
 /***/ }),
 
@@ -1294,24 +1248,20 @@ exports.Slider = Slider;
 /*!**********************************!*\
   !*** ./view/components/Thumb.ts ***!
   \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: Thumb */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Thumb", function() { return Thumb; });
+/* harmony import */ var _ThumbLabel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ThumbLabel */ "./view/components/ThumbLabel.ts");
 
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Thumb = void 0;
-
-const ThumbLabel_1 = __webpack_require__(/*! ./ThumbLabel */ "./view/components/ThumbLabel.ts");
 
 class Thumb {
   constructor(className) {
     this.thumb = document.createElement('div');
     this.thumb.classList.add(className);
-    this.thumbLabel = new ThumbLabel_1.ThumbLabel();
+    this.thumbLabel = new _ThumbLabel__WEBPACK_IMPORTED_MODULE_0__["ThumbLabel"]();
     this.thumbLabelHTML = this.thumbLabel.getThumbLabelContainer();
     this.thumb.appendChild(this.thumbLabelHTML);
   }
@@ -1352,7 +1302,7 @@ class Thumb {
 
 }
 
-exports.Thumb = Thumb;
+
 
 /***/ }),
 
@@ -1360,27 +1310,23 @@ exports.Thumb = Thumb;
 /*!***************************************!*\
   !*** ./view/components/ThumbLabel.ts ***!
   \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: ThumbLabel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ThumbLabel", function() { return ThumbLabel; });
+/* harmony import */ var _utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
 
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ThumbLabel = void 0;
-
-const ClassNaming_1 = __webpack_require__(/*! ../../utils/ClassNaming */ "./utils/ClassNaming.ts");
 
 class ThumbLabel {
   constructor() {
     const div = document.createElement('div');
     const divValue = document.createElement('div');
     this.thumbLabelContainer = div;
-    this.thumbLabelContainer.classList.add(ClassNaming_1.ClassNaming.THUMB_LABEL);
+    this.thumbLabelContainer.classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__["ClassNaming"].THUMB_LABEL);
     this.thumbLabelValue = divValue;
-    this.thumbLabelValue.classList.add(ClassNaming_1.ClassNaming.THUMB_VALUE);
+    this.thumbLabelValue.classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__["ClassNaming"].THUMB_VALUE);
     this.thumbLabelContainer.appendChild(this.thumbLabelValue);
   }
 
@@ -1393,26 +1339,26 @@ class ThumbLabel {
   }
 
   hideLabel() {
-    this.thumbLabelContainer.classList.add(ClassNaming_1.ClassNaming.HIDE_ELEMENT);
+    this.thumbLabelContainer.classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__["ClassNaming"].HIDE_ELEMENT);
   }
 
   showLabel() {
-    this.thumbLabelContainer.classList.remove(ClassNaming_1.ClassNaming.HIDE_ELEMENT);
+    this.thumbLabelContainer.classList.remove(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__["ClassNaming"].HIDE_ELEMENT);
   }
 
   setVertical() {
-    this.thumbLabelContainer.classList.add(ClassNaming_1.ClassNaming.THUMB_LABEL_IS_VERTICAL);
+    this.thumbLabelContainer.classList.add(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__["ClassNaming"].THUMB_LABEL_IS_VERTICAL);
   }
 
   setHorizontal() {
-    this.thumbLabelContainer.classList.remove(ClassNaming_1.ClassNaming.THUMB_LABEL_IS_VERTICAL);
+    this.thumbLabelContainer.classList.remove(_utils_ClassNaming__WEBPACK_IMPORTED_MODULE_0__["ClassNaming"].THUMB_LABEL_IS_VERTICAL);
   }
 
 }
 
-exports.ThumbLabel = ThumbLabel;
+
 
 /***/ })
 
 /******/ });
-//# sourceMappingURL=lib.js.map
+//# sourceMappingURL=fsd-slider.js.map
