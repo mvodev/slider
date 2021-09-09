@@ -1,4 +1,4 @@
-(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["vendors~lib~main"],{
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([["vendors~main"],{
 
 /***/ "../node_modules/jquery/dist/jquery.js":
 /*!*********************************************!*\
@@ -10885,4 +10885,4 @@ return jQuery;
 /***/ })
 
 }]);
-//# sourceMappingURL=vendors~lib~main.js.map
+//# sourceMappingURL=vendors~main.js.map

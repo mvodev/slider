@@ -24,7 +24,6 @@ let demoConfig = {
   mode: 'development',
   entry: {
     main: './index.js',
-    lib: './fsd-slider.js',
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
@@ -60,7 +59,7 @@ let demoConfig = {
       jQuery: 'jquery'
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css'
+      filename: 'fsd-slider.css'
     }),
   ],
   module: {

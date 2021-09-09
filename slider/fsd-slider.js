@@ -1238,6 +1238,14 @@ class Slider extends _observers_EventObservable__WEBPACK_IMPORTED_MODULE_3__["Ev
     return this.getThumbFrom().offsetWidth;
   }
 
+  getThumbLabelFrom() {
+    return this.range.getThumbFrom();
+  }
+
+  getThumbLabelTo() {
+    return this.range.getThumbTo();
+  }
+
 }
 
 

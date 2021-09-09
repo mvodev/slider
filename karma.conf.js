@@ -7,7 +7,7 @@ config.set({
   frameworks: ['jasmine'],
   files: [
     'src/test/*.*.ts',
-    { pattern: 'src/styles/fsd-slider-copy.css', included: true, watched: false },
+    { pattern: 'docs/fsd-slider.css', included: true, watched: false },
   ],
   exclude: [],
   preprocessors: {
@@ -27,5 +27,5 @@ config.set({
   browsers: ['Chrome'],
   singleRun: false,
   concurrency: Infinity,
-});
+ });
 };
