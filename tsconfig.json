@@ -4,7 +4,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitReturns": true, 
+    "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "strictNullChecks": true,
     "strictPropertyInitialization": true,
@@ -21,7 +21,6 @@
   "exclude": [
     "node_modules",
     "docs",
-    "slider",
     "slider",
     "./src/test",
   ],

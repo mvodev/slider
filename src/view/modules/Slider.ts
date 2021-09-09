@@ -83,13 +83,13 @@ class Slider extends EventObservable{
     const bottom = this.sliderLengthInPx - this.getThumbWidthInPx();
     if (this.settings.isVertical) {
       clickedPos = e.clientY - this.getRange().getBoundingClientRect().top;
-      fromPos = this.getThumbFrom().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbWidthInPx() / 2);
-      toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbWidthInPx() / 2): bottom;
+      fromPos = this.getThumbFrom().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top);
+      toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top): bottom;
     }
     else {
       clickedPos = e.clientX - this.getRange().getBoundingClientRect().left;
-      fromPos = this.getThumbFrom().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbWidthInPx() / 2);
-      toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbWidthInPx() / 2) : bottom;
+      fromPos = this.getThumbFrom().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left);
+      toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left) : bottom;
     }
     if (clickedPos > bottom) {
       clickedPos = bottom;
@@ -121,7 +121,6 @@ class Slider extends EventObservable{
         }
       }
     }
-    
   }
 
   private convertFromPxToPercent(valueInPX: number) {
@@ -147,7 +146,6 @@ class Slider extends EventObservable{
   }
 
   private dispatchEvent(shift: number, type: string) {
-
     this.resPercentage = this.convertFromPxToPercent(shift);
     if (type === "thumbFrom") {
       this.range.setThumbPositionFrom(this.resPercentage,this.settings.isVertical);

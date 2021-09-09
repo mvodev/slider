@@ -980,12 +980,12 @@ class Slider extends EventObservable_1.EventObservable {
 
     if (this.settings.isVertical) {
       clickedPos = e.clientY - this.getRange().getBoundingClientRect().top;
-      fromPos = this.getThumbFrom().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbWidthInPx() / 2);
-      toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top - this.getThumbWidthInPx() / 2) : bottom;
+      fromPos = this.getThumbFrom().getBoundingClientRect().top - this.getRange().getBoundingClientRect().top;
+      toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().top - this.getRange().getBoundingClientRect().top : bottom;
     } else {
       clickedPos = e.clientX - this.getRange().getBoundingClientRect().left;
-      fromPos = this.getThumbFrom().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbWidthInPx() / 2);
-      toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().left - (this.getRange().getBoundingClientRect().left - this.getThumbWidthInPx() / 2) : bottom;
+      fromPos = this.getThumbFrom().getBoundingClientRect().left - this.getRange().getBoundingClientRect().left;
+      toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().left - this.getRange().getBoundingClientRect().left : bottom;
     }
 
     if (clickedPos > bottom) {
