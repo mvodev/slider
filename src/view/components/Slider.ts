@@ -87,7 +87,7 @@ class Slider extends EventObservable{
     this.moveHandlerBinded = this.moveHandler.bind(this);
     this.removeHandlerBinded = this.removeHandler.bind(this);
     this.getRange().addEventListener('mousemove', this.moveHandlerBinded);
-    this.getRange().addEventListener('mouseup', this.removeHandlerBinded);
+    document.addEventListener('mouseup', this.removeHandlerBinded);
   }
 
   private handleRange(type:string,e: Event) {
@@ -188,7 +188,7 @@ class Slider extends EventObservable{
 
   private removeHandler() {
     this.getRange().removeEventListener('mousemove', this.moveHandlerBinded);
-    this.getRange().removeEventListener('mouseup', this.removeHandlerBinded);
+    document.removeEventListener('mouseup', this.removeHandlerBinded);
   }
 
   private convertFromPxToPercent(valueInPX: number) {

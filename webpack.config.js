@@ -37,7 +37,6 @@ let demoConfig = {
       chunks: 'all'
     }
   },
-  devtool: 'source-map',
   plugins: [
     new HTMLWebpackPlugin(
       {
@@ -114,7 +113,6 @@ let libConfig = {
       chunks: 'all'
     }
   },
-  devtool: 'source-map',
   plugins: [
     new HTMLWebpackPlugin(
       {
