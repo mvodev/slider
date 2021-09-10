@@ -54,6 +54,8 @@ class Slider extends EventObservable{
     else {
       this.setHorizontal();
     }
+    this.handleRangeBinded = this.handleRange.bind(this, 'range');
+    this.handleRangeLabelBinded = this.handleRange.bind(this, 'rangeLabel');
     this.bindEvents();
     this.stepInPx = this.getSliderLengthInPx() / (Math.abs((this.settings.max - this.settings.min) / this.settings.step));
     this.sliderLengthInPx = this.getSliderLengthInPx();
@@ -77,8 +79,6 @@ class Slider extends EventObservable{
   }
 
   private bindEvents(): void {
-    this.handleRangeBinded = this.handleRange.bind(this,'range');
-    this.handleRangeLabelBinded = this.handleRange.bind(this,'rangeLabel');
     this.getRangeLabel().addEventListener('mousedown', this.handleRangeLabelBinded);
     this.getRange().addEventListener('mousedown', this.handleRangeBinded);
   }
@@ -88,6 +88,12 @@ class Slider extends EventObservable{
     this.removeHandlerBinded = this.removeHandler.bind(this);
     this.getRange().addEventListener('mousemove', this.moveHandlerBinded);
     document.addEventListener('mouseup', this.removeHandlerBinded);
+  }
+
+  private unbindEvents(){
+    this.removeHandler();
+    this.getRangeLabel().removeEventListener('mousedown', this.handleRangeLabelBinded);
+    this.getRange().removeEventListener('mousedown', this.handleRangeBinded);
   }
 
   private handleRange(type:string,e: Event) {
@@ -265,12 +271,14 @@ class Slider extends EventObservable{
   }
 
   private setVertical(): void {
+    this.unbindEvents()
     this.container.classList.add(ClassNaming.SLIDER_IS_VERTICAL);
     this.range.setVertical();
     this.rangeLabel.setVertical();
   }
 
   private setHorizontal(): void {
+    this.unbindEvents();
     this.container.classList.remove(ClassNaming.SLIDER_IS_VERTICAL);
     this.range.setHorizontal();
     this.rangeLabel.setHorizontal();
