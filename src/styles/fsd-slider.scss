@@ -65,6 +65,7 @@
 
   }
 
+
   &__thumb-value{
     font-size: 16px;
     font-family: inherit;
@@ -88,6 +89,24 @@
       margin-left: 10px;
       margin-top: 0;
     }
+
+    &-scale{
+      background-color: rgb(197, 77, 77);
+      border-radius: 5px;
+      position: relative;
+      padding: 3px;
+    }
+
+    &-scale::before {
+      content: ""; 
+      border: solid transparent;
+      position: absolute;   
+      bottom: 100%;
+      left: 50%;
+      border-bottom-color: rgb(197, 77, 77);
+      border-width: 5px;
+      margin-left: -5px;
+}
   }
 
   &_element_is_hidden{
