@@ -60,7 +60,7 @@
 
     &_is_vertical{
       top: 5px;
-      left: -30px;
+      left: -50px;
     }
 
   }
@@ -76,9 +76,9 @@
     height: 30px;
     width: 100%;
     display: flex;
-    justify-content: space-between;
     flex-direction: row;
     margin-top: 10px;
+    position: relative;
 
     &_is_vertical{
       flex-direction: column;
@@ -100,7 +100,7 @@
     &-scale{
       background-color: rgb(197, 77, 77);
       border-radius: 5px;
-      position: relative;
+      position: absolute;
       padding: 3px;
       z-index: 9;
       cursor: pointer;

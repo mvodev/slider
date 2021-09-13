@@ -2,52 +2,28 @@ import { defaultSettings } from '../../model/defaultSettings';
 import { ISettings } from '../../model/ISettings';
 import { ClassNaming } from '../../utils/ClassNaming';
 import { Constants } from '../../utils/Constants';
-import { Utils } from '../../utils/Utils';
 
 class RangeLabel{
   private rangeLabelContainer!: HTMLDivElement;
   private minLabel!: HTMLSpanElement;
   private maxLabel!: HTMLSpanElement;
   private labels:HTMLSpanElement[];
-  private viewSettings!:ISettings;
+  private settings!:ISettings;
 
-  constructor(viewSettings:ISettings) {
+  constructor(settings:ISettings) {
     this.labels = [];
-    this.viewSettings = Object.assign(defaultSettings, viewSettings);
+    this.settings = Object.assign(defaultSettings, settings);
     this.initComponents();
   }
 
   render(settings:ISettings):void{
-    this.viewSettings = Object.assign(this.viewSettings, settings);
-    this.setMinRange(this.viewSettings.min);
-    this.minLabel.setAttribute('value', this.viewSettings.min.toString());
-    this.setMaxRange(this.viewSettings.max);
-    this.maxLabel.setAttribute('value', this.viewSettings.max.toString());
-    this.setLabels();
+    this.settings = Object.assign(this.settings, settings);
+    this.setMinRange(this.settings.min);
+    this.setMaxRange(this.settings.max);
   }
 
   getRangeLabel():HTMLDivElement {
     return this.rangeLabelContainer;
-  }
-
-  private setLabels(): void {
-    const diapason = Math.abs(this.viewSettings.max - this.viewSettings.min);
-    const step = diapason / (Constants.NUMBER_OF_LABELS + 1);
-    let initialValue = this.viewSettings.min;
-    for (let i = 1; i < this.labels.length-1; i++) {
-      initialValue += step;
-      this.labels[i].setAttribute('value', this.round(initialValue).toString());
-      this.labels[i].innerText = this.round(initialValue).toString();
-    }
-  }
-
-  private round(value:number):number{
-    let del = 1;
-    if (this.viewSettings.step != 0) {
-      del = 1.0 / this.viewSettings.step;
-    }
-    const result = Math.round(+value.toFixed(Utils.numDigitsAfterDecimal(this.viewSettings.step)) * del) / del;
-    return result;
   }
 
   setMinRange(value: number) :void{
@@ -57,7 +33,6 @@ class RangeLabel{
   setMaxRange(value: number):void {
     this.maxLabel.innerText = '' + value;
   }
-
 
   private initComponents() {
     this.rangeLabelContainer = document.createElement('div');

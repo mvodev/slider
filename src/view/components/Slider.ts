@@ -7,6 +7,7 @@ import { EventObservable } from '../../observers/EventObservable';
 import { ClassNaming } from '../../utils/ClassNaming';
 import { ThumbsPosition } from '../Interfaces/ThumbsPosition';
 import { Constants } from '../../utils/Constants';
+import { Utils } from '../../utils/Utils';
 
 class Slider extends EventObservable{
 
@@ -19,7 +20,7 @@ class Slider extends EventObservable{
   private stepInPx:number;
   private threshold:number;
   private sliderLengthInPx:number;
-  private handlerThumbMoveBinded!:EventListenerOrEventListenerObject;
+  private handleThumbMoveBinded!:EventListenerOrEventListenerObject;
   private removeHandlerBinded!: EventListenerOrEventListenerObject;
   private handleRangeBinded!:EventListenerOrEventListenerObject;
   private handleRangeLabelBinded!:EventListenerOrEventListenerObject;
@@ -66,7 +67,7 @@ class Slider extends EventObservable{
       this.range.setValueToLabelThumbTo(this.settings.to);
       this.range.setThumbPositionTo(this.convertFromValueToPercent(this.settings.to), this.settings.isVertical);
     }
-    this.adjustLabels();
+    this.setLabels();
     this.setColoredRange();
   }
 
@@ -76,10 +77,64 @@ class Slider extends EventObservable{
     this.container = document.createElement('div');
   }
 
-  private adjustLabels():void{
-    this.rangeLabel.getLabels().forEach(elem=>{
-      console.log(elem.innerText);
-    });
+  private roundWithStep(value: number): number {
+    let del = 1;
+    if (this.settings.step != 0) {
+      del = 1.0 / this.settings.step;
+    }
+    const result = Math.round(+value.toFixed(Utils.numDigitsAfterDecimal(this.settings.step)) * del) / del;
+    return result;
+  }
+
+  private getLabels():HTMLElement[]{
+    return this.rangeLabel.getLabels();
+  }
+
+  private setLabels(): void {
+    const diapason = Math.abs(this.settings.max - this.settings.min);
+    const step = diapason / (Constants.NUMBER_OF_LABELS + 1);
+    let initialValue = this.settings.min;
+    
+    for (let i = 0; i < this.getLabels().length; i++) {
+      if(!this.settings.isVertical){
+        if (i === 0) {
+          this.getLabels()[i].setAttribute('value', this.settings.min.toString());
+          this.getLabels()[i].style.left = Math.abs(this.getThumbWidthInPercentage() / 2 - this.getLabels()[i].offsetWidth / this.getSliderLengthInPx() * 100 / 2) + '%';
+          this.getLabels()[i].style.top = '';
+        }
+        else if (i === this.getLabels().length - 1) {
+          this.getLabels()[i].setAttribute('value', this.settings.max.toString());
+          this.getLabels()[i].style.left = (100 - ((this.getLabels()[i].offsetWidth / 2 + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100) + '%';
+          this.getLabels()[i].style.top = '';
+        }
+        else {
+          initialValue += step;
+          this.getLabels()[i].setAttribute('value', this.roundWithStep(initialValue).toString());
+          this.getLabels()[i].innerText = this.roundWithStep(initialValue).toString();
+          this.getLabels()[i].style.left = (this.convertFromValueToPercent(this.roundWithStep(initialValue)) + this.getThumbWidthInPercentage() / 2 - (this.getLabels()[i].offsetWidth / this.getSliderLengthInPx() * 100 / 2)) + '%';
+          this.getLabels()[i].style.top = '';
+        }
+      }
+      else{
+        if (i === 0) {
+          this.getLabels()[i].setAttribute('value', this.settings.min.toString());
+          this.getLabels()[i].style.top = Math.abs(this.getThumbWidthInPercentage() / 2 - this.getLabels()[i].offsetWidth / this.getSliderLengthInPx() * 100 / 2) + '%';
+          this.getLabels()[i].style.left = '';
+        }
+        else if (i === this.getLabels().length - 1) {
+          this.getLabels()[i].setAttribute('value', this.settings.max.toString());
+          this.getLabels()[i].style.top = (100 - ((this.getLabels()[i].offsetHeight / 2 + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100) + '%';
+          this.getLabels()[i].style.left = '';
+        }
+        else {
+          initialValue += step;
+          this.getLabels()[i].setAttribute('value', this.roundWithStep(initialValue).toString());
+          this.getLabels()[i].innerText = this.roundWithStep(initialValue).toString();
+          this.getLabels()[i].style.top = (this.convertFromValueToPercent(this.roundWithStep(initialValue)) + this.getThumbWidthInPercentage() / 2 - (this.getLabels()[i].offsetHeight / this.getSliderLengthInPx() * 100 / 2)) + '%';
+          this.getLabels()[i].style.left = '';
+        }
+      }
+    }
   }
 
   private bindEvents(): void {
@@ -89,12 +144,17 @@ class Slider extends EventObservable{
     this.rangeLabel.getLabels().forEach(elem=>elem.addEventListener('click',this.handleRangeLabelBinded));
   }
 
-
   private bindExtraListeners(){
-    this.handlerThumbMoveBinded = this.handlerThumbMove.bind(this);
+    this.handleThumbMoveBinded = this.handleThumbMove.bind(this);
     this.removeHandlerBinded = this.removeHandler.bind(this);
-    this.getRange().addEventListener('mousemove', this.handlerThumbMoveBinded);
+    document.addEventListener('mousemove', this.handleThumbMoveBinded);
     document.addEventListener('mouseup', this.removeHandlerBinded);
+  }
+
+  private unbindEvents() {
+    this.removeHandler();
+    this.getRangeLabel().removeEventListener('mousedown', this.handleRangeLabelBinded);
+    this.getRange().removeEventListener('mousedown', this.handleRangeBinded);
   }
 
   private handleRangeLabel(e:Event){
@@ -126,12 +186,6 @@ class Slider extends EventObservable{
     this.setColoredRange();
   }
 
-  private unbindEvents(){
-    this.removeHandler();
-    this.getRangeLabel().removeEventListener('mousedown', this.handleRangeLabelBinded);
-    this.getRange().removeEventListener('mousedown', this.handleRangeBinded);
-  }
-
   private handleRange(type:string,e: Event) {
     if (e instanceof MouseEvent){
       let clickedPos: number;
@@ -151,7 +205,7 @@ class Slider extends EventObservable{
       if (this.settings.isRange) {
         if (fromPos > toPos) {
           fromPos = toPos;
-          this.dispatchEvent(clickedPos, Constants.THUMB_TO);
+          this.dispatchEvent(clickedPos, Constants.THUMB_FROM);
         }
       }
       if (!this.settings.isRange) {
@@ -159,7 +213,7 @@ class Slider extends EventObservable{
       }
       else {
         if (clickedPos > toPos) {
-          this.dispatchEvent(clickedPos, Constants.THUMB_FROM);
+          this.dispatchEvent(clickedPos, Constants.THUMB_TO);
         }
         if (clickedPos < fromPos) {
           this.dispatchEvent(clickedPos, Constants.THUMB_FROM);
@@ -181,7 +235,7 @@ class Slider extends EventObservable{
     }
   }
 
-  private handlerThumbMove(e: Event) {
+  private handleThumbMove(e: Event) {
     let newPos:number;
     const pos = this.getElemsPos();
     const fromPos = pos.fromPos;
@@ -229,7 +283,7 @@ class Slider extends EventObservable{
   }
 
   private removeHandler() {
-    this.getRange().removeEventListener('mousemove', this.handlerThumbMoveBinded);
+    document.removeEventListener('mousemove', this.handleThumbMoveBinded);
     document.removeEventListener('mouseup', this.removeHandlerBinded);
   }
 
@@ -348,8 +402,6 @@ class Slider extends EventObservable{
   getThumbLabelTo():HTMLElement{
     return this.range.getThumbTo();
   }
-
-  
 
 }
 export {Slider}
