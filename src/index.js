@@ -3,11 +3,11 @@ import './fsd-slider.js';
 var $sl1 = $('.slider1');
 var $sl1_input = $('.input-result1');
 $sl1.fsdSlider({
-  min: 5,
-  max: 25,
-  from: 8,
-  step: 1,
-  to: 18,
+  min: 5000,
+  max: 25000,
+  from: 8000,
+  step: 1000,
+  to: 18000,
   isVertical: false,
   hideThumbLabel: false,
   isRange: true,
@@ -51,9 +51,9 @@ var $sl3_input = $('.input-result3');
 $sl3.fsdSlider({
   min: -15,
   max: 100,
-  from: -14,
-  step: 4,
-  to: 11,
+  from: -5,
+  step: 5,
+  to: 20,
   isVertical: false,
   hideThumbLabel: false,
   isRange: true,

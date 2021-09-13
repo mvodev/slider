@@ -17,8 +17,9 @@ class Slider extends EventObservable{
   private settings: ISettings;
   private resPercentage: number;
   private stepInPx:number;
+  private threshold:number;
   private sliderLengthInPx:number;
-  private moveHandlerBinded!:EventListenerOrEventListenerObject;
+  private handlerThumbMoveBinded!:EventListenerOrEventListenerObject;
   private removeHandlerBinded!: EventListenerOrEventListenerObject;
   private handleRangeBinded!:EventListenerOrEventListenerObject;
   private handleRangeLabelBinded!:EventListenerOrEventListenerObject;
@@ -29,6 +30,7 @@ class Slider extends EventObservable{
     this.rootElem = rootElem;
     this.resPercentage = 0;
     this.stepInPx = 0;
+    this.threshold = 0;
     this.sliderLengthInPx = 0;
     this.initSliderComponents();
   }
@@ -41,7 +43,7 @@ class Slider extends EventObservable{
     this.rangeLabel.render(JSON.parse(settings));
     this.container.appendChild(this.rangeLabel.getRangeLabel());
     this.rootElem.appendChild(this.container);
-    
+
     if (this.settings.hideThumbLabel) {
       this.range.hideLabel();
     }
@@ -54,10 +56,9 @@ class Slider extends EventObservable{
     else {
       this.setHorizontal();
     }
-    this.handleRangeBinded = this.handleRange.bind(this, 'range');
-    this.handleRangeLabelBinded = this.handleRange.bind(this, 'rangeLabel');
     this.bindEvents();
     this.stepInPx = this.getSliderLengthInPx() / (Math.abs((this.settings.max - this.settings.min) / this.settings.step));
+    this.threshold = 0.2*this.stepInPx;
     this.sliderLengthInPx = this.getSliderLengthInPx();
     this.range.setValueToLabelThumbFrom(this.settings.from);
     this.range.setThumbPositionFrom(this.convertFromValueToPercent(this.settings.from),this.settings.isVertical);
@@ -65,11 +66,8 @@ class Slider extends EventObservable{
       this.range.setValueToLabelThumbTo(this.settings.to);
       this.range.setThumbPositionTo(this.convertFromValueToPercent(this.settings.to), this.settings.isVertical);
     }
+    this.adjustLabels();
     this.setColoredRange();
-  }
-
-  private convertFromValueToPercent(value: number): number {
-    return (((100 - this.getThumbWidthInPercentage()) / Math.abs(this.settings.max - this.settings.min)) * (Math.abs(value - this.settings.min)));
   }
 
   private initSliderComponents() {
@@ -78,16 +76,54 @@ class Slider extends EventObservable{
     this.container = document.createElement('div');
   }
 
-  private bindEvents(): void {
-    this.getRangeLabel().addEventListener('mousedown', this.handleRangeLabelBinded);
-    this.getRange().addEventListener('mousedown', this.handleRangeBinded);
+  private adjustLabels():void{
+    this.rangeLabel.getLabels().forEach(elem=>{
+      console.log(elem.innerText);
+    });
   }
 
+  private bindEvents(): void {
+    this.handleRangeBinded = this.handleRange.bind(this, 'range');
+    this.handleRangeLabelBinded = this.handleRangeLabel.bind(this);
+    this.getRange().addEventListener('mousedown', this.handleRangeBinded);
+    this.rangeLabel.getLabels().forEach(elem=>elem.addEventListener('click',this.handleRangeLabelBinded));
+  }
+
+
   private bindExtraListeners(){
-    this.moveHandlerBinded = this.moveHandler.bind(this);
+    this.handlerThumbMoveBinded = this.handlerThumbMove.bind(this);
     this.removeHandlerBinded = this.removeHandler.bind(this);
-    this.getRange().addEventListener('mousemove', this.moveHandlerBinded);
+    this.getRange().addEventListener('mousemove', this.handlerThumbMoveBinded);
     document.addEventListener('mouseup', this.removeHandlerBinded);
+  }
+
+  private handleRangeLabel(e:Event){
+    if(e.target instanceof Element){
+      if (e.target.getAttribute('value')){
+
+        if(!this.settings.isRange){
+          this.dispatchEvent(this.convertFromValueToPx(Number(e.target.getAttribute('value'))), Constants.THUMB_FROM);
+        }
+        else{
+          if (Number(e.target.getAttribute('value')) >= this.settings.to) {
+            this.dispatchEvent(this.convertFromValueToPx(Number(e.target.getAttribute('value'))), Constants.THUMB_TO);
+          }
+          else if (Number(e.target.getAttribute('value')) <= this.settings.from) {
+            this.dispatchEvent(this.convertFromValueToPx(Number(e.target.getAttribute('value'))), Constants.THUMB_FROM);
+          }
+          else {
+            const pivot = Math.abs(this.settings.to - this.settings.from) / 2;
+            if (Number(e.target.getAttribute('value')) < (pivot + this.settings.from)) {
+              this.dispatchEvent(this.convertFromValueToPx(Number(e.target.getAttribute('value'))), Constants.THUMB_FROM);
+            }
+            else if (Number(e.target.getAttribute('value')) > (pivot + this.settings.from)) {
+              this.dispatchEvent(this.convertFromValueToPx(Number(e.target.getAttribute('value'))), Constants.THUMB_TO);
+            }
+          }
+        }
+      } 
+    }
+    this.setColoredRange();
   }
 
   private unbindEvents(){
@@ -115,27 +151,27 @@ class Slider extends EventObservable{
       if (this.settings.isRange) {
         if (fromPos > toPos) {
           fromPos = toPos;
-          this.dispatchEvent(clickedPos, 'thumbTo');
+          this.dispatchEvent(clickedPos, Constants.THUMB_TO);
         }
       }
       if (!this.settings.isRange) {
-        this.dispatchEvent(clickedPos, 'thumbFrom');
+        this.dispatchEvent(clickedPos, Constants.THUMB_FROM);
       }
       else {
         if (clickedPos > toPos) {
-          this.dispatchEvent(clickedPos, 'thumbTo');
+          this.dispatchEvent(clickedPos, Constants.THUMB_FROM);
         }
         if (clickedPos < fromPos) {
-          this.dispatchEvent(clickedPos, 'thumbFrom');
+          this.dispatchEvent(clickedPos, Constants.THUMB_FROM);
 
         }
         else if (clickedPos > fromPos && clickedPos < toPos) {
           const pivot = (toPos - fromPos) / 2;
           if (clickedPos < (pivot + fromPos) && (clickedPos < toPos)) {
-            this.dispatchEvent(clickedPos, 'thumbFrom');
+            this.dispatchEvent(clickedPos, Constants.THUMB_FROM);
           }
           else if (clickedPos > (pivot + fromPos) && (clickedPos < toPos)) {
-            this.dispatchEvent(clickedPos, 'thumbTo')
+            this.dispatchEvent(clickedPos, Constants.THUMB_TO)
           }
         }
       }
@@ -145,7 +181,7 @@ class Slider extends EventObservable{
     }
   }
 
-  private moveHandler(e: Event) {
+  private handlerThumbMove(e: Event) {
     let newPos:number;
     const pos = this.getElemsPos();
     const fromPos = pos.fromPos;
@@ -185,7 +221,7 @@ class Slider extends EventObservable{
           if(newPos<fromPos) newPos = fromPos;
           if(newPos>bottom) newPos = bottom;
         }
-        if (Math.abs(newPos % this.stepInPx) <= 0.2 * this.stepInPx) {
+        if (Math.abs(newPos % this.stepInPx) <= this.threshold) {
           this.dispatchEvent(newPos, thumbType);
         }
       }
@@ -193,12 +229,20 @@ class Slider extends EventObservable{
   }
 
   private removeHandler() {
-    this.getRange().removeEventListener('mousemove', this.moveHandlerBinded);
+    this.getRange().removeEventListener('mousemove', this.handlerThumbMoveBinded);
     document.removeEventListener('mouseup', this.removeHandlerBinded);
   }
 
-  private convertFromPxToPercent(valueInPX: number) {
+  private convertFromPxToPercent(valueInPX: number):number {
     return (valueInPX / this.sliderLengthInPx) * 100;
+  }
+
+  private convertFromValueToPx(value:number):number{
+    return ((Math.abs(value - this.settings.min)) / Math.abs(this.settings.max - this.settings.min))*(this.getSliderLengthInPx()-this.getThumbWidthInPx());
+  }
+
+  private convertFromValueToPercent(value: number): number {
+    return (((100 - this.getThumbWidthInPercentage()) / Math.abs(this.settings.max - this.settings.min)) * (Math.abs(value - this.settings.min)));
   }
 
   getThumbWidthInPercentage() :number{
@@ -252,10 +296,12 @@ class Slider extends EventObservable{
 
   setValueToLabelThumbFrom(value: number): void {
     this.range.setValueToLabelThumbFrom(value);
+    this.settings.from = value;
   }
 
   setValueToLabelThumbTo(value: number): void {
     this.range.setValueToLabelThumbTo(value);
+    this.settings.to = value;
   }
 
   getRangeLabel(): HTMLDivElement {
@@ -302,6 +348,8 @@ class Slider extends EventObservable{
   getThumbLabelTo():HTMLElement{
     return this.range.getThumbTo();
   }
+
+  
 
 }
 export {Slider}

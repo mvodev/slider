@@ -24,6 +24,7 @@ class View extends EventObservable implements IObserver{
   }
 
   private render(s:ISettings):void {
+    
     this.slider.render(JSON.stringify(s));
   }
 
