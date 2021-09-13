@@ -67,7 +67,7 @@ class Slider extends EventObservable{
       this.range.setValueToLabelThumbTo(this.settings.to);
       this.range.setThumbPositionTo(this.convertFromValueToPercent(this.settings.to), this.settings.isVertical);
     }
-    this.setLabels();
+    this.setLabelsPosition();
     this.setColoredRange();
   }
 
@@ -90,7 +90,7 @@ class Slider extends EventObservable{
     return this.rangeLabel.getLabels();
   }
 
-  private setLabels(): void {
+  private setLabelsPosition(): void {
     const diapason = Math.abs(this.settings.max - this.settings.min);
     const step = diapason / (Constants.NUMBER_OF_LABELS + 1);
     let initialValue = this.settings.min;
@@ -99,7 +99,7 @@ class Slider extends EventObservable{
       if(!this.settings.isVertical){
         if (i === 0) {
           this.getLabels()[i].setAttribute('value', this.settings.min.toString());
-          this.getLabels()[i].style.left = Math.abs(this.getThumbWidthInPercentage() / 2 - this.getLabels()[i].offsetWidth / this.getSliderLengthInPx() * 100 / 2) + '%';
+          this.getLabels()[i].style.left = (this.getThumbWidthInPercentage() / 2 - this.getLabels()[i].offsetWidth / this.getSliderLengthInPx() * 100 / 2) + '%';
           this.getLabels()[i].style.top = '';
         }
         else if (i === this.getLabels().length - 1) {
@@ -118,7 +118,7 @@ class Slider extends EventObservable{
       else{
         if (i === 0) {
           this.getLabels()[i].setAttribute('value', this.settings.min.toString());
-          this.getLabels()[i].style.top = Math.abs(this.getThumbWidthInPercentage() / 2 - this.getLabels()[i].offsetWidth / this.getSliderLengthInPx() * 100 / 2) + '%';
+          this.getLabels()[i].style.top = (this.getThumbWidthInPercentage() / 2 - this.getLabels()[i].offsetHeight/ this.getSliderLengthInPx() * 100 / 2) + '%';
           this.getLabels()[i].style.left = '';
         }
         else if (i === this.getLabels().length - 1) {
