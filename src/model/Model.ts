@@ -51,99 +51,37 @@ class Model extends EventObservable implements IModelFacade {
     const newStep = Utils.convertFromInputToNumber(settings.step);
     const newIsVertical = Utils.convertFromInputToBoolean(settings.isVertical);
     const newHideThumbLabel = Utils.convertFromInputToBoolean(settings.hideThumbLabel);
-    
+    if(newMin&&newMax){
+      if(newMin>newMax) new ErrorMessage('unacceptable value,min value more than max value');
+      this.settings.min = newMin;
+      this.settings.max = newMax;
+    }
+    if(newMax){
+      this.settings.max = newMax;
+    }
+    if(newMin){
+      this.settings.min = newMin;
+    }
+    if (newFrom && newTo) {
+      if (newFrom > newTo) new ErrorMessage('unacceptable value,from more than to');
+      this.settings.from = newFrom;
+      this.settings.to = newTo;
+    }
+    if(newFrom){
+      this.settings.from = newFrom;
+    }
+    if(newStep){
+      if(newStep<0){
+        new ErrorMessage('step must be positive');
+        this.settings.step = newStep * (-1);
+      }
+      this.settings.step = newStep;
+    }
+    this.settings.isVertical = newIsVertical
+    this.settings.hideThumbLabel = newHideThumbLabel;
     this.settings.isRange = settings.isRange ? Utils.convertFromInputToBoolean(settings.isRange):this.settings.isRange;
-    this.validateMinOrError(newMin);
-    this.validateMaxOrError(newMax);
-    this.validateFromOrError(newFrom);
-    this.validateToOrError(newTo);
-    this.validateStepOrError(newStep);
-    this.validateIsVerticalOrError(newIsVertical);
-    this.validateThumbLabelOrError(newHideThumbLabel);
   }
-  private validateMinOrError(newMin:number|undefined):void{
-    if (newMin) {
-      if (newMin >= this.settings.max) {
-        new ErrorMessage('unacceptable value,min value in settings more than max value', 'validate settings method of Model');
-      }
-      else if (newMin > this.settings.from) {
-        new ErrorMessage('unacceptable value,min value in settings more than from value', 'validate settings method of Model');
-      }
-      else {
-        this.settings.min = newMin;
-      }
-    }
-  }
-  private validateMaxOrError(newMax:number|undefined):void{
-    if (newMax) {
-      if (newMax <= this.settings.min) {
-        new ErrorMessage('unacceptable value,max value in settings lower than min value', 'validate settings method of Model');
-      }
-      else if (newMax <= this.settings.to && this.settings.isRange) {
-        new ErrorMessage('unacceptable value,max value in settings lower than to value', 'validate settings method of Model');
-      }
-      else if (newMax <= this.settings.from) {
-        new ErrorMessage('unacceptable value,max value in settings lower than from value', 'validate settings method of Model');
-      }
-      else {
-        this.settings.max = newMax;
-      }
-    }
-  }
-  private validateFromOrError(newFrom:number|undefined):void{
-    if (newFrom) {
-      const max = this.settings.isRange ? this.settings.to : this.settings.max;
-      if (newFrom <= this.settings.min + this.settings.step || newFrom >= max + this.settings.step) {
-        new ErrorMessage('from is invalid', 'validate settings method of Model');
-        this.settings.from = this.settings.min;
-      }
-      else {
-        this.settings.from = newFrom;
-      }
-    }
-  }
-  private validateToOrError(newTo:number|undefined):void{
-    if (newTo) {
-      if (newTo > this.settings.max) {
-        new ErrorMessage('to must be lower than max', 'validate settings method of Model');
-      }
-      else if (newTo <= this.settings.min) {
-        new ErrorMessage('to must be lower than max', 'validate settings method of Model');
-      }
-      else if (this.settings.isRange) {
-        if (newTo <= this.settings.from) {
-          new ErrorMessage('to must be lower than max', 'validate settings method of Model');
-        }
-        else {
-          this.settings.to = newTo;
-        }
-      }
-    }
-  }
-  private validateStepOrError(newStep:number|undefined):void{
-    if (newStep) {
-      if (newStep < 0) {
-        new ErrorMessage('step must be positive', 'validate settings method of Model');
-      }
-      else if (newStep > (Math.abs(this.settings.max - this.settings.min))) {
-        new ErrorMessage('step must be lower than difference between max and min', 'validate settings method of Model');
-      }
-      else {
-        this.settings.step = newStep;
-      }
-    }
-  }
-  private validateIsVerticalOrError(newIsVertical:boolean|undefined):void{
-    if (newIsVertical !== undefined) {
-      this.settings.isVertical = newIsVertical;
-    }
-  }
-  private validateThumbLabelOrError(newHideThumbLabel:boolean|undefined):void{
-    if (newHideThumbLabel !== undefined) {
-      this.settings.hideThumbLabel = newHideThumbLabel;
-    }
-  }
-
+  
   private convertFromPercentToValue(valueInPercent: number,thumbWidthInPercent:number) {
     if (valueInPercent <= 0) {
       return this.getMin();

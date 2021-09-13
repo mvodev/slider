@@ -173,7 +173,7 @@ class Slider extends EventObservable{
           }
           else {
             const pivot = Math.abs(this.settings.to - this.settings.from) / 2;
-            if (Number(e.target.getAttribute('value')) < (pivot + this.settings.from)) {
+            if (Number(e.target.getAttribute('value')) <= (pivot + this.settings.from)) {
               this.dispatchEvent(this.convertFromValueToPx(Number(e.target.getAttribute('value'))), Constants.THUMB_FROM);
             }
             else if (Number(e.target.getAttribute('value')) > (pivot + this.settings.from)) {
