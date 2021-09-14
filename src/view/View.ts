@@ -4,19 +4,23 @@ import { Messages } from '../utils/Messages';
 import { EventObservable } from '../observers/EventObservable';
 import { defaultSettings } from '../model/defaultSettings';
 import { IObserver } from '../observers/IObserver';
+import { ErrorMessage } from '../error-message/ErrorMessage';
 
 
 class View extends EventObservable implements IObserver{
-  private slider: Slider;
+  private slider!: Slider;
   private viewSettings: ISettings;
-  private rootElem: HTMLDivElement;
+  private rootElem!: HTMLDivElement|null;
 
-  constructor(root: HTMLDivElement) {
+  constructor(root: HTMLDivElement|null) {
     super();
     this.viewSettings = Object.assign({},defaultSettings);
-    this.rootElem = root;
-    this.slider = new Slider(this.rootElem);
-    this.slider.addObserver(this);
+    if (root){
+      this.rootElem = root;
+      this.slider = new Slider(this.rootElem);
+      this.slider.addObserver(this);
+    }
+    else new ErrorMessage('root elem of Slider is null!');
   }
 
   handleEvent(msg: Messages, settings: string): void {

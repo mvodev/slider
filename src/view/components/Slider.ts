@@ -8,6 +8,7 @@ import { ClassNaming } from '../../utils/ClassNaming';
 import { ThumbsPosition } from '../Interfaces/ThumbsPosition';
 import { Constants } from '../../utils/Constants';
 import { Utils } from '../../utils/Utils';
+import { ErrorMessage } from '../../error-message/ErrorMessage';
 
 class Slider extends EventObservable{
 
@@ -25,10 +26,14 @@ class Slider extends EventObservable{
   private handleRangeBinded!:EventListenerOrEventListenerObject;
   private handleRangeLabelBinded!:EventListenerOrEventListenerObject;
 
-  constructor(rootElem: HTMLDivElement) {
+  constructor(rootElem: HTMLDivElement|null) {
     super();
     this.settings = Object.assign({},defaultSettings);
-    this.rootElem = rootElem;
+    if(rootElem){
+      this.rootElem = rootElem;
+    }
+    else new ErrorMessage('root elem of Slider is null!');
+    
     this.resPercentage = 0;
     this.stepInPx = 0;
     this.threshold = 0;
