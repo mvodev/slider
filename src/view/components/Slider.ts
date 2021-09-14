@@ -194,14 +194,13 @@ class Slider extends EventObservable{
       const toPos = pos.toPos;
       const bottom = pos.bottom;
       if (this.settings.isVertical) {
-        clickedPos = e.clientY - this.getRange().getBoundingClientRect().top;
+        clickedPos = e.clientY - this.getRange().getBoundingClientRect().top - this.getThumbWidthInPx()/2;
       }
       else {
-        clickedPos = e.clientX - this.getRange().getBoundingClientRect().left;
+        clickedPos = e.clientX - this.getRange().getBoundingClientRect().left - this.getThumbWidthInPx() / 2;
       }
-      if (clickedPos > bottom) {
-        clickedPos = bottom;
-      }
+      if (clickedPos > bottom) clickedPos = bottom;
+      if(clickedPos < 0) clickedPos = 0;
       if (this.settings.isRange) {
         if (fromPos > toPos) {
           fromPos = toPos;
@@ -244,10 +243,10 @@ class Slider extends EventObservable{
     let thumbType = '';
     if(e instanceof MouseEvent){
       if(this.settings.isVertical){
-        newPos = e.clientY - this.getRange().getBoundingClientRect().top;
+        newPos = e.clientY - this.getRange().getBoundingClientRect().top - this.getThumbWidthInPx()/2;
       }
       else{
-        newPos = e.clientX - this.getRange().getBoundingClientRect().left;
+        newPos = e.clientX - this.getRange().getBoundingClientRect().left - this.getThumbWidthInPx() / 2;
       }
       if(!this.settings.isRange){
         if(newPos<0){
