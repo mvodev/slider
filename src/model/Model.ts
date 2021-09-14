@@ -3,7 +3,7 @@ import { IModelFacade } from './IModelFacade';
 import { ISettings } from './ISettings';
 import { EventObservable } from '../observers/EventObservable';
 import { Utils } from '../utils/Utils';
-import {defaultSettings} from './DefaultSettings';
+import {defaultSettings} from './defaultSettings';
 import { ErrorMessage } from '../error-message/ErrorMessage';
 
 class Model extends EventObservable implements IModelFacade {

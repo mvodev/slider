@@ -2,7 +2,7 @@ import { Range } from './Range';
 import { Messages } from '../../utils/Messages';
 import { RangeLabel } from './RangeLabel';
 import { ISettings } from '../../model/ISettings';
-import { defaultSettings } from '../../model/DefaultSettings';
+import { defaultSettings } from '../../model/defaultSettings';
 import { EventObservable } from '../../observers/EventObservable';
 import { ClassNaming } from '../../utils/ClassNaming';
 import { ThumbsPosition } from '../Interfaces/ThumbsPosition';
