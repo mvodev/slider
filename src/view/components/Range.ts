@@ -52,12 +52,12 @@ class Range{
     }
   }
   
-  setColoredRange(widthThumb:number):void{
+  setColoredRange(thumbWidthInPercentage:number):void{
     this.coloredRange.setColoredRange(
       this.viewSettings,
       this.thumbFrom.getThumb(),
       this.thumbTo.getThumb(),
-      widthThumb);
+      thumbWidthInPercentage);
   }
 
   getThumbFrom(): HTMLDivElement {

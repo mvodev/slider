@@ -4,6 +4,7 @@
   "description": "MetaLamp Course4",
   "dependencies": {
     "@types/jquery": "^3.5.5",
+    "@types/resize-observer-browser": "^0.1.6",
     "jquery": "^3.5.1",
     "tsd": "^0.14.0"
   },
