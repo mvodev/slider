@@ -4,14 +4,14 @@ const webpackConfig = require('./webpack.config');
 module.exports = function (config) {
 config.set({
   basePath: '',
-  frameworks: ['jasmine'],
+  frameworks: ['jasmine', 'karma-typescript'],
   files: [
     'src/test/*.*.ts',
     { pattern: 'docs/fsd-slider.css', included: true, watched: false },
   ],
   exclude: [],
   preprocessors: {
-    'src/test/*.ts': 'webpack',
+    'src/test/*.ts': 'karma-typescript',
   },
   webpack: {
     module: webpackConfig.module,

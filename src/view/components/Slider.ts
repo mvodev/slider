@@ -26,7 +26,7 @@ class Slider extends EventObservable{
   private handleRangeBinded!:EventListenerOrEventListenerObject;
   private handleRangeLabelBinded!:EventListenerOrEventListenerObject;
 
-  constructor(rootElem: HTMLDivElement|null) {
+  constructor(rootElem: HTMLDivElement) {
     super();
     this.settings = Object.assign({},defaultSettings);
     if(rootElem){

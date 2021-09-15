@@ -10,9 +10,9 @@ import { ErrorMessage } from '../error-message/ErrorMessage';
 class View extends EventObservable implements IObserver{
   private slider!: Slider;
   private viewSettings: ISettings;
-  private rootElem!: HTMLDivElement|null;
+  private rootElem!: HTMLDivElement;
 
-  constructor(root: HTMLDivElement|null) {
+  constructor(root: HTMLDivElement) {
     super();
     this.viewSettings = Object.assign({},defaultSettings);
     if (root){
