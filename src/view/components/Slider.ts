@@ -20,7 +20,6 @@ class Slider extends EventObservable{
   private resPercentage: number;
   private stepInPx:number;
   private threshold:number;
-  private sliderLengthInPx:number;
   private handleThumbMoveBinded!:EventListenerOrEventListenerObject;
   private removeHandlerBinded!: EventListenerOrEventListenerObject;
   private handleRangeBinded!:EventListenerOrEventListenerObject;
@@ -37,7 +36,6 @@ class Slider extends EventObservable{
     this.resPercentage = 0;
     this.stepInPx = 0;
     this.threshold = 0;
-    this.sliderLengthInPx = 0;
     this.initSliderComponents();
   }
   
@@ -65,7 +63,6 @@ class Slider extends EventObservable{
     this.bindEvents();
     this.stepInPx = this.getSliderLengthInPx() / (Math.abs((this.settings.max - this.settings.min) / this.settings.step));
     this.threshold = 0.2*this.stepInPx;
-    this.sliderLengthInPx = this.getSliderLengthInPx();
     this.range.setValueToLabelThumbFrom(this.settings.from);
     this.range.setThumbPositionFrom(this.convertFromValueToPercent(this.settings.from),this.settings.isVertical);
     if (this.settings.isRange) {
@@ -292,7 +289,7 @@ class Slider extends EventObservable{
   }
 
   private convertFromPxToPercent(valueInPX: number):number {
-    return (valueInPX / this.sliderLengthInPx) * 100;
+    return (valueInPX / this.getSliderLengthInPx()) * 100;
   }
 
   private convertFromValueToPx(value:number):number{
@@ -305,16 +302,16 @@ class Slider extends EventObservable{
 
   getThumbWidthInPercentage() :number{
     if (this.settings.isVertical) {
-      return ((this.getThumbFrom().offsetHeight / this.sliderLengthInPx) * 100);
+      return ((this.getThumbFrom().offsetHeight / this.getSliderLengthInPx()) * 100);
     }
     else {
-      return ((this.getThumbFrom().offsetWidth / this.sliderLengthInPx) * 100);
+      return ((this.getThumbFrom().offsetWidth / this.getSliderLengthInPx()) * 100);
     }
   }
 
   private getElemsPos():ThumbsPosition{
     let fromPos:number,toPos:number;
-    const bottom = this.sliderLengthInPx - this.getThumbWidthInPx();
+    const bottom = this.getSliderLengthInPx() - this.getThumbWidthInPx();
     if (this.settings.isVertical) {
       fromPos = this.getThumbFrom().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top);
       toPos = this.settings.isRange ? this.getThumbTo().getBoundingClientRect().top - (this.getRange().getBoundingClientRect().top) : bottom;
