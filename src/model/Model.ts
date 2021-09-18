@@ -79,7 +79,9 @@ class Model extends EventObservable implements IModelFacade {
     }
     this.settings.isVertical = newIsVertical
     this.settings.hideThumbLabel = newHideThumbLabel;
-    this.settings.isRange = settings.isRange;
+    if(settings.isRange!==undefined){
+      this.settings.isRange = settings.isRange;
+    }
   }
   
   private convertFromPercentToValue(valueInPercent: number,thumbWidthInPercent:number) {

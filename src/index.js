@@ -14,7 +14,7 @@ $sl1.fsdSlider({
 }, 
 {
   handleEvent: (message, result) => {
-    var s = JSON.parse(result)
+    var s = JSON.parse(result);
     if (s.isRange) {
       $sl1_input.val(s.from + '  -  ' + s.to);
     }
@@ -59,6 +59,7 @@ $sl3.fsdSlider({
 }, {
   handleEvent: (message, result) => {
     var s = JSON.parse(result);
+    
     if (s.isRange) {
       $sl3_input.val(s.from + '    -    ' + s.to);
     }
