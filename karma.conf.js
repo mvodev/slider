@@ -11,7 +11,7 @@ config.set({
   ],
   exclude: [],
   preprocessors: {
-    'src/test/*.ts': 'karma-typescript',
+    'src/test/*.*.ts': 'karma-typescript',
   },
   webpack: {
     module: webpackConfig.module,
@@ -27,5 +27,5 @@ config.set({
   browsers: ['Chrome'],
   singleRun: false,
   concurrency: Infinity,
- });
+  });
 };

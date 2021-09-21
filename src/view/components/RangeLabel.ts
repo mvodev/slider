@@ -73,5 +73,7 @@ class RangeLabel{
     this.rangeLabelContainer.classList.remove(ClassNaming.HIDE_ELEMENT);
   }
 
+  
+
 }
 export {RangeLabel}
