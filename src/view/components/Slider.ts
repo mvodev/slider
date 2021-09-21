@@ -264,13 +264,13 @@ class Slider extends EventObservable{
       else {
         newPos = e.clientX - this.getRange().getBoundingClientRect().left - this.getThumbWidthInPx() / 2;
       }
+      if (newPos < 0) {
+        newPos = 0;
+      }
+      if (newPos > bottom) {
+        newPos = bottom;
+      }
       if (!this.settings.isRange) {
-        if (newPos < 0) {
-          newPos = 0;
-        }
-        if (newPos > bottom) {
-          newPos = bottom;
-        }
         if (newPos < this.fromInPx) {
           if (Math.abs(newPos - this.getStepInPx()) < this.fromInPx) {
             this.fromInPx = this.fromInPx - Math.round(Math.abs(this.fromInPx - newPos) / this.getStepInPx()) * this.getStepInPx();
