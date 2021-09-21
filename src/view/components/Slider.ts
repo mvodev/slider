@@ -45,7 +45,6 @@ class Slider extends EventObservable{
     this.rangeLabel.render(JSON.parse(settings));
     this.container.appendChild(this.rangeLabel.getRangeLabel());
     this.rootElem.appendChild(this.container);
-
     if (this.settings.hideThumbLabel) {
       this.range.hideLabel();
     }
@@ -196,6 +195,63 @@ class Slider extends EventObservable{
       } 
     }
     this.setColoredRange();
+  }
+
+  private handleRange(type: string, e: Event) {
+    if (e instanceof MouseEvent) {
+      let clickedPos: number;
+      const bottom = this.getSliderLengthInPx() - this.getThumbWidthInPx();
+      if (this.settings.isVertical) {
+        clickedPos = e.clientY - this.getRange().getBoundingClientRect().top - this.getThumbWidthInPx()/2;
+      }
+      else {
+        clickedPos = e.clientX - this.getRange().getBoundingClientRect().left - this.getThumbWidthInPx() / 2;
+      }
+      if (clickedPos > bottom) clickedPos = bottom;
+      if (clickedPos < 0) clickedPos = 0;
+      if (this.settings.isRange) {
+        if ( clickedPos < this.fromInPx ) {
+          if (Math.abs(clickedPos - this.getStepInPx()) < this.fromInPx) {
+            this.fromInPx = this.fromInPx - Math.round(Math.abs(this.fromInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
+            this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+          }
+        }
+        else if (clickedPos> this.toInPx) {
+          if (Math.abs(clickedPos + this.getStepInPx()) > this.toInPx) {
+            this.toInPx = this.toInPx + Math.round(Math.abs(this.toInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
+            this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
+          }
+        }
+        else if (clickedPos >= this.fromInPx && clickedPos <= this.toInPx) {
+          const pivot = (this.toInPx - this.fromInPx) / 2;
+          if (Math.abs(clickedPos + this.getStepInPx()) <= this.fromInPx + pivot) {
+            this.fromInPx = this.fromInPx + Math.round(Math.abs(this.fromInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
+            this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+          }
+          if (Math.abs(clickedPos + this.getStepInPx()) > this.fromInPx + pivot) {
+            this.toInPx = this.toInPx - Math.round(Math.abs(this.toInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
+            this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
+          }
+        }
+      }
+      else {
+        if (clickedPos +this.getThumbWidthInPx()/2< this.fromInPx) {
+          if (Math.abs(clickedPos - this.getStepInPx()) < this.fromInPx) {
+            this.fromInPx = this.fromInPx - Math.round(Math.abs(this.fromInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
+            this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+          }
+        }
+        else {
+          if (Math.abs(clickedPos + this.getStepInPx()) > this.fromInPx) {
+            this.fromInPx = this.fromInPx + Math.round(Math.abs(this.fromInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
+            this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+          }
+        }
+      }
+      if (type === 'range') {
+        this.bindExtraListeners();
+      }
+    }
   }
 
   private handleThumbMove(e: Event) {
@@ -366,64 +422,6 @@ class Slider extends EventObservable{
 
   private getStepInPx(): number {
     return (this.getSliderLengthInPx()-this.getThumbWidthInPx() )/ (Math.abs((this.settings.max - this.settings.min) / this.settings.step));
-  }
-
-  private handleRange(type: string, e: Event) {
-    if (e instanceof MouseEvent) {
-      let clickedPos: number;
-      const bottom = this.getSliderLengthInPx() - this.getThumbWidthInPx();
-      if (this.settings.isVertical) {
-        clickedPos = e.clientY - this.getRange().getBoundingClientRect().top;
-      }
-      else {
-        clickedPos = e.clientX - this.getRange().getBoundingClientRect().left;
-      }
-      if (clickedPos > bottom) clickedPos = bottom;
-      if (clickedPos < 0) clickedPos = 0;
-      if(this.settings.isRange){
-        if (clickedPos < this.fromInPx){
-          if (Math.abs(clickedPos - this.getStepInPx()) < this.fromInPx) {
-            this.fromInPx = this.fromInPx - Math.round(Math.abs(this.fromInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
-            this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
-          }
-        }
-        else if (clickedPos > this.toInPx){
-          console.log('inside handle range else if (clickedPos > this.toInPx)');
-          if (Math.abs(clickedPos + this.getStepInPx()) > this.toInPx) {
-            this.toInPx = this.toInPx + Math.round(Math.abs(this.toInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
-            this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
-          }
-        }
-        else if (clickedPos >= this.fromInPx && clickedPos <= this.toInPx){
-          const pivot = (this.toInPx - this.fromInPx) / 2;
-          if (Math.abs(clickedPos + this.getStepInPx()) <= this.fromInPx+pivot){
-            this.fromInPx = this.fromInPx + Math.round(Math.abs(this.fromInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
-            this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
-          }
-          if (Math.abs(clickedPos + this.getStepInPx()) > this.fromInPx + pivot){
-            this.toInPx = this.toInPx - Math.round(Math.abs(this.toInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
-            this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
-          }
-        }
-      }
-      else{
-        if (clickedPos < this.fromInPx) {
-          if (Math.abs(clickedPos - this.getStepInPx()) < this.fromInPx) {
-            this.fromInPx = this.fromInPx - Math.round(Math.abs(this.fromInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
-            this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
-          }
-        }
-        else {
-          if (Math.abs(clickedPos + this.getStepInPx()) > this.fromInPx) {
-            this.fromInPx = this.fromInPx + Math.round(Math.abs(this.fromInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
-            this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
-          }
-        }
-      }
-      if (type === 'range') {
-        this.bindExtraListeners();
-      }
-    }
   }
 
   private roundWithStep(value: number): number {
