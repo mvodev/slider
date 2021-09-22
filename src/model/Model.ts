@@ -51,26 +51,26 @@ class Model extends EventObservable implements IModelFacade {
     const newStep = Utils.convertFromInputToNumber(settings.step);
     const newIsVertical = Utils.convertFromInputToBoolean(settings.isVertical);
     const newHideThumbLabel = Utils.convertFromInputToBoolean(settings.hideThumbLabel);
-    if(newMin&&newMax){
+    if (newMin !== undefined && newMax !== undefined){
       if(newMin>newMax) new ErrorMessage('unacceptable value,min value more than max value');
       this.settings.min = newMin;
       this.settings.max = newMax;
     }
-    if(newMax){
+    if (newMax !== undefined){
       this.settings.max = newMax;
     }
-    if(newMin){
+    if(newMin!==undefined){
       this.settings.min = newMin;
     }
-    if (newFrom && newTo) {
+    if (newFrom !== undefined && newTo !== undefined) {
       if (newFrom > newTo) new ErrorMessage('unacceptable value,from more than to');
       this.settings.from = newFrom;
       this.settings.to = newTo;
     }
-    if(newFrom){
+    if (newFrom !== undefined){
       this.settings.from = newFrom;
     }
-    if(newStep){
+    if (newStep !== undefined){
       if(newStep<0){
         new ErrorMessage('step must be positive');
         this.settings.step = newStep * (-1);

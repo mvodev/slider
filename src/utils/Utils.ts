@@ -6,6 +6,7 @@ class Utils {
     }
     else return 0;
   }
+
   static convertFromInputToNumber(value:string|number|boolean|undefined):number|undefined{
     const number = parseFloat(String(value));
     if(isNaN(number)){
@@ -13,6 +14,7 @@ class Utils {
     }
     return number;
   }
+
   static convertFromInputToBoolean(value:boolean|undefined):boolean{
     return Boolean(value);
   }
