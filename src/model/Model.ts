@@ -12,36 +12,50 @@ class Model extends EventObservable implements IModelFacade {
   constructor(settings: ISettings) {
     super();
     this.settings = Object.assign({},defaultSettings);
-    this.validateSettings(settings);
+    this.setSettings(settings);
   }
+
+  private setSettings(settings:ISettings):void{
+    this.settings = Object.assign(this.settings,settings);
+  }
+
   getSettings(): string {
     return JSON.stringify(this.settings);
   }
+
   updateSettings(settings: ISettings):void {
     this.validateSettings(settings);
     this.notifyObservers(Messages.UPDATE, this.getSettings(),0);
   }
+
   getMin(): number {
       return this.settings.min;
   }
+
   getMax() :number{
     return this.settings.max;
   }
+
   setFrom(valueInPercent: number, thumbWidthInPercent:number): void {
     this.settings.from = this.convertFromPercentToValue(valueInPercent,thumbWidthInPercent);
   }
+
   getFrom(): number {
   return this.settings.from;
   }
+
   setTo(valueInPercent: number, thumbWidthInPercent:number): void {
     this.settings.to = this.convertFromPercentToValue(valueInPercent, thumbWidthInPercent);
   }
+
   getTo() :number{
     return this.settings.to;
   }
+
   getStep() :number{
     return this.settings.step ? this.settings.step : 0;
   }
+
   private validateSettings(settings: ISettings):void {
     
     const newMin = Utils.convertFromInputToNumber(settings.min);
@@ -51,31 +65,60 @@ class Model extends EventObservable implements IModelFacade {
     const newStep = Utils.convertFromInputToNumber(settings.step);
     const newIsVertical = Utils.convertFromInputToBoolean(settings.isVertical);
     const newHideThumbLabel = Utils.convertFromInputToBoolean(settings.hideThumbLabel);
-    if (newMin !== undefined && newMax !== undefined){
-      if(newMin>newMax) new ErrorMessage('unacceptable value,min value more than max value');
-      this.settings.min = newMin;
-      this.settings.max = newMax;
+
+    if (newMin !== undefined){
+      if(newMin>this.settings.from) {
+        new ErrorMessage('unacceptable value,min value more than from value');
+        this.settings.min = this.settings.from;
+      }
+      else{
+        this.settings.min = newMin;
+      }
     }
     if (newMax !== undefined){
-      this.settings.max = newMax;
-    }
-    if(newMin!==undefined){
-      this.settings.min = newMin;
+      if(this.settings.isRange&&newMax<this.settings.to){
+        new ErrorMessage('unacceptable value,min value more than to value');
+      }
+      else if (!this.settings.isRange && newMax < this.settings.from){
+        new ErrorMessage('unacceptable value,min value more than from value');
+        this.settings.max = this.settings.from+this.settings.step;
+      }
+      else{
+        this.settings.max = newMax;
+      }
     }
     if (newFrom !== undefined && newTo !== undefined) {
       if (newFrom > newTo) new ErrorMessage('unacceptable value,from more than to');
-      this.settings.from = newFrom;
-      this.settings.to = newTo;
+      this.settings.from = this.settings.min;
+      this.settings.to = this.settings.max;
     }
-    if (newFrom !== undefined){
-      this.settings.from = newFrom;
+    if (newFrom !== undefined&&!this.settings.isRange){
+      if(newFrom>this.settings.max){
+        new ErrorMessage('unacceptable value,from more than max');
+      }
+      else this.settings.from = newFrom;
+    }
+    if (newFrom !== undefined && this.settings.isRange) {
+      if (newFrom > this.settings.to) {
+        new ErrorMessage('unacceptable value,from more than to');
+      }
+      else this.settings.from = newFrom;
+    }
+    if (newTo !== undefined && this.settings.isRange) {
+      if (newTo < this.settings.from) {
+        new ErrorMessage('unacceptable value,to less than from');
+      }
+      else if (newTo > this.settings.max){
+        new ErrorMessage('unacceptable value,to more than max');
+      }
+      else this.settings.to = newTo;
     }
     if (newStep !== undefined){
       if(newStep<0){
         new ErrorMessage('step must be positive');
         this.settings.step = newStep * (-1);
       }
-      this.settings.step = newStep;
+      else this.settings.step = newStep;
     }
     this.settings.isVertical = newIsVertical
     this.settings.hideThumbLabel = newHideThumbLabel;
