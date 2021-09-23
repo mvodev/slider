@@ -19,12 +19,12 @@ class Utils {
     return Boolean(value);
   }
 
-  static roundWithStep(value: number,step:number): number {
+  static roundWithStep(value: number,step:number,min:number): number {
     let del = 1;
     if (step != 0) {
       del = 1.0 / step;
     }
-    const result = Math.round(+value.toFixed(Utils.numDigitsAfterDecimal(step)) * del) / del;
+    const result = Math.round(+(value-min).toFixed(Utils.numDigitsAfterDecimal(step)) * del) / del+min;
     return result;
   }
 

@@ -160,7 +160,6 @@ class Model extends EventObservable implements IModelFacade {
     const res = Math.round(  +  (  (diapason * valueInPercent / (100 - thumbWidthInPercent) ) ).toFixed(Utils.numDigitsAfterDecimal(this.getStep())) * del) / del+this.getMin();
     if (res < this.getMin()) return this.getMin();
     if (res > this.getMax()) return this.getMax();
-    console.log('inside convert model res='+res);
     return res;
   }
 

@@ -85,11 +85,8 @@ class Slider extends EventObservable{
 
   private setLabelsPosition(): void {
     const diapason = Math.abs(this.settings.max - this.settings.min);
-    const pivot = (diapason / 2)+this.settings.min;
-    //console.log('pivot='+pivot);
-    const pivotValue = Utils.roundWithStep((pivot),this.settings.step);
-    //console.log('pivotvalue=' + pivotValue);
-    
+    const pivot = (diapason / 2);
+    const pivotValue = Utils.roundWithStep((pivot),this.settings.step,this.settings.min);
       if(!this.settings.isVertical){
           this.getLabels()[0].setAttribute('value', this.settings.min.toString());
           this.getLabels()[0].style.left = (this.getThumbWidthInPercentage() / 2 - this.getLabels()[0].offsetWidth / this.getSliderLengthInPx() * 100 / 2) + '%';
@@ -162,27 +159,32 @@ class Slider extends EventObservable{
 
 
   private handleRangeLabel(e:Event){
-    this.setLabelsPosition();
     if(e.target instanceof Element){
       if (e.target.getAttribute('value')){
-
+        const roundedValue = Utils.roundWithStep(Number(e.target.getAttribute('value')), this.settings.step,this.settings.min);
         if(!this.settings.isRange){
-          this.dispatchEvent(this.convertFromValueToPx(Number(e.target.getAttribute('value'))), Constants.THUMB_FROM);
+          if(roundedValue<=this.settings.max){
+            this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_FROM);
+          }
         }
         else{
           if (Number(e.target.getAttribute('value')) >= this.settings.to) {
-            this.dispatchEvent(this.convertFromValueToPx(Number(e.target.getAttribute('value'))), Constants.THUMB_TO);
+            if (roundedValue <= this.settings.max) {
+              this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_TO);
+            }
           }
           else if (Number(e.target.getAttribute('value')) <= this.settings.from) {
-            this.dispatchEvent(this.convertFromValueToPx(Number(e.target.getAttribute('value'))), Constants.THUMB_FROM);
+            this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_FROM);
           }
           else {
             const pivot = Math.abs(this.settings.to - this.settings.from) / 2;
             if (Number(e.target.getAttribute('value')) <= (pivot + this.settings.from)) {
-              this.dispatchEvent(this.convertFromValueToPx(Number(e.target.getAttribute('value'))), Constants.THUMB_FROM);
+              this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_FROM);
             }
             else if (Number(e.target.getAttribute('value')) > (pivot + this.settings.from)) {
-              this.dispatchEvent(this.convertFromValueToPx(Number(e.target.getAttribute('value'))), Constants.THUMB_TO);
+              if (roundedValue <= this.settings.max) {
+                this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_TO);
+              }
             }
           }
         }
@@ -261,7 +263,7 @@ class Slider extends EventObservable{
       if (newPos < 0) {
         newPos = 0;
       }
-      if (newPos > bottom) {
+      if (newPos >= bottom) {
         newPos = bottom;
       }
       if (!this.settings.isRange) {
@@ -272,23 +274,26 @@ class Slider extends EventObservable{
           }
         }
         else {
-          if (Math.abs(newPos + this.getStepInPx()) > this.fromInPx) {
-            this.fromInPx = this.fromInPx + Math.round(Math.abs(this.fromInPx - newPos) / this.getStepInPx()) * this.getStepInPx();
-            this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+          if ( Math.abs(newPos + this.getStepInPx()) > this.fromInPx && 
+              (Math.abs(this.fromInPx + this.getStepInPx())<=bottom)) {
+                this.fromInPx = this.fromInPx + Math.round(Math.abs(this.fromInPx - newPos) / this.getStepInPx()) * this.getStepInPx();
+                this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
           }
         }
       }
       else {
         if (newPos < this.fromInPx){
-          if (Math.abs(newPos - this.getStepInPx()) < this.fromInPx) {
+          if (Math.abs(newPos - this.getStepInPx()) <= this.fromInPx) {
             this.fromInPx = this.fromInPx - Math.round(Math.abs(this.fromInPx - newPos) / this.getStepInPx()) * this.getStepInPx();
             this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
           }
         }
         if (newPos > this.toInPx){
-          if (Math.abs(newPos + this.getStepInPx()) > this.toInPx) {
-            this.toInPx = this.toInPx + Math.round(Math.abs(this.toInPx - newPos) / this.getStepInPx()) * this.getStepInPx();
-            this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
+          if (Math.abs(newPos + this.getStepInPx()) > this.toInPx 
+              && 
+            (Math.abs(this.toInPx + this.getStepInPx()) <= bottom)) {
+              this.toInPx = this.toInPx + Math.round(Math.abs(this.toInPx - newPos) / this.getStepInPx()) * this.getStepInPx();
+              this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
           }
         }
         if (newPos >= this.fromInPx && newPos <= this.toInPx) {
@@ -315,8 +320,10 @@ class Slider extends EventObservable{
     if(valueInPX<0){
       return 0;
     }
-
-    const res = (valueInPX / (this.getSliderLengthInPx())) * 100;
+    const res = (valueInPX / (this.getSliderLengthInPx())) * 100; 
+    if(res>100){
+      return 100 - this.getThumbWidthInPercentage();
+    }
     return +res.toFixed(4);
   }
 
