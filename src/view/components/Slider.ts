@@ -85,8 +85,8 @@ class Slider extends EventObservable{
 
   private setLabelsPosition(): void {
     const diapason = Math.abs(this.settings.max - this.settings.min);
-    const pivot = (diapason / 2);
-    const pivotValue = Utils.roundWithStep((pivot),this.settings.step,this.settings.min);
+    const pivot = (diapason / 2)+this.settings.min;
+    const pivotRounded = Utils.roundWithStep((pivot),this.settings.step,this.settings.min);
       if(!this.settings.isVertical){
           this.getLabels()[0].setAttribute('value', this.settings.min.toString());
           this.getLabels()[0].style.left = (this.getThumbWidthInPercentage() / 2 - this.getLabels()[0].offsetWidth / this.getSliderLengthInPx() * 100 / 2) + '%';
@@ -97,9 +97,9 @@ class Slider extends EventObservable{
           this.getLabels()[2].style.top = '';
         
         
-          this.getLabels()[1].setAttribute('value', pivotValue.toString());
-          this.getLabels()[1].innerText = pivotValue.toString();
-          this.getLabels()[1].style.left = (this.convertFromValueToPercent(pivotValue) + this.getThumbWidthInPercentage() / 2 - (this.getLabels()[1].offsetWidth / this.getSliderLengthInPx() * 100 / 2)) + '%';
+        this.getLabels()[1].setAttribute('value', pivotRounded.toString());
+        this.getLabels()[1].innerText = pivotRounded.toString();
+        this.getLabels()[1].style.left = (this.convertFromValueToPercent(pivotRounded) + this.getThumbWidthInPercentage() / 2 - (this.getLabels()[1].offsetWidth / this.getSliderLengthInPx() * 100 / 2)) + '%';
           this.getLabels()[1].style.top = '';
         
       }
@@ -112,13 +112,11 @@ class Slider extends EventObservable{
           this.getLabels()[2].style.top = (100 - ((this.getLabels()[2].offsetHeight / 2 + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100) + '%';
           this.getLabels()[2].style.left = '';
       
-          this.getLabels()[1].setAttribute('value', pivotValue.toString());
-          this.getLabels()[1].innerText = pivotValue.toString();
-          this.getLabels()[1].style.top = (this.convertFromValueToPercent(pivotValue) + this.getThumbWidthInPercentage() / 2 - (this.getLabels()[1].offsetHeight / this.getSliderLengthInPx() * 100 / 2)) + '%';
+        this.getLabels()[1].setAttribute('value', pivotRounded.toString());
+        this.getLabels()[1].innerText = pivotRounded.toString();
+        this.getLabels()[1].style.top = (this.convertFromValueToPercent(pivotRounded) + this.getThumbWidthInPercentage() / 2 - (this.getLabels()[1].offsetHeight / this.getSliderLengthInPx() * 100 / 2)) + '%';
           this.getLabels()[1].style.left = '';
-        
       }
-    
   }
 
   private bindEvents(): void {
@@ -274,8 +272,7 @@ class Slider extends EventObservable{
           }
         }
         else {
-          if ( Math.abs(newPos + this.getStepInPx()) > this.fromInPx && 
-              (Math.abs(this.fromInPx + this.getStepInPx())<=bottom)) {
+          if ( Math.abs(newPos + this.getStepInPx()) > this.fromInPx ) {
                 this.fromInPx = this.fromInPx + Math.round(Math.abs(this.fromInPx - newPos) / this.getStepInPx()) * this.getStepInPx();
                 this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
           }
@@ -289,9 +286,7 @@ class Slider extends EventObservable{
           }
         }
         if (newPos > this.toInPx){
-          if (Math.abs(newPos + this.getStepInPx()) > this.toInPx 
-              && 
-            (Math.abs(this.toInPx + this.getStepInPx()) <= bottom)) {
+          if (Math.abs(newPos + this.getStepInPx()) > this.toInPx) {
               this.toInPx = this.toInPx + Math.round(Math.abs(this.toInPx - newPos) / this.getStepInPx()) * this.getStepInPx();
               this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
           }
