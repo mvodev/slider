@@ -1,7 +1,6 @@
 import { defaultSettings } from '../../model/defaultSettings';
 import { ISettings } from '../../model/ISettings';
 import { ClassNaming } from '../../utils/ClassNaming';
-import { Constants } from '../../utils/Constants';
 
 class RangeLabel{
   private rangeLabelContainer!: HTMLDivElement;
@@ -43,12 +42,10 @@ class RangeLabel{
     this.maxLabel.classList.add(ClassNaming.RANGE_LABEL_SCALE);
     this.rangeLabelContainer.appendChild(this.minLabel);
     this.labels.push(this.minLabel);
-    for(let i=0;i<Constants.NUMBER_OF_LABELS;i++){
-      const mark = document.createElement('span');
-      mark.classList.add(ClassNaming.RANGE_LABEL_SCALE);
-      this.labels.push(mark);
-      this.rangeLabelContainer.appendChild(mark);
-    }
+    const pivotMark = document.createElement('span');
+    pivotMark.classList.add(ClassNaming.RANGE_LABEL_SCALE);
+    this.labels.push(pivotMark);
+    this.rangeLabelContainer.appendChild(pivotMark);
     this.rangeLabelContainer.appendChild(this.maxLabel);
     this.labels.push(this.maxLabel);
   }

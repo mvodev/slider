@@ -85,49 +85,43 @@ class Slider extends EventObservable{
 
   private setLabelsPosition(): void {
     const diapason = Math.abs(this.settings.max - this.settings.min);
-    const step = diapason / (Constants.NUMBER_OF_LABELS + 1);
-    let initialValue = this.settings.min;
+    const pivot = (diapason / 2)+this.settings.min;
+    //console.log('pivot='+pivot);
+    const pivotValue = Utils.roundWithStep((pivot),this.settings.step);
+    //console.log('pivotvalue=' + pivotValue);
     
-    for (let i = 0; i < this.getLabels().length; i++) {
       if(!this.settings.isVertical){
-        if (i === 0) {
-          this.getLabels()[i].setAttribute('value', this.settings.min.toString());
-          this.getLabels()[i].style.left = (this.getThumbWidthInPercentage() / 2 - this.getLabels()[i].offsetWidth / this.getSliderLengthInPx() * 100 / 2) + '%';
-          this.getLabels()[i].style.top = '';
-        }
-        else if (i === this.getLabels().length - 1) {
-          this.getLabels()[i].setAttribute('value', this.settings.max.toString());
-          this.getLabels()[i].style.left = (100 - ((this.getLabels()[i].offsetWidth / 2 + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100) + '%';
-          this.getLabels()[i].style.top = '';
-        }
-        else {
-          initialValue += step;
-          this.getLabels()[i].setAttribute('value', this.roundWithStep(initialValue).toString());
-          this.getLabels()[i].innerText = this.roundWithStep(initialValue).toString();
-          this.getLabels()[i].style.left = (this.convertFromValueToPercent(this.roundWithStep(initialValue)) + this.getThumbWidthInPercentage() / 2 - (this.getLabels()[i].offsetWidth / this.getSliderLengthInPx() * 100 / 2)) + '%';
-          this.getLabels()[i].style.top = '';
-        }
+          this.getLabels()[0].setAttribute('value', this.settings.min.toString());
+          this.getLabels()[0].style.left = (this.getThumbWidthInPercentage() / 2 - this.getLabels()[0].offsetWidth / this.getSliderLengthInPx() * 100 / 2) + '%';
+          this.getLabels()[0].style.top = '';
+        
+          this.getLabels()[2].setAttribute('value', this.settings.max.toString());
+          this.getLabels()[2].style.left = (100 - ((this.getLabels()[2].offsetWidth / 2 + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100) + '%';
+          this.getLabels()[2].style.top = '';
+        
+        
+          this.getLabels()[1].setAttribute('value', pivotValue.toString());
+          this.getLabels()[1].innerText = pivotValue.toString();
+          this.getLabels()[1].style.left = (this.convertFromValueToPercent(pivotValue) + this.getThumbWidthInPercentage() / 2 - (this.getLabels()[1].offsetWidth / this.getSliderLengthInPx() * 100 / 2)) + '%';
+          this.getLabels()[1].style.top = '';
+        
       }
       else{
-        if (i === 0) {
-          this.getLabels()[i].setAttribute('value', this.settings.min.toString());
-          this.getLabels()[i].style.top = (this.getThumbWidthInPercentage() / 2 - this.getLabels()[i].offsetHeight/ this.getSliderLengthInPx() * 100 / 2) + '%';
-          this.getLabels()[i].style.left = '';
-        }
-        else if (i === this.getLabels().length - 1) {
-          this.getLabels()[i].setAttribute('value', this.settings.max.toString());
-          this.getLabels()[i].style.top = (100 - ((this.getLabels()[i].offsetHeight / 2 + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100) + '%';
-          this.getLabels()[i].style.left = '';
-        }
-        else {
-          initialValue += step;
-          this.getLabels()[i].setAttribute('value', this.roundWithStep(initialValue).toString());
-          this.getLabels()[i].innerText = this.roundWithStep(initialValue).toString();
-          this.getLabels()[i].style.top = (this.convertFromValueToPercent(this.roundWithStep(initialValue)) + this.getThumbWidthInPercentage() / 2 - (this.getLabels()[i].offsetHeight / this.getSliderLengthInPx() * 100 / 2)) + '%';
-          this.getLabels()[i].style.left = '';
-        }
+          this.getLabels()[0].setAttribute('value', this.settings.min.toString());
+          this.getLabels()[0].style.top = (this.getThumbWidthInPercentage() / 2 - this.getLabels()[0].offsetHeight/ this.getSliderLengthInPx() * 100 / 2) + '%';
+          this.getLabels()[0].style.left = '';
+        
+          this.getLabels()[2].setAttribute('value', this.settings.max.toString());
+          this.getLabels()[2].style.top = (100 - ((this.getLabels()[2].offsetHeight / 2 + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100) + '%';
+          this.getLabels()[2].style.left = '';
+      
+          this.getLabels()[1].setAttribute('value', pivotValue.toString());
+          this.getLabels()[1].innerText = pivotValue.toString();
+          this.getLabels()[1].style.top = (this.convertFromValueToPercent(pivotValue) + this.getThumbWidthInPercentage() / 2 - (this.getLabels()[1].offsetHeight / this.getSliderLengthInPx() * 100 / 2)) + '%';
+          this.getLabels()[1].style.left = '';
+        
       }
-    }
+    
   }
 
   private bindEvents(): void {
@@ -424,14 +418,7 @@ class Slider extends EventObservable{
     return (this.getSliderLengthInPx()-this.getThumbWidthInPx() )/ (Math.abs((this.settings.max - this.settings.min) / this.settings.step));
   }
 
-  private roundWithStep(value: number): number {
-    let del = 1;
-    if (this.settings.step != 0) {
-      del = 1.0 / this.settings.step;
-    }
-    const result = Math.round(+value.toFixed(Utils.numDigitsAfterDecimal(this.settings.step)) * del) / del;
-    return result;
-  }
+
 
   private getLabels(): HTMLElement[] {
     return this.rangeLabel.getLabels();

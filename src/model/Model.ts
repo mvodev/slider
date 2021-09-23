@@ -65,7 +65,12 @@ class Model extends EventObservable implements IModelFacade {
     const newStep = Utils.convertFromInputToNumber(settings.step);
     const newIsVertical = Utils.convertFromInputToBoolean(settings.isVertical);
     const newHideThumbLabel = Utils.convertFromInputToBoolean(settings.hideThumbLabel);
-
+    if (newMin !== undefined && newMax !== undefined){
+      if (Math.abs(newMax - newMin)<this.settings.step) {
+        new ErrorMessage('unacceptable values,difference between min and max more than step');
+        return;
+      }
+    }
     if (newMin !== undefined){
       if(newMin>this.settings.from) {
         new ErrorMessage('unacceptable value,min value more than from value');
@@ -78,6 +83,7 @@ class Model extends EventObservable implements IModelFacade {
     if (newMax !== undefined){
       if(this.settings.isRange&&newMax<this.settings.to){
         new ErrorMessage('unacceptable value,min value more than to value');
+        return;
       }
       else if (!this.settings.isRange && newMax < this.settings.from){
         new ErrorMessage('unacceptable value,min value more than from value');
@@ -95,32 +101,44 @@ class Model extends EventObservable implements IModelFacade {
     if (newFrom !== undefined&&!this.settings.isRange){
       if(newFrom>this.settings.max){
         new ErrorMessage('unacceptable value,from more than max');
+        return;
       }
       else this.settings.from = newFrom;
     }
     if (newFrom !== undefined && this.settings.isRange) {
       if (newFrom > this.settings.to) {
         new ErrorMessage('unacceptable value,from more than to');
+        return;
       }
       else this.settings.from = newFrom;
     }
     if (newTo !== undefined && this.settings.isRange) {
       if (newTo < this.settings.from) {
         new ErrorMessage('unacceptable value,to less than from');
+        return;
       }
       else if (newTo > this.settings.max){
         new ErrorMessage('unacceptable value,to more than max');
+        return;
       }
       else this.settings.to = newTo;
     }
     if (newStep !== undefined){
       if(newStep<0){
         new ErrorMessage('step must be positive');
-        this.settings.step = newStep * (-1);
+        return;
       }
-      else this.settings.step = newStep;
+      else if (newStep>(Math.abs(this.settings.max - this.settings.min))){
+        new ErrorMessage('step must be more than difference between max and min');
+        return;
+      }
+      else{
+        this.settings.step = newStep;
+        this.settings.from = this.settings.min +this.settings.step;
+        this.settings.to = this.settings.from + this.settings.step;
+      }
     }
-    this.settings.isVertical = newIsVertical
+    this.settings.isVertical = newIsVertical;
     this.settings.hideThumbLabel = newHideThumbLabel;
     if(settings.isRange!==undefined){
       this.settings.isRange = settings.isRange;
@@ -139,9 +157,10 @@ class Model extends EventObservable implements IModelFacade {
       del = 1.0 / this.getStep();
     }
     const diapason = Math.abs(this.getMax() - this.getMin());
-    const res = Math.round(+((diapason * valueInPercent / (100 - thumbWidthInPercent)) + this.getMin()).toFixed(Utils.numDigitsAfterDecimal(this.getStep())) * del) / del;
+    const res = Math.round(  +  (  (diapason * valueInPercent / (100 - thumbWidthInPercent) ) ).toFixed(Utils.numDigitsAfterDecimal(this.getStep())) * del) / del+this.getMin();
     if (res < this.getMin()) return this.getMin();
     if (res > this.getMax()) return this.getMax();
+    console.log('inside convert model res='+res);
     return res;
   }
 

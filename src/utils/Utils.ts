@@ -19,5 +19,14 @@ class Utils {
     return Boolean(value);
   }
 
+  static roundWithStep(value: number,step:number): number {
+    let del = 1;
+    if (step != 0) {
+      del = 1.0 / step;
+    }
+    const result = Math.round(+value.toFixed(Utils.numDigitsAfterDecimal(step)) * del) / del;
+    return result;
+  }
+
 }
 export {Utils}
