@@ -37,7 +37,14 @@ class Model extends EventObservable implements IModelFacade {
   }
 
   setFrom(valueInPercent: number, thumbWidthInPercent:number): void {
-    this.settings.from = this.convertFromPercentToValue(valueInPercent,thumbWidthInPercent);
+    const from = this.convertFromPercentToValue(valueInPercent, thumbWidthInPercent);
+    if(from>this.settings.max){
+      this.settings.from = this.settings.max;
+    }
+    else if (from < this.settings.min){
+      this.settings.from = this.settings.min;
+    }
+    else this.settings.from = from;
   }
 
   getFrom(): number {
@@ -45,7 +52,14 @@ class Model extends EventObservable implements IModelFacade {
   }
 
   setTo(valueInPercent: number, thumbWidthInPercent:number): void {
-    this.settings.to = this.convertFromPercentToValue(valueInPercent, thumbWidthInPercent);
+    const to = this.convertFromPercentToValue(valueInPercent, thumbWidthInPercent);
+    if (to >= this.settings.max) {
+      this.settings.to = this.settings.max;
+    }
+    else if (to <= this.settings.from) {
+      this.settings.to = this.settings.from;
+    }
+    else this.settings.to = to;
   }
 
   getTo() :number{
