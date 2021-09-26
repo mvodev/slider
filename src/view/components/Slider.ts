@@ -214,7 +214,8 @@ class Slider extends EventObservable{
         }
         else if (clickedPos> this.toInPx) {
           thumbType = Constants.THUMB_TO;
-          if (Math.abs(clickedPos + this.getStepInPx()) > this.toInPx) {
+          if ((clickedPos + this.getStepInPx()) > this.toInPx
+            && ((Math.round(Math.abs(this.toInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx() + this.toInPx)<=bottom)) {
             this.toInPx = this.toInPx + Math.round(Math.abs(this.toInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
             this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
           }
@@ -242,7 +243,8 @@ class Slider extends EventObservable{
           }
         }
         else {
-          if (Math.abs(clickedPos + this.getStepInPx()) > this.fromInPx) {
+          if (Math.abs(clickedPos + this.getStepInPx()) > this.fromInPx
+            && (this.fromInPx + Math.round(Math.abs(this.fromInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx()<=bottom)) {
             this.fromInPx = this.fromInPx + Math.round(Math.abs(this.fromInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
             this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
           }
@@ -256,7 +258,7 @@ class Slider extends EventObservable{
 
   private handleThumbMove(thumbType:string,e: Event) {
     let newPos: number;
-    const bottom = this.getSliderLengthInPx() - this.getThumbWidthInPx();
+    const bottom = this.getSliderLengthInPx()-this.getThumbWidthInPx();
     if (e instanceof MouseEvent) {
       if (this.settings.isVertical) {
         newPos = e.clientY - this.getRange().getBoundingClientRect().top - this.getThumbWidthInPx() / 2;
@@ -294,7 +296,7 @@ class Slider extends EventObservable{
             }
           }
           else {
-            if (Math.abs(newPos + this.getStepInPx()) > this.fromInPx) {
+            if (Math.abs(newPos + this.getStepInPx()) > this.fromInPx && (this.fromInPx + Math.round(Math.abs(this.fromInPx - newPos) / this.getStepInPx()) * this.getStepInPx()<=bottom)) {
               this.fromInPx = this.fromInPx + Math.round(Math.abs(this.fromInPx - newPos) / this.getStepInPx()) * this.getStepInPx();
               this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
             }
@@ -304,7 +306,7 @@ class Slider extends EventObservable{
       else{
           if (newPos > this.toInPx) {
             if (
-              Math.abs(newPos + this.getStepInPx()) > this.toInPx) {
+              (newPos + this.getStepInPx()) > this.toInPx && (this.toInPx + Math.round(Math.abs(this.toInPx - newPos) / this.getStepInPx()) * this.getStepInPx()<=bottom)) {
               this.toInPx = this.toInPx + Math.round(Math.abs(this.toInPx - newPos) / this.getStepInPx()) * this.getStepInPx();
               this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
             }
@@ -329,7 +331,7 @@ class Slider extends EventObservable{
       return 0;
     }
     const res = (valueInPX / (this.getSliderLengthInPx())) * 100; 
-    if(res>100){
+    if (res > (100 - this.getThumbWidthInPercentage())){
       return 100 - this.getThumbWidthInPercentage();
     }
     return +res.toFixed(4);
@@ -340,11 +342,12 @@ class Slider extends EventObservable{
   }
 
   private convertFromValueToPercent(value: number): number {
-    return (((100 - this.getThumbWidthInPercentage()) / Math.abs(this.settings.max - this.settings.min)) * (Math.abs(value - this.settings.min)));
-    // if(res>100-this.getThumbWidthInPercentage()){
-    //   return (100 - this.getThumbWidthInPercentage());
-    // }
-    // return res;
+    //return (((100 - this.getThumbWidthInPercentage()) / Math.abs(this.settings.max - this.settings.min)) * (Math.abs(value - this.settings.min)));
+    const res = (((100 - this.getThumbWidthInPercentage()) / Math.abs(this.settings.max - this.settings.min)) * (Math.abs(value - this.settings.min)))
+    if(res>100-this.getThumbWidthInPercentage()){
+      return (100 - this.getThumbWidthInPercentage());
+    }
+    return res;
   }
 
   getThumbWidthInPercentage() :number{

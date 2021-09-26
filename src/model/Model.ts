@@ -67,7 +67,7 @@ class Model extends EventObservable implements IModelFacade {
   }
 
   getStep() :number{
-    return this.settings.step ? this.settings.step : 0;
+    return this.settings.step ? this.settings.step : 1;
   }
 
   private validateSettings(settings: ISettings):void {
@@ -82,7 +82,6 @@ class Model extends EventObservable implements IModelFacade {
     if (newMin !== undefined && newMax !== undefined){
       if (Math.abs(newMax - newMin)<this.settings.step) {
         new ErrorMessage('unacceptable values,difference between min and max more than step');
-        return;
       }
     }
     if (newMin !== undefined){
@@ -97,7 +96,6 @@ class Model extends EventObservable implements IModelFacade {
     if (newMax !== undefined){
       if(this.settings.isRange&&newMax<this.settings.to){
         new ErrorMessage('unacceptable value,min value more than to value');
-        return;
       }
       else if (!this.settings.isRange && newMax < this.settings.from){
         new ErrorMessage('unacceptable value,min value more than from value');
@@ -108,43 +106,45 @@ class Model extends EventObservable implements IModelFacade {
       }
     }
     if (newFrom !== undefined && newTo !== undefined) {
-      if (newFrom > newTo) new ErrorMessage('unacceptable value,from more than to');
-      this.settings.from = this.settings.min;
-      this.settings.to = this.settings.max;
+      if (newFrom > newTo&&this.settings.isRange) {
+        new ErrorMessage('unacceptable value,from more than to');
+        this.settings.from = this.settings.min;
+        this.settings.to = this.settings.max;
+      }
     }
     if (newFrom !== undefined&&!this.settings.isRange){
       if(newFrom>this.settings.max){
         new ErrorMessage('unacceptable value,from more than max');
-        return;
       }
-      else this.settings.from = newFrom;
+      if(newFrom<this.settings.min){
+        new ErrorMessage('unacceptable value,from less than min');
+      }
+      this.settings.from = newFrom;
     }
     if (newFrom !== undefined && this.settings.isRange) {
       if (newFrom > this.settings.to) {
         new ErrorMessage('unacceptable value,from more than to');
-        return;
       }
-      else this.settings.from = newFrom;
+      if (newFrom < this.settings.min) {
+        new ErrorMessage('unacceptable value,from less than min');
+      }
+      this.settings.from = newFrom;
     }
     if (newTo !== undefined && this.settings.isRange) {
       if (newTo < this.settings.from) {
         new ErrorMessage('unacceptable value,to less than from');
-        return;
       }
       else if (newTo > this.settings.max){
         new ErrorMessage('unacceptable value,to more than max');
-        return;
       }
       else this.settings.to = newTo;
     }
     if (newStep !== undefined){
       if(newStep<0){
         new ErrorMessage('step must be positive');
-        return;
       }
       else if (newStep>(Math.abs(this.settings.max - this.settings.min))){
         new ErrorMessage('step must be more than difference between max and min');
-        return;
       }
       else{
         this.settings.step = newStep;
