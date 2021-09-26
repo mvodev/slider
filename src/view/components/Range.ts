@@ -98,5 +98,12 @@ setThumbPositionTo(shift: number, isVertical: boolean | undefined): void {
   this.thumbTo.setThumbPosition(shift, isVertical);
 }
 
+  getThumbWidthInPx():number{
+    if (this.viewSettings.isVertical) {
+      return this.getThumbFrom().offsetHeight;
+    }
+    return this.getThumbFrom().offsetWidth;
+  }
+
 }
 export {Range}
