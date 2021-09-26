@@ -36,7 +36,7 @@ class Slider extends EventObservable{
     this.resPercentage = 0;
     this.initSliderComponents();
   }
-  
+
   render(settings:string) :void{
     this.settings = Object.assign(this.settings,JSON.parse(settings));
     this.container.classList.add(ClassNaming.ROOT);
@@ -154,7 +154,6 @@ class Slider extends EventObservable{
     this.getRangeLabel().removeEventListener('mousedown', this.handleRangeLabelBinded);
     this.getRange().removeEventListener('mousedown', this.handleRangeBinded);
   }
-
 
   private handleRangeLabel(e:Event){
     if(e.target instanceof Element){
@@ -439,8 +438,6 @@ class Slider extends EventObservable{
   private getStepInPx(): number {
     return (this.getSliderLengthInPx()-this.getThumbWidthInPx() )/ (Math.abs((this.settings.max - this.settings.min) / this.settings.step));
   }
-
-
 
   private getLabels(): HTMLElement[] {
     return this.rangeLabel.getLabels();
