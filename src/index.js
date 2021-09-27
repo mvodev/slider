@@ -72,29 +72,30 @@ let sl1_instance = $sl1.data("fsdSlider");
 let sl2_instance = $sl2.data("fsdSlider");
 let sl3_instance = $sl3.data("fsdSlider");
 setSettingsToInputs();
-$("input").on("change",function inputHandler(){
-  if ($(this).parent().parent().hasClass("form_slider1"))//slider1
+$("input").on("change",inputHandler);
+function inputHandler() {
+  if ($(this).parent().parent().hasClass("js-control-panel__form_slider1"))//slider1
   {
     sl1_instance.update(collectData('slider1'));
   }
-  else if ($(this).parent().parent().hasClass("form_slider2"))//slider1
+  else if ($(this).parent().parent().hasClass("js-control-panel__form_slider2"))//slider1
   {
     sl2_instance.update(collectData('slider2'));
   }
-  else if ($(this).parent().parent().hasClass("form_slider3"))//slider1
+  else if ($(this).parent().parent().hasClass("js-control-panel__form_slider3"))//slider1
   {
     sl3_instance.update(collectData('slider3'));
-  }  
-});
+  }
+}
 function collectData(sliderNumber) {
   return {
-    min: $('.control-panel__min-' + sliderNumber).val(),
-    max: $('.control-panel__max-' + sliderNumber).val(),
-    from: $('.control-panel__from-' + sliderNumber).val(),
-    to: $('.control-panel__to-' + sliderNumber).val(),
-    step: $('.control-panel__step-' + sliderNumber).val(),
-    hideThumbLabel: $('.control-panel__hide-thumb-label-' + sliderNumber).is(':checked'),
-    isVertical: $('.control-panel__is-vertical-' + sliderNumber).is(':checked')
+    min: $('.js-control-panel__min-' + sliderNumber).val(),
+    max: $('.js-control-panel__max-' + sliderNumber).val(),
+    from: $('.js-control-panel__from-' + sliderNumber).val(),
+    to: $('.js-control-panel__to-' + sliderNumber).val(),
+    step: $('.js-control-panel__step-' + sliderNumber).val(),
+    hideThumbLabel: $('.js-control-panel__hide-thumb-label-' + sliderNumber).is(':checked'),
+    isVertical: $('.js-control-panel__is-vertical-' + sliderNumber).is(':checked')
   }
 }
 function setSettingsToInputs(){

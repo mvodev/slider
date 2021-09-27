@@ -1,11 +1,9 @@
-/* eslint-disable no-undef */
 import '../src/styles/fsd-slider.scss';
 import { View } from './view/View';
 import { Model } from './model/Model';
 import { Presenter } from './presenter/Presenter';
 (function ($) {
   var FsdSlider = function (root, settings,callback) {
-    // eslint-disable-next-line no-undef
     let model = new Model(settings);
     let view = new View(root);
     this.presenter = new Presenter(view, model);
