@@ -1,8 +1,8 @@
 import './index.scss';
 import './fsd-slider.js';
-var $sl1 = $('.slider1');
-var $sl1_input = $('.input-result1');
-$sl1.fsdSlider({
+let $sl1 = $('.slider1');
+let $sl1_input = $('.input-result1');
+let sl1Settings = {
   min: 5000,
   max: 25000,
   from: 8000,
@@ -11,10 +11,10 @@ $sl1.fsdSlider({
   isVertical: false,
   hideThumbLabel: false,
   isRange: true,
-}, 
-{
+};
+$sl1.fsdSlider(sl1Settings,{
   handleEvent: (message, result) => {
-    var s = JSON.parse(result);
+    let s = JSON.parse(result);
     if (s.isRange) {
       $sl1_input.val(s.from + '  -  ' + s.to);
     }
@@ -25,7 +25,7 @@ $sl1.fsdSlider({
 });
 var $sl2 = $('.slider2');
 var $sl2_input = $('.input-result2');
-$sl2.fsdSlider({
+let sl2Settings={
   min: 5,
   max: 10,
   from: 7,
@@ -33,10 +33,10 @@ $sl2.fsdSlider({
   isVertical: true,
   hideThumbLabel: false,
   isRange: false,
-},
-{
+}
+$sl2.fsdSlider(sl2Settings,{
   handleEvent: (message, result) => {
-    var s = JSON.parse(result);
+    let s = JSON.parse(result);
     if (s.isRange) {
       $sl2_input.val(s.from + '    -    ' + s.to);
     }
@@ -45,9 +45,9 @@ $sl2.fsdSlider({
     }
   }
 });
-var $sl3 = $('.slider3');
-var $sl3_input = $('.input-result3');
-$sl3.fsdSlider({
+let $sl3 = $('.slider3');
+let $sl3_input = $('.input-result3');
+let sl3Settings= {
   min: -15,
   max: 100,
   from: -5,
@@ -56,10 +56,10 @@ $sl3.fsdSlider({
   isVertical: false,
   hideThumbLabel: false,
   isRange: true,
-}, {
+}
+$sl3.fsdSlider(sl3Settings, {
   handleEvent: (message, result) => {
-    var s = JSON.parse(result);
-    
+    let s = JSON.parse(result);
     if (s.isRange) {
       $sl3_input.val(s.from + '    -    ' + s.to);
     }
@@ -68,10 +68,10 @@ $sl3.fsdSlider({
     }
   }
 });
-var sl1_instance = $sl1.data("fsdSlider");
-var sl2_instance = $sl2.data("fsdSlider");
-var sl3_instance = $sl3.data("fsdSlider");
-
+let sl1_instance = $sl1.data("fsdSlider");
+let sl2_instance = $sl2.data("fsdSlider");
+let sl3_instance = $sl3.data("fsdSlider");
+setSettingsToInputs();
 $("input").on("change",function inputHandler(){
   if ($(this).parent().parent().hasClass("form_slider1"))//slider1
   {
@@ -96,4 +96,16 @@ function collectData(sliderNumber) {
     hideThumbLabel: $('.control-panel__hide-thumb-label-' + sliderNumber).is(':checked'),
     isVertical: $('.control-panel__is-vertical-' + sliderNumber).is(':checked')
   }
+}
+function setSettingsToInputs(){
+  if(sl1Settings.isVertical){
+    $('.js-control-panel__is-vertical-slider1').prop('checked', true);
+  }
+  if (sl2Settings.isVertical) {
+    $('.js-control-panel__is-vertical-slider2').prop('checked', true);
+  }
+  if (sl3Settings.isVertical) {
+    $('.js-control-panel__is-vertical-slider3').prop('checked', true);
+  }
+  return 0;
 }
