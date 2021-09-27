@@ -206,7 +206,7 @@ class Slider extends EventObservable{
       if (this.settings.isRange) {
         if ( clickedPos < this.fromInPx ) {
           thumbType = Constants.THUMB_FROM;
-          if (Math.abs(clickedPos - this.getStepInPx()) < this.fromInPx) {
+          if (Math.abs(clickedPos - this.getStepInPx()) <= this.fromInPx) {
             this.fromInPx = this.fromInPx - Math.round(Math.abs(this.fromInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx();
             this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
           }
@@ -215,11 +215,7 @@ class Slider extends EventObservable{
           thumbType = Constants.THUMB_TO;
           if ((clickedPos + this.getStepInPx()) > this.toInPx
             && (Math.floor(Math.round(Math.abs(this.toInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx() + this.toInPx) <= (bottom))) {
-            this.toInPx = 
-                        this.toInPx + 
-                        Math.round(Math.abs(this.toInPx - clickedPos) 
-                        /
-                        this.getStepInPx()) * this.getStepInPx();
+            this.toInPx = this.toInPx + this.roundPos(this.toInPx, clickedPos);
             this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
           }
         }
@@ -227,20 +223,12 @@ class Slider extends EventObservable{
           const pivot = (this.toInPx - this.fromInPx) / 2;
           if (Math.abs(clickedPos + this.getStepInPx()) <= this.fromInPx + pivot) {
             thumbType = Constants.THUMB_FROM;
-            this.fromInPx = 
-                          this.fromInPx + 
-                          Math.round(Math.abs(this.fromInPx - clickedPos) 
-                          /
-                          this.getStepInPx()) * this.getStepInPx();
+            this.fromInPx = this.fromInPx + this.roundPos(this.fromInPx, clickedPos);
             this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
           }
           if (Math.abs(clickedPos + this.getStepInPx()) > this.fromInPx + pivot) {
             thumbType = Constants.THUMB_TO;
-            this.toInPx = 
-                        this.toInPx - 
-                        Math.round(Math.abs(this.toInPx - clickedPos) 
-                        / 
-                        this.getStepInPx()) * this.getStepInPx();
+            this.toInPx = this.toInPx - this.roundPos(this.toInPx, clickedPos);
             this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
           }
         }
@@ -249,22 +237,14 @@ class Slider extends EventObservable{
         thumbType = Constants.THUMB_FROM;
         if (clickedPos +this.getThumbWidthInPx()/2< this.fromInPx) {
           if (Math.abs(clickedPos - this.getStepInPx()) < this.fromInPx) {
-            this.fromInPx = 
-                          this.fromInPx - 
-                          Math.round(Math.abs(this.fromInPx - clickedPos) 
-                          / 
-                          this.getStepInPx()) * this.getStepInPx();
+            this.fromInPx = this.fromInPx - this.roundPos(this.fromInPx, clickedPos);
             this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
           }
         }
         else {
           if (Math.abs(clickedPos + this.getStepInPx()) > this.fromInPx
             && (Math.floor(this.fromInPx + Math.round(Math.abs(this.fromInPx - clickedPos) / this.getStepInPx()) * this.getStepInPx())<=bottom)) {
-            this.fromInPx = 
-                          this.fromInPx + 
-                          Math.round(Math.abs(this.fromInPx - clickedPos) 
-                          / 
-                          this.getStepInPx()) * this.getStepInPx();
+            this.fromInPx = this.fromInPx + this.roundPos(this.fromInPx, clickedPos);
             this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
           }
         }
@@ -277,7 +257,7 @@ class Slider extends EventObservable{
 
   private handleThumbMove(thumbType:string,e: Event) {
     let newPos: number;
-    const bottom = this.getSliderLengthInPx()-this.getThumbWidthInPx();
+    const bottom = this.getSliderLengthInPx() - this.getThumbWidthInPx();
     if (e instanceof MouseEvent) {
       if (this.settings.isVertical) {
         newPos = e.clientY - this.getRange().getBoundingClientRect().top - this.getThumbWidthInPx() / 2;
