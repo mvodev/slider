@@ -5,6 +5,7 @@
   "dependencies": {
     "@types/jquery": "^3.5.5",
     "@types/resize-observer-browser": "^0.1.6",
+    "eslint-config-airbnb-base": "^14.2.1",
     "jquery": "^3.5.1",
     "tsd": "^0.14.0"
   },

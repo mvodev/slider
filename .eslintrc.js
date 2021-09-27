@@ -1,24 +1,25 @@
 module.exports = {
-    "env": {
-        "browser": true,
-        "es2021": true,
-        "jquery": true,
-        "jasmine": true,
-        "node":true,
+    env: {
+        browser: true,
+        es2021: true,
+        jquery: true,
+        jasmine: true,
+        node:true,
     },
-    "extends": [
+    extends: [
+        "airbnb-base",
         "eslint:recommended",
-        "plugin:@typescript-eslint/recommended"
+        "plugin:@typescript-eslint/recommended",
     ],
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": 12,
-        "sourceType": "module"
+    parser: "@typescript-eslint/parser",
+    parserOptions: {
+        ecmaVersion: 12,
+        sourceType: "module",
     },
-    "plugins": [
-        "fsd"
+    plugins: [
+        "fsd",
     ],
-    "rules": {
+    rules: {
         "fsd/hof-name-prefix": "error",
         "fsd/no-heavy-constructor": "error",
         "fsd/jq-cache-dom-elements": "error",
