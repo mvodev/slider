@@ -1,24 +1,28 @@
-import { IObservable } from "./IObservable";
-import { IObserver } from "./IObserver";
-import { Messages } from '../utils/Messages';
+import IObservable from './IObservable';
+import IObserver from './IObserver';
+import Messages from '../utils/Messages';
 
 class EventObservable implements IObservable {
   private observers: Array<IObserver>;
+
   constructor() {
     this.observers = [];
   }
+
   addObserver(o: IObserver):void {
     this.observers.push(o);
   }
+
   removeObserver(o: IObserver):void {
-    this.observers.filter(subscriber => subscriber !== o);
+    this.observers.filter((subscriber) => subscriber !== o);
   }
-  notifyObservers(msg: Messages, settings: string,width:number):void {
-    this.observers.forEach(elem => {
-      if(elem&&("handleEvent" in elem)){
-        elem.handleEvent(msg, settings,width);
+
+  notifyObservers(msg: Messages, settings: string, width:number):void {
+    this.observers.forEach((elem) => {
+      if (elem && ('handleEvent' in elem)) {
+        elem.handleEvent(msg, settings, width);
       }
     });
   }
 }
-export {EventObservable}
+export default EventObservable;

@@ -1,13 +1,17 @@
-import { ISettings } from '../../model/ISettings';
-import { ClassNaming } from '../../utils/ClassNaming';
-import { ColoredRange } from './ColoredRange';
-import { Thumb } from './Thumb';
+import ISettings from '../../model/ISettings';
+import ClassNaming from '../../utils/ClassNaming';
+import ColoredRange from './ColoredRange';
+import Thumb from './Thumb';
 
-class Range{
+class Range {
   private range: HTMLDivElement;
+
   private coloredRange!: ColoredRange;
+
   private viewSettings:ISettings;
+
   private thumbFrom!: Thumb;
+
   private thumbTo!: Thumb;
 
   constructor(settings:ISettings) {
@@ -25,16 +29,16 @@ class Range{
     return this.range;
   }
 
-  render(settings:string):void{
+  render(settings:string):void {
     Object.assign(this.viewSettings, JSON.parse(settings));
     this.getRange().appendChild(this.thumbFrom.getThumb());
-    
+
     if (this.viewSettings.isRange) {
       this.getRange().appendChild(this.thumbTo.getThumb());
     }
   }
 
-  setVertical():void{
+  setVertical():void {
     this.range.classList.add(ClassNaming.RANGE_IS_VERTICAL);
     this.coloredRange.getColoredRange().classList.add(ClassNaming.COLORED_RANGE_IS_VERTICAL);
     this.thumbFrom.setVertical();
@@ -42,8 +46,8 @@ class Range{
       this.thumbTo.setVertical();
     }
   }
-  
-  setHorizontal():void{
+
+  setHorizontal():void {
     this.range.classList.remove(ClassNaming.RANGE_IS_VERTICAL);
     this.coloredRange.getColoredRange().classList.remove(ClassNaming.COLORED_RANGE_IS_VERTICAL);
     this.thumbFrom.setHorizontal();
@@ -51,10 +55,9 @@ class Range{
       this.thumbTo.setHorizontal();
     }
   }
-  
-  setColoredRange(thumbWidthInPercentage:number):void{
-    this.coloredRange.setColoredRange(
-      this.viewSettings,
+
+  setColoredRange(thumbWidthInPercentage:number):void {
+    this.coloredRange.setColoredRange(this.viewSettings,
       this.thumbFrom.getThumb(),
       this.thumbTo.getThumb(),
       thumbWidthInPercentage);
@@ -75,35 +78,34 @@ class Range{
     }
   }
 
-showLabel(): void {
-  this.thumbFrom.showLabel();
-  if (this.viewSettings.isRange) {
-    this.thumbTo.showLabel();
+  showLabel(): void {
+    this.thumbFrom.showLabel();
+    if (this.viewSettings.isRange) {
+      this.thumbTo.showLabel();
+    }
   }
-}
 
-setValueToLabelThumbFrom(value: number):void{
-  this.thumbFrom.setValueToLabel(value);
-}
+  setValueToLabelThumbFrom(value: number):void {
+    this.thumbFrom.setValueToLabel(value);
+  }
 
-setValueToLabelThumbTo(value: number): void {
-  this.thumbTo.setValueToLabel(value);
-}
+  setValueToLabelThumbTo(value: number): void {
+    this.thumbTo.setValueToLabel(value);
+  }
 
-setThumbPositionFrom(shift: number, isVertical: boolean | undefined):void{
-  this.thumbFrom.setThumbPosition(shift, isVertical);
-}
+  setThumbPositionFrom(shift: number, isVertical: boolean | undefined):void {
+    this.thumbFrom.setThumbPosition(shift, isVertical);
+  }
 
-setThumbPositionTo(shift: number, isVertical: boolean | undefined): void {
-  this.thumbTo.setThumbPosition(shift, isVertical);
-}
+  setThumbPositionTo(shift: number, isVertical: boolean | undefined): void {
+    this.thumbTo.setThumbPosition(shift, isVertical);
+  }
 
-  getThumbWidthInPx():number{
+  getThumbWidthInPx():number {
     if (this.viewSettings.isVertical) {
       return this.getThumbFrom().offsetHeight;
     }
     return this.getThumbFrom().offsetWidth;
   }
-
 }
-export {Range}
+export default Range;

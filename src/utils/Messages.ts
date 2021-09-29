@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-shadow
 const enum Messages {
   INIT,
   UPDATE,
@@ -6,4 +7,4 @@ const enum Messages {
   SET_FROM,
   SET_TO,
 }
-export {Messages}
+export default Messages;

@@ -4,3 +4,4 @@ export namespace Constants{
   export const THUMB_FROM = 'thumbFrom';
   export const THUMB_TO = 'thumbTo';
 }
+export default Constants;

@@ -1,8 +1,8 @@
-import { ClassNaming } from "../../utils/ClassNaming";
-
+import ClassNaming from '../../utils/ClassNaming';
 
 class ThumbLabel {
   private thumbLabelContainer: HTMLDivElement;
+
   private thumbLabelValue: HTMLSpanElement;
 
   constructor() {
@@ -16,11 +16,11 @@ class ThumbLabel {
   }
 
   getThumbLabelContainer(): HTMLDivElement {
-  return this.thumbLabelContainer;
+    return this.thumbLabelContainer;
   }
 
   setValueToLabel(value: number): void {
-    this.thumbLabelValue.innerText = '' + value;
+    this.thumbLabelValue.innerText = `${value}`;
   }
 
   hideLabel(): void {
@@ -31,14 +31,13 @@ class ThumbLabel {
     this.thumbLabelContainer.classList.remove(ClassNaming.HIDE_ELEMENT);
   }
 
-  setVertical():void{
+  setVertical():void {
     this.thumbLabelContainer.classList.add(ClassNaming.THUMB_LABEL_IS_VERTICAL);
   }
 
-  setHorizontal():void{
+  setHorizontal():void {
     this.thumbLabelContainer.classList.remove(ClassNaming.THUMB_LABEL_IS_VERTICAL);
   }
-
 }
 
-export { ThumbLabel }
+export default ThumbLabel;

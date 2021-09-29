@@ -1,5 +1,6 @@
-import { Messages } from '../utils/Messages';
+import Messages from '../utils/Messages';
+
 interface IObserver {
-  handleEvent(msg: Messages, s: string,width:number):void;
+  handleEvent(msg: Messages, s: string, width:number):void;
 }
-export {IObserver}
+export default IObserver;

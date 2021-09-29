@@ -1,8 +1,10 @@
-import { ThumbLabel } from "./ThumbLabel";
+import ThumbLabel from './ThumbLabel';
 
-class Thumb{
+class Thumb {
   private thumb: HTMLDivElement;
+
   private thumbLabel:ThumbLabel;
+
   private thumbLabelHTML:HTMLDivElement;
 
   constructor(className:string) {
@@ -17,18 +19,17 @@ class Thumb{
     return this.thumb;
   }
 
-  setThumbPosition(shift:number,isVertical:boolean|undefined):void{
+  setThumbPosition(shift:number, isVertical:boolean|undefined):void {
     if (isVertical) {
-      this.getThumb().style.top = shift + '%';
+      this.getThumb().style.top = `${shift}%`;
       this.getThumb().style.left = '-25%';
-    }
-    else {
-      this.getThumb().style.left = shift + '%';
+    } else {
+      this.getThumb().style.left = `${shift}%`;
       this.getThumb().style.top = '-25%';
     }
   }
 
-  setVertical():void{
+  setVertical():void {
     this.thumbLabel.setVertical();
   }
 
@@ -36,17 +37,16 @@ class Thumb{
     this.thumbLabel.setHorizontal();
   }
 
-  hideLabel():void{
+  hideLabel():void {
     this.thumbLabel.hideLabel();
   }
 
-  showLabel():void{
+  showLabel():void {
     this.thumbLabel.showLabel();
   }
 
   setValueToLabel(value: number): void {
     this.thumbLabel.setValueToLabel(value);
   }
-
 }
-export {Thumb}
+export default Thumb;

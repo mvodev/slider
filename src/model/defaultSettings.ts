@@ -1,4 +1,5 @@
-import {ISettings} from './ISettings';
+import ISettings from './ISettings';
+
 const defaultSettings: ISettings = {
   min: 0,
   max: 10,
@@ -10,4 +11,4 @@ const defaultSettings: ISettings = {
   hideThumbLabel: false,
 };
 
-export {defaultSettings};
+export default defaultSettings;

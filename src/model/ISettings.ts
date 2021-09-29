@@ -8,4 +8,4 @@ interface ISettings {
   isRange?: boolean;
   hideThumbLabel?: boolean;
 }
-export {ISettings}
+export default ISettings;

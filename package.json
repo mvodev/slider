@@ -6,6 +6,8 @@
     "@types/jquery": "^3.5.5",
     "@types/resize-observer-browser": "^0.1.6",
     "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.24.2",
     "jquery": "^3.5.1",
     "tsd": "^0.14.0"
   },

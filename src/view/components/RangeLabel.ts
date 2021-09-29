@@ -1,12 +1,16 @@
-import { defaultSettings } from '../../model/defaultSettings';
-import { ISettings } from '../../model/ISettings';
-import { ClassNaming } from '../../utils/ClassNaming';
+import defaultSettings from '../../model/defaultSettings';
+import ISettings from '../../model/ISettings';
+import ClassNaming from '../../utils/ClassNaming';
 
-class RangeLabel{
+class RangeLabel {
   private rangeLabelContainer!: HTMLDivElement;
+
   private minLabel!: HTMLSpanElement;
+
   private maxLabel!: HTMLSpanElement;
+
   private labels:HTMLSpanElement[];
+
   private settings!:ISettings;
 
   constructor(settings:ISettings) {
@@ -15,7 +19,7 @@ class RangeLabel{
     this.initComponents();
   }
 
-  render(settings:ISettings):void{
+  render(settings:ISettings):void {
     this.settings = Object.assign(this.settings, settings);
     this.setMinRange(this.settings.min);
     this.setMaxRange(this.settings.max);
@@ -25,12 +29,12 @@ class RangeLabel{
     return this.rangeLabelContainer;
   }
 
-  setMinRange(value: number) :void{
-    this.minLabel.innerText = '' + value;
+  setMinRange(value: number) :void {
+    this.minLabel.innerText = `${value}`;
   }
 
   setMaxRange(value: number):void {
-    this.maxLabel.innerText = '' + value;
+    this.maxLabel.innerText = `${value}`;
   }
 
   private initComponents() {
@@ -50,27 +54,24 @@ class RangeLabel{
     this.labels.push(this.maxLabel);
   }
 
-  setVertical():void{
+  setVertical():void {
     this.getRangeLabel().classList.add(ClassNaming.RANGE_LABEL_IS_VERTICAL);
   }
 
-  setHorizontal():void{
+  setHorizontal():void {
     this.getRangeLabel().classList.remove(ClassNaming.RANGE_LABEL_IS_VERTICAL);
   }
 
-  getLabels():HTMLElement[]{
+  getLabels():HTMLElement[] {
     return this.labels;
   }
 
-  hideLabels():void{
+  hideLabels():void {
     this.rangeLabelContainer.classList.add(ClassNaming.HIDE_ELEMENT);
   }
 
   showLabels(): void {
     this.rangeLabelContainer.classList.remove(ClassNaming.HIDE_ELEMENT);
   }
-
-  
-
 }
-export {RangeLabel}
+export default RangeLabel;

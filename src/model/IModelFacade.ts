@@ -1,10 +1,10 @@
 interface IModelFacade {
   getMin(): number;
   getMax(): number;
-  setFrom(pos: number,value:number): void;
+  setFrom(pos: number, value:number): void;
   getFrom(): number;
-  setTo(pos: number,value:number): void;
+  setTo(pos: number, value:number): void;
   getTo(): number;
   getStep(): number;
 }
-export { IModelFacade }
+export default IModelFacade;

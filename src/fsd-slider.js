@@ -1,11 +1,12 @@
-import '../src/styles/fsd-slider.scss';
-import { View } from './view/View';
-import { Model } from './model/Model';
-import { Presenter } from './presenter/Presenter';
+import './styles/fsd-slider.scss';
+import View from './view/View';
+import Model from './model/Model';
+import Presenter from './presenter/Presenter';
+
 (function ($) {
-  var FsdSlider = function (root, settings,callback) {
-    let model = new Model(settings);
-    let view = new View(root);
+  const FsdSlider = function (root, settings, callback) {
+    const model = new Model(settings);
+    const view = new View(root);
     this.presenter = new Presenter(view, model);
     model.addObserver(this.presenter);
     view.addObserver(this.presenter);
@@ -13,15 +14,15 @@ import { Presenter } from './presenter/Presenter';
     this.presenter.initialize();
   };
   FsdSlider.prototype = {
-    update: function (newSettings) {
+    update(newSettings) {
       this.presenter.update(newSettings);
     },
   };
-  $.fn.fsdSlider = function (settings,callback) {
+  $.fn.fsdSlider = function (settings, callback) {
     return this.each(function () {
-      if (!$.data(this, "fsd-slider")) {
-        $.data(this, "fsd-slider", new FsdSlider(this, settings, callback));
+      if (!$.data(this, 'fsd-slider')) {
+        $.data(this, 'fsd-slider', new FsdSlider(this, settings, callback));
       }
     });
   };
-})(jQuery);
+}(jQuery));
