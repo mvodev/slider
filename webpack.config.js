@@ -3,10 +3,10 @@ const path = require('path');
 const HTMLWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CopyPlugin = require("copy-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 
-const cssLoaders = extra => {
+const cssLoaders = (extra) => {
   const loaders = [{
     loader: MiniCssExtractPlugin.loader,
     options: {},
@@ -17,9 +17,9 @@ const cssLoaders = extra => {
   }
 
   return loaders;
-}
+};
 
-let demoConfig = {
+const demoConfig = {
   context: path.resolve(__dirname, 'src'),
   mode: 'development',
   entry: {
@@ -34,54 +34,54 @@ let demoConfig = {
   },
   optimization: {
     splitChunks: {
-      chunks: 'all'
-    }
+      chunks: 'all',
+    },
   },
   plugins: [
     new HTMLWebpackPlugin(
       {
         template: './index.pug',
         chunks: ['main'],
-      }
+      },
     ),
     new CopyPlugin({
       patterns: [
         {
           from: path.resolve(__dirname, 'src/assets/'),
-          to: path.resolve(__dirname, 'docs')
+          to: path.resolve(__dirname, 'docs'),
         },
       ],
     }),
     new CleanWebpackPlugin(),
     new webpack.ProvidePlugin({
       $: 'jquery',
-      jQuery: 'jquery'
+      jQuery: 'jquery',
     }),
     new MiniCssExtractPlugin({
-      filename: 'fsd-slider.css'
+      filename: 'fsd-slider.css',
     }),
   ],
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: cssLoaders()
+        use: cssLoaders(),
       },
       {
         test: /\.pug$/,
-        use: ["pug-loader"],
+        use: ['pug-loader'],
       },
       {
         test: /\.(png|jpg|svg|gif)$/,
-        use: ['file-loader']
+        use: ['file-loader'],
       },
       {
         test: /\.(ttf|woff|woff2|eot|otf)$/,
-        use: ['file-loader']
+        use: ['file-loader'],
       },
       {
         test: /\.s[ac]ss$/,
-        use: cssLoaders('sass-loader')
+        use: cssLoaders('sass-loader'),
       },
       {
         test: /\.ts(x?)$/,
@@ -89,13 +89,13 @@ let demoConfig = {
         use: [
           'babel-loader',
           'ts-loader',
-        ]
+        ],
       },
-    ]
-  }
+    ],
+  },
 };
 
-let libConfig = {
+const libConfig = {
   context: path.resolve(__dirname, 'src'),
   mode: 'development',
   entry: {
@@ -110,50 +110,50 @@ let libConfig = {
   },
   optimization: {
     splitChunks: {
-      chunks: 'all'
-    }
+      chunks: 'all',
+    },
   },
   plugins: [
     new HTMLWebpackPlugin(
       {
         template: './index.pug',
         chunks: ['lib'],
-      }
+      },
     ),
     new CopyPlugin({
       patterns: [
         {
           from: path.resolve(__dirname, 'src/assets/'),
-          to: path.resolve(__dirname, 'docs')
+          to: path.resolve(__dirname, 'docs'),
         },
       ],
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
-      filename: 'fsd-slider.css'
+      filename: 'fsd-slider.css',
     }),
   ],
   module: {
     rules: [
       {
         test: /\.css$/,
-        use: cssLoaders()
+        use: cssLoaders(),
       },
       {
         test: /\.pug$/,
-        use: ["pug-loader"],
+        use: ['pug-loader'],
       },
       {
         test: /\.(png|jpg|svg|gif)$/,
-        use: ['file-loader']
+        use: ['file-loader'],
       },
       {
         test: /\.(ttf|woff|woff2|eot|otf)$/,
-        use: ['file-loader']
+        use: ['file-loader'],
       },
       {
         test: /\.s[ac]ss$/,
-        use: cssLoaders('sass-loader')
+        use: cssLoaders('sass-loader'),
       },
       {
         test: /\.ts(x?)$/,
@@ -161,9 +161,9 @@ let libConfig = {
         use: [
           'babel-loader',
           'ts-loader',
-        ]
+        ],
       },
-    ]
+    ],
   },
 };
 
