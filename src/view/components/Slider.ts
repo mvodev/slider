@@ -5,7 +5,6 @@ import ISettings from '../../model/ISettings';
 import defaultSettings from '../../model/defaultSettings';
 import EventObservable from '../../observers/EventObservable';
 import ClassNaming from '../../utils/ClassNaming';
-// eslint-disable-next-line import/no-named-as-default
 import Constants from '../../utils/Constants';
 import Utils from '../../utils/Utils';
 import ErrorMessage from '../../error-message/ErrorMessage';
