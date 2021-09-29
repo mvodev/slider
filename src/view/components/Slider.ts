@@ -5,6 +5,7 @@ import ISettings from '../../model/ISettings';
 import defaultSettings from '../../model/defaultSettings';
 import EventObservable from '../../observers/EventObservable';
 import ClassNaming from '../../utils/ClassNaming';
+// eslint-disable-next-line import/no-named-as-default
 import Constants from '../../utils/Constants';
 import Utils from '../../utils/Utils';
 import ErrorMessage from '../../error-message/ErrorMessage';
@@ -102,7 +103,7 @@ class Slider extends EventObservable {
       //  set min value label
       this.getLabels()[0].setAttribute('value', this.settings.min.toString());
       this.getLabels()[0].style.left = `${(this.getThumbWidthInPercentage() / 2
-        - (this.getLabels()[0].offsetWidth / (this.getSliderLengthInPx() * 100)) / 2)}%`;
+        - ((this.getLabels()[0].offsetWidth * 100) / (this.getSliderLengthInPx())) / 2)}%`;
       this.getLabels()[0].style.top = '';
       // set max value label
       this.getLabels()[2].setAttribute('value', this.settings.max.toString());
@@ -111,12 +112,12 @@ class Slider extends EventObservable {
       // set average value label
       this.getLabels()[1].setAttribute('value', pivotRounded.toString());
       this.getLabels()[1].innerText = pivotRounded.toString();
-      this.getLabels()[1].style.left = `${(this.convertFromValueToPercent(pivotRounded) + this.getThumbWidthInPercentage() / 2 - (this.getLabels()[1].offsetWidth / (this.getSliderLengthInPx() * 100) / 2))}%`;
+      this.getLabels()[1].style.left = `${(this.convertFromValueToPercent(pivotRounded) + this.getThumbWidthInPercentage() / 2 - ((this.getLabels()[1].offsetWidth * 100) / (this.getSliderLengthInPx()) / 2))}%`;
       this.getLabels()[1].style.top = '';
     } else {
       // set min value label
       this.getLabels()[0].setAttribute('value', this.settings.min.toString());
-      this.getLabels()[0].style.top = `${(this.getThumbWidthInPercentage() / 2 - this.getLabels()[0].offsetHeight / (this.getSliderLengthInPx() * 100) / 2)}%`;
+      this.getLabels()[0].style.top = `${(this.getThumbWidthInPercentage() / 2 - (this.getLabels()[0].offsetHeight * 100) / (this.getSliderLengthInPx()) / 2)}%`;
       this.getLabels()[0].style.left = '';
       // set max value label
       this.getLabels()[2].setAttribute('value', this.settings.max.toString());
@@ -125,7 +126,7 @@ class Slider extends EventObservable {
       // set average value label
       this.getLabels()[1].setAttribute('value', pivotRounded.toString());
       this.getLabels()[1].innerText = pivotRounded.toString();
-      this.getLabels()[1].style.top = `${(this.convertFromValueToPercent(pivotRounded) + this.getThumbWidthInPercentage() / 2 - (this.getLabels()[1].offsetHeight / (this.getSliderLengthInPx() * 100) / 2))}%`;
+      this.getLabels()[1].style.top = `${(this.convertFromValueToPercent(pivotRounded) + this.getThumbWidthInPercentage() / 2 - ((this.getLabels()[1].offsetHeight * 100) / (this.getSliderLengthInPx()) / 2))}%`;
       this.getLabels()[1].style.left = '';
     }
   }
