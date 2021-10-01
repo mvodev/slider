@@ -31,11 +31,12 @@ class ColoredRange {
       }
     } else if (!viewSettings.isRange) {
       if (viewSettings.isVertical) {
-        this.getColoredRange().style.left = '0%';
+        this.getColoredRange().style.top = '0%';
         this.getColoredRange().style.width = '100%';
         this.getColoredRange().style.height = `${(Number.parseInt(thumbFrom.style.top, 10) + thumbWidthInPercentage / 2)}%`;
       } else {
         this.getColoredRange().style.width = `${(Number.parseInt(thumbFrom.style.left, 10) + thumbWidthInPercentage / 2)}%`;
+        this.getColoredRange().style.left = '0%';
         this.getColoredRange().style.top = '0%';
         this.getColoredRange().style.height = '100%';
       }

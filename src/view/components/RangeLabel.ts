@@ -1,4 +1,3 @@
-import defaultSettings from '../../model/defaultSettings';
 import ISettings from '../../model/ISettings';
 import ClassNaming from '../../utils/ClassNaming';
 
@@ -15,7 +14,7 @@ class RangeLabel {
 
   constructor(settings:ISettings) {
     this.labels = [];
-    this.settings = Object.assign(defaultSettings, settings);
+    this.settings = { ...settings };
     this.initComponents();
   }
 

@@ -36,7 +36,8 @@ class Slider extends EventObservable {
 
   constructor(rootElem: HTMLDivElement) {
     super();
-    this.settings = { ...defaultSettings };
+    // eslint-disable-next-line prefer-object-spread
+    this.settings = Object.assign({}, defaultSettings);
     if (rootElem) {
       this.rootElem = rootElem;
     } else {

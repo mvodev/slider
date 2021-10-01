@@ -7,7 +7,7 @@ import defaultSettings from './defaultSettings';
 import ErrorMessage from '../error-message/ErrorMessage';
 
 class Model extends EventObservable implements IModelFacade {
-  private settings: ISettings
+  private settings: ISettings;
 
   constructor(settings: ISettings) {
     super();
@@ -16,7 +16,7 @@ class Model extends EventObservable implements IModelFacade {
   }
 
   private setSettings(settings:ISettings):void {
-    this.settings = Object.assign(this.settings, settings);
+    this.settings = { ...settings };
   }
 
   getSettings(): string {
@@ -74,6 +74,7 @@ class Model extends EventObservable implements IModelFacade {
     const newStep = Utils.convertFromInputToNumber(settings.step);
     const newIsVertical = Utils.convertFromInputToBoolean(settings.isVertical);
     const newHideThumbLabel = Utils.convertFromInputToBoolean(settings.hideThumbLabel);
+    const newRange = Utils.convertFromInputToBoolean(settings.isRange);
     if (newMin !== undefined && newMax !== undefined) {
       if (Math.abs(newMax - newMin) < this.settings.step) {
         throw new ErrorMessage('unacceptable values,difference between min and max more than step');
@@ -81,8 +82,8 @@ class Model extends EventObservable implements IModelFacade {
     }
     if (newMin !== undefined) {
       if (newMin > this.settings.from) {
-        throw new ErrorMessage('unacceptable value,min value more than from value');
         this.settings.min = this.settings.from;
+        throw new ErrorMessage('unacceptable value,min value more than from value');
       } else {
         this.settings.min = newMin;
       }
@@ -133,7 +134,7 @@ class Model extends EventObservable implements IModelFacade {
       if (newStep < 0) {
         throw new ErrorMessage('step must be positive');
       } else if (newStep === 0) {
-        throw new ErrorMessage('step must be zero');
+        throw new ErrorMessage('step must not be zero');
       } else if (newStep > (Math.abs(this.settings.max - this.settings.min))) {
         throw new ErrorMessage('step must be more than difference between max and min');
       } else {
@@ -144,8 +145,11 @@ class Model extends EventObservable implements IModelFacade {
     }
     this.settings.isVertical = newIsVertical;
     this.settings.hideThumbLabel = newHideThumbLabel;
-    if (settings.isRange !== undefined) {
-      this.settings.isRange = settings.isRange;
+    if (newRange !== undefined) {
+      this.settings.isRange = newRange;
+      if (this.settings.from >= this.settings.to) {
+        this.settings.from = this.settings.min;
+      }
     }
   }
 

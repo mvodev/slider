@@ -70,7 +70,7 @@ const sl1Instance = $sl1.data('fsdSlider');
 const sl2Instance = $sl2.data('fsdSlider');
 const sl3Instance = $sl3.data('fsdSlider');
 function collectData(sliderNumber) {
-  return {
+  const result = {
     min: $(`.js-control-panel__min-${sliderNumber}`).val(),
     max: $(`.js-control-panel__max-${sliderNumber}`).val(),
     from: $(`.js-control-panel__from-${sliderNumber}`).val(),
@@ -78,7 +78,9 @@ function collectData(sliderNumber) {
     step: $(`.js-control-panel__step-${sliderNumber}`).val(),
     hideThumbLabel: $(`.js-control-panel__hide-thumb-label-${sliderNumber}`).is(':checked'),
     isVertical: $(`.js-control-panel__is-vertical-${sliderNumber}`).is(':checked'),
+    isRange: $(`.js-control-panel__is-range-${sliderNumber}`).is(':checked'),
   };
+  return result;
 }
 function inputHandler() {
   if ($(this).parent().parent().hasClass('js-control-panel__form_slider1')) {
@@ -94,11 +96,29 @@ function setSettingsToInputs() {
   if (sl1Settings.isVertical) {
     $('.js-control-panel__is-vertical-slider1').prop('checked', true);
   }
+  if (sl1Settings.isRange) {
+    $('.js-control-panel__is-range-slider1').prop('checked', true);
+  }
+  if (sl1Settings.hideThumbLabel) {
+    $('.js-control-panel__hide-thumb-label-slider1').prop('checked', true);
+  }
   if (sl2Settings.isVertical) {
     $('.js-control-panel__is-vertical-slider2').prop('checked', true);
   }
+  if (sl2Settings.isRange) {
+    $('.js-control-panel__is-range-slider2').prop('checked', true);
+  }
+  if (sl2Settings.hideThumbLabel) {
+    $('.js-control-panel__hide-thumb-label-slider2').prop('checked', true);
+  }
   if (sl3Settings.isVertical) {
     $('.js-control-panel__is-vertical-slider3').prop('checked', true);
+  }
+  if (sl3Settings.isRange) {
+    $('.js-control-panel__is-range-slider3').prop('checked', true);
+  }
+  if (sl3Settings.hideThumbLabel) {
+    $('.js-control-panel__hide-thumb-label-slider3').prop('checked', true);
   }
   return 0;
 }
