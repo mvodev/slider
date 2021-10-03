@@ -132,12 +132,15 @@ class Model extends EventObservable implements IModelFacade {
     }
     if (newStep !== undefined) {
       if (newStep < 0) {
-        throw new ErrorMessage('step must be positive');
+        // eslint-disable-next-line no-new
+        new ErrorMessage('step must be positive');
       } else if (newStep === 0) {
-        throw new ErrorMessage('step must not be zero');
+        // eslint-disable-next-line no-new
+        new ErrorMessage('step must not be zero');
       } else if (newStep > (Math.abs(this.settings.max - this.settings.min))) {
-        throw new ErrorMessage('step must be more than difference between max and min');
-      } else {
+        // eslint-disable-next-line no-new
+        new ErrorMessage('step must be more than difference between max and min');
+      } else if (this.settings.step !== newStep) {
         this.settings.step = newStep;
         this.settings.from = this.settings.min + this.settings.step;
         this.settings.to = this.settings.from + this.settings.step;

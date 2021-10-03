@@ -5,6 +5,7 @@ function setValuesToControlPanel(s, slider) {
   $(`.js-control-panel__min-${slider}`).val(s.min);
   $(`.js-control-panel__max-${slider}`).val(s.max);
   $(`.js-control-panel__from-${slider}`).val(s.from);
+  $(`.js-control-panel__step-${slider}`).val(s.step);
   if (s.isRange) {
     $(`.js-control-panel__to-${slider}`).val(s.to);
   } else {
