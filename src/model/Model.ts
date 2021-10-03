@@ -150,6 +150,7 @@ class Model extends EventObservable implements IModelFacade {
       if (this.settings.from >= this.settings.to) {
         this.settings.from = this.settings.min;
       }
+      this.settings.to = this.settings.max;
     }
   }
 

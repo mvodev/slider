@@ -41,7 +41,8 @@ class Slider extends EventObservable {
     if (rootElem) {
       this.rootElem = rootElem;
     } else {
-      throw new ErrorMessage('root elem of Slider is null!');
+      // eslint-disable-next-line no-new
+      new ErrorMessage('root elem of Slider is null!');
     }
 
     this.fromInPx = 0;

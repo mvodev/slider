@@ -20,7 +20,8 @@ class View extends EventObservable implements IObserver {
       this.rootElem = root;
       this.slider = new Slider(this.rootElem);
       this.slider.addObserver(this);
-    } else throw new ErrorMessage('root elem of Slider is null!');
+    // eslint-disable-next-line no-new
+    } else new ErrorMessage('root elem of Slider is null!');
   }
 
   handleEvent(msg: Messages, settings: string): void {
