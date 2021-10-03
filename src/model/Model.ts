@@ -118,17 +118,15 @@ class Model extends EventObservable implements IModelFacade {
     if (newFrom !== undefined && this.settings.isRange) {
       if (newFrom > this.settings.to) {
         new ErrorMessage('unacceptable value,from more than to');
-      }
-      if (newFrom < this.settings.min) {
+      } else if (newFrom < this.settings.min) {
         new ErrorMessage('unacceptable value,from less than min');
-      }
-      this.settings.from = newFrom;
+      } else this.settings.from = newFrom;
     }
     if (newTo !== undefined && this.settings.isRange) {
       if (newTo < this.settings.from) {
-        throw new ErrorMessage('unacceptable value,to less than from');
+        new ErrorMessage('unacceptable value,to less than from');
       } else if (newTo > this.settings.max) {
-        throw new ErrorMessage('unacceptable value,to more than max');
+        new ErrorMessage('unacceptable value,to more than max');
       } else this.settings.to = newTo;
     }
     if (newStep !== undefined) {
