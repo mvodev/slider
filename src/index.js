@@ -1,8 +1,23 @@
 import './index.scss';
 import './fsd-slider.js';
 
+function setValuesToControlPanel(s, slider) {
+  $(`.js-control-panel__min-${slider}`).val(s.min);
+  $(`.js-control-panel__max-${slider}`).val(s.max);
+  $(`.js-control-panel__from-${slider}`).val(s.from);
+  if (s.isRange) {
+    $(`.js-control-panel__to-${slider}`).val(s.to);
+  } else {
+    $(`.js-control-panel__to-${slider}`).val('');
+  }
+  if (s.isRange) {
+    $(`.js-control-panel__values-${slider}`).val(`${s.from} - ${s.to}`);
+  } else {
+    $(`.js-control-panel__values-${slider}`).val(s.from);
+  }
+}
+
 const $sl1 = $('.slider1');
-const $sl1Input = $('.input-result1');
 const sl1Settings = {
   min: 5000,
   max: 25000,
@@ -13,18 +28,15 @@ const sl1Settings = {
   hideThumbLabel: false,
   isRange: true,
 };
+
 $sl1.fsdSlider(sl1Settings, {
   handleEvent: (message, result) => {
     const s = JSON.parse(result);
-    if (s.isRange) {
-      $sl1Input.val(`${s.from} - ${s.to}`);
-    } else {
-      $sl1Input.val(s.from);
-    }
+    setValuesToControlPanel(s, 'slider1');
   },
 });
+
 const $sl2 = $('.slider2');
-const $sl2Input = $('.input-result2');
 const sl2Settings = {
   min: 5,
   max: 10,
@@ -34,18 +46,15 @@ const sl2Settings = {
   hideThumbLabel: false,
   isRange: false,
 };
+
 $sl2.fsdSlider(sl2Settings, {
   handleEvent: (message, result) => {
     const s = JSON.parse(result);
-    if (s.isRange) {
-      $sl2Input.val(`${s.from} - ${s.to}`);
-    } else {
-      $sl2Input.val(s.from);
-    }
+    setValuesToControlPanel(s, 'slider2');
   },
 });
+
 const $sl3 = $('.slider3');
-const $sl3Input = $('.input-result3');
 const sl3Settings = {
   min: -15,
   max: 100,
@@ -56,19 +65,18 @@ const sl3Settings = {
   hideThumbLabel: false,
   isRange: true,
 };
+
 $sl3.fsdSlider(sl3Settings, {
   handleEvent: (message, result) => {
     const s = JSON.parse(result);
-    if (s.isRange) {
-      $sl3Input.val(`${s.from} - ${s.to}`);
-    } else {
-      $sl3Input.val(s.from);
-    }
+    setValuesToControlPanel(s, 'slider3');
   },
 });
+
 const sl1Instance = $sl1.data('fsdSlider');
 const sl2Instance = $sl2.data('fsdSlider');
 const sl3Instance = $sl3.data('fsdSlider');
+
 function collectData(sliderNumber) {
   const result = {
     min: $(`.js-control-panel__min-${sliderNumber}`).val(),
@@ -82,6 +90,7 @@ function collectData(sliderNumber) {
   };
   return result;
 }
+
 function inputHandler() {
   if ($(this).parent().parent().hasClass('js-control-panel__form_slider1')) {
     sl1Instance.update(collectData('slider1'));
@@ -91,7 +100,9 @@ function inputHandler() {
     sl3Instance.update(collectData('slider3'));
   }
 }
+
 $('input').on('change', inputHandler);
+
 function setSettingsToInputs() {
   if (sl1Settings.isVertical) {
     $('.js-control-panel__is-vertical-slider1').prop('checked', true);
@@ -122,4 +133,5 @@ function setSettingsToInputs() {
   }
   return 0;
 }
+
 setSettingsToInputs();

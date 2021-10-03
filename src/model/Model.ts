@@ -146,11 +146,13 @@ class Model extends EventObservable implements IModelFacade {
     this.settings.isVertical = newIsVertical;
     this.settings.hideThumbLabel = newHideThumbLabel;
     if (newRange !== undefined) {
+      if (!this.settings.isRange) {
+        this.settings.to = this.settings.max;
+      }
       this.settings.isRange = newRange;
       if (this.settings.from >= this.settings.to) {
         this.settings.from = this.settings.min;
       }
-      this.settings.to = this.settings.max;
     }
   }
 
