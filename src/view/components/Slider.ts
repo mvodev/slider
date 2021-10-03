@@ -1,5 +1,3 @@
-/* eslint-disable prefer-template */
-/* eslint-disable no-console */
 /* eslint-disable no-new */
 import Range from './Range';
 import Messages from '../../utils/Messages';
@@ -22,8 +20,6 @@ class Slider extends EventObservable {
   private container!: HTMLDivElement;
 
   private settings: ISettings;
-
-  private resPercentage: number;
 
   private handleThumbMoveBinded!:EventListenerOrEventListenerObject;
 
@@ -48,7 +44,6 @@ class Slider extends EventObservable {
 
     this.fromInPx = 0;
     this.toInPx = 0;
-    this.resPercentage = 0;
     this.initSliderComponents();
   }
 
@@ -231,11 +226,13 @@ class Slider extends EventObservable {
           }
         } else if (clickedPos > this.toInPx) {
           thumbType = Constants.THUMB_TO;
-          if ((clickedPos + this.getStepInPx()) > this.toInPx
-            && (Math.floor(Math.round(Math.abs(this.toInPx - clickedPos)
-              / this.getStepInPx()) * this.getStepInPx() + this.toInPx) <= (bottom))) {
-            this.toInPx += this.roundPos(this.toInPx, clickedPos);
-            this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
+          if ((clickedPos + this.getStepInPx()) > this.toInPx) {
+            if (clickedPos >= bottom) {
+              this.dispatchEvent(clickedPos, Constants.THUMB_TO);
+            } else {
+              this.toInPx += this.roundPos(this.toInPx, clickedPos);
+              this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
+            }
           }
         } else if (clickedPos >= this.fromInPx && clickedPos <= this.toInPx) {
           const pivot = (this.toInPx - this.fromInPx) / 2;
@@ -311,22 +308,26 @@ class Slider extends EventObservable {
             }
           } else {
             const valueRoundedInPx = this.roundPos(this.fromInPx, newPos);
-            if ((Math.abs(newPos + this.getStepInPx()) > this.fromInPx)
-              && (Math.floor(this.fromInPx + valueRoundedInPx) <= bottom)
-            ) {
-              this.fromInPx += valueRoundedInPx;
-              this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+            if ((Math.abs(newPos + this.getStepInPx()) > this.fromInPx)) {
+              if (newPos >= bottom) {
+                this.dispatchEvent(newPos, Constants.THUMB_FROM);
+              } else {
+                this.fromInPx += valueRoundedInPx;
+                this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+              }
             }
           }
         }
       } else if (thumbType === Constants.THUMB_TO) {
         if (newPos > this.toInPx) {
           const valueRoundedInPx = this.roundPos(this.toInPx, newPos);
-          if (
-            (newPos + this.getStepInPx()) > this.toInPx
-              && (Math.floor(this.toInPx + valueRoundedInPx) <= bottom)) {
-            this.toInPx += valueRoundedInPx;
-            this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
+          if ((newPos + this.getStepInPx()) > this.toInPx) {
+            if (newPos >= bottom) {
+              this.dispatchEvent(newPos, Constants.THUMB_TO);
+            } else {
+              this.toInPx += valueRoundedInPx;
+              this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
+            }
           }
         } else if (newPos < this.toInPx && newPos > this.fromInPx) {
           if (Math.abs(newPos - this.getStepInPx()) >= this.fromInPx) {
@@ -388,14 +389,13 @@ class Slider extends EventObservable {
   }
 
   private dispatchEvent(shift: number, type: string) {
-    this.resPercentage = this.convertFromPxToPercent(shift);
-    console.log('inside dispatchEvent ' + this.resPercentage);
+    const valueInPercentage = this.convertFromPxToPercent(shift);
     if (type === 'thumbFrom') {
-      this.range.setThumbPositionFrom(this.resPercentage, this.settings.isVertical);
-      this.notifyObservers(Messages.SET_FROM, JSON.stringify({ from: this.resPercentage }), 0);
+      this.range.setThumbPositionFrom(valueInPercentage, this.settings.isVertical);
+      this.notifyObservers(Messages.SET_FROM, JSON.stringify({ from: valueInPercentage }), 0);
     } else {
-      this.range.setThumbPositionTo(this.resPercentage, this.settings.isVertical);
-      this.notifyObservers(Messages.SET_TO, JSON.stringify({ to: this.resPercentage }), 0);
+      this.range.setThumbPositionTo(valueInPercentage, this.settings.isVertical);
+      this.notifyObservers(Messages.SET_TO, JSON.stringify({ to: valueInPercentage }), 0);
     }
     this.setColoredRange();
   }
