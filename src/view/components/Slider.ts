@@ -1,3 +1,6 @@
+/* eslint-disable prefer-template */
+/* eslint-disable no-console */
+/* eslint-disable no-new */
 import Range from './Range';
 import Messages from '../../utils/Messages';
 import RangeLabel from './RangeLabel';
@@ -36,12 +39,10 @@ class Slider extends EventObservable {
 
   constructor(rootElem: HTMLDivElement) {
     super();
-    // eslint-disable-next-line prefer-object-spread
-    this.settings = Object.assign({}, defaultSettings);
+    this.settings = { ...defaultSettings };
     if (rootElem) {
       this.rootElem = rootElem;
     } else {
-      // eslint-disable-next-line no-new
       new ErrorMessage('root elem of Slider is null!');
     }
 
@@ -173,24 +174,29 @@ class Slider extends EventObservable {
   private handleRangeLabel(e:Event) {
     if (e.target instanceof Element) {
       if (e.target.getAttribute('value')) {
-        const roundedValue = Utils.roundWithStep(Number(e.target.getAttribute('value')),
+        const targetValue = Number(e.target.getAttribute('value'));
+        const roundedValue = Utils.roundWithStep(targetValue,
           this.settings.step, this.settings.min);
         if (!this.settings.isRange) {
-          if (roundedValue <= this.settings.max) {
+          if (targetValue === this.settings.max) {
+            this.dispatchEvent(this.convertFromValueToPx(targetValue), Constants.THUMB_FROM);
+          } else {
             this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_FROM);
           }
         } else if (this.settings.isRange) {
-          if (Number(e.target.getAttribute('value')) >= this.settings.to) {
-            if (roundedValue <= this.settings.max) {
+          if (targetValue >= this.settings.to) {
+            if (targetValue === this.settings.max) {
+              this.dispatchEvent(this.convertFromValueToPx(targetValue), Constants.THUMB_TO);
+            } else {
               this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_TO);
             }
-          } else if (Number(e.target.getAttribute('value')) <= this.settings.from) {
+          } else if (targetValue <= this.settings.from) {
             this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_FROM);
           } else {
             const pivot = Math.abs(this.settings.to - this.settings.from) / 2;
-            if (Number(e.target.getAttribute('value')) <= (pivot + this.settings.from)) {
+            if (targetValue <= (pivot + this.settings.from)) {
               this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_FROM);
-            } else if (Number(e.target.getAttribute('value')) > (pivot + this.settings.from)) {
+            } else if (targetValue > (pivot + this.settings.from)) {
               if (roundedValue <= this.settings.max) {
                 this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_TO);
               }
@@ -220,8 +226,7 @@ class Slider extends EventObservable {
         if (clickedPos < this.fromInPx) {
           thumbType = Constants.THUMB_FROM;
           if (Math.abs(clickedPos - this.getStepInPx()) <= this.fromInPx) {
-            this.fromInPx -= Math.round(Math.abs(this.fromInPx - clickedPos) / this.getStepInPx())
-              * this.getStepInPx();
+            this.fromInPx -= this.roundPos(this.fromInPx, clickedPos);
             this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
           }
         } else if (clickedPos > this.toInPx) {
@@ -384,6 +389,7 @@ class Slider extends EventObservable {
 
   private dispatchEvent(shift: number, type: string) {
     this.resPercentage = this.convertFromPxToPercent(shift);
+    console.log('inside dispatchEvent ' + this.resPercentage);
     if (type === 'thumbFrom') {
       this.range.setThumbPositionFrom(this.resPercentage, this.settings.isVertical);
       this.notifyObservers(Messages.SET_FROM, JSON.stringify({ from: this.resPercentage }), 0);

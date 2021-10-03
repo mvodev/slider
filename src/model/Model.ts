@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable prefer-template */
 /* eslint-disable no-new */
 import Messages from '../utils/Messages';
 import IModelFacade from './IModelFacade';
@@ -52,6 +54,7 @@ class Model extends EventObservable implements IModelFacade {
 
   setTo(valueInPercent: number, thumbWidthInPercent:number): void {
     const to = this.convertFromPercentToValue(valueInPercent, thumbWidthInPercent);
+    console.log('inside set to: ' + to);
     if (to >= this.settings.max) {
       this.settings.to = this.settings.max;
     } else if (to <= this.settings.from) {
@@ -159,7 +162,7 @@ class Model extends EventObservable implements IModelFacade {
     if (valueInPercent <= 0) {
       return this.getMin();
     }
-    if (valueInPercent >= 100) {
+    if (valueInPercent >= (100 - thumbWidthInPercent)) {
       return this.getMax();
     }
     let del = 1;
