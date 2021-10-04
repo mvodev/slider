@@ -1,7 +1,7 @@
-import { Model } from '../model/Model';
+import Model from '../model/Model';
 import * as chai from 'chai';
-import { Presenter } from '../presenter/Presenter';
-import { View } from '../view/view';
+import Presenter from '../presenter/Presenter';
+import View from '../view/View';
 let assert = chai.assert;
 document.body.innerHTML = '<div id="slider-test3"></>';
 describe("Presenter", function () {
@@ -10,7 +10,7 @@ describe("Presenter", function () {
     min: 0,
     max: 25,
     from: 17,
-    to:20,
+    to: 20,
     step: 5,
     isVertical: true,
     hideThumbLabel: true,
@@ -20,7 +20,7 @@ describe("Presenter", function () {
     min: -10,
     max: 25,
     from: 17,
-    to:20,
+    to: 20,
     step: -3,
     isVertical: true,
     hideThumbLabel: false,

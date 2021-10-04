@@ -22,12 +22,12 @@ class ColoredRange {
         this.getColoredRange().style.top = thumbFrom.style.top;
         this.getColoredRange().style.left = '0%';
         this.getColoredRange().style.width = '100%';
-        this.getColoredRange().style.height = `${(Number.parseInt(thumbTo.style.top, 10) - Number.parseInt(thumbFrom.style.top, 10) + thumbWidthInPercentage / 2)}%`;
+        this.getColoredRange().style.height = `${(Number.parseInt(thumbTo.style.top, 10) - Number.parseInt(thumbFrom.style.top, 10) + thumbWidthInPercentage)}%`;
       } else {
         this.getColoredRange().style.left = thumbFrom.style.left;
         this.getColoredRange().style.top = '0%';
         this.getColoredRange().style.height = '100%';
-        this.getColoredRange().style.width = `${(Number.parseInt(thumbTo.style.left, 10) - Number.parseInt(thumbFrom.style.left, 10) + thumbWidthInPercentage / 2)}%`;
+        this.getColoredRange().style.width = `${(Number.parseInt(thumbTo.style.left, 10) - Number.parseInt(thumbFrom.style.left, 10) + thumbWidthInPercentage)}%`;
       }
     } else if (!viewSettings.isRange) {
       if (viewSettings.isVertical) {

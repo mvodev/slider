@@ -12,11 +12,15 @@
     "strictFunctionTypes": true,
     "module": "ES6",
     "moduleResolution": "node",
-    "target": "ES6",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "target": "ES5",
+    "paths": {
+      "model/*": [
+        "./src/model/*"
+      ],
+      "model": [
+        "./src/model"
+      ]
+    },
   },
   "exclude": [
     "node_modules",

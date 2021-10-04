@@ -104,35 +104,24 @@ function inputHandler() {
 
 $('input').on('change', inputHandler);
 
-function setSettingsToInputs() {
-  if (sl1Settings.isVertical) {
-    $('.js-control-panel__is-vertical-slider1').prop('checked', true);
+function setSettingsToInputs(sliderNumber, sliderSettings) {
+  if (sliderSettings.isVertical) {
+    $(`.js-control-panel__is-vertical-${sliderNumber}`).prop('checked', true);
+  } else {
+    $(`.js-control-panel__is-vertical-${sliderNumber}`).prop('checked', false);
   }
-  if (sl1Settings.isRange) {
-    $('.js-control-panel__is-range-slider1').prop('checked', true);
+  if (sliderSettings.isRange) {
+    $(`.js-control-panel__is-range-${sliderNumber}`).prop('checked', true);
+  } else {
+    $(`.js-control-panel__is-range-${sliderNumber}`).prop('checked', false);
   }
-  if (sl1Settings.hideThumbLabel) {
-    $('.js-control-panel__hide-thumb-label-slider1').prop('checked', true);
+  if (sliderSettings.hideThumbLabel) {
+    $(`.js-control-panel__hide-thumb-label-${sliderNumber}`).prop('checked', true);
+  } else {
+    $(`.js-control-panel__hide-thumb-label-${sliderNumber}`).prop('checked', false);
   }
-  if (sl2Settings.isVertical) {
-    $('.js-control-panel__is-vertical-slider2').prop('checked', true);
-  }
-  if (sl2Settings.isRange) {
-    $('.js-control-panel__is-range-slider2').prop('checked', true);
-  }
-  if (sl2Settings.hideThumbLabel) {
-    $('.js-control-panel__hide-thumb-label-slider2').prop('checked', true);
-  }
-  if (sl3Settings.isVertical) {
-    $('.js-control-panel__is-vertical-slider3').prop('checked', true);
-  }
-  if (sl3Settings.isRange) {
-    $('.js-control-panel__is-range-slider3').prop('checked', true);
-  }
-  if (sl3Settings.hideThumbLabel) {
-    $('.js-control-panel__hide-thumb-label-slider3').prop('checked', true);
-  }
-  return 0;
 }
 
-setSettingsToInputs();
+setSettingsToInputs('slider1', sl1Settings);
+setSettingsToInputs('slider2', sl2Settings);
+setSettingsToInputs('slider3', sl3Settings);

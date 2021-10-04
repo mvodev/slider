@@ -7,12 +7,15 @@ module.exports = function (config) {
     basePath: '',
     frameworks: ['jasmine', 'karma-typescript'],
     files: [
-      'src/test/*.*.ts',
+      './src/test/*.test.ts',
+      './src/*/*.ts',
+      './src/view/components/*.ts',
+      './src/view/View.ts',
       { pattern: 'docs/fsd-slider.css', included: true, watched: false },
     ],
     exclude: [],
     preprocessors: {
-      'src/test/*.*.ts': 'karma-typescript',
+      '**/*.ts': 'karma-typescript',
     },
     webpack: {
       module: webpackConfig.module,
