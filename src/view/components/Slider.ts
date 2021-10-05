@@ -86,6 +86,7 @@ class Slider extends EventObservable {
     if (this.settings.isRange) {
       this.toInPx = this.convertFromValueToPx(this.settings.to);
     } else this.toInPx = this.getSliderLengthInPx();
+    console.log(this.fromInPx + '  ' + this.toInPx);
   }
 
   private initSliderComponents():void {
@@ -238,12 +239,11 @@ class Slider extends EventObservable {
           }
         } else if (clickedPos >= this.fromInPx && clickedPos <= this.toInPx) {
           const pivot = (this.toInPx - this.fromInPx) / 2;
-          if (Math.abs(clickedPos + this.getStepInPx()) <= this.fromInPx + pivot) {
+          if ((clickedPos) <= (pivot + this.fromInPx)) {
             thumbType = Constants.THUMB_FROM;
             this.fromInPx += this.roundPos(this.fromInPx, clickedPos);
             this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
-          }
-          if (Math.abs(clickedPos + this.getStepInPx()) > this.fromInPx + pivot) {
+          } else if ((clickedPos) > (pivot + this.fromInPx)) {
             thumbType = Constants.THUMB_TO;
             this.toInPx -= this.roundPos(this.toInPx, clickedPos);
             this.dispatchEvent(this.toInPx, Constants.THUMB_TO);

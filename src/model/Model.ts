@@ -159,7 +159,8 @@ class Model extends EventObservable implements IModelFacade {
     if (newRange !== undefined) {
       if (!this.settings.isRange) {
         this.settings.to = ((this.settings.from + this.settings.step) > this.settings.max)
-          ? this.settings.max : (this.settings.from + this.settings.step);
+          ? this.settings.max : (+Math.round(this.settings.from + this.settings.step)
+            .toFixed(Utils.numDigitsAfterDecimal(this.settings.step)));
       }
       this.settings.isRange = newRange;
       if (this.settings.from >= this.settings.to) {
