@@ -1,5 +1,3 @@
-/* eslint-disable prefer-template */
-/* eslint-disable no-console */
 /* eslint-disable no-new */
 import Range from './Range';
 import Messages from '../../utils/Messages';
@@ -86,7 +84,6 @@ class Slider extends EventObservable {
     if (this.settings.isRange) {
       this.toInPx = this.convertFromValueToPx(this.settings.to);
     } else this.toInPx = this.getSliderLengthInPx();
-    console.log(this.fromInPx + '  ' + this.toInPx);
   }
 
   private initSliderComponents():void {

@@ -13,14 +13,6 @@
     "module": "ES6",
     "moduleResolution": "node",
     "target": "ES5",
-    "paths": {
-      "model/*": [
-        "./src/model/*"
-      ],
-      "model": [
-        "./src/model"
-      ]
-    },
   },
   "exclude": [
     "node_modules",

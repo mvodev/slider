@@ -3,7 +3,7 @@ import Messages from '../utils/Messages';
 import * as chai from 'chai';
 document.body.innerHTML = '<div id="slider-test2"></div>';
 let assert = chai.assert;
-describe("View", function () {
+describe("View update", function () {
   let s = {
     min: 15,
     max: 25,
