@@ -143,10 +143,14 @@ class Model extends EventObservable implements IModelFacade {
         // eslint-disable-next-line no-lonely-if
         if (this.settings.step !== newStep) {
           this.settings.step = newStep;
-          this.settings.from = this.settings.min + this.settings.step;
+          this.settings.from = +Math.round(this.settings.min + this.settings.step)
+            .toFixed(Utils.numDigitsAfterDecimal(this.settings.step));
           if ((this.settings.from + this.settings.step) >= this.settings.max) {
             this.settings.to = this.settings.max;
-          } else this.settings.to = this.settings.from + this.settings.step;
+          } else {
+            this.settings.to = +Math.round(this.settings.from + this.settings.step)
+              .toFixed(Utils.numDigitsAfterDecimal(this.settings.step));
+          }
         }
       }
     }

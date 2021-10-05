@@ -1,3 +1,5 @@
+/* eslint-disable prefer-template */
+/* eslint-disable no-console */
 /* eslint-disable no-new */
 import Range from './Range';
 import Messages from '../../utils/Messages';

@@ -155,6 +155,8 @@ describe('Model validate settings', function () {
     assert.equal(model.getStep(), 0.2);
   });
 });
+
+
 describe('Model validate step settings', function () {
   const model = new Model({
     min: -15,
