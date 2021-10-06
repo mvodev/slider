@@ -13,10 +13,12 @@ class ColoredRange {
     return this.coloredRange;
   }
 
-  setColoredRange(viewSettings:ISettings,
+  setColoredRange(
+    viewSettings:ISettings,
     thumbFrom:HTMLDivElement,
     thumbTo:HTMLDivElement,
-    thumbWidthInPercentage:number) :void {
+    thumbWidthInPercentage:number,
+  ) :void {
     if (viewSettings.isRange) {
       if (viewSettings.isVertical) {
         this.getColoredRange().style.top = thumbFrom.style.top;

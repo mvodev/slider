@@ -8,7 +8,7 @@ class Range {
 
   private coloredRange!: ColoredRange;
 
-  private viewSettings:ISettings;
+  private viewSettings: ISettings;
 
   private thumbFrom!: Thumb;
 
@@ -60,10 +60,12 @@ class Range {
   }
 
   setColoredRange(thumbWidthInPercentage:number):void {
-    this.coloredRange.setColoredRange(this.viewSettings,
+    this.coloredRange.setColoredRange(
+      this.viewSettings,
       this.thumbFrom.getThumb(),
       this.thumbTo.getThumb(),
-      thumbWidthInPercentage);
+      thumbWidthInPercentage,
+    );
   }
 
   getThumbFrom(): HTMLDivElement {

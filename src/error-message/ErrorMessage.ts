@@ -1,5 +1,5 @@
 class ErrorMessage {
-  private message:string;
+  private message: string;
 
   constructor(message:string) {
     this.message = message;

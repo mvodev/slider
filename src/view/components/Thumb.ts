@@ -3,9 +3,9 @@ import ThumbLabel from './ThumbLabel';
 class Thumb {
   private thumb: HTMLDivElement;
 
-  private thumbLabel:ThumbLabel;
+  private thumbLabel: ThumbLabel;
 
-  private thumbLabelHTML:HTMLDivElement;
+  private thumbLabelHTML: HTMLDivElement;
 
   constructor(className:string) {
     this.thumb = document.createElement('div');

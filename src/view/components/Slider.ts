@@ -21,17 +21,17 @@ class Slider extends EventObservable {
 
   private settings: ISettings;
 
-  private handleThumbMoveBinded!:EventListenerOrEventListenerObject;
+  private handleThumbMoveBinded!: EventListenerOrEventListenerObject;
 
   private removeHandlerBinded!: EventListenerOrEventListenerObject;
 
-  private handleRangeBinded!:EventListenerOrEventListenerObject;
+  private handleRangeBinded!: EventListenerOrEventListenerObject;
 
-  private handleRangeLabelBinded!:EventListenerOrEventListenerObject;
+  private handleRangeLabelBinded!: EventListenerOrEventListenerObject;
 
-  private fromInPx:number;
+  private fromInPx: number;
 
-  private toInPx:number;
+  private toInPx: number;
 
   constructor(rootElem: HTMLDivElement) {
     super();

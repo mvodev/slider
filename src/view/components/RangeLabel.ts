@@ -8,9 +8,9 @@ class RangeLabel {
 
   private maxLabel!: HTMLSpanElement;
 
-  private labels:HTMLSpanElement[];
+  private labels: HTMLSpanElement[];
 
-  private settings!:ISettings;
+  private settings!: ISettings;
 
   constructor(settings:ISettings) {
     this.labels = [];
