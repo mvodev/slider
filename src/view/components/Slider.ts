@@ -104,26 +104,33 @@ class Slider extends EventObservable {
       this.getLabels()[0].style.top = '';
       // set max value label
       this.getLabels()[2].setAttribute('value', this.settings.max.toString());
-      this.getLabels()[2].style.left = `${(100 - ((this.getLabels()[2].offsetWidth / 2 + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100)}%`;
+      this.getLabels()[2].style.left = `${(100 - ((this.getLabels()[2].offsetWidth / 2
+        + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100)}%`;
       this.getLabels()[2].style.top = '';
       // set average value label
       this.getLabels()[1].setAttribute('value', pivotRounded.toString());
       this.getLabels()[1].innerText = pivotRounded.toString();
-      this.getLabels()[1].style.left = `${(this.convertFromValueToPercent(pivotRounded) + this.getThumbWidthInPercentage() / 2 - ((this.getLabels()[1].offsetWidth * 100) / (this.getSliderLengthInPx()) / 2))}%`;
+      this.getLabels()[1].style.left = `${(this.convertFromValueToPercent(pivotRounded)
+        + this.getThumbWidthInPercentage() / 2
+        - ((this.getLabels()[1].offsetWidth * 100) / (this.getSliderLengthInPx()) / 2))}%`;
       this.getLabels()[1].style.top = '';
     } else {
       // set min value label
       this.getLabels()[0].setAttribute('value', this.settings.min.toString());
-      this.getLabels()[0].style.top = `${(this.getThumbWidthInPercentage() / 2 - (this.getLabels()[0].offsetHeight * 100) / (this.getSliderLengthInPx()) / 2)}%`;
+      this.getLabels()[0].style.top = `${(this.getThumbWidthInPercentage() / 2
+        - (this.getLabels()[0].offsetHeight * 100) / (this.getSliderLengthInPx()) / 2)}%`;
       this.getLabels()[0].style.left = '';
       // set max value label
       this.getLabels()[2].setAttribute('value', this.settings.max.toString());
-      this.getLabels()[2].style.top = `${(100 - ((this.getLabels()[2].offsetHeight / 2 + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100)}%`;
+      this.getLabels()[2].style.top = `${(100 - ((this.getLabels()[2].offsetHeight / 2
+        + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100)}%`;
       this.getLabels()[2].style.left = '';
       // set average value label
       this.getLabels()[1].setAttribute('value', pivotRounded.toString());
       this.getLabels()[1].innerText = pivotRounded.toString();
-      this.getLabels()[1].style.top = `${(this.convertFromValueToPercent(pivotRounded) + this.getThumbWidthInPercentage() / 2 - ((this.getLabels()[1].offsetHeight * 100) / (this.getSliderLengthInPx()) / 2))}%`;
+      this.getLabels()[1].style.top = `${(this.convertFromValueToPercent(pivotRounded)
+        + this.getThumbWidthInPercentage() / 2
+        - ((this.getLabels()[1].offsetHeight * 100) / (this.getSliderLengthInPx()) / 2))}%`;
       this.getLabels()[1].style.left = '';
     }
   }
@@ -366,7 +373,8 @@ class Slider extends EventObservable {
 
   private convertFromValueToPercent(value: number): number {
     const res = (((100 - this.getThumbWidthInPercentage())
-      / Math.abs(this.settings.max - this.settings.min)) * (Math.abs(value - this.settings.min)));
+      / Math.abs(this.settings.max - this.settings.min))
+      * (Math.abs(value - this.settings.min)));
     if (res > (100 - this.getThumbWidthInPercentage())) {
       return (100 - this.getThumbWidthInPercentage());
     }
