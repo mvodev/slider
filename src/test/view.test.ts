@@ -1,6 +1,7 @@
 import View from '../view/View';
 import Messages from '../utils/Messages';
 import * as chai from 'chai';
+import '../../slider/fsd-slider.css';
 let assert = chai.assert;
 document.body.innerHTML = '<div id="slider-test"></>';
 describe("View", function () {
@@ -27,6 +28,6 @@ describe("View", function () {
     assert.equal(view.getSlider().getRangeLabel().firstElementChild.innerHTML, "" + s.min);
   });
   it("View set correct style for ThumbLabel", function () {
-    assert.equal(view.getSlider().getThumbLabelFrom().style.display, "none");
+    assert.equal(view.getSlider().getThumbLabelFrom().style.display, "");
   });
 });

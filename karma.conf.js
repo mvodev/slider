@@ -11,8 +11,9 @@ module.exports = function (config) {
       './src/*/*.ts',
       './src/view/components/*.ts',
       './src/view/View.ts',
-      { pattern: './slider/fsd-slider.css', included: true, watched: false },
+      { pattern: 'slider/fsd-slider.css', included: true, watched: false },
     ],
+    plugins: ['karma-*'],
     exclude: [],
     preprocessors: {
       '**/*.ts': 'karma-typescript',
