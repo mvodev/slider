@@ -4,7 +4,6 @@ import Messages from '../utils/Messages';
 import EventObservable from '../observers/EventObservable';
 import defaultSettings from '../model/defaultSettings';
 import IObserver from '../observers/IObserver';
-import ErrorMessage from '../error-message/ErrorMessage';
 
 class View extends EventObservable implements IObserver {
   private slider!: Slider;
@@ -21,7 +20,7 @@ class View extends EventObservable implements IObserver {
       this.slider = new Slider(this.rootElem);
       this.slider.addObserver(this);
     // eslint-disable-next-line no-new
-    } else new ErrorMessage('root elem of Slider is null!');
+    } else throw new Error('root elem of Slider is null!');
   }
 
   handleEvent(msg: Messages, settings: string): void {

@@ -1,4 +1,3 @@
-/* eslint-disable no-new */
 import Range from './Range';
 import Messages from '../../utils/Messages';
 import RangeLabel from './RangeLabel';
@@ -8,7 +7,6 @@ import EventObservable from '../../observers/EventObservable';
 import ClassNaming from '../../utils/ClassNaming';
 import Constants from '../../utils/Constants';
 import Utils from '../../utils/Utils';
-import ErrorMessage from '../../error-message/ErrorMessage';
 
 class Slider extends EventObservable {
   private range!: Range;
@@ -39,7 +37,7 @@ class Slider extends EventObservable {
     if (rootElem) {
       this.rootElem = rootElem;
     } else {
-      new ErrorMessage('root elem of Slider is null!');
+      throw new Error('root elem of Slider is null!');
     }
 
     this.fromInPx = 0;

@@ -1,13 +1,9 @@
-/* eslint-disable prefer-template */
-/* eslint-disable no-console */
-/* eslint-disable no-new */
 import Messages from '../utils/Messages';
 import IModelFacade from './IModelFacade';
 import ISettings from './ISettings';
 import EventObservable from '../observers/EventObservable';
 import Utils from '../utils/Utils';
 import defaultSettings from './defaultSettings';
-import ErrorMessage from '../error-message/ErrorMessage';
 
 class Model extends EventObservable implements IModelFacade {
   private settings: ISettings;
@@ -92,53 +88,53 @@ class Model extends EventObservable implements IModelFacade {
     const newRange = Utils.convertFromInputToBoolean(settings.isRange);
     if (newMin !== undefined && newMax !== undefined) {
       if (Math.abs(newMax - newMin) < this.settings.step) {
-        new ErrorMessage('unacceptable values,difference between min and max more than step');
+        throw new Error('unacceptable values,difference between min and max more than step');
       }
     }
     if (newMin !== undefined) {
       if (newMin > this.settings.from) {
-        new ErrorMessage('unacceptable value,min value more than from value');
+        throw new Error('unacceptable value,min value more than from value');
       } else {
         this.settings.min = newMin;
       }
     }
     if (newMax !== undefined) {
       if (this.settings.isRange && newMax < this.settings.to) {
-        new ErrorMessage('unacceptable value,min value more than to value');
+        throw new Error('unacceptable value,min value more than to value');
       } else if (!this.settings.isRange && newMax < this.settings.from) {
-        new ErrorMessage('unacceptable value,min value more than from value');
+        throw new Error('unacceptable value,min value more than from value');
       } else {
         this.settings.max = newMax;
       }
     }
     if (newFrom !== undefined && !this.settings.isRange) {
       if (newFrom > this.settings.max) {
-        new ErrorMessage('unacceptable value,from more than max');
+        throw new Error('unacceptable value,from more than max');
       } else if (newFrom < this.settings.min) {
-        new ErrorMessage('unacceptable value,from less than min');
+        throw new Error('unacceptable value,from less than min');
       } else this.settings.from = newFrom;
     }
     if (newFrom !== undefined && this.settings.isRange) {
       if (newFrom > this.settings.to) {
-        new ErrorMessage('unacceptable value,from more than to');
+        throw new Error('unacceptable value,from more than to');
       } else if (newFrom < this.settings.min) {
-        new ErrorMessage('unacceptable value,from less than min');
+        throw new Error('unacceptable value,from less than min');
       } else this.settings.from = newFrom;
     }
     if (newTo !== undefined && this.settings.isRange) {
       if (newTo < this.settings.from) {
-        new ErrorMessage('unacceptable value,to less than from');
+        throw new Error('unacceptable value,to less than from');
       } else if (newTo > this.settings.max) {
-        new ErrorMessage('unacceptable value,to more than max');
+        throw new Error('unacceptable value,to more than max');
       } else this.settings.to = newTo;
     }
     if (newStep !== undefined) {
       if (newStep < 0) {
-        new ErrorMessage('step must be positive');
+        throw new Error('step must be positive');
       } else if (newStep === 0) {
-        new ErrorMessage('step must not be zero');
+        throw new Error('step must not be zero');
       } else if (newStep > (Math.abs(this.settings.max - this.settings.min))) {
-        new ErrorMessage('step must be more than difference between max and min');
+        throw new Error('step must be more than difference between max and min');
       } else {
         // eslint-disable-next-line no-lonely-if
         if (this.settings.step !== newStep) {
