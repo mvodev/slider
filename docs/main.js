@@ -66,7 +66,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
   \****************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nvar Constants = {\n  NUMBER_OF_LABELS: 3,\n  THUMB_FROM: 'thumbFrom',\n  THUMB_TO: 'thumbTo'\n};\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Constants);\n\n//# sourceURL=webpack:///./utils/Constants.ts?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nvar CONSTANTS = {\n  NUMBER_OF_LABELS: 3,\n  THUMB_FROM: 'thumbFrom',\n  THUMB_TO: 'thumbTo'\n};\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (CONSTANTS);\n\n//# sourceURL=webpack:///./utils/Constants.ts?");
 
 /***/ }),
 

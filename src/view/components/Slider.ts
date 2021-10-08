@@ -5,7 +5,7 @@ import ISettings from '../../model/ISettings';
 import defaultSettings from '../../model/defaultSettings';
 import EventObservable from '../../observers/EventObservable';
 import ClassNaming from '../../utils/ClassNaming';
-import Constants from '../../utils/Constants';
+import CONSTANTS from '../../utils/Constants';
 import Utils from '../../utils/Utils';
 
 class Slider extends EventObservable {
@@ -182,26 +182,26 @@ class Slider extends EventObservable {
         this.settings.step, this.settings.min);
       if (!this.settings.isRange) {
         if (targetValue === this.settings.max) {
-          this.dispatchEvent(this.convertFromValueToPx(targetValue), Constants.THUMB_FROM);
+          this.dispatchEvent(this.convertFromValueToPx(targetValue), CONSTANTS.THUMB_FROM);
         } else {
-          this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_FROM);
+          this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.THUMB_FROM);
         }
       } else if (this.settings.isRange) {
         if (targetValue >= this.settings.to) {
           if (targetValue === this.settings.max) {
-            this.dispatchEvent(this.convertFromValueToPx(targetValue), Constants.THUMB_TO);
+            this.dispatchEvent(this.convertFromValueToPx(targetValue), CONSTANTS.THUMB_TO);
           } else {
-            this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_TO);
+            this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.THUMB_TO);
           }
         } else if (targetValue <= this.settings.from) {
-          this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_FROM);
+          this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.THUMB_FROM);
         } else {
           const pivot = Math.abs(this.settings.to - this.settings.from) / 2;
           if (targetValue <= (pivot + this.settings.from)) {
-            this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_FROM);
+            this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.THUMB_FROM);
           } else if (targetValue > (pivot + this.settings.from)) {
             if (roundedValue <= this.settings.max) {
-              this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_TO);
+              this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.THUMB_TO);
             }
           }
         }
@@ -226,46 +226,46 @@ class Slider extends EventObservable {
       if (clickedPos < 0) clickedPos = 0;
       if (this.settings.isRange) {
         if (clickedPos < this.fromInPx) {
-          thumbType = Constants.THUMB_FROM;
+          thumbType = CONSTANTS.THUMB_FROM;
           if (Math.abs(clickedPos - this.getStepInPx()) <= this.fromInPx) {
             this.fromInPx -= this.roundPos(this.fromInPx, clickedPos);
-            this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+            this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
           }
         } else if (clickedPos > this.toInPx) {
-          thumbType = Constants.THUMB_TO;
+          thumbType = CONSTANTS.THUMB_TO;
           if ((clickedPos + this.getStepInPx()) > this.toInPx) {
             if (clickedPos >= bottom) {
-              this.dispatchEvent(clickedPos, Constants.THUMB_TO);
+              this.dispatchEvent(clickedPos, CONSTANTS.THUMB_TO);
             } else {
               this.toInPx += this.roundPos(this.toInPx, clickedPos);
-              this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
+              this.dispatchEvent(this.toInPx, CONSTANTS.THUMB_TO);
             }
           }
         } else if (clickedPos >= this.fromInPx && clickedPos <= this.toInPx) {
           const pivot = (this.toInPx - this.fromInPx) / 2;
           if ((clickedPos) <= (pivot + this.fromInPx)) {
-            thumbType = Constants.THUMB_FROM;
+            thumbType = CONSTANTS.THUMB_FROM;
             this.fromInPx += this.roundPos(this.fromInPx, clickedPos);
-            this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+            this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
           } else if ((clickedPos) > (pivot + this.fromInPx)) {
-            thumbType = Constants.THUMB_TO;
+            thumbType = CONSTANTS.THUMB_TO;
             this.toInPx -= this.roundPos(this.toInPx, clickedPos);
-            this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
+            this.dispatchEvent(this.toInPx, CONSTANTS.THUMB_TO);
           }
         }
       } else {
-        thumbType = Constants.THUMB_FROM;
+        thumbType = CONSTANTS.THUMB_FROM;
         if ((clickedPos + this.getThumbWidthInPx() / 2) < this.fromInPx) {
           if (Math.abs(clickedPos - this.getStepInPx()) < this.fromInPx) {
             this.fromInPx -= this.roundPos(this.fromInPx, clickedPos);
-            this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+            this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
           }
         } else if ((clickedPos + this.getThumbWidthInPx() / 2) > this.fromInPx) {
           if (Math.abs(clickedPos + this.getStepInPx()) > this.fromInPx
             && (Math.floor(this.fromInPx + Math.round(Math.abs(this.fromInPx - clickedPos)
               / this.getStepInPx()) * this.getStepInPx()) <= bottom)) {
             this.fromInPx += this.roundPos(this.fromInPx, clickedPos);
-            this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+            this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
           }
         }
       }
@@ -292,53 +292,53 @@ class Slider extends EventObservable {
       if (newPos >= bottom) {
         newPos = bottom;
       }
-      if (thumbType === Constants.THUMB_FROM) {
+      if (thumbType === CONSTANTS.THUMB_FROM) {
         if (this.settings.isRange) {
           if (newPos < this.fromInPx) {
             if (Math.abs(newPos - this.getStepInPx()) <= this.fromInPx) {
               this.fromInPx -= this.roundPos(this.fromInPx, newPos);
-              this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+              this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
             }
           } else if (newPos <= this.toInPx && newPos > this.fromInPx) {
             if (Math.abs(newPos + this.getStepInPx()) > this.fromInPx
               && Math.abs(newPos + this.getStepInPx()) <= this.toInPx) {
               this.fromInPx += this.roundPos(this.fromInPx, newPos);
-              this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+              this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
             }
           }
         } else if (!this.settings.isRange) {
           if (newPos < this.fromInPx) {
             if (Math.abs(newPos - this.getStepInPx()) < this.fromInPx) {
               this.fromInPx -= this.roundPos(this.fromInPx, newPos);
-              this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+              this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
             }
           } else {
             const valueRoundedInPx = this.roundPos(this.fromInPx, newPos);
             if ((Math.abs(newPos + this.getStepInPx()) > this.fromInPx)) {
               if (newPos >= bottom) {
-                this.dispatchEvent(newPos, Constants.THUMB_FROM);
+                this.dispatchEvent(newPos, CONSTANTS.THUMB_FROM);
               } else {
                 this.fromInPx += valueRoundedInPx;
-                this.dispatchEvent(this.fromInPx, Constants.THUMB_FROM);
+                this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
               }
             }
           }
         }
-      } else if (thumbType === Constants.THUMB_TO) {
+      } else if (thumbType === CONSTANTS.THUMB_TO) {
         if (newPos > this.toInPx) {
           const valueRoundedInPx = this.roundPos(this.toInPx, newPos);
           if ((newPos + this.getStepInPx()) > this.toInPx) {
             if (newPos >= bottom) {
-              this.dispatchEvent(newPos, Constants.THUMB_TO);
+              this.dispatchEvent(newPos, CONSTANTS.THUMB_TO);
             } else {
               this.toInPx += valueRoundedInPx;
-              this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
+              this.dispatchEvent(this.toInPx, CONSTANTS.THUMB_TO);
             }
           }
         } else if (newPos < this.toInPx && newPos > this.fromInPx) {
           if (Math.abs(newPos - this.getStepInPx()) >= this.fromInPx) {
             this.toInPx -= this.roundPos(this.toInPx, newPos);
-            this.dispatchEvent(this.toInPx, Constants.THUMB_TO);
+            this.dispatchEvent(this.toInPx, CONSTANTS.THUMB_TO);
           }
         }
       }
