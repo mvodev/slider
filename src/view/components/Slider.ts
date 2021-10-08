@@ -94,42 +94,45 @@ class Slider extends EventObservable {
     const diapason = Math.abs(this.settings.max - this.settings.min);
     const pivot = (diapason / 2) + this.settings.min;
     const pivotRounded = Utils.roundWithStep((pivot), this.settings.step, this.settings.min);
+    const minLabel = this.getLabels()[0];
+    const averageLabel = this.getLabels()[1];
+    const maxLabel = this.getLabels()[2];
     if (!this.settings.isVertical) {
       //  set min value label
-      this.getLabels()[0].setAttribute('value', this.settings.min.toString());
-      this.getLabels()[0].style.left = `${(this.getThumbWidthInPercentage() / 2
-        - ((this.getLabels()[0].offsetWidth * 100) / (this.getSliderLengthInPx())) / 2)}%`;
-      this.getLabels()[0].style.top = '';
+      minLabel.setAttribute('value', this.settings.min.toString());
+      minLabel.style.left = `${(this.getThumbWidthInPercentage() / 2
+        - ((minLabel.offsetWidth * 100) / (this.getSliderLengthInPx())) / 2)}%`;
+      minLabel.style.top = '';
       // set max value label
-      this.getLabels()[2].setAttribute('value', this.settings.max.toString());
-      this.getLabels()[2].style.left = `${(100 - ((this.getLabels()[2].offsetWidth / 2
+      maxLabel.setAttribute('value', this.settings.max.toString());
+      maxLabel.style.left = `${(100 - ((maxLabel.offsetWidth / 2
         + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100)}%`;
-      this.getLabels()[2].style.top = '';
+      maxLabel.style.top = '';
       // set average value label
-      this.getLabels()[1].setAttribute('value', pivotRounded.toString());
-      this.getLabels()[1].innerText = pivotRounded.toString();
-      this.getLabels()[1].style.left = `${(this.convertFromValueToPercent(pivotRounded)
+      averageLabel.setAttribute('value', pivotRounded.toString());
+      averageLabel.innerText = pivotRounded.toString();
+      averageLabel.style.left = `${(this.convertFromValueToPercent(pivotRounded)
         + this.getThumbWidthInPercentage() / 2
-        - ((this.getLabels()[1].offsetWidth * 100) / (this.getSliderLengthInPx()) / 2))}%`;
-      this.getLabels()[1].style.top = '';
+        - ((averageLabel.offsetWidth * 100) / (this.getSliderLengthInPx()) / 2))}%`;
+      averageLabel.style.top = '';
     } else {
       // set min value label
-      this.getLabels()[0].setAttribute('value', this.settings.min.toString());
-      this.getLabels()[0].style.top = `${(this.getThumbWidthInPercentage() / 2
-        - (this.getLabels()[0].offsetHeight * 100) / (this.getSliderLengthInPx()) / 2)}%`;
-      this.getLabels()[0].style.left = '';
+      minLabel.setAttribute('value', this.settings.min.toString());
+      minLabel.style.top = `${(this.getThumbWidthInPercentage() / 2
+        - (minLabel.offsetHeight * 100) / (this.getSliderLengthInPx()) / 2)}%`;
+      minLabel.style.left = '';
       // set max value label
-      this.getLabels()[2].setAttribute('value', this.settings.max.toString());
-      this.getLabels()[2].style.top = `${(100 - ((this.getLabels()[2].offsetHeight / 2
+      maxLabel.setAttribute('value', this.settings.max.toString());
+      maxLabel.style.top = `${(100 - ((maxLabel.offsetHeight / 2
         + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100)}%`;
-      this.getLabels()[2].style.left = '';
+      maxLabel.style.left = '';
       // set average value label
-      this.getLabels()[1].setAttribute('value', pivotRounded.toString());
-      this.getLabels()[1].innerText = pivotRounded.toString();
-      this.getLabels()[1].style.top = `${(this.convertFromValueToPercent(pivotRounded)
+      averageLabel.setAttribute('value', pivotRounded.toString());
+      averageLabel.innerText = pivotRounded.toString();
+      averageLabel.style.top = `${(this.convertFromValueToPercent(pivotRounded)
         + this.getThumbWidthInPercentage() / 2
         - ((this.getLabels()[1].offsetHeight * 100) / (this.getSliderLengthInPx()) / 2))}%`;
-      this.getLabels()[1].style.left = '';
+      averageLabel.style.left = '';
     }
   }
 
