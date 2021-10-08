@@ -19,7 +19,6 @@ class View extends EventObservable implements IObserver {
       this.rootElem = root;
       this.slider = new Slider(this.rootElem);
       this.slider.addObserver(this);
-    // eslint-disable-next-line no-new
     } else throw new Error('root elem of Slider is null!');
   }
 

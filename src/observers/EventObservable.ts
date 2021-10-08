@@ -9,15 +9,15 @@ class EventObservable implements IObservable {
     this.observers = [];
   }
 
-  addObserver(o: IObserver):void {
+  addObserver(o: IObserver): void {
     this.observers.push(o);
   }
 
-  removeObserver(o: IObserver):void {
+  removeObserver(o: IObserver): void {
     this.observers.filter((subscriber) => subscriber !== o);
   }
 
-  notifyObservers(msg: Messages, settings: string, width:number):void {
+  notifyObservers(msg: Messages, settings: string, width: number): void {
     this.observers.forEach((elem) => {
       if (elem && ('handleEvent' in elem)) {
         elem.handleEvent(msg, settings, width);

@@ -14,7 +14,7 @@ class Range {
 
   private thumbTo!: Thumb;
 
-  constructor(settings:ISettings) {
+  constructor(settings: ISettings) {
     const div = document.createElement('div');
     div.classList.add(ClassNaming.RANGE);
     this.range = div;
@@ -30,7 +30,7 @@ class Range {
     return this.range;
   }
 
-  render(settings:string):void {
+  render(settings: string): void {
     Object.assign(this.viewSettings, JSON.parse(settings));
     if (this.viewSettings.isRange) {
       this.getRange().appendChild(this.thumbTo.getThumb());
@@ -41,7 +41,7 @@ class Range {
     }
   }
 
-  setVertical():void {
+  setVertical(): void {
     this.range.classList.add(ClassNaming.RANGE_IS_VERTICAL);
     this.coloredRange.getColoredRange().classList.add(ClassNaming.COLORED_RANGE_IS_VERTICAL);
     this.thumbFrom.setVertical();
@@ -50,7 +50,7 @@ class Range {
     }
   }
 
-  setHorizontal():void {
+  setHorizontal(): void {
     this.range.classList.remove(ClassNaming.RANGE_IS_VERTICAL);
     this.coloredRange.getColoredRange().classList.remove(ClassNaming.COLORED_RANGE_IS_VERTICAL);
     this.thumbFrom.setHorizontal();
@@ -59,7 +59,7 @@ class Range {
     }
   }
 
-  setColoredRange(thumbWidthInPercentage:number):void {
+  setColoredRange(thumbWidthInPercentage:number): void {
     this.coloredRange.setColoredRange(
       this.viewSettings,
       this.thumbFrom.getThumb(),
@@ -90,7 +90,7 @@ class Range {
     }
   }
 
-  setValueToLabelThumbFrom(value: number):void {
+  setValueToLabelThumbFrom(value: number): void {
     this.thumbFrom.setValueToLabel(value);
   }
 
@@ -98,7 +98,7 @@ class Range {
     this.thumbTo.setValueToLabel(value);
   }
 
-  setThumbPositionFrom(shift: number, isVertical: boolean | undefined):void {
+  setThumbPositionFrom(shift: number, isVertical: boolean | undefined): void {
     this.thumbFrom.setThumbPosition(shift, isVertical);
   }
 
@@ -106,7 +106,7 @@ class Range {
     this.thumbTo.setThumbPosition(shift, isVertical);
   }
 
-  getThumbWidthInPx():number {
+  getThumbWidthInPx(): number {
     if (this.viewSettings.isVertical) {
       return this.getThumbFrom().offsetHeight;
     }

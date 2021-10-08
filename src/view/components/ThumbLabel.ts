@@ -31,11 +31,11 @@ class ThumbLabel {
     this.thumbLabelContainer.classList.remove(ClassNaming.HIDE_ELEMENT);
   }
 
-  setVertical():void {
+  setVertical(): void {
     this.thumbLabelContainer.classList.add(ClassNaming.THUMB_LABEL_IS_VERTICAL);
   }
 
-  setHorizontal():void {
+  setHorizontal(): void {
     this.thumbLabelContainer.classList.remove(ClassNaming.THUMB_LABEL_IS_VERTICAL);
   }
 }

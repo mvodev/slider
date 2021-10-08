@@ -16,7 +16,7 @@ class Presenter extends EventObservable implements IObserver {
     this.model = model;
   }
 
-  handleEvent(msg: Messages, s: string, thumbWidthInPercentage:number) :void {
+  handleEvent(msg: Messages, s: string, thumbWidthInPercentage: number) : void {
     if (msg === Messages.UPDATE) {
       this.view.refreshView(Messages.UPDATE, JSON.parse(s));
       this.notifyObservers(Messages.UPDATE, this.model.getSettings(), thumbWidthInPercentage);
@@ -31,12 +31,12 @@ class Presenter extends EventObservable implements IObserver {
     }
   }
 
-  initialize():void {
+  initialize(): void {
     this.view.refreshView(Messages.INIT, JSON.parse(this.model.getSettings()));
     this.notifyObservers(Messages.UPDATE, this.model.getSettings(), 0);
   }
 
-  update(newSettings: ISettings):void {
+  update(newSettings: ISettings): void {
     this.model.updateSettings(newSettings);
   }
 }

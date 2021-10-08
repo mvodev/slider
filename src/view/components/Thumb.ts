@@ -7,7 +7,7 @@ class Thumb {
 
   private thumbLabelHTML: HTMLDivElement;
 
-  constructor(className:string) {
+  constructor(className: string) {
     this.thumb = document.createElement('div');
     this.thumb.classList.add(className);
     this.thumbLabel = new ThumbLabel();
@@ -19,7 +19,7 @@ class Thumb {
     return this.thumb;
   }
 
-  setThumbPosition(shift:number, isVertical:boolean|undefined):void {
+  setThumbPosition(shift: number, isVertical: boolean|undefined): void {
     if (isVertical) {
       this.thumb.style.top = `${shift}%`;
       this.thumb.style.left = '-25%';
@@ -29,7 +29,7 @@ class Thumb {
     }
   }
 
-  setVertical():void {
+  setVertical(): void {
     this.thumbLabel.setVertical();
   }
 
@@ -37,11 +37,11 @@ class Thumb {
     this.thumbLabel.setHorizontal();
   }
 
-  hideLabel():void {
+  hideLabel(): void {
     this.thumbLabel.hideLabel();
   }
 
-  showLabel():void {
+  showLabel(): void {
     this.thumbLabel.showLabel();
   }
 

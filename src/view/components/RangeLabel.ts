@@ -12,27 +12,27 @@ class RangeLabel {
 
   private settings!: ISettings;
 
-  constructor(settings:ISettings) {
+  constructor(settings: ISettings) {
     this.labels = [];
     this.settings = { ...settings };
     this.initComponents();
   }
 
-  render(settings:ISettings):void {
+  render(settings: ISettings): void {
     this.settings = Object.assign(this.settings, settings);
     this.setMinRange(this.settings.min);
     this.setMaxRange(this.settings.max);
   }
 
-  getRangeLabel():HTMLDivElement {
+  getRangeLabel(): HTMLDivElement {
     return this.rangeLabelContainer;
   }
 
-  setMinRange(value: number) :void {
+  setMinRange(value: number): void {
     this.minLabel.innerText = `${value}`;
   }
 
-  setMaxRange(value: number):void {
+  setMaxRange(value: number): void {
     this.maxLabel.innerText = `${value}`;
   }
 
@@ -53,19 +53,19 @@ class RangeLabel {
     this.labels.push(this.maxLabel);
   }
 
-  setVertical():void {
+  setVertical(): void {
     this.getRangeLabel().classList.add(ClassNaming.RANGE_LABEL_IS_VERTICAL);
   }
 
-  setHorizontal():void {
+  setHorizontal(): void {
     this.getRangeLabel().classList.remove(ClassNaming.RANGE_LABEL_IS_VERTICAL);
   }
 
-  getLabels():HTMLElement[] {
+  getLabels(): HTMLElement[] {
     return this.labels;
   }
 
-  hideLabels():void {
+  hideLabels(): void {
     this.rangeLabelContainer.classList.add(ClassNaming.HIDE_ELEMENT);
   }
 

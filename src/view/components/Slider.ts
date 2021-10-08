@@ -45,7 +45,7 @@ class Slider extends EventObservable {
     this.initSliderComponents();
   }
 
-  render(settings:string) :void {
+  render(settings:string): void {
     this.settings = Object.assign(this.settings, JSON.parse(settings));
     this.container.classList.add(ClassNaming.ROOT);
     this.container.appendChild(this.range.getRange());
@@ -77,14 +77,14 @@ class Slider extends EventObservable {
     this.calculateThumbPos();
   }
 
-  private calculateThumbPos():void {
+  private calculateThumbPos(): void {
     this.fromInPx = this.convertFromValueToPx(this.settings.from);
     if (this.settings.isRange) {
       this.toInPx = this.convertFromValueToPx(this.settings.to);
     } else this.toInPx = this.getSliderLengthInPx();
   }
 
-  private initSliderComponents():void {
+  private initSliderComponents(): void {
     this.range = new Range(this.settings);
     this.rangeLabel = new RangeLabel(this.settings);
     this.container = document.createElement('div');
@@ -144,7 +144,7 @@ class Slider extends EventObservable {
     this.rangeLabel.getLabels().forEach((elem) => elem.addEventListener('click', this.handleRangeLabelBinded));
   }
 
-  private initResizeObserver():void {
+  private initResizeObserver(): void {
     const resizeObserver = new ResizeObserver(() => {
       this.range.setValueToLabelThumbFrom(this.settings.from);
       this.range.setThumbPositionFrom(this.convertFromValueToPercent(this.settings.from),
@@ -161,7 +161,7 @@ class Slider extends EventObservable {
     resizeObserver.observe(this.rootElem);
   }
 
-  private bindExtraListeners(thumbType:string) {
+  private bindExtraListeners(thumbType: string) {
     this.handleThumbMoveBinded = this.handleThumbMove.bind(this, thumbType);
     this.removeHandlerBinded = this.removeHandler.bind(this);
     document.addEventListener('mousemove', this.handleThumbMoveBinded);
@@ -174,7 +174,7 @@ class Slider extends EventObservable {
     this.getRange().removeEventListener('mousedown', this.handleRangeBinded);
   }
 
-  private handleRangeLabel(e:Event) {
+  private handleRangeLabel(e: Event) {
     const elemIsTarget = (e.target instanceof Element) && (e.target.getAttribute('value'));
     if (elemIsTarget) {
       const targetValue = Number(e.target.getAttribute('value'));
@@ -275,7 +275,7 @@ class Slider extends EventObservable {
     }
   }
 
-  private handleThumbMove(thumbType:string, e: Event) {
+  private handleThumbMove(thumbType: string, e: Event) {
     let newPos: number;
     const bottom = this.getSliderLengthInPx() - this.getThumbWidthInPx();
     if (e instanceof MouseEvent) {
@@ -345,7 +345,7 @@ class Slider extends EventObservable {
     }
   }
 
-  private roundPos(thumbInPx:number, newPos:number) {
+  private roundPos(thumbInPx: number, newPos: number): number {
     return Math.round(Math.abs(thumbInPx - newPos) / this.getStepInPx()) * this.getStepInPx();
   }
 
@@ -354,7 +354,7 @@ class Slider extends EventObservable {
     document.removeEventListener('mouseup', this.removeHandlerBinded);
   }
 
-  private convertFromPxToPercent(valueInPX: number):number {
+  private convertFromPxToPercent(valueInPX: number): number {
     if (valueInPX < 0) {
       return 0;
     }
@@ -365,7 +365,7 @@ class Slider extends EventObservable {
     return +res.toFixed(20);
   }
 
-  private convertFromValueToPx(value:number):number {
+  private convertFromValueToPx(value: number): number {
     return ((Math.abs(value - this.settings.min))
       / Math.abs(this.settings.max - this.settings.min))
       * (this.getSliderLengthInPx() - this.getThumbWidthInPx());
@@ -381,14 +381,14 @@ class Slider extends EventObservable {
     return res;
   }
 
-  getThumbWidthInPercentage() :number {
+  getThumbWidthInPercentage(): number {
     if (this.settings.isVertical) {
       return ((this.getThumbFrom().offsetHeight / this.getSliderLengthInPx()) * 100);
     }
     return ((this.getThumbFrom().offsetWidth / this.getSliderLengthInPx()) * 100);
   }
 
-  private getSliderLengthInPx() :number {
+  private getSliderLengthInPx(): number {
     if (this.settings.isVertical) {
       return this.getRange().offsetHeight;
     }
@@ -451,11 +451,11 @@ class Slider extends EventObservable {
     return this.range.getThumbWidthInPx();
   }
 
-  getThumbLabelFrom():HTMLElement {
+  getThumbLabelFrom(): HTMLElement {
     return this.range.getThumbFrom();
   }
 
-  getThumbLabelTo():HTMLElement {
+  getThumbLabelTo(): HTMLElement {
     return this.range.getThumbTo();
   }
 

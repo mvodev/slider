@@ -14,7 +14,7 @@ class Model extends EventObservable implements IModelFacade {
     this.setSettings(settings);
   }
 
-  private setSettings(settings:ISettings):void {
+  private setSettings(settings:ISettings): void {
     this.settings = { ...settings };
   }
 
@@ -22,7 +22,7 @@ class Model extends EventObservable implements IModelFacade {
     return JSON.stringify(this.settings);
   }
 
-  updateSettings(settings: ISettings):void {
+  updateSettings(settings: ISettings): void {
     this.validateSettings(settings);
     this.notifyObservers(Messages.UPDATE, this.getSettings(), 0);
   }
@@ -35,7 +35,7 @@ class Model extends EventObservable implements IModelFacade {
     return this.settings.max;
   }
 
-  setFrom(valueInPercent: number, thumbWidthInPercent:number): void {
+  setFrom(valueInPercent: number, thumbWidthInPercent: number): void {
     const from = this.convertFromPercentToValue(valueInPercent, thumbWidthInPercent);
     if (from > this.settings.max) {
       this.settings.from = this.settings.max;
@@ -48,7 +48,7 @@ class Model extends EventObservable implements IModelFacade {
     return this.settings.from;
   }
 
-  setTo(valueInPercent: number, thumbWidthInPercent:number): void {
+  setTo(valueInPercent: number, thumbWidthInPercent: number): void {
     const to = this.convertFromPercentToValue(valueInPercent, thumbWidthInPercent);
     if (to >= this.settings.max) {
       this.settings.to = this.settings.max;
@@ -57,11 +57,11 @@ class Model extends EventObservable implements IModelFacade {
     } else this.settings.to = to;
   }
 
-  getTo() :number {
+  getTo(): number {
     return this.settings.to;
   }
 
-  getStep() :number {
+  getStep(): number {
     return this.settings.step ? this.settings.step : 1;
   }
 
@@ -77,7 +77,7 @@ class Model extends EventObservable implements IModelFacade {
     return this.settings.hideThumbLabel;
   }
 
-  private validateSettings(settings: ISettings):void {
+  private validateSettings(settings: ISettings): void {
     const newMin = Utils.convertFromInputToNumber(settings.min);
     const newMax = Utils.convertFromInputToNumber(settings.max);
     const newFrom = Utils.convertFromInputToNumber(settings.from);
