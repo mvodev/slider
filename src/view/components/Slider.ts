@@ -175,34 +175,33 @@ class Slider extends EventObservable {
   }
 
   private handleRangeLabel(e:Event) {
-    if (e.target instanceof Element) {
-      if (e.target.getAttribute('value')) {
-        const targetValue = Number(e.target.getAttribute('value'));
-        const roundedValue = Utils.roundWithStep(targetValue,
-          this.settings.step, this.settings.min);
-        if (!this.settings.isRange) {
+    const elemIsTarget = (e.target instanceof Element) && (e.target.getAttribute('value'));
+    if (elemIsTarget) {
+      const targetValue = Number(e.target.getAttribute('value'));
+      const roundedValue = Utils.roundWithStep(targetValue,
+        this.settings.step, this.settings.min);
+      if (!this.settings.isRange) {
+        if (targetValue === this.settings.max) {
+          this.dispatchEvent(this.convertFromValueToPx(targetValue), Constants.THUMB_FROM);
+        } else {
+          this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_FROM);
+        }
+      } else if (this.settings.isRange) {
+        if (targetValue >= this.settings.to) {
           if (targetValue === this.settings.max) {
-            this.dispatchEvent(this.convertFromValueToPx(targetValue), Constants.THUMB_FROM);
+            this.dispatchEvent(this.convertFromValueToPx(targetValue), Constants.THUMB_TO);
           } else {
-            this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_FROM);
+            this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_TO);
           }
-        } else if (this.settings.isRange) {
-          if (targetValue >= this.settings.to) {
-            if (targetValue === this.settings.max) {
-              this.dispatchEvent(this.convertFromValueToPx(targetValue), Constants.THUMB_TO);
-            } else {
-              this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_TO);
-            }
-          } else if (targetValue <= this.settings.from) {
+        } else if (targetValue <= this.settings.from) {
+          this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_FROM);
+        } else {
+          const pivot = Math.abs(this.settings.to - this.settings.from) / 2;
+          if (targetValue <= (pivot + this.settings.from)) {
             this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_FROM);
-          } else {
-            const pivot = Math.abs(this.settings.to - this.settings.from) / 2;
-            if (targetValue <= (pivot + this.settings.from)) {
-              this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_FROM);
-            } else if (targetValue > (pivot + this.settings.from)) {
-              if (roundedValue <= this.settings.max) {
-                this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_TO);
-              }
+          } else if (targetValue > (pivot + this.settings.from)) {
+            if (roundedValue <= this.settings.max) {
+              this.dispatchEvent(this.convertFromValueToPx(roundedValue), Constants.THUMB_TO);
             }
           }
         }
