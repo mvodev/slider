@@ -21,11 +21,11 @@ class Thumb {
 
   setThumbPosition(shift:number, isVertical:boolean|undefined):void {
     if (isVertical) {
-      this.getThumb().style.top = `${shift}%`;
-      this.getThumb().style.left = '-25%';
+      this.thumb.style.top = `${shift}%`;
+      this.thumb.style.left = '-25%';
     } else {
-      this.getThumb().style.left = `${shift}%`;
-      this.getThumb().style.top = '-25%';
+      this.thumb.style.left = `${shift}%`;
+      this.thumb.style.top = '-25%';
     }
   }
 
