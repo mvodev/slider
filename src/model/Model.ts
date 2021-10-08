@@ -88,44 +88,44 @@ class Model extends EventObservable implements IModelFacade {
     const newRange = Utils.convertFromInputToBoolean(settings.isRange);
     if (newMin !== undefined && newMax !== undefined) {
       if (Math.abs(newMax - newMin) < this.settings.step) {
-        throw new Error('unacceptable values,difference between min and max more than step');
+        throw new Error('difference between min and max more than step');
       }
     }
     if (newMin !== undefined) {
       if (newMin > this.settings.from) {
-        throw new Error('unacceptable value,min value more than from value');
+        throw new Error('min value more than from value');
       } else {
         this.settings.min = newMin;
       }
     }
     if (newMax !== undefined) {
       if (this.settings.isRange && newMax < this.settings.to) {
-        throw new Error('unacceptable value,min value more than to value');
+        throw new Error('min value more than to value');
       } else if (!this.settings.isRange && newMax < this.settings.from) {
-        throw new Error('unacceptable value,min value more than from value');
+        throw new Error('min value more than from value');
       } else {
         this.settings.max = newMax;
       }
     }
     if (newFrom !== undefined && !this.settings.isRange) {
       if (newFrom > this.settings.max) {
-        throw new Error('unacceptable value,from more than max');
+        throw new Error('from more than max');
       } else if (newFrom < this.settings.min) {
-        throw new Error('unacceptable value,from less than min');
+        throw new Error('from less than min');
       } else this.settings.from = newFrom;
     }
     if (newFrom !== undefined && this.settings.isRange) {
       if (newFrom > this.settings.to) {
-        throw new Error('unacceptable value,from more than to');
+        throw new Error('from more than to');
       } else if (newFrom < this.settings.min) {
-        throw new Error('unacceptable value,from less than min');
+        throw new Error('from less than min');
       } else this.settings.from = newFrom;
     }
     if (newTo !== undefined && this.settings.isRange) {
       if (newTo < this.settings.from) {
-        throw new Error('unacceptable value,to less than from');
+        throw new Error('to less than from');
       } else if (newTo > this.settings.max) {
-        throw new Error('unacceptable value,to more than max');
+        throw new Error('to more than max');
       } else this.settings.to = newTo;
     }
     if (newStep !== undefined) {
