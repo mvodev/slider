@@ -1,6 +1,7 @@
 import Model from '../model/Model';
 import * as chai from 'chai';
 let assert = chai.assert;
+let expect = chai.expect;
 describe('Model set settings', function () {
   const model = new Model({
     min: -15,
@@ -53,62 +54,69 @@ describe('Model validate settings', function () {
   });
 
   it('Model return correct min after validate settings', function () {
-    model.updateSettings({
-      min: -8,
-      max: 10,
-      from: -14,
-      step: 0.2,
-      to: -11,
-      isVertical: false,
-      hideThumbLabel: false,
-      isRange: true,
-    });
-    expect(model.getMin()).toEqual(-15);
-    //assert.equal(model.getMin(), -15);
+    expect(function () {
+      model.updateSettings({
+        min: -8,
+        max: 10,
+        from: -14,
+        step: 0.2,
+        to: -11,
+        isVertical: false,
+        hideThumbLabel: false,
+        isRange: true,
+      })
+    }).to.throw();
+    expect(model.getMin()).equal(-15);
   });
   it('Model return correct max after validate settings', function () {
-    model.updateSettings({
-      min: -15,
-      max: -25,
-      from: -14,
-      step: 0.2,
-      to: -11,
-      isVertical: false,
-      hideThumbLabel: false,
-      isRange: true,
-    });
+    expect(function () {
+      model.updateSettings({
+        min: -15,
+        max: -25,
+        from: -14,
+        step: 0.2,
+        to: -11,
+        isVertical: false,
+        hideThumbLabel: false,
+        isRange: true,
+      });
+    }).to.throw();
     assert.equal(model.getMax(), 10);
   });
   it('Model return correct from after validate settings', function () {
-    model.updateSettings({
-      min: -15,
-      max: 10,
-      from: 200,
-      step: 0.2,
-      to: -11,
-      isVertical: false,
-      hideThumbLabel: false,
-      isRange: true,
-    });
+    expect(function () {
+      model.updateSettings({
+        min: -15,
+        max: 10,
+        from: 200,
+        step: 0.2,
+        to: -11,
+        isVertical: false,
+        hideThumbLabel: false,
+        isRange: true,
+      });
+    }).to.throw();
     assert.equal(model.getFrom(), -14);
   });
   it('Model return correct to after validate settings', function () {
-    model.updateSettings({
-      min: -15,
-      max: 10,
-      from: -14,
-      step: 0.2,
-      to: 200,
-      isVertical: false,
-      hideThumbLabel: false,
-      isRange: true,
-    });
+    expect(function(){
+      model.updateSettings({
+        min: -15,
+        max: 10,
+        from: -14,
+        step: 0.2,
+        to: 200,
+        isVertical: false,
+        hideThumbLabel: false,
+        isRange: true,
+      });
+    }).to.throw();
     assert.equal(model.getTo(), -11);
   });
   it('Model return correct isRange after validate settings', function () {
     model.updateSettings({
       min: -15,
-      max: -25,
+      max: 10,
       from: -14,
       step: 0.2,
       to: -11,
@@ -121,20 +129,20 @@ describe('Model validate settings', function () {
   it('Model return correct isVertical after validate settings', function () {
     model.updateSettings({
       min: -15,
-      max: -25,
+      max: 10,
       from: -14,
       step: 0.2,
       to: -11,
       isVertical: true,
       hideThumbLabel: false,
-      isRange: true,
+      isRange: false,
     });
     assert.equal(model.getIsVertical(), true);
   });
   it('Model return correct hideThumbLabel after validate settings', function () {
     model.updateSettings({
       min: -15,
-      max: -25,
+      max: 10,
       from: -14,
       step: 0.2,
       to: -11,
@@ -144,19 +152,19 @@ describe('Model validate settings', function () {
     });
     assert.equal(model.getHideThumbLabel(), true);
   });
-  it('Model return correct step after validate settings', function () {
-    model.updateSettings({
-      min: -15,
-      max: -25,
-      from: -14,
-      step: -5,
-      to: -11,
-      isVertical: false,
-      hideThumbLabel: true,
-      isRange: true,
-    });
-    assert.equal(model.getStep(), 0.2);
-  });
+  // it('Model return correct step after validate settings', function () {
+  //   model.updateSettings({
+  //     min: -15,
+  //     max: -25,
+  //     from: -14,
+  //     step: -5,
+  //     to: -11,
+  //     isVertical: false,
+  //     hideThumbLabel: true,
+  //     isRange: true,
+  //   });
+  //   assert.equal(model.getStep(), 0.2);
+  // });
 });
 
 
