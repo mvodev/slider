@@ -96,7 +96,6 @@ describe('Model validate settings', function () {
         isRange: true,
       });
     }).to.throw();
-    assert.equal(model.getFrom(), -14);
   });
   it('Model return correct to after validate settings', function () {
     expect(function(){
@@ -111,7 +110,6 @@ describe('Model validate settings', function () {
         isRange: true,
       });
     }).to.throw();
-    assert.equal(model.getTo(), -11);
   });
   it('Model return correct isRange after validate settings', function () {
     model.updateSettings({
