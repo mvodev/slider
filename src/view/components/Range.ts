@@ -22,8 +22,8 @@ class Range {
     this.coloredRange = new ColoredRange();
     this.thumbTo = new Thumb(ClassNaming.THUMB_TO);
     this.thumbFrom = new Thumb(ClassNaming.THUMB_FROM);
-    this.getRange().appendChild(this.coloredRange.getColoredRange());
-    this.getRange().appendChild(this.thumbFrom.getThumb());
+    this.range.appendChild(this.coloredRange.getColoredRange());
+    this.range.appendChild(this.thumbFrom.getThumb());
   }
 
   getRange(): HTMLDivElement {
@@ -33,10 +33,10 @@ class Range {
   render(settings: string): void {
     Object.assign(this.viewSettings, JSON.parse(settings));
     if (this.viewSettings.isRange) {
-      this.getRange().appendChild(this.thumbTo.getThumb());
+      this.range.appendChild(this.thumbTo.getThumb());
     } else if (!this.viewSettings.isRange) {
-      if (this.getRange().contains(this.thumbTo.getThumb())) {
-        this.getRange().removeChild(this.thumbTo.getThumb());
+      if (this.range.contains(this.thumbTo.getThumb())) {
+        this.range.removeChild(this.thumbTo.getThumb());
       }
     }
   }
@@ -108,9 +108,9 @@ class Range {
 
   getThumbWidthInPx(): number {
     if (this.viewSettings.isVertical) {
-      return this.getThumbFrom().offsetHeight;
+      return this.thumbFrom.getThumb().offsetHeight;
     }
-    return this.getThumbFrom().offsetWidth;
+    return this.thumbFrom.getThumb().offsetWidth;
   }
 }
 export default Range;

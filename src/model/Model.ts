@@ -180,15 +180,17 @@ class Model extends EventObservable implements IModelFacade {
   }
 
   private validateRange(newRange:boolean|undefined) {
+    const {
+      min, max, step, isRange, to, from,
+    } = this.settings;
     if (newRange !== undefined) {
-      if (!this.settings.isRange) {
-        this.settings.to = ((this.settings.from + this.settings.step) > this.settings.max)
-          ? this.settings.max : (+Math.round(this.settings.from + this.settings.step)
-            .toFixed(Utils.numDigitsAfterDecimal(this.settings.step)));
+      if (!isRange) {
+        this.settings.to = ((from + step) > max) ? max
+          : (+Math.round(from + step).toFixed(Utils.numDigitsAfterDecimal(step)));
       }
       this.settings.isRange = newRange;
-      if (this.settings.from >= this.settings.to) {
-        this.settings.from = this.settings.min;
+      if (from >= to) {
+        this.settings.from = min;
       }
     }
   }
