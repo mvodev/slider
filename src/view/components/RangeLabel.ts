@@ -54,11 +54,11 @@ class RangeLabel {
   }
 
   setVertical(): void {
-    this.getRangeLabel().classList.add(ClassNaming.RANGE_LABEL_IS_VERTICAL);
+    this.rangeLabelContainer.classList.add(ClassNaming.RANGE_LABEL_IS_VERTICAL);
   }
 
   setHorizontal(): void {
-    this.getRangeLabel().classList.remove(ClassNaming.RANGE_LABEL_IS_VERTICAL);
+    this.rangeLabelContainer.classList.remove(ClassNaming.RANGE_LABEL_IS_VERTICAL);
   }
 
   getLabels(): HTMLElement[] {
