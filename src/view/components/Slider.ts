@@ -4,7 +4,7 @@ import RangeLabel from './RangeLabel';
 import ISettings from '../../model/ISettings';
 import defaultSettings from '../../model/defaultSettings';
 import EventObservable from '../../observers/EventObservable';
-import ClassNaming from '../../utils/ClassNaming';
+import ClassNaming from '../../utils/classNaming';
 import CONSTANTS from '../../utils/Constants';
 import Utils from '../../utils/Utils';
 

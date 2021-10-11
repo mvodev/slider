@@ -1,4 +1,4 @@
-import ClassNaming from '../../utils/ClassNaming';
+import ClassNaming from '../../utils/classNaming';
 
 class ThumbLabel {
   private thumbLabelContainer: HTMLDivElement;

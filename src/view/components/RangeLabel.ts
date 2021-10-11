@@ -1,5 +1,5 @@
 import ISettings from '../../model/ISettings';
-import ClassNaming from '../../utils/ClassNaming';
+import ClassNaming from '../../utils/classNaming';
 
 class RangeLabel {
   private rangeLabelContainer!: HTMLDivElement;
