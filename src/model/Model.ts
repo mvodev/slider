@@ -87,6 +87,20 @@ class Model extends EventObservable implements IModelFacade {
     const newHideThumbLabel = Utils.convertFromInputToBoolean(settings.hideThumbLabel);
     const newRange = Utils.convertFromInputToBoolean(settings.isRange);
 
+    this.validateMin(newMin, newMax);
+    this.validateMax(newMax);
+    this.validateFrom(newFrom);
+    this.validateTo(newTo);
+    this.validateStep(newStep);
+
+    this.settings.isVertical = newIsVertical;
+
+    this.settings.hideThumbLabel = newHideThumbLabel;
+
+    this.validateRange(newRange);
+  }
+
+  private validateMin(newMin:number|undefined, newMax:number|undefined) {
     if (newMin !== undefined && newMax !== undefined) {
       if (Math.abs(newMax - newMin) < this.settings.step) {
         throw new Error('difference between min and max more than step');
@@ -99,7 +113,9 @@ class Model extends EventObservable implements IModelFacade {
         this.settings.min = newMin;
       }
     }
+  }
 
+  private validateMax(newMax:number|undefined) {
     if (newMax !== undefined) {
       if (this.settings.isRange && newMax < this.settings.to) {
         throw new Error('min value more than to value');
@@ -109,7 +125,9 @@ class Model extends EventObservable implements IModelFacade {
         this.settings.max = newMax;
       }
     }
+  }
 
+  private validateFrom(newFrom:number|undefined) {
     if (newFrom !== undefined && !this.settings.isRange) {
       if (newFrom > this.settings.max) {
         throw new Error('from more than max');
@@ -124,7 +142,9 @@ class Model extends EventObservable implements IModelFacade {
         throw new Error('from less than min');
       } else this.settings.from = newFrom;
     }
+  }
 
+  private validateTo(newTo:number|undefined) {
     if (newTo !== undefined && this.settings.isRange) {
       if (newTo < this.settings.from) {
         throw new Error('to less than from');
@@ -132,7 +152,9 @@ class Model extends EventObservable implements IModelFacade {
         throw new Error('to more than max');
       } else this.settings.to = newTo;
     }
+  }
 
+  private validateStep(newStep:number|undefined) {
     if (newStep !== undefined) {
       if (newStep < 0) {
         throw new Error('step must be positive');
@@ -155,11 +177,9 @@ class Model extends EventObservable implements IModelFacade {
         }
       }
     }
+  }
 
-    this.settings.isVertical = newIsVertical;
-
-    this.settings.hideThumbLabel = newHideThumbLabel;
-
+  private validateRange(newRange:boolean|undefined) {
     if (newRange !== undefined) {
       if (!this.settings.isRange) {
         this.settings.to = ((this.settings.from + this.settings.step) > this.settings.max)
