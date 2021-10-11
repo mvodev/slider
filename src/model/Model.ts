@@ -14,7 +14,7 @@ class Model extends EventObservable implements IModelFacade {
     this.setSettings(settings);
   }
 
-  private setSettings(settings:ISettings): void {
+  private setSettings(settings: ISettings): void {
     this.settings = { ...settings };
   }
 
@@ -167,20 +167,20 @@ class Model extends EventObservable implements IModelFacade {
 
   private convertFromPercentToValue(valueInPercent: number, thumbWidthInPercent:number) {
     if (valueInPercent <= 0) {
-      return this.getMin();
+      return this.settings.min;
     }
     if (valueInPercent >= (100 - thumbWidthInPercent)) {
-      return this.getMax();
+      return this.settings.max;
     }
     let del = 1;
     if (this.getStep() !== 0) {
       del = 1.0 / this.getStep();
     }
-    const diapason = Math.abs(this.getMax() - this.getMin());
+    const diapason = Math.abs(this.settings.max - this.settings.min);
     const res = Math.round(+(((diapason * valueInPercent) / (100 - thumbWidthInPercent)))
       .toFixed(Utils.numDigitsAfterDecimal(this.getStep())) * del) / del + this.getMin();
-    if (res < this.getMin()) return this.getMin();
-    if (res > this.getMax()) return this.getMax();
+    if (res < this.settings.min) return this.settings.min;
+    if (res > this.settings.max) return this.settings.max;
     return res;
   }
 }

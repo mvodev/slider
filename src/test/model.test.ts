@@ -40,6 +40,7 @@ describe('Model set settings', function () {
 
 
 describe('Model validate settings', function () {
+
   const model = new Model({
     min: -15,
     max: 10,
@@ -50,6 +51,7 @@ describe('Model validate settings', function () {
     hideThumbLabel: false,
     isRange: true,
   });
+
   it('Model return correct min after validate settings', function () {
     model.updateSettings({
       min: -8,
@@ -61,7 +63,8 @@ describe('Model validate settings', function () {
       hideThumbLabel: false,
       isRange: true,
     });
-    assert.equal(model.getMin(), -15);
+    expect(model.getMin()).toEqual(-15);
+    //assert.equal(model.getMin(), -15);
   });
   it('Model return correct max after validate settings', function () {
     model.updateSettings({
