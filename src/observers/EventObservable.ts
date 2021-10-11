@@ -1,4 +1,4 @@
-import Messages from '../utils/Messages';
+import Messages from '../utils/messages';
 import IObservable from './IObservable';
 import IObserver from './IObserver';
 

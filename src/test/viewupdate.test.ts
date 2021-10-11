@@ -1,5 +1,5 @@
 import View from '../view/View';
-import Messages from '../utils/Messages';
+import Messages from '../utils/messages';
 import * as chai from 'chai';
 document.body.innerHTML = '<div id="slider-test2"></div>';
 let assert = chai.assert;

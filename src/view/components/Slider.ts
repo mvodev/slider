@@ -1,11 +1,11 @@
 import Range from './Range';
-import Messages from '../../utils/Messages';
+import Messages from '../../utils/messages';
 import RangeLabel from './RangeLabel';
 import ISettings from '../../model/ISettings';
 import defaultSettings from '../../model/defaultSettings';
 import EventObservable from '../../observers/EventObservable';
 import ClassNaming from '../../utils/classNaming';
-import CONSTANTS from '../../utils/Constants';
+import CONSTANTS from '../../utils/constants';
 import Utils from '../../utils/Utils';
 
 class Slider extends EventObservable {

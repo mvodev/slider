@@ -1,7 +1,7 @@
 import ISettings from '../model/ISettings';
 import Model from '../model/Model';
 import View from '../view/View';
-import Messages from '../utils/Messages';
+import Messages from '../utils/messages';
 import IObserver from '../observers/IObserver';
 import EventObservable from '../observers/EventObservable';
 

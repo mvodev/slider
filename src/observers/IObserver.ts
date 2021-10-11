@@ -1,4 +1,4 @@
-import Messages from '../utils/Messages';
+import Messages from '../utils/messages';
 
 interface IObserver {
   handleEvent(msg: Messages, s: string, width: number): void;

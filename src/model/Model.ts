@@ -1,4 +1,4 @@
-import Messages from '../utils/Messages';
+import Messages from '../utils/messages';
 import IModelFacade from './IModelFacade';
 import ISettings from './ISettings';
 import EventObservable from '../observers/EventObservable';

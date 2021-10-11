@@ -1,5 +1,5 @@
 import IObserver from './IObserver';
-import Messages from '../utils/Messages';
+import Messages from '../utils/messages';
 
 interface IObservable {
   addObserver(o: IObserver): void;

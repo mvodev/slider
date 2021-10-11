@@ -1,5 +1,5 @@
 import View from '../view/View';
-import Messages from '../utils/Messages';
+import Messages from '../utils/messages';
 import * as chai from 'chai';
 import '../../slider/fsd-slider.css';
 let assert = chai.assert;
