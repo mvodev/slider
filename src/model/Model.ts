@@ -155,21 +155,24 @@ class Model extends EventObservable implements IModelFacade {
   }
 
   private validateStep(newStep:number|undefined) {
+    const {
+      min, max, step,
+    } = this.settings;
     if (newStep !== undefined) {
       if (newStep < 0) {
         throw new Error('step must be positive');
       } else if (newStep === 0) {
         throw new Error('step must not be zero');
-      } else if (newStep > (Math.abs(this.settings.max - this.settings.min))) {
+      } else if (newStep > (Math.abs(max - min))) {
         throw new Error('step must be more than difference between max and min');
       } else {
         // eslint-disable-next-line no-lonely-if
-        if (this.settings.step !== newStep) {
+        if (step !== newStep) {
           this.settings.step = newStep;
-          this.settings.from = +Math.round(this.settings.min + this.settings.step)
+          this.settings.from = +Math.round(min + this.settings.step)
             .toFixed(Utils.numDigitsAfterDecimal(this.settings.step));
-          if ((this.settings.from + this.settings.step) >= this.settings.max) {
-            this.settings.to = this.settings.max;
+          if ((this.settings.from + this.settings.step) >= max) {
+            this.settings.to = max;
           } else {
             this.settings.to = +Math.round(this.settings.from + this.settings.step)
               .toFixed(Utils.numDigitsAfterDecimal(this.settings.step));
