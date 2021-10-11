@@ -28,9 +28,9 @@ describe("View update", function () {
   const view = new View(root);
   view.refreshView(Messages.INIT, s);
   view.refreshView(Messages.UPDATE, sUpdated);
-  // it("View set correct style for ThumbLabel after update", function () {
-  //   assert.equal(view.getSlider().getThumbLabelFrom().style.display, "block");
-  // });
+  it("View set correct style for ThumbLabel after update", function () {
+    assert.equal(view.getSlider().getThumbLabelFrom().style.display, "block");
+  });
   it("View set correct value for min label after update", function () {
     assert.equal(view.getSlider().getRangeLabel().firstElementChild.innerHTML, "" + sUpdated.min);
   });
