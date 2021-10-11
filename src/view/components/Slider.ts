@@ -25,7 +25,7 @@ class Slider extends EventObservable {
 
   private handleRangeBinded!: EventListenerOrEventListenerObject;
 
-  private handleRangeLabelBinded!: EventListenerOrEventListenerObject;
+  private handleRangeLabelClickBinded!: EventListenerOrEventListenerObject;
 
   private fromInPx: number;
 
@@ -139,9 +139,9 @@ class Slider extends EventObservable {
   private bindEvents(): void {
     this.handleRangeBinded = this.handleRange.bind(this, 'range');
     this.initResizeObserver();
-    this.handleRangeLabelBinded = this.handleRangeLabel.bind(this);
+    this.handleRangeLabelClickBinded = this.handleRangeLabelClick.bind(this);
     this.getRange().addEventListener('mousedown', this.handleRangeBinded);
-    this.rangeLabel.getLabels().forEach((elem) => elem.addEventListener('click', this.handleRangeLabelBinded));
+    this.rangeLabel.getLabels().forEach((elem) => elem.addEventListener('click', this.handleRangeLabelClickBinded));
   }
 
   private initResizeObserver(): void {
@@ -170,11 +170,11 @@ class Slider extends EventObservable {
 
   private unbindEvents() {
     this.removeHandler();
-    this.getRangeLabel().removeEventListener('mousedown', this.handleRangeLabelBinded);
+    this.getRangeLabel().removeEventListener('mousedown', this.handleRangeLabelClickBinded);
     this.getRange().removeEventListener('mousedown', this.handleRangeBinded);
   }
 
-  private handleRangeLabel(e: Event) {
+  private handleRangeLabelClick(e: Event) {
     const elemIsTarget = (e.target instanceof Element) && (e.target.getAttribute('value'));
     const {
       to, max, min, from, isRange, step,
