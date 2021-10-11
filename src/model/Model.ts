@@ -194,21 +194,23 @@ class Model extends EventObservable implements IModelFacade {
   }
 
   private convertFromPercentToValue(valueInPercent: number, thumbWidthInPercent:number) {
+    const { min, max, step } = this.settings;
     if (valueInPercent <= 0) {
-      return this.settings.min;
+      return min;
     }
     if (valueInPercent >= (100 - thumbWidthInPercent)) {
-      return this.settings.max;
+      return max;
     }
-    let del = 1;
-    if (this.getStep() !== 0) {
-      del = 1.0 / this.getStep();
+    let delimeter = 1;
+    if (step !== 0) {
+      delimeter = 1.0 / step;
     }
-    const diapason = Math.abs(this.settings.max - this.settings.min);
+    const diapason = Math.abs(max - min);
     const res = Math.round(+(((diapason * valueInPercent) / (100 - thumbWidthInPercent)))
-      .toFixed(Utils.numDigitsAfterDecimal(this.getStep())) * del) / del + this.getMin();
-    if (res < this.settings.min) return this.settings.min;
-    if (res > this.settings.max) return this.settings.max;
+      .toFixed(Utils.numDigitsAfterDecimal(step)) * delimeter)
+      / delimeter + min;
+    if (res < min) return min;
+    if (res > max) return max;
     return res;
   }
 }

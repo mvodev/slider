@@ -98,7 +98,7 @@ describe('Model validate settings', function () {
     }).to.throw();
   });
   it('Model return correct to after validate settings', function () {
-    expect(function(){
+    expect(function () {
       model.updateSettings({
         min: -15,
         max: 10,
