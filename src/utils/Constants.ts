@@ -1,6 +1,6 @@
 const CONSTANTS = {
-  NUMBER_OF_LABELS: 3,
-  THUMB_FROM: 'thumbFrom',
-  THUMB_TO: 'thumbTo',
+  numberOfLabels: 3,
+  thumbFrom: 'thumbFrom',
+  thumbTo: 'thumbTo',
 };
 export default CONSTANTS;

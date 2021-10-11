@@ -182,26 +182,26 @@ class Slider extends EventObservable {
         this.settings.step, this.settings.min);
       if (!this.settings.isRange) {
         if (targetValue === this.settings.max) {
-          this.dispatchEvent(this.convertFromValueToPx(targetValue), CONSTANTS.THUMB_FROM);
+          this.dispatchEvent(this.convertFromValueToPx(targetValue), CONSTANTS.thumbFrom);
         } else {
-          this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.THUMB_FROM);
+          this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.thumbFrom);
         }
       } else if (this.settings.isRange) {
         if (targetValue >= this.settings.to) {
           if (targetValue === this.settings.max) {
-            this.dispatchEvent(this.convertFromValueToPx(targetValue), CONSTANTS.THUMB_TO);
+            this.dispatchEvent(this.convertFromValueToPx(targetValue), CONSTANTS.thumbTo);
           } else {
-            this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.THUMB_TO);
+            this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.thumbTo);
           }
         } else if (targetValue <= this.settings.from) {
-          this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.THUMB_FROM);
+          this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.thumbFrom);
         } else {
           const pivot = Math.abs(this.settings.to - this.settings.from) / 2;
           if (targetValue <= (pivot + this.settings.from)) {
-            this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.THUMB_FROM);
+            this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.thumbFrom);
           } else if (targetValue > (pivot + this.settings.from)) {
             if (roundedValue <= this.settings.max) {
-              this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.THUMB_TO);
+              this.dispatchEvent(this.convertFromValueToPx(roundedValue), CONSTANTS.thumbTo);
             }
           }
         }
@@ -226,46 +226,46 @@ class Slider extends EventObservable {
       if (clickedPos < 0) clickedPos = 0;
       if (this.settings.isRange) {
         if (clickedPos < this.fromInPx) {
-          thumbType = CONSTANTS.THUMB_FROM;
+          thumbType = CONSTANTS.thumbFrom;
           if (Math.abs(clickedPos - this.getStepInPx()) <= this.fromInPx) {
             this.fromInPx -= this.roundPos(this.fromInPx, clickedPos);
-            this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
+            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
           }
         } else if (clickedPos > this.toInPx) {
-          thumbType = CONSTANTS.THUMB_TO;
+          thumbType = CONSTANTS.thumbTo;
           if ((clickedPos + this.getStepInPx()) > this.toInPx) {
             if (clickedPos >= bottom) {
-              this.dispatchEvent(clickedPos, CONSTANTS.THUMB_TO);
+              this.dispatchEvent(clickedPos, CONSTANTS.thumbTo);
             } else {
               this.toInPx += this.roundPos(this.toInPx, clickedPos);
-              this.dispatchEvent(this.toInPx, CONSTANTS.THUMB_TO);
+              this.dispatchEvent(this.toInPx, CONSTANTS.thumbTo);
             }
           }
         } else if (clickedPos >= this.fromInPx && clickedPos <= this.toInPx) {
           const pivot = (this.toInPx - this.fromInPx) / 2;
           if ((clickedPos) <= (pivot + this.fromInPx)) {
-            thumbType = CONSTANTS.THUMB_FROM;
+            thumbType = CONSTANTS.thumbFrom;
             this.fromInPx += this.roundPos(this.fromInPx, clickedPos);
-            this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
+            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
           } else if ((clickedPos) > (pivot + this.fromInPx)) {
-            thumbType = CONSTANTS.THUMB_TO;
+            thumbType = CONSTANTS.thumbTo;
             this.toInPx -= this.roundPos(this.toInPx, clickedPos);
-            this.dispatchEvent(this.toInPx, CONSTANTS.THUMB_TO);
+            this.dispatchEvent(this.toInPx, CONSTANTS.thumbTo);
           }
         }
       } else {
-        thumbType = CONSTANTS.THUMB_FROM;
+        thumbType = CONSTANTS.thumbFrom;
         if ((clickedPos + this.getThumbWidthInPx() / 2) < this.fromInPx) {
           if (Math.abs(clickedPos - this.getStepInPx()) < this.fromInPx) {
             this.fromInPx -= this.roundPos(this.fromInPx, clickedPos);
-            this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
+            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
           }
         } else if ((clickedPos + this.getThumbWidthInPx() / 2) > this.fromInPx) {
           if (Math.abs(clickedPos + this.getStepInPx()) > this.fromInPx
             && (Math.floor(this.fromInPx + Math.round(Math.abs(this.fromInPx - clickedPos)
               / this.getStepInPx()) * this.getStepInPx()) <= bottom)) {
             this.fromInPx += this.roundPos(this.fromInPx, clickedPos);
-            this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
+            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
           }
         }
       }
@@ -292,53 +292,53 @@ class Slider extends EventObservable {
       if (newPos >= bottom) {
         newPos = bottom;
       }
-      if (thumbType === CONSTANTS.THUMB_FROM) {
+      if (thumbType === CONSTANTS.thumbFrom) {
         if (this.settings.isRange) {
           if (newPos < this.fromInPx) {
             if (Math.abs(newPos - this.getStepInPx()) <= this.fromInPx) {
               this.fromInPx -= this.roundPos(this.fromInPx, newPos);
-              this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
+              this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
             }
           } else if (newPos <= this.toInPx && newPos > this.fromInPx) {
             if (Math.abs(newPos + this.getStepInPx()) > this.fromInPx
               && Math.abs(newPos + this.getStepInPx()) <= this.toInPx) {
               this.fromInPx += this.roundPos(this.fromInPx, newPos);
-              this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
+              this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
             }
           }
         } else if (!this.settings.isRange) {
           if (newPos < this.fromInPx) {
             if (Math.abs(newPos - this.getStepInPx()) < this.fromInPx) {
               this.fromInPx -= this.roundPos(this.fromInPx, newPos);
-              this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
+              this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
             }
           } else {
             const valueRoundedInPx = this.roundPos(this.fromInPx, newPos);
             if ((Math.abs(newPos + this.getStepInPx()) > this.fromInPx)) {
               if (newPos >= bottom) {
-                this.dispatchEvent(newPos, CONSTANTS.THUMB_FROM);
+                this.dispatchEvent(newPos, CONSTANTS.thumbFrom);
               } else {
                 this.fromInPx += valueRoundedInPx;
-                this.dispatchEvent(this.fromInPx, CONSTANTS.THUMB_FROM);
+                this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
               }
             }
           }
         }
-      } else if (thumbType === CONSTANTS.THUMB_TO) {
+      } else if (thumbType === CONSTANTS.thumbTo) {
         if (newPos > this.toInPx) {
           const valueRoundedInPx = this.roundPos(this.toInPx, newPos);
           if ((newPos + this.getStepInPx()) > this.toInPx) {
             if (newPos >= bottom) {
-              this.dispatchEvent(newPos, CONSTANTS.THUMB_TO);
+              this.dispatchEvent(newPos, CONSTANTS.thumbTo);
             } else {
               this.toInPx += valueRoundedInPx;
-              this.dispatchEvent(this.toInPx, CONSTANTS.THUMB_TO);
+              this.dispatchEvent(this.toInPx, CONSTANTS.thumbTo);
             }
           }
         } else if (newPos < this.toInPx && newPos > this.fromInPx) {
           if (Math.abs(newPos - this.getStepInPx()) >= this.fromInPx) {
             this.toInPx -= this.roundPos(this.toInPx, newPos);
-            this.dispatchEvent(this.toInPx, CONSTANTS.THUMB_TO);
+            this.dispatchEvent(this.toInPx, CONSTANTS.thumbTo);
           }
         }
       }
