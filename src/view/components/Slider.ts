@@ -175,12 +175,13 @@ class Slider extends EventObservable {
   }
 
   private handleRangeLabelClick(e: Event) {
-    const elemIsTarget = (e.target instanceof Element) && (e.target.getAttribute('value'));
+    const elemIsTarget = (e.target instanceof Element)
+      && (e.target.getAttribute(CONSTANTS.dataAttrName));
     const {
       to, max, min, from, isRange, step,
     } = this.settings;
     if (elemIsTarget) {
-      const targetValue = Number(e.target.getAttribute('value'));
+      const targetValue = Number(e.target.getAttribute(CONSTANTS.dataAttrName));
       const roundedValue = Utils.roundWithStep(targetValue, step, min);
       if (!isRange) {
         if (targetValue === max) {
