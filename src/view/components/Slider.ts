@@ -23,9 +23,9 @@ class Slider extends EventObservable {
 
   private removeHandlerBinded!: EventListenerOrEventListenerObject;
 
-  private handleRangeBinded!: EventListenerOrEventListenerObject;
+  private handleRangeClickBinded!: EventListenerOrEventListenerObject;
 
-  private handleRangeLabelClickBinded!: EventListenerOrEventListenerObject;
+  private handleRangeClickLabelClickBinded!: EventListenerOrEventListenerObject;
 
   private fromInPx: number;
 
@@ -137,11 +137,11 @@ class Slider extends EventObservable {
   }
 
   private bindEvents(): void {
-    this.handleRangeBinded = this.handleRange.bind(this, 'range');
+    this.handleRangeClickBinded = this.handleRangeClick.bind(this, 'range');
     this.initResizeObserver();
-    this.handleRangeLabelClickBinded = this.handleRangeLabelClick.bind(this);
-    this.getRange().addEventListener('mousedown', this.handleRangeBinded);
-    this.rangeLabel.getLabels().forEach((elem) => elem.addEventListener('click', this.handleRangeLabelClickBinded));
+    this.handleRangeClickLabelClickBinded = this.handleRangeClickLabelClick.bind(this);
+    this.getRange().addEventListener('mousedown', this.handleRangeClickBinded);
+    this.rangeLabel.getLabels().forEach((elem) => elem.addEventListener('click', this.handleRangeClickLabelClickBinded));
   }
 
   private initResizeObserver(): void {
@@ -170,11 +170,11 @@ class Slider extends EventObservable {
 
   private unbindEvents() {
     this.removeHandler();
-    this.getRangeLabel().removeEventListener('mousedown', this.handleRangeLabelClickBinded);
-    this.getRange().removeEventListener('mousedown', this.handleRangeBinded);
+    this.getRangeLabel().removeEventListener('mousedown', this.handleRangeClickLabelClickBinded);
+    this.getRange().removeEventListener('mousedown', this.handleRangeClickBinded);
   }
 
-  private handleRangeLabelClick(e: Event) {
+  private handleRangeClickLabelClick(e: Event) {
     const elemIsTarget = (e.target instanceof Element)
       && (e.target.getAttribute(CONSTANTS.dataAttrName));
     const {
@@ -213,7 +213,7 @@ class Slider extends EventObservable {
     this.setColoredRange();
   }
 
-  private handleRange(type: string, e: Event) {
+  private handleRangeClick(type: string, e: Event) {
     const {
       isRange, isVertical,
     } = this.settings;
