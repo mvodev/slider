@@ -211,6 +211,7 @@ class Slider extends EventObservable {
       }
     }
     this.setColoredRange();
+    this.calculateThumbPos();
   }
 
   private handleRangeClick(type: string, e: Event) {
@@ -361,7 +362,7 @@ class Slider extends EventObservable {
 
   private roundPos(thumbInPx: number, newPos: number): number {
     return +(Math.round(Math.abs(thumbInPx - newPos) / this.getStepInPx())
-      * this.getStepInPx()).toFixed(2);
+      * this.getStepInPx()).toFixed(4);
   }
 
   private removeHandler() {
