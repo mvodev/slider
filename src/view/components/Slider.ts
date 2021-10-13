@@ -304,6 +304,9 @@ class Slider extends EventObservable {
           if (newPos < this.fromInPx) {
             if (Math.abs(newPos - this.getStepInPx()) <= this.fromInPx) {
               this.fromInPx -= this.roundPos(this.fromInPx, newPos);
+              if (this.fromInPx < 0) {
+                this.fromInPx = 0;
+              }
               this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
             }
           } else if (newPos <= this.toInPx && newPos > this.fromInPx) {
@@ -317,6 +320,9 @@ class Slider extends EventObservable {
           if (newPos < this.fromInPx) {
             if (Math.abs(newPos - this.getStepInPx()) < this.fromInPx) {
               this.fromInPx -= this.roundPos(this.fromInPx, newPos);
+              if (this.fromInPx < 0) {
+                this.fromInPx = 0;
+              }
               this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
             }
           } else {
@@ -343,7 +349,8 @@ class Slider extends EventObservable {
             }
           }
         } else if (newPos < this.toInPx && newPos > this.fromInPx) {
-          if (Math.abs(newPos - this.getStepInPx()) >= this.fromInPx) {
+          if (Math.abs(newPos - this.getStepInPx()) > this.fromInPx
+            && (this.toInPx - this.roundPos(this.toInPx, newPos)) > this.fromInPx) {
             this.toInPx -= this.roundPos(this.toInPx, newPos);
             this.dispatchEvent(this.toInPx, CONSTANTS.thumbTo);
           }
@@ -353,7 +360,8 @@ class Slider extends EventObservable {
   }
 
   private roundPos(thumbInPx: number, newPos: number): number {
-    return Math.round(Math.abs(thumbInPx - newPos) / this.getStepInPx()) * this.getStepInPx();
+    return +(Math.round(Math.abs(thumbInPx - newPos) / this.getStepInPx())
+      * this.getStepInPx()).toFixed(2);
   }
 
   private removeHandler() {
@@ -373,9 +381,13 @@ class Slider extends EventObservable {
   }
 
   private convertFromValueToPx(value: number): number {
-    return ((Math.abs(value - this.settings.min))
+    const result = ((Math.abs(value - this.settings.min))
       / Math.abs(this.settings.max - this.settings.min))
       * (this.getSliderLengthInPx() - this.getThumbWidthInPx());
+    if (result < 0) {
+      return 0;
+    }
+    return result;
   }
 
   private convertFromValueToPercent(value: number): number {
