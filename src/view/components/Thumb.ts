@@ -11,11 +11,11 @@ class Thumb {
     this.thumb = document.createElement('div');
     this.thumb.classList.add(className);
     this.thumbLabel = new ThumbLabel();
-    this.thumbLabelHTML = this.thumbLabel.getThumbLabelContainer();
+    this.thumbLabelHTML = this.thumbLabel.getThumbLabelHTML();
     this.thumb.appendChild(this.thumbLabelHTML);
   }
 
-  getThumb(): HTMLDivElement {
+  getThumbHTML(): HTMLDivElement {
     return this.thumb;
   }
 

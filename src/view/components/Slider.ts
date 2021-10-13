@@ -39,7 +39,6 @@ class Slider extends EventObservable {
     } else {
       throw new Error('root elem of Slider is null!');
     }
-
     this.fromInPx = 0;
     this.toInPx = 0;
     this.initSliderComponents();
@@ -48,10 +47,10 @@ class Slider extends EventObservable {
   render(settings:string): void {
     this.settings = Object.assign(this.settings, JSON.parse(settings));
     this.container.classList.add(ClassNaming.ROOT);
-    this.container.appendChild(this.range.getRange());
+    this.container.appendChild(this.range.getRangeHTML());
     this.range.render(settings);
     this.rangeLabel.render(JSON.parse(settings));
-    this.container.appendChild(this.rangeLabel.getRangeLabel());
+    this.container.appendChild(this.rangeLabel.getRangeLabelHTML());
     this.rootElem.appendChild(this.container);
     if (this.settings.hideThumbLabel) {
       this.range.hideLabel();
@@ -140,7 +139,7 @@ class Slider extends EventObservable {
     this.handleRangeClickBinded = this.handleRangeClick.bind(this, 'range');
     this.initResizeObserver();
     this.handleRangeClickLabelClickBinded = this.handleRangeClickLabelClick.bind(this);
-    this.getRange().addEventListener('mousedown', this.handleRangeClickBinded);
+    this.getRangeHTML().addEventListener('mousedown', this.handleRangeClickBinded);
     this.rangeLabel.getLabels().forEach((elem) => elem.addEventListener('click', this.handleRangeClickLabelClickBinded));
   }
 
@@ -170,8 +169,8 @@ class Slider extends EventObservable {
 
   private unbindEvents() {
     this.removeHandler();
-    this.getRangeLabel().removeEventListener('mousedown', this.handleRangeClickLabelClickBinded);
-    this.getRange().removeEventListener('mousedown', this.handleRangeClickBinded);
+    this.getRangeLabelHTML().removeEventListener('mousedown', this.handleRangeClickLabelClickBinded);
+    this.getRangeHTML().removeEventListener('mousedown', this.handleRangeClickBinded);
   }
 
   private handleRangeClickLabelClick(e: Event) {
@@ -223,10 +222,10 @@ class Slider extends EventObservable {
       let thumbType = '';
       const bottom = this.getSliderLengthInPx() - this.getThumbWidthInPx();
       if (isVertical) {
-        clickedPos = e.clientY - this.getRange().getBoundingClientRect().top
+        clickedPos = e.clientY - this.getRangeHTML().getBoundingClientRect().top
           - this.getThumbWidthInPx() / 2;
       } else {
-        clickedPos = e.clientX - this.getRange().getBoundingClientRect().left
+        clickedPos = e.clientX - this.getRangeHTML().getBoundingClientRect().left
           - this.getThumbWidthInPx() / 2;
       }
       if (clickedPos > bottom) clickedPos = bottom;
@@ -288,10 +287,10 @@ class Slider extends EventObservable {
     const bottom = this.getSliderLengthInPx() - this.getThumbWidthInPx();
     if (e instanceof MouseEvent) {
       if (this.settings.isVertical) {
-        newPos = e.clientY - this.getRange().getBoundingClientRect().top
+        newPos = e.clientY - this.getRangeHTML().getBoundingClientRect().top
           - this.getThumbWidthInPx() / 2;
       } else {
-        newPos = e.clientX - this.getRange().getBoundingClientRect().left
+        newPos = e.clientX - this.getRangeHTML().getBoundingClientRect().left
           - this.getThumbWidthInPx() / 2;
       }
       if (newPos < 0) {
@@ -410,9 +409,9 @@ class Slider extends EventObservable {
 
   private getSliderLengthInPx(): number {
     if (this.settings.isVertical) {
-      return this.getRange().offsetHeight;
+      return this.getRangeHTML().offsetHeight;
     }
-    return this.getRange().offsetWidth;
+    return this.getRangeHTML().offsetWidth;
   }
 
   private dispatchEvent(shift: number, type: string) {
@@ -427,8 +426,8 @@ class Slider extends EventObservable {
     this.setColoredRange();
   }
 
-  getRange(): HTMLDivElement {
-    return this.range.getRange();
+  getRangeHTML(): HTMLDivElement {
+    return this.range.getRangeHTML();
   }
 
   setValueToLabelThumbFrom(value: number): void {
@@ -441,8 +440,8 @@ class Slider extends EventObservable {
     this.settings.to = value;
   }
 
-  getRangeLabel(): HTMLDivElement {
-    return this.rangeLabel.getRangeLabel();
+  getRangeLabelHTML(): HTMLDivElement {
+    return this.rangeLabel.getRangeLabelHTML();
   }
 
   getThumbFrom(): HTMLDivElement {
@@ -469,14 +468,6 @@ class Slider extends EventObservable {
 
   private getThumbWidthInPx(): number {
     return this.range.getThumbWidthInPx();
-  }
-
-  getThumbLabelFrom(): HTMLElement {
-    return this.range.getThumbFrom();
-  }
-
-  getThumbLabelTo(): HTMLElement {
-    return this.range.getThumbTo();
   }
 
   private getStepInPx(): number {

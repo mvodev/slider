@@ -9,7 +9,7 @@ class ColoredRange {
     this.coloredRange.classList.add(ClassNaming.COLORED_RANGE);
   }
 
-  getColoredRange(): HTMLDivElement {
+  getColoredRangeHTML(): HTMLDivElement {
     return this.coloredRange;
   }
 

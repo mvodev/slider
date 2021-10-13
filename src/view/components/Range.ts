@@ -22,28 +22,28 @@ class Range {
     this.coloredRange = new ColoredRange();
     this.thumbTo = new Thumb(ClassNaming.THUMB_TO);
     this.thumbFrom = new Thumb(ClassNaming.THUMB_FROM);
-    this.range.appendChild(this.coloredRange.getColoredRange());
-    this.range.appendChild(this.thumbFrom.getThumb());
+    this.range.appendChild(this.coloredRange.getColoredRangeHTML());
+    this.range.appendChild(this.thumbFrom.getThumbHTML());
   }
 
-  getRange(): HTMLDivElement {
+  getRangeHTML(): HTMLDivElement {
     return this.range;
   }
 
   render(settings: string): void {
     Object.assign(this.viewSettings, JSON.parse(settings));
     if (this.viewSettings.isRange) {
-      this.range.appendChild(this.thumbTo.getThumb());
+      this.range.appendChild(this.thumbTo.getThumbHTML());
     } else if (!this.viewSettings.isRange) {
-      if (this.range.contains(this.thumbTo.getThumb())) {
-        this.range.removeChild(this.thumbTo.getThumb());
+      if (this.range.contains(this.thumbTo.getThumbHTML())) {
+        this.range.removeChild(this.thumbTo.getThumbHTML());
       }
     }
   }
 
   setVertical(): void {
     this.range.classList.add(ClassNaming.RANGE_IS_VERTICAL);
-    this.coloredRange.getColoredRange().classList.add(ClassNaming.COLORED_RANGE_IS_VERTICAL);
+    this.coloredRange.getColoredRangeHTML().classList.add(ClassNaming.COLORED_RANGE_IS_VERTICAL);
     this.thumbFrom.setVertical();
     if (this.viewSettings.isRange) {
       this.thumbTo.setVertical();
@@ -52,7 +52,7 @@ class Range {
 
   setHorizontal(): void {
     this.range.classList.remove(ClassNaming.RANGE_IS_VERTICAL);
-    this.coloredRange.getColoredRange().classList.remove(ClassNaming.COLORED_RANGE_IS_VERTICAL);
+    this.coloredRange.getColoredRangeHTML().classList.remove(ClassNaming.COLORED_RANGE_IS_VERTICAL);
     this.thumbFrom.setHorizontal();
     if (this.viewSettings.isRange) {
       this.thumbTo.setHorizontal();
@@ -62,18 +62,18 @@ class Range {
   setColoredRange(thumbWidthInPercentage:number): void {
     this.coloredRange.setColoredRange(
       this.viewSettings,
-      this.thumbFrom.getThumb(),
-      this.thumbTo.getThumb(),
+      this.thumbFrom.getThumbHTML(),
+      this.thumbTo.getThumbHTML(),
       thumbWidthInPercentage,
     );
   }
 
   getThumbFrom(): HTMLDivElement {
-    return this.thumbFrom.getThumb();
+    return this.thumbFrom.getThumbHTML();
   }
 
   getThumbTo(): HTMLDivElement {
-    return this.thumbTo.getThumb();
+    return this.thumbTo.getThumbHTML();
   }
 
   hideLabel(): void {
@@ -108,9 +108,9 @@ class Range {
 
   getThumbWidthInPx(): number {
     if (this.viewSettings.isVertical) {
-      return this.thumbFrom.getThumb().offsetHeight;
+      return this.thumbFrom.getThumbHTML().offsetHeight;
     }
-    return this.thumbFrom.getThumb().offsetWidth;
+    return this.thumbFrom.getThumbHTML().offsetWidth;
   }
 }
 export default Range;

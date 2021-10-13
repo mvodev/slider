@@ -24,7 +24,7 @@ class RangeLabel {
     this.setMaxRange(this.settings.max);
   }
 
-  getRangeLabel(): HTMLDivElement {
+  getRangeLabelHTML(): HTMLDivElement {
     return this.rangeLabelContainer;
   }
 

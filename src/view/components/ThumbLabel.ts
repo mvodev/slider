@@ -15,7 +15,7 @@ class ThumbLabel {
     this.thumbLabelContainer.appendChild(this.thumbLabelValue);
   }
 
-  getThumbLabelContainer(): HTMLDivElement {
+  getThumbLabelHTML(): HTMLDivElement {
     return this.thumbLabelContainer;
   }
 
