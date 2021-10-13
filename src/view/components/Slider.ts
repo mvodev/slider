@@ -99,17 +99,17 @@ class Slider extends EventObservable {
     const maxLabel = this.getLabels()[2];
     if (!this.settings.isVertical) {
       //  set min value label
-      minLabel.setAttribute(CONSTANTS.dataAttrName, this.settings.min.toString());
+      minLabel.dataset.value = this.settings.min.toString();
       minLabel.style.left = `${(this.getThumbWidthInPercentage() / 2
         - ((minLabel.offsetWidth * 100) / (this.getSliderLengthInPx())) / 2)}%`;
       minLabel.style.top = '';
       // set max value label
-      maxLabel.setAttribute(CONSTANTS.dataAttrName, this.settings.max.toString());
+      maxLabel.dataset.value = this.settings.max.toString();
       maxLabel.style.left = `${(100 - ((maxLabel.offsetWidth / 2
         + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100)}%`;
       maxLabel.style.top = '';
       // set average value label
-      averageLabel.setAttribute(CONSTANTS.dataAttrName, pivotRounded.toString());
+      averageLabel.dataset.value = pivotRounded.toString();
       averageLabel.innerText = pivotRounded.toString();
       averageLabel.style.left = `${(this.convertFromValueToPercent(pivotRounded)
         + this.getThumbWidthInPercentage() / 2
@@ -117,17 +117,17 @@ class Slider extends EventObservable {
       averageLabel.style.top = '';
     } else {
       // set min value label
-      minLabel.setAttribute(CONSTANTS.dataAttrName, this.settings.min.toString());
+      minLabel.dataset.value = this.settings.min.toString();
       minLabel.style.top = `${(this.getThumbWidthInPercentage() / 2
         - (minLabel.offsetHeight * 100) / (this.getSliderLengthInPx()) / 2)}%`;
       minLabel.style.left = '';
       // set max value label
-      maxLabel.setAttribute(CONSTANTS.dataAttrName, this.settings.max.toString());
+      maxLabel.dataset.value = this.settings.max.toString();
       maxLabel.style.top = `${(100 - ((maxLabel.offsetHeight / 2
         + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100)}%`;
       maxLabel.style.left = '';
       // set average value label
-      averageLabel.setAttribute(CONSTANTS.dataAttrName, pivotRounded.toString());
+      averageLabel.dataset.value = pivotRounded.toString();
       averageLabel.innerText = pivotRounded.toString();
       averageLabel.style.top = `${(this.convertFromValueToPercent(pivotRounded)
         + this.getThumbWidthInPercentage() / 2
