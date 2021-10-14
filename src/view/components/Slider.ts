@@ -96,38 +96,36 @@ class Slider extends EventObservable {
     const minLabel = this.getLabels()[0];
     const averageLabel = this.getLabels()[1];
     const maxLabel = this.getLabels()[2];
+    minLabel.dataset.value = this.settings.min.toString();
+    maxLabel.dataset.value = this.settings.max.toString();
+    averageLabel.dataset.value = pivotRounded.toString();
+    averageLabel.innerText = pivotRounded.toString();
+    averageLabel.dataset.value = pivotRounded.toString();
+    averageLabel.innerText = pivotRounded.toString();
     if (!this.settings.isVertical) {
       //  set min value label
-      minLabel.dataset.value = this.settings.min.toString();
       minLabel.style.left = `${(this.getThumbWidthInPercentage() / 2
         - ((minLabel.offsetWidth * 100) / (this.getSliderLengthInPx())) / 2)}%`;
       minLabel.style.top = '';
       // set max value label
-      maxLabel.dataset.value = this.settings.max.toString();
       maxLabel.style.left = `${(100 - ((maxLabel.offsetWidth / 2
         + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100)}%`;
       maxLabel.style.top = '';
       // set average value label
-      averageLabel.dataset.value = pivotRounded.toString();
-      averageLabel.innerText = pivotRounded.toString();
       averageLabel.style.left = `${(this.convertFromValueToPercent(pivotRounded)
         + this.getThumbWidthInPercentage() / 2
         - ((averageLabel.offsetWidth * 100) / (this.getSliderLengthInPx()) / 2))}%`;
       averageLabel.style.top = '';
     } else {
       // set min value label
-      minLabel.dataset.value = this.settings.min.toString();
       minLabel.style.top = `${(this.getThumbWidthInPercentage() / 2
         - (minLabel.offsetHeight * 100) / (this.getSliderLengthInPx()) / 2)}%`;
       minLabel.style.left = '';
       // set max value label
-      maxLabel.dataset.value = this.settings.max.toString();
       maxLabel.style.top = `${(100 - ((maxLabel.offsetHeight / 2
         + this.getThumbWidthInPx() / 2) / this.getSliderLengthInPx()) * 100)}%`;
       maxLabel.style.left = '';
       // set average value label
-      averageLabel.dataset.value = pivotRounded.toString();
-      averageLabel.innerText = pivotRounded.toString();
       averageLabel.style.top = `${(this.convertFromValueToPercent(pivotRounded)
         + this.getThumbWidthInPercentage() / 2
         - ((this.getLabels()[1].offsetHeight * 100) / (this.getSliderLengthInPx()) / 2))}%`;
