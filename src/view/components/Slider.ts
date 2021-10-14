@@ -349,8 +349,10 @@ class Slider extends EventObservable {
             }
           }
         } else if (newPos < this.toInPx && newPos > this.fromInPx) {
-          if (Math.abs(newPos - this.getStepInPx()) > this.fromInPx
-            && (this.toInPx - this.roundPos(this.toInPx, newPos)) > this.fromInPx) {
+          const isPossiblePosition = (Math.abs(newPos - this.getStepInPx()) > this.fromInPx)
+            && ((this.toInPx - this.roundPos(this.toInPx, newPos)) - this.fromInPx)
+              > (CONSTANTS.threshold);
+          if (isPossiblePosition) {
             this.toInPx -= this.roundPos(this.toInPx, newPos);
             this.dispatchEvent(this.toInPx, CONSTANTS.thumbTo);
           }
@@ -360,6 +362,9 @@ class Slider extends EventObservable {
   }
 
   private roundPos(thumbInPx: number, newPos: number): number {
+    if (newPos === 0) {
+      return thumbInPx;
+    }
     const result = (Math.round(Math.abs(thumbInPx - newPos) / this.getStepInPx())
       * this.getStepInPx());
     return +result.toFixed(20);
