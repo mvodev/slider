@@ -360,8 +360,9 @@ class Slider extends EventObservable {
   }
 
   private roundPos(thumbInPx: number, newPos: number): number {
-    return +(Math.round(Math.abs(thumbInPx - newPos) / this.getStepInPx())
-      * this.getStepInPx()).toFixed(4);
+    const result = (Math.round(Math.abs(thumbInPx - newPos) / this.getStepInPx())
+      * this.getStepInPx());
+    return +result.toFixed(20);
   }
 
   private removeHandler() {
@@ -387,7 +388,7 @@ class Slider extends EventObservable {
     if (result < 0) {
       return 0;
     }
-    return result;
+    return +result.toFixed(20);
   }
 
   private convertFromValueToPercent(value: number): number {
@@ -397,7 +398,10 @@ class Slider extends EventObservable {
     if (result > (100 - this.getThumbWidthInPercentage())) {
       return (100 - this.getThumbWidthInPercentage());
     }
-    return result;
+    if (result < 0) {
+      return 0;
+    }
+    return +result.toFixed(20);
   }
 
   getThumbWidthInPercentage(): number {
@@ -471,8 +475,8 @@ class Slider extends EventObservable {
   }
 
   private getStepInPx(): number {
-    return (this.getSliderLengthInPx() - this.getThumbWidthInPx())
-    / (Math.abs((this.settings.max - this.settings.min) / this.settings.step));
+    return +((this.getSliderLengthInPx() - this.getThumbWidthInPx())
+    / (Math.abs((this.settings.max - this.settings.min) / this.settings.step))).toFixed(20);
   }
 
   private getLabels(): HTMLElement[] {
