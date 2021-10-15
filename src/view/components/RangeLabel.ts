@@ -1,5 +1,5 @@
 import ISettings from '../../model/ISettings';
-import ClassNaming from '../../utils/classNaming';
+import CLASSNAMING from '../../utils/classNaming';
 
 class RangeLabel {
   private rangeLabelContainer!: HTMLDivElement;
@@ -38,15 +38,15 @@ class RangeLabel {
 
   private initComponents() {
     this.rangeLabelContainer = document.createElement('div');
-    this.rangeLabelContainer.classList.add(ClassNaming.RANGE_LABEL);
+    this.rangeLabelContainer.classList.add(CLASSNAMING.rangeLabel);
     this.minLabel = document.createElement('span');
-    this.minLabel.classList.add(ClassNaming.RANGE_LABEL_SCALE);
+    this.minLabel.classList.add(CLASSNAMING.rangeLabelScale);
     this.maxLabel = document.createElement('span');
-    this.maxLabel.classList.add(ClassNaming.RANGE_LABEL_SCALE);
+    this.maxLabel.classList.add(CLASSNAMING.rangeLabelScale);
     this.rangeLabelContainer.appendChild(this.minLabel);
     this.labels.push(this.minLabel);
     const pivotMark = document.createElement('span');
-    pivotMark.classList.add(ClassNaming.RANGE_LABEL_SCALE);
+    pivotMark.classList.add(CLASSNAMING.rangeLabelScale);
     this.labels.push(pivotMark);
     this.rangeLabelContainer.appendChild(pivotMark);
     this.rangeLabelContainer.appendChild(this.maxLabel);
@@ -54,11 +54,11 @@ class RangeLabel {
   }
 
   setVertical(): void {
-    this.rangeLabelContainer.classList.add(ClassNaming.RANGE_LABEL_IS_VERTICAL);
+    this.rangeLabelContainer.classList.add(CLASSNAMING.rangeLabelIsVertical);
   }
 
   setHorizontal(): void {
-    this.rangeLabelContainer.classList.remove(ClassNaming.RANGE_LABEL_IS_VERTICAL);
+    this.rangeLabelContainer.classList.remove(CLASSNAMING.rangeLabelIsVertical);
   }
 
   getLabels(): HTMLElement[] {
@@ -66,11 +66,11 @@ class RangeLabel {
   }
 
   hideLabels(): void {
-    this.rangeLabelContainer.classList.add(ClassNaming.HIDE_ELEMENT);
+    this.rangeLabelContainer.classList.add(CLASSNAMING.hideElement);
   }
 
   showLabels(): void {
-    this.rangeLabelContainer.classList.remove(ClassNaming.HIDE_ELEMENT);
+    this.rangeLabelContainer.classList.remove(CLASSNAMING.hideElement);
   }
 }
 export default RangeLabel;

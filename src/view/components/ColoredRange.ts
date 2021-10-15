@@ -1,12 +1,12 @@
 import ISettings from '../../model/ISettings';
-import ClassNaming from '../../utils/classNaming';
+import CLASSNAMING from '../../utils/classNaming';
 
 class ColoredRange {
   private coloredRange: HTMLDivElement;
 
   constructor() {
     this.coloredRange = document.createElement('div');
-    this.coloredRange.classList.add(ClassNaming.COLORED_RANGE);
+    this.coloredRange.classList.add(CLASSNAMING.coloredRange);
   }
 
   getColoredRangeHTML(): HTMLDivElement {

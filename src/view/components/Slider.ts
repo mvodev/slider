@@ -4,9 +4,9 @@ import RangeLabel from './RangeLabel';
 import ISettings from '../../model/ISettings';
 import defaultSettings from '../../model/defaultSettings';
 import EventObservable from '../../observers/EventObservable';
-import ClassNaming from '../../utils/classNaming';
 import CONSTANTS from '../../utils/constants';
 import Utils from '../../utils/Utils';
+import CLASSNAMING from '../../utils/classNaming';
 
 class Slider extends EventObservable {
   private range!: Range;
@@ -46,7 +46,7 @@ class Slider extends EventObservable {
 
   render(settings:string): void {
     this.settings = Object.assign(this.settings, JSON.parse(settings));
-    this.container.classList.add(ClassNaming.ROOT);
+    this.container.classList.add(CLASSNAMING.root);
     this.container.appendChild(this.range.getRangeHTML());
     this.range.render(settings);
     this.rangeLabel.render(JSON.parse(settings));
@@ -457,14 +457,14 @@ class Slider extends EventObservable {
 
   private setVertical(): void {
     this.unbindEvents();
-    this.container.classList.add(ClassNaming.SLIDER_IS_VERTICAL);
+    this.container.classList.add(CLASSNAMING.sliderIsVertical);
     this.range.setVertical();
     this.rangeLabel.setVertical();
   }
 
   private setHorizontal(): void {
     this.unbindEvents();
-    this.container.classList.remove(ClassNaming.SLIDER_IS_VERTICAL);
+    this.container.classList.remove(CLASSNAMING.sliderIsVertical);
     this.range.setHorizontal();
     this.rangeLabel.setHorizontal();
   }
