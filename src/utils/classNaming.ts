@@ -1,4 +1,4 @@
-const CLASSNAMING = {
+const CLASS_NAMING = {
   root: 'fsd-slider',
   range: 'fsd-slider__range',
   rangeLabel: 'fsd-slider__range-label',
@@ -15,4 +15,4 @@ const CLASSNAMING = {
   thumbLabelIsVertical: 'fsd-slider__thumb-label_is_vertical',
   hideElement: 'fsd-slider_element_is_hidden',
 };
-export default CLASSNAMING;
+export default CLASS_NAMING;

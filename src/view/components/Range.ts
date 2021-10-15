@@ -1,5 +1,5 @@
 import ISettings from '../../model/ISettings';
-import CLASSNAMING from '../../utils/classNaming';
+import CLASS_NAMING from '../../utils/classNaming';
 import ColoredRange from './ColoredRange';
 import Thumb from './Thumb';
 
@@ -16,12 +16,12 @@ class Range {
 
   constructor(settings: ISettings) {
     const div = document.createElement('div');
-    div.classList.add(CLASSNAMING.range);
+    div.classList.add(CLASS_NAMING.range);
     this.range = div;
     this.viewSettings = settings;
     this.coloredRange = new ColoredRange();
-    this.thumbTo = new Thumb(CLASSNAMING.thumbTo);
-    this.thumbFrom = new Thumb(CLASSNAMING.thumbFrom);
+    this.thumbTo = new Thumb(CLASS_NAMING.thumbTo);
+    this.thumbFrom = new Thumb(CLASS_NAMING.thumbFrom);
     this.range.appendChild(this.coloredRange.getColoredRangeHTML());
     this.range.appendChild(this.thumbFrom.getThumbHTML());
   }
@@ -42,8 +42,8 @@ class Range {
   }
 
   setVertical(): void {
-    this.range.classList.add(CLASSNAMING.rangeIsVertical);
-    this.coloredRange.getColoredRangeHTML().classList.add(CLASSNAMING.coloredRangeIsVertical);
+    this.range.classList.add(CLASS_NAMING.rangeIsVertical);
+    this.coloredRange.getColoredRangeHTML().classList.add(CLASS_NAMING.coloredRangeIsVertical);
     this.thumbFrom.setVertical();
     if (this.viewSettings.isRange) {
       this.thumbTo.setVertical();
@@ -51,8 +51,8 @@ class Range {
   }
 
   setHorizontal(): void {
-    this.range.classList.remove(CLASSNAMING.rangeIsVertical);
-    this.coloredRange.getColoredRangeHTML().classList.remove(CLASSNAMING.coloredRangeIsVertical);
+    this.range.classList.remove(CLASS_NAMING.rangeIsVertical);
+    this.coloredRange.getColoredRangeHTML().classList.remove(CLASS_NAMING.coloredRangeIsVertical);
     this.thumbFrom.setHorizontal();
     if (this.viewSettings.isRange) {
       this.thumbTo.setHorizontal();

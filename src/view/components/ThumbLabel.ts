@@ -1,4 +1,4 @@
-import CLASSNAMING from '../../utils/classNaming';
+import CLASS_NAMING from '../../utils/classNaming';
 
 class ThumbLabel {
   private thumbLabelContainer: HTMLDivElement;
@@ -9,9 +9,9 @@ class ThumbLabel {
     const div = document.createElement('div');
     const divValue = document.createElement('div');
     this.thumbLabelContainer = div;
-    this.thumbLabelContainer.classList.add(CLASSNAMING.thumbLabel);
+    this.thumbLabelContainer.classList.add(CLASS_NAMING.thumbLabel);
     this.thumbLabelValue = divValue;
-    this.thumbLabelValue.classList.add(CLASSNAMING.thumbValue);
+    this.thumbLabelValue.classList.add(CLASS_NAMING.thumbValue);
     this.thumbLabelContainer.appendChild(this.thumbLabelValue);
   }
 
@@ -24,19 +24,19 @@ class ThumbLabel {
   }
 
   hideLabel(): void {
-    this.thumbLabelContainer.classList.add(CLASSNAMING.hideElement);
+    this.thumbLabelContainer.classList.add(CLASS_NAMING.hideElement);
   }
 
   showLabel(): void {
-    this.thumbLabelContainer.classList.remove(CLASSNAMING.hideElement);
+    this.thumbLabelContainer.classList.remove(CLASS_NAMING.hideElement);
   }
 
   setVertical(): void {
-    this.thumbLabelContainer.classList.add(CLASSNAMING.thumbLabelIsVertical);
+    this.thumbLabelContainer.classList.add(CLASS_NAMING.thumbLabelIsVertical);
   }
 
   setHorizontal(): void {
-    this.thumbLabelContainer.classList.remove(CLASSNAMING.thumbLabelIsVertical);
+    this.thumbLabelContainer.classList.remove(CLASS_NAMING.thumbLabelIsVertical);
   }
 }
 
