@@ -281,6 +281,7 @@ class Slider extends EventObservable {
 
   private handleThumbMove(thumbType: string, e: Event) {
     const { isRange } = this.settings;
+    const stepInPx = this.getStepInPx();
     let newPos: number;
     const bottom = this.getSliderLengthInPx() - this.getThumbWidthInPx();
     if (e instanceof MouseEvent) {
@@ -300,32 +301,25 @@ class Slider extends EventObservable {
       if (thumbType === CONSTANTS.thumbFrom) {
         if (isRange) {
           if (newPos < this.fromInPx) {
-            if (Math.abs(newPos - this.getStepInPx()) <= this.fromInPx) {
-              this.fromInPx -= this.roundPos(this.fromInPx, newPos);
-              if (this.fromInPx < 0) {
-                this.fromInPx = 0;
-              }
-              this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
+            this.fromInPx -= this.roundPos(this.fromInPx, newPos);
+            if (this.fromInPx < 0) {
+              this.fromInPx = 0;
             }
-          } else if (newPos <= this.toInPx && newPos > this.fromInPx) {
-            if (Math.abs(newPos + this.getStepInPx()) > this.fromInPx
-              && Math.abs(newPos + this.getStepInPx()) <= this.toInPx) {
-              this.fromInPx += this.roundPos(this.fromInPx, newPos);
-              this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
-            }
+            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
+          } else if ((newPos + stepInPx) < this.toInPx) {
+            this.fromInPx += this.roundPos(this.fromInPx, newPos);
+            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
           }
         } else if (!isRange) {
           if (newPos < this.fromInPx) {
-            if (Math.abs(newPos - this.getStepInPx()) < this.fromInPx) {
-              this.fromInPx -= this.roundPos(this.fromInPx, newPos);
-              if (this.fromInPx < 0) {
-                this.fromInPx = 0;
-              }
-              this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
+            this.fromInPx -= this.roundPos(this.fromInPx, newPos);
+            if (this.fromInPx < 0) {
+              this.fromInPx = 0;
             }
+            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
           } else {
             const valueRoundedInPx = this.roundPos(this.fromInPx, newPos);
-            if ((Math.abs(newPos + this.getStepInPx()) > this.fromInPx)) {
+            if (((newPos + stepInPx) > this.fromInPx)) {
               if (newPos >= bottom) {
                 this.dispatchEvent(newPos, CONSTANTS.thumbFrom);
               } else {
@@ -337,17 +331,14 @@ class Slider extends EventObservable {
         }
       } else if (thumbType === CONSTANTS.thumbTo) {
         if (newPos > this.toInPx) {
-          const valueRoundedInPx = this.roundPos(this.toInPx, newPos);
-          if ((newPos + this.getStepInPx()) > this.toInPx) {
-            if (newPos >= bottom) {
-              this.dispatchEvent(newPos, CONSTANTS.thumbTo);
-            } else {
-              this.toInPx += valueRoundedInPx;
-              this.dispatchEvent(this.toInPx, CONSTANTS.thumbTo);
-            }
+          if (newPos >= bottom) {
+            this.dispatchEvent(newPos, CONSTANTS.thumbTo);
+          } else {
+            this.toInPx += this.roundPos(this.toInPx, newPos);
+            this.dispatchEvent(this.toInPx, CONSTANTS.thumbTo);
           }
         } else if (newPos < this.toInPx && newPos > this.fromInPx) {
-          const isPossiblePosition = (Math.abs(newPos - this.getStepInPx()) > this.fromInPx)
+          const isPossiblePosition = (Math.abs(newPos - stepInPx) > this.fromInPx)
             && ((this.toInPx - this.roundPos(this.toInPx, newPos)) - this.fromInPx)
               > (CONSTANTS.threshold);
           if (isPossiblePosition) {
@@ -421,8 +412,8 @@ class Slider extends EventObservable {
     return this.getRangeHTML().offsetWidth;
   }
 
-  private dispatchEvent(shift: number, type: string) {
-    const valueInPercentage = this.convertFromPxToPercent(shift);
+  private dispatchEvent(shiftInPx: number, type: string) {
+    const valueInPercentage = this.convertFromPxToPercent(shiftInPx);
     if (type === 'thumbFrom') {
       this.range.setThumbPositionFrom(valueInPercentage, this.settings.isVertical);
       this.notifyObservers(Messages.SET_FROM, JSON.stringify({ from: valueInPercentage }), 0);
