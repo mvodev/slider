@@ -32,6 +32,6 @@ describe("View update", function () {
     assert.equal(view.getSlider().getThumbLabelFrom().style.display, "block");
   });
   it("View set correct value for min label after update", function () {
-    assert.equal(view.getSlider().getRangeLabel().firstElementChild.innerHTML, "" + sUpdated.min);
+    assert.equal(view.getSlider().getRangeLabelHTML().firstElementChild.innerHTML, "" + sUpdated.min);
   });
 });

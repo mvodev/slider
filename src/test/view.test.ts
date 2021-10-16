@@ -19,13 +19,13 @@ describe("View", function () {
   const view = new View(root);
   view.refreshView(Messages.INIT, s);
   it("View set correct classes for range label in vertical mode", function () {
-    assert.equal(view.getSlider().getRangeLabel().classList.contains('fsd-slider__range-label_is_vertical'), true);
+    assert.equal(view.getSlider().getRangeLabelHTML().classList.contains('fsd-slider__range-label_is_vertical'), true);
   });
   it("View set correct classes for range in vertical mode", function () {
-    assert.equal(view.getSlider().getRange().classList.contains('fsd-slider__range_is_vertical'), true);
+    assert.equal(view.getSlider().getRangeHTML().classList.contains('fsd-slider__range_is_vertical'), true);
   });
   it("View set correct min value", function () {
-    assert.equal(view.getSlider().getRangeLabel().firstElementChild.innerHTML, "" + s.min);
+    assert.equal(view.getSlider().getRangeLabelHTML().firstElementChild.innerHTML, "" + s.min);
   });
   it("View set correct style for ThumbLabel", function () {
     assert.equal(view.getSlider().getThumbLabelFrom().style.display, "");

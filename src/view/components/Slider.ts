@@ -400,9 +400,9 @@ class Slider extends EventObservable {
 
   getThumbWidthInPercentage(): number {
     if (this.settings.isVertical) {
-      return ((this.getThumbFrom().offsetHeight / this.getSliderLengthInPx()) * 100);
+      return ((this.getThumbFromHTML().offsetHeight / this.getSliderLengthInPx()) * 100);
     }
-    return ((this.getThumbFrom().offsetWidth / this.getSliderLengthInPx()) * 100);
+    return ((this.getThumbFromHTML().offsetWidth / this.getSliderLengthInPx()) * 100);
   }
 
   private getSliderLengthInPx(): number {
@@ -442,8 +442,8 @@ class Slider extends EventObservable {
     return this.rangeLabel.getRangeLabelHTML();
   }
 
-  getThumbFrom(): HTMLDivElement {
-    return this.range.getThumbFrom();
+  getThumbFromHTML(): HTMLDivElement {
+    return this.range.getThumbFromHTML();
   }
 
   private setVertical(): void {
@@ -471,6 +471,10 @@ class Slider extends EventObservable {
   private getStepInPx(): number {
     return +((this.getSliderLengthInPx() - this.getThumbWidthInPx())
     / (Math.abs((this.settings.max - this.settings.min) / this.settings.step))).toFixed(20);
+  }
+
+  getThumbLabelFrom(): HTMLElement {
+    return this.range.getThumbLabelFromHTML();
   }
 
   private getLabels(): HTMLElement[] {

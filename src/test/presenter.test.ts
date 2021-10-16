@@ -41,14 +41,14 @@ describe("Presenter", function () {
     presenter.update(settingsUpdated);
     assert.equal(view.getSlider().getThumbLabelFrom().style.display, "block");
     //assert.equal(view.getSlider().getThumbLabelTo().style.display, "block");
-    assert.equal(view.getSlider().getRangeLabel().firstElementChild.innerHTML, "" + settingsUpdated.min);
+    assert.equal(view.getSlider().getRangeLabelHTML().firstElementChild.innerHTML, "" + settingsUpdated.min);
   });
   it("Slider is correctly set min value in rangeLabel after presenter update", function () {
     presenter.update(settingsUpdated);
-    assert.equal(view.getSlider().getRangeLabel().firstElementChild.innerHTML, "" + settingsUpdated.min);
+    assert.equal(view.getSlider().getRangeLabelHTML().firstElementChild.innerHTML, "" + settingsUpdated.min);
   });
   it("Slider is correctly set position thumbFrom after update", function () {
     presenter.update(settingsUpdated);
-    assert.equal(view.getSlider().getThumbFrom().style.top, '77.1429%');
+    assert.equal(view.getSlider().getThumbFromHTML().style.top, '77.1429%');
   });
 });

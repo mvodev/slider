@@ -19,6 +19,10 @@ class Thumb {
     return this.thumb;
   }
 
+  getThumbLabelHTML(): HTMLElement {
+    return this.thumbLabel.getThumbLabelHTML();
+  }
+
   setThumbPosition(shift: number, isVertical: boolean|undefined): void {
     if (isVertical) {
       this.thumb.style.top = `${shift}%`;
