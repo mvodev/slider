@@ -2,6 +2,8 @@ import Model from '../model/Model';
 import * as chai from 'chai';
 import Presenter from '../presenter/Presenter';
 import View from '../view/View';
+//const jsdom = require("jsdom");
+//const { JSDOM } = jsdom;
 global.ResizeObserver = require('resize-observer-polyfill');
 let assert = chai.assert;
 document.body.innerHTML = '<div id="slider-test3"></>';
@@ -43,32 +45,4 @@ describe("Presenter", function () {
     assert.equal(view.getSlider().getMinRangeHTML().innerText, "-10");
   });
 });
-const root3: HTMLDivElement = document.querySelector('#slider-test3');
-let s = {
-  min: 15,
-  max: 25,
-  from: 17,
-  to: 20,
-  step: 2,
-  isVertical: true,
-  hideThumbLabel: true,
-  isRange: false,
-};
-let sUpdated = {
-  min: 10,
-  max: 25,
-  from: 17,
-  to: 20,
-  step: 2,
-  isVertical: true,
-  hideThumbLabel: false,
-  isRange: false,
-};
-const model = new Model(s);
-const view = new View(root3);
-const presenter = new Presenter(view, model);
-model.addObserver(presenter);
-view.addObserver(presenter);
-presenter.initialize();
-presenter.update(sUpdated);
-console.log(view.getSlider().getThumbLabelFrom().style);
+
