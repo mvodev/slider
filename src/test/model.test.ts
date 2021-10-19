@@ -150,19 +150,22 @@ describe('Model validate settings', function () {
     });
     assert.equal(model.getHideThumbLabel(), true);
   });
-  // it('Model return correct step after validate settings', function () {
-  //   model.updateSettings({
-  //     min: -15,
-  //     max: -25,
-  //     from: -14,
-  //     step: -5,
-  //     to: -11,
-  //     isVertical: false,
-  //     hideThumbLabel: true,
-  //     isRange: true,
-  //   });
-  //   assert.equal(model.getStep(), 0.2);
-  // });
+  it('Model return correct step after validate settings', function () {
+
+    expect(function () {
+      model.updateSettings({
+        min: -15,
+        max: -25,
+        from: -14,
+        step: -5,
+        to: -11,
+        isVertical: false,
+        hideThumbLabel: true,
+        isRange: true,
+      });
+    }).to.throw();
+    assert.equal(model.getStep(), 0.2);
+  });
 });
 
 

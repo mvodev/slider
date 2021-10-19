@@ -15,8 +15,8 @@ class ColoredRange {
 
   setColoredRange(
     viewSettings:ISettings,
-    thumbFrom:HTMLDivElement,
-    thumbTo:HTMLDivElement,
+    thumbFrom:HTMLElement,
+    thumbTo:HTMLElement,
     thumbWidthInPercentage:number,
   ): void {
     if (viewSettings.isRange) {

@@ -2,6 +2,7 @@ import View from '../view/View';
 import Messages from '../utils/messages';
 import * as chai from 'chai';
 import '../../slider/fsd-slider.css';
+global.ResizeObserver = require('resize-observer-polyfill');
 let assert = chai.assert;
 document.body.innerHTML = '<div id="slider-test"></>';
 describe("View", function () {
@@ -25,9 +26,9 @@ describe("View", function () {
     assert.equal(view.getSlider().getRangeHTML().classList.contains('fsd-slider__range_is_vertical'), true);
   });
   it("View set correct min value", function () {
-    assert.equal(view.getSlider().getRangeLabelHTML().firstElementChild.innerHTML, "" + s.min);
+    assert.equal(view.getSlider().getMinRangeHTML().innerText, "" + s.min);
   });
   it("View set correct style for ThumbLabel", function () {
-    assert.equal(view.getSlider().getThumbLabelFrom().style.display, "");
+    assert.equal(view.getSlider().getThumbLabelFrom().style.display, '');
   });
 });

@@ -2,6 +2,7 @@ import Model from '../model/Model';
 import * as chai from 'chai';
 import Presenter from '../presenter/Presenter';
 import View from '../view/View';
+global.ResizeObserver = require('resize-observer-polyfill');
 let assert = chai.assert;
 document.body.innerHTML = '<div id="slider-test3"></>';
 describe("Presenter", function () {
@@ -40,15 +41,14 @@ describe("Presenter", function () {
   it("Slider is correctly set styles for ThumbLabel after presenter update", function () {
     presenter.update(settingsUpdated);
     assert.equal(view.getSlider().getThumbLabelFrom().style.display, "block");
-    //assert.equal(view.getSlider().getThumbLabelTo().style.display, "block");
-    assert.equal(view.getSlider().getRangeLabelHTML().firstElementChild.innerHTML, "" + settingsUpdated.min);
+    //assert.equal(view.getSlider().getRangeLabelHTML().firstElementChild.innerHTML, "" + settingsUpdated.min);
   });
   it("Slider is correctly set min value in rangeLabel after presenter update", function () {
     presenter.update(settingsUpdated);
-    assert.equal(view.getSlider().getRangeLabelHTML().firstElementChild.innerHTML, "" + settingsUpdated.min);
+    assert.equal(view.getSlider().getMinRangeHTML().innerText, "-10");
   });
   it("Slider is correctly set position thumbFrom after update", function () {
     presenter.update(settingsUpdated);
-    assert.equal(view.getSlider().getThumbFromHTML().style.top, '77.1429%');
+    assert.equal(view.getSlider().getThumbFromHTML().style.left, '69.4286%');
   });
 });

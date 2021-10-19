@@ -2,6 +2,7 @@ import View from '../view/View';
 import Messages from '../utils/messages';
 import * as chai from 'chai';
 document.body.innerHTML = '<div id="slider-test2"></div>';
+global.ResizeObserver = require('resize-observer-polyfill');
 let assert = chai.assert;
 describe("View update", function () {
   let s = {
@@ -32,6 +33,6 @@ describe("View update", function () {
     assert.equal(view.getSlider().getThumbLabelFrom().style.display, "block");
   });
   it("View set correct value for min label after update", function () {
-    assert.equal(view.getSlider().getRangeLabelHTML().firstElementChild.innerHTML, "" + sUpdated.min);
+    assert.equal(view.getSlider().getMinRangeHTML().innerText, "" + sUpdated.min);
   });
 });

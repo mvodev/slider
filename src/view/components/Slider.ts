@@ -460,8 +460,12 @@ class Slider extends EventObservable {
     return this.rangeLabel.getRangeLabelHTML();
   }
 
-  getThumbFromHTML(): HTMLDivElement {
+  getThumbFromHTML(): HTMLElement {
     return this.range.getThumbFromHTML();
+  }
+
+  getMinRangeHTML(): HTMLElement {
+    return this.rangeLabel.getMinRangeHTML();
   }
 
   private setVertical(): void {

@@ -5,7 +5,7 @@ const webpackConfig = require('./webpack.config');
 module.exports = function (config) {
   config.set({
     basePath: '',
-    frameworks: ['jasmine', 'karma-typescript'],
+    frameworks: ['jasmine-jquery', 'jasmine', 'karma-typescript'],
     files: [
       './src/test/*.test.ts',
       './src/*/*.ts',
@@ -31,7 +31,7 @@ module.exports = function (config) {
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
+    browsers: ['jsdom'],
     singleRun: false,
     concurrency: Infinity,
   });

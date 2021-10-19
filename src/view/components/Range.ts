@@ -68,7 +68,7 @@ class Range {
     );
   }
 
-  getThumbFromHTML(): HTMLDivElement {
+  getThumbFromHTML(): HTMLElement {
     return this.thumbFrom.getThumbHTML();
   }
 
@@ -76,7 +76,7 @@ class Range {
     return this.thumbFrom.getThumbLabelHTML();
   }
 
-  getThumbTo(): HTMLDivElement {
+  getThumbTo(): HTMLElement {
     return this.thumbTo.getThumbHTML();
   }
 

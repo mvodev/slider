@@ -36,6 +36,10 @@ class RangeLabel {
     this.maxLabel.innerText = `${value}`;
   }
 
+  getMinRangeHTML(): HTMLElement {
+    return this.minLabel;
+  }
+
   private initComponents() {
     this.rangeLabelContainer = document.createElement('div');
     this.rangeLabelContainer.classList.add(CLASS_NAMING.rangeLabel);

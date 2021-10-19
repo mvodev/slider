@@ -15,7 +15,7 @@ class Thumb {
     this.thumb.appendChild(this.thumbLabelHTML);
   }
 
-  getThumbHTML(): HTMLDivElement {
+  getThumbHTML(): HTMLElement {
     return this.thumb;
   }
 
