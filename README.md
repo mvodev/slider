@@ -24,7 +24,7 @@ $sl1.fsdSlider({
 }, 
 {
  handleEvent: (message, result) => {
-  var s = JSON.parse(result)
+  let s = JSON.parse(result)
   if (s.isRange) {
    $sl1_input.val(s.from + '  -  ' + s.to);
   }
@@ -54,10 +54,10 @@ isRange - булево значение true данного параметра �
 Передайте объект,содержащий функцию handleEvent.
 Внутри handleEvent можно передавать значения необходимым input.
 ```
-var $sl1_input = $('.input-result1');
+let $sl1_input = $('.input-result1');
 {
  handleEvent: (message, result) => {
-  var s = JSON.parse(result)
+  let s = JSON.parse(result)
   if (s.isRange) {
    $sl1_input.val(s.from + '  -  ' + s.to);
   }
@@ -80,7 +80,7 @@ var $sl1_input = $('.input-result1');
  ```
  ## API:
  ```
- var sl1_instance = $sl1.data("fsd-slider");
+ let sl1_instance = $sl1.data("fsd-slider");
  sl1_instance.update(newSettings); - возможность передать новые настройки в слайдер
  ```
 ## Описание проекта:

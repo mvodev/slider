@@ -2,8 +2,11 @@ import Model from '../model/Model';
 import * as chai from 'chai';
 import Presenter from '../presenter/Presenter';
 import View from '../view/View';
+// https://github.com/jsdom/jsdom
 //const jsdom = require("jsdom");
 //const { JSDOM } = jsdom;
+//const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
+//console.log(dom.window.document.querySelector("p").textContent);
 global.ResizeObserver = require('resize-observer-polyfill');
 let assert = chai.assert;
 document.body.innerHTML = '<div id="slider-test3"></>';
