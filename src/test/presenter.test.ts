@@ -38,17 +38,37 @@ describe("Presenter", function () {
     presenter.update(settingsUpdated);
     assert.equal(model.getMin(), -10);
   });
-  it("Slider is correctly set styles for ThumbLabel after presenter update", function () {
-    presenter.update(settingsUpdated);
-    assert.equal(view.getSlider().getThumbLabelFrom().style.display, "block");
-    //assert.equal(view.getSlider().getRangeLabelHTML().firstElementChild.innerHTML, "" + settingsUpdated.min);
-  });
   it("Slider is correctly set min value in rangeLabel after presenter update", function () {
     presenter.update(settingsUpdated);
     assert.equal(view.getSlider().getMinRangeHTML().innerText, "-10");
   });
-  it("Slider is correctly set position thumbFrom after update", function () {
-    presenter.update(settingsUpdated);
-    assert.equal(view.getSlider().getThumbFromHTML().style.left, '69.4286%');
-  });
 });
+const root3: HTMLDivElement = document.querySelector('#slider-test3');
+let s = {
+  min: 15,
+  max: 25,
+  from: 17,
+  to: 20,
+  step: 2,
+  isVertical: true,
+  hideThumbLabel: true,
+  isRange: false,
+};
+let sUpdated = {
+  min: 10,
+  max: 25,
+  from: 17,
+  to: 20,
+  step: 2,
+  isVertical: true,
+  hideThumbLabel: false,
+  isRange: false,
+};
+const model = new Model(s);
+const view = new View(root3);
+const presenter = new Presenter(view, model);
+model.addObserver(presenter);
+view.addObserver(presenter);
+presenter.initialize();
+presenter.update(sUpdated);
+console.log(view.getSlider().getThumbLabelFrom().style);
