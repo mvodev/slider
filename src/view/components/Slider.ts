@@ -1,5 +1,3 @@
-/* eslint-disable prefer-template */
-/* eslint-disable no-console */
 import Range from './Range';
 import Messages from '../../utils/messages';
 import RangeLabel from './RangeLabel';
@@ -79,9 +77,12 @@ class Slider extends EventObservable {
   }
 
   private calculateThumbPos(): void {
-    this.fromInPx = this.convertFromValueToPx(this.settings.from);
+    const {
+      from, to, step, min,
+    } = this.settings;
+    this.fromInPx = this.convertFromValueToPx(from);
     if (this.settings.isRange) {
-      this.toInPx = this.convertFromValueToPx(this.settings.to);
+      this.toInPx = this.convertFromValueToPx(Utils.roundWithStep(to, step, min));
     } else this.toInPx = this.getSliderLengthInPx();
   }
 
@@ -282,7 +283,6 @@ class Slider extends EventObservable {
   }
 
   private handleThumbMove(thumbType: string, e: Event) {
-    const { isRange } = this.settings;
     let newPos: number;
     const bottom = this.getSliderLengthInPx() - this.getThumbWidthInPx();
     if (e instanceof MouseEvent) {
@@ -300,34 +300,16 @@ class Slider extends EventObservable {
         newPos = bottom;
       }
       if (thumbType === CONSTANTS.thumbFrom) {
-        if (isRange) {
-          if (newPos < this.fromInPx) {
-            this.setFromInPx('-', newPos);
-            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
-          } else {
-            this.setFromInPx('+', newPos);
-            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
-          }
-        } else if (!isRange) {
-          if (newPos < this.fromInPx) {
-            this.setFromInPx('-', newPos);
-            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
-          } else {
-            this.setFromInPx('+', newPos);
-            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
-          }
+        if (newPos < this.fromInPx) {
+          this.setFromInPx('-', newPos);
+        } else {
+          this.setFromInPx('+', newPos);
         }
       } else if (thumbType === CONSTANTS.thumbTo) {
         if (newPos > this.toInPx) {
-          if (newPos >= bottom) {
-            this.dispatchEvent(newPos, CONSTANTS.thumbTo);
-          } else {
-            this.setToInPx('+', newPos);
-            this.dispatchEvent(this.toInPx, CONSTANTS.thumbTo);
-          }
+          this.setToInPx('+', newPos);
         } else {
           this.setToInPx('-', newPos);
-          this.dispatchEvent(this.toInPx, CONSTANTS.thumbTo);
         }
       }
     }
@@ -335,6 +317,7 @@ class Slider extends EventObservable {
 
   private setFromInPx(type: string, newPos: number): void {
     let result = 0;
+    const bottom = this.getSliderLengthInPx() - this.getThumbWidthInPx();
     if (type === '+') {
       result = this.fromInPx + this.roundPos(this.fromInPx, newPos);
     } else {
@@ -346,14 +329,21 @@ class Slider extends EventObservable {
     if (result < 0) {
       result = 0;
     }
-    if (result > this.toInPx) {
+    if ((result > this.toInPx) && this.settings.isRange) {
       result = this.toInPx - this.getStepInPx();
     }
-    this.fromInPx = result;
+    const isPossibleMoveToBottom = result < bottom && newPos >= bottom && !this.settings.isRange;
+    if (isPossibleMoveToBottom) {
+      this.dispatchEvent(newPos, CONSTANTS.thumbFrom);
+    } else {
+      this.fromInPx = result;
+      this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
+    }
   }
 
   private setToInPx(type: string, newPos: number): void {
     let result;
+    const bottom = this.getSliderLengthInPx() - this.getThumbWidthInPx();
     if (type === '+') {
       result = this.toInPx + this.roundPos(this.toInPx, newPos);
     } else {
@@ -365,7 +355,13 @@ class Slider extends EventObservable {
     if (result < this.fromInPx) {
       result = this.fromInPx + this.getStepInPx();
     }
-    this.toInPx = result;
+    const isPossibleMoveToBottom = result < bottom && newPos >= bottom;
+    if (isPossibleMoveToBottom) {
+      this.dispatchEvent(newPos, CONSTANTS.thumbTo);
+    } else {
+      this.toInPx = result;
+      this.dispatchEvent(this.toInPx, CONSTANTS.thumbTo);
+    }
   }
 
   private roundPos(thumbInPx: number, newPos: number): number {

@@ -169,13 +169,11 @@ class Model extends EventObservable implements IModelFacade {
         // eslint-disable-next-line no-lonely-if
         if (step !== newStep) {
           this.settings.step = newStep;
-          this.settings.from = +Math.round(min + this.settings.step)
-            .toFixed(Utils.numDigitsAfterDecimal(this.settings.step));
+          this.settings.from = min;
           if ((this.settings.from + this.settings.step) >= max) {
             this.settings.to = max;
           } else {
-            this.settings.to = +Math.round(this.settings.from + this.settings.step)
-              .toFixed(Utils.numDigitsAfterDecimal(this.settings.step));
+            this.settings.to = this.settings.from + this.settings.step;
           }
         }
       }
@@ -219,4 +217,5 @@ class Model extends EventObservable implements IModelFacade {
     return res;
   }
 }
+
 export default Model;

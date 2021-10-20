@@ -192,7 +192,7 @@ describe('Model validate step settings', function () {
       isRange: true,
     });
     assert.equal(model.getStep(), 5);
-    assert.equal(model.getFrom(), -10);
-    assert.equal(model.getTo(), -5);
+    assert.equal(model.getFrom(), -15);
+    assert.equal(model.getTo(), -10);
   });
 });
