@@ -235,8 +235,7 @@ class Slider extends EventObservable {
         if (clickedPos < this.fromInPx) {
           thumbType = CONSTANTS.thumbFrom;
           if (Math.abs(clickedPos - this.getStepInPx()) <= this.fromInPx) {
-            this.fromInPx -= this.roundPos(this.fromInPx, clickedPos);
-            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
+            this.setFromInPx('-', clickedPos);
           }
         } else if (clickedPos > this.toInPx) {
           thumbType = CONSTANTS.thumbTo;
@@ -244,35 +243,30 @@ class Slider extends EventObservable {
             if (clickedPos >= bottom) {
               this.dispatchEvent(clickedPos, CONSTANTS.thumbTo);
             } else {
-              this.toInPx += this.roundPos(this.toInPx, clickedPos);
-              this.dispatchEvent(this.toInPx, CONSTANTS.thumbTo);
+              this.setToInPx('+', clickedPos);
             }
           }
         } else if (clickedPos >= this.fromInPx && clickedPos <= this.toInPx) {
           const pivot = (this.toInPx - this.fromInPx) / 2;
           if ((clickedPos) <= (pivot + this.fromInPx)) {
             thumbType = CONSTANTS.thumbFrom;
-            this.fromInPx += this.roundPos(this.fromInPx, clickedPos);
-            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
+            this.setFromInPx('+', clickedPos);
           } else if ((clickedPos) > (pivot + this.fromInPx)) {
             thumbType = CONSTANTS.thumbTo;
-            this.toInPx -= this.roundPos(this.toInPx, clickedPos);
-            this.dispatchEvent(this.toInPx, CONSTANTS.thumbTo);
+            this.setToInPx('-', clickedPos);
           }
         }
       } else {
         thumbType = CONSTANTS.thumbFrom;
         if ((clickedPos + this.getThumbWidthInPx() / 2) < this.fromInPx) {
           if (Math.abs(clickedPos - this.getStepInPx()) < this.fromInPx) {
-            this.fromInPx -= this.roundPos(this.fromInPx, clickedPos);
-            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
+            this.setFromInPx('-', clickedPos);
           }
         } else if ((clickedPos + this.getThumbWidthInPx() / 2) > this.fromInPx) {
           if (Math.abs(clickedPos + this.getStepInPx()) > this.fromInPx
             && (Math.floor(this.fromInPx + Math.round(Math.abs(this.fromInPx - clickedPos)
               / this.getStepInPx()) * this.getStepInPx()) <= bottom)) {
-            this.fromInPx += this.roundPos(this.fromInPx, clickedPos);
-            this.dispatchEvent(this.fromInPx, CONSTANTS.thumbFrom);
+            this.setFromInPx('+', clickedPos);
           }
         }
       }
