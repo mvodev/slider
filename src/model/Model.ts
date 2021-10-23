@@ -104,11 +104,8 @@ class Model extends EventObservable implements IModelFacade {
     this.validateFrom(newFrom);
     this.validateTo(newTo);
     this.validateStep(newStep);
-
     this.settings.isVertical = newIsVertical;
-
     this.settings.hideThumbLabel = newHideThumbLabel;
-
     this.validateRange(newRange);
   }
 

@@ -83,6 +83,30 @@ describe('Model validate settings', function () {
     }).to.throw();
     assert.equal(model.getMax(), 10);
   });
+  it('Model return correct to after validate settings', function () {
+    expect(function () {
+      const model = new Model({
+        min: -15,
+        max: 10,
+        from: -14,
+        step: 0.2,
+        to: -11,
+        isVertical: false,
+        hideThumbLabel: false,
+        isRange: true,
+      });
+      model.updateSettings({
+        min: -15,
+        max: 10,
+        from: -14,
+        step: 0.2,
+        to: 200,
+        isVertical: false,
+        hideThumbLabel: false,
+        isRange: true,
+      });
+    }).to.throw();
+  });
   it('Model return correct from after validate settings', function () {
     expect(function () {
       model.updateSettings({
@@ -97,33 +121,7 @@ describe('Model validate settings', function () {
       });
     }).to.throw();
   });
-  it('Model return correct to after validate settings', function () {
-    expect(function () {
-      model.updateSettings({
-        min: -15,
-        max: 10,
-        from: -14,
-        step: 0.2,
-        to: 200,
-        isVertical: false,
-        hideThumbLabel: false,
-        isRange: true,
-      });
-    }).to.throw();
-  });
-  it('Model return correct isRange after validate settings', function () {
-    model.updateSettings({
-      min: -15,
-      max: 10,
-      from: -14,
-      step: 0.2,
-      to: -11,
-      isVertical: false,
-      hideThumbLabel: false,
-      isRange: false,
-    });
-    assert.equal(model.getIsRange(), false);
-  });
+
   it('Model return correct isVertical after validate settings', function () {
     model.updateSettings({
       min: -15,
@@ -133,7 +131,7 @@ describe('Model validate settings', function () {
       to: -11,
       isVertical: true,
       hideThumbLabel: false,
-      isRange: false,
+      isRange: true,
     });
     assert.equal(model.getIsVertical(), true);
   });
@@ -166,8 +164,20 @@ describe('Model validate settings', function () {
     }).to.throw();
     assert.equal(model.getStep(), 0.2);
   });
+  it('Model return correct isRange after validate settings', function () {
+    model.updateSettings({
+      min: -15,
+      max: 10,
+      from: -14,
+      step: 0.2,
+      to: -11,
+      isVertical: false,
+      hideThumbLabel: false,
+      isRange: false,
+    });
+    assert.equal(model.getIsRange(), false);
+  });
 });
-
 
 describe('Model validate step settings', function () {
   const model = new Model({
