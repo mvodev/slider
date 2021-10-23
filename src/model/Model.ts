@@ -10,12 +10,24 @@ class Model extends EventObservable implements IModelFacade {
 
   constructor(settings: ISettings) {
     super();
-    this.settings = { ...defaultSettings };
+    this.settings = defaultSettings;
     this.setSettings(settings);
   }
 
   private setSettings(settings: ISettings): void {
-    this.settings = { ...settings };
+    const isMaxMoreThanMin = settings.max > settings.min;
+    const isToMoreThanFrom = settings.isRange ? (settings.to > settings.from) : true;
+    const isFromInDiapason = (settings.from > settings.min) && (settings.from < settings.max);
+    const isToInDiapason = settings.isRange ? (settings.to < settings.max) : true;
+    const isStepValid = (Math.abs(settings.max - settings.min) > settings.step)
+      && settings.step > 0;
+    const isSettingsValid = isMaxMoreThanMin && isToMoreThanFrom
+      && isFromInDiapason && isToInDiapason && isStepValid;
+    if (isSettingsValid) {
+      this.settings = { ...settings };
+    } else {
+      throw new Error('settings is not valid');
+    }
   }
 
   getSettings(): string {
