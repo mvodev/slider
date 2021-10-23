@@ -14,28 +14,28 @@ describe('Model set settings', function () {
     isRange: true,
   });
   it('Model return correct min after set settings', function () {
-    assert.equal(model.getMin(), -15);
+    assert.equal(JSON.parse(model.getSettings()).min, -15);
   });
   it('Model return correct max after set settings', function () {
-    assert.equal(model.getMax(), 10);
+    assert.equal(JSON.parse(model.getSettings()).max, 10);
   });
   it('Model return correct step after set settings', function () {
-    assert.equal(model.getStep(), 0.2);
+    assert.equal(JSON.parse(model.getSettings()).step, 0.2);
   });
   it('Model return correct from after set settings', function () {
-    assert.equal(model.getFrom(), -14);
+    assert.equal(JSON.parse(model.getSettings()).from, -14);
   });
   it('Model return correct to after set settings', function () {
-    assert.equal(model.getTo(), -11);
+    assert.equal(JSON.parse(model.getSettings()).to, -11);
   });
   it('Model return correct isRange after set settings', function () {
-    assert.equal(model.getIsRange(), true);
+    assert.equal(JSON.parse(model.getSettings()).isRange, true);
   });
   it('Model return correct isVertical after set settings', function () {
-    assert.equal(model.getIsVertical(), false);
+    assert.equal(JSON.parse(model.getSettings()).isVertical, false);
   });
   it('Model return correct hideThumbLabel after set settings', function () {
-    assert.equal(model.getHideThumbLabel(), false);
+    assert.equal(JSON.parse(model.getSettings()).hideThumbLabel, false);
   });
 });
 
@@ -66,7 +66,7 @@ describe('Model validate settings', function () {
         isRange: true,
       })
     }).to.throw();
-    expect(model.getMin()).equal(-15);
+    expect(JSON.parse(model.getSettings()).min).equal(-15);
   });
   it('Model return correct max after validate settings', function () {
     expect(function () {
@@ -81,7 +81,7 @@ describe('Model validate settings', function () {
         isRange: true,
       });
     }).to.throw();
-    assert.equal(model.getMax(), 10);
+    assert.equal(JSON.parse(model.getSettings()).max, 10);
   });
   it('Model return correct to after validate settings', function () {
     expect(function () {
@@ -133,7 +133,7 @@ describe('Model validate settings', function () {
       hideThumbLabel: false,
       isRange: true,
     });
-    assert.equal(model.getIsVertical(), true);
+    assert.equal(JSON.parse(model.getSettings()).isVertical, true);
   });
   it('Model return correct hideThumbLabel after validate settings', function () {
     model.updateSettings({
@@ -146,7 +146,7 @@ describe('Model validate settings', function () {
       hideThumbLabel: true,
       isRange: true,
     });
-    assert.equal(model.getHideThumbLabel(), true);
+    assert.equal(JSON.parse(model.getSettings()).hideThumbLabel, true);
   });
   it('Model return correct step after validate settings', function () {
 
@@ -162,7 +162,7 @@ describe('Model validate settings', function () {
         isRange: true,
       });
     }).to.throw();
-    assert.equal(model.getStep(), 0.2);
+    assert.equal(JSON.parse(model.getSettings()).step, 0.2);
   });
   it('Model return correct isRange after validate settings', function () {
     model.updateSettings({
@@ -175,7 +175,7 @@ describe('Model validate settings', function () {
       hideThumbLabel: false,
       isRange: false,
     });
-    assert.equal(model.getIsRange(), false);
+    assert.equal(JSON.parse(model.getSettings()).isRange, false);
   });
 });
 
@@ -201,8 +201,8 @@ describe('Model validate step settings', function () {
       hideThumbLabel: true,
       isRange: true,
     });
-    assert.equal(model.getStep(), 5);
-    assert.equal(model.getFrom(), -15);
-    assert.equal(model.getTo(), -10);
+    assert.equal(JSON.parse(model.getSettings()).step, 5);
+    assert.equal(JSON.parse(model.getSettings()).from, -15);
+    assert.equal(JSON.parse(model.getSettings()).to, -10);
   });
 });

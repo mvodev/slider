@@ -1,11 +1,10 @@
 import Messages from '../utils/messages';
-import IModelFacade from './IModelFacade';
 import ISettings from './ISettings';
 import EventObservable from '../observers/EventObservable';
 import Utils from '../utils/Utils';
 import defaultSettings from './defaultSettings';
 
-class Model extends EventObservable implements IModelFacade {
+class Model extends EventObservable {
   private settings: ISettings;
 
   constructor(settings: ISettings) {
@@ -15,18 +14,20 @@ class Model extends EventObservable implements IModelFacade {
   }
 
   private setSettings(settings: ISettings): void {
-    const isMaxMoreThanMin = settings.max > settings.min;
-    const isToMoreThanFrom = settings.isRange ? (settings.to > settings.from) : true;
-    const isFromInDiapason = (settings.from > settings.min) && (settings.from < settings.max);
-    const isToInDiapason = settings.isRange ? (settings.to < settings.max) : true;
-    const isStepValid = (Math.abs(settings.max - settings.min) > settings.step)
-      && settings.step > 0;
-    const isSettingsValid = isMaxMoreThanMin && isToMoreThanFrom
-      && isFromInDiapason && isToInDiapason && isStepValid;
-    if (isSettingsValid) {
-      this.settings = { ...settings };
-    } else {
-      throw new Error('settings is not valid');
+    if (settings !== undefined) {
+      const isMaxMoreThanMin = settings.max > settings.min;
+      const isToMoreThanFrom = settings.isRange ? (settings.to > settings.from) : true;
+      const isFromInDiapason = (settings.from > settings.min) && (settings.from < settings.max);
+      const isToInDiapason = settings.isRange ? (settings.to < settings.max) : true;
+      const isStepValid = (Math.abs(settings.max - settings.min) > settings.step)
+        && settings.step > 0;
+      const isSettingsValid = isMaxMoreThanMin && isToMoreThanFrom
+        && isFromInDiapason && isToInDiapason && isStepValid;
+      if (isSettingsValid) {
+        this.settings = { ...settings };
+      } else {
+        throw new Error('settings is not valid');
+      }
     }
   }
 
@@ -39,14 +40,6 @@ class Model extends EventObservable implements IModelFacade {
     this.notifyObservers(Messages.UPDATE, this.getSettings(), 0);
   }
 
-  getMin(): number {
-    return this.settings.min;
-  }
-
-  getMax() :number {
-    return this.settings.max;
-  }
-
   setFrom(valueInPercent: number, thumbWidthInPercent: number): void {
     const from = this.convertFromPercentToValue(valueInPercent, thumbWidthInPercent);
     if (from > this.settings.max) {
@@ -56,10 +49,6 @@ class Model extends EventObservable implements IModelFacade {
     } else this.settings.from = from;
   }
 
-  getFrom(): number {
-    return this.settings.from;
-  }
-
   setTo(valueInPercent: number, thumbWidthInPercent: number): void {
     const to = this.convertFromPercentToValue(valueInPercent, thumbWidthInPercent);
     if (to >= this.settings.max) {
@@ -67,26 +56,6 @@ class Model extends EventObservable implements IModelFacade {
     } else if (to <= this.settings.from) {
       this.settings.to = this.settings.from;
     } else this.settings.to = to;
-  }
-
-  getTo(): number {
-    return this.settings.to;
-  }
-
-  getStep(): number {
-    return this.settings.step ? this.settings.step : 1;
-  }
-
-  getIsRange(): boolean|undefined {
-    return this.settings.isRange;
-  }
-
-  getIsVertical(): boolean|undefined {
-    return this.settings.isVertical;
-  }
-
-  getHideThumbLabel(): boolean | undefined {
-    return this.settings.hideThumbLabel;
   }
 
   private validateSettings(settings: ISettings): void {

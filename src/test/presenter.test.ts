@@ -41,7 +41,7 @@ describe("Presenter", function () {
 
   it("Slider is correctly set min after presenter update", function () {
     presenter.update(settingsUpdated);
-    assert.equal(model.getMin(), -10);
+    assert.equal(JSON.parse(model.getSettings()).min, -10);
   });
   it("Slider is correctly set min value in rangeLabel after presenter update", function () {
     presenter.update(settingsUpdated);
