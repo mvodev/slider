@@ -232,12 +232,15 @@ class Slider extends EventObservable {
       if (clickedPos > bottom) clickedPos = bottom;
       if (clickedPos < 0) clickedPos = 0;
       if (isRange) {
-        if (clickedPos < this.fromInPx) {
+        const clickedPosLessFrom = clickedPos < this.fromInPx;
+        const clickedPosMoreThanTo = clickedPos > this.toInPx;
+        const clickedPosBetweenFromAndTo = clickedPos >= this.fromInPx && clickedPos <= this.toInPx;
+        if (clickedPosLessFrom) {
           thumbType = CONSTANTS.thumbFrom;
           if (Math.abs(clickedPos - this.getStepInPx()) <= this.fromInPx) {
             this.setFromInPx('-', clickedPos);
           }
-        } else if (clickedPos > this.toInPx) {
+        } else if (clickedPosMoreThanTo) {
           thumbType = CONSTANTS.thumbTo;
           if ((clickedPos + this.getStepInPx()) > this.toInPx) {
             if (clickedPos >= bottom) {
@@ -246,7 +249,7 @@ class Slider extends EventObservable {
               this.setToInPx('+', clickedPos);
             }
           }
-        } else if (clickedPos >= this.fromInPx && clickedPos <= this.toInPx) {
+        } else if (clickedPosBetweenFromAndTo) {
           const pivot = (this.toInPx - this.fromInPx) / 2;
           if ((clickedPos) <= (pivot + this.fromInPx)) {
             thumbType = CONSTANTS.thumbFrom;
@@ -259,15 +262,9 @@ class Slider extends EventObservable {
       } else {
         thumbType = CONSTANTS.thumbFrom;
         if ((clickedPos + this.getThumbWidthInPx() / 2) < this.fromInPx) {
-          if (Math.abs(clickedPos - this.getStepInPx()) < this.fromInPx) {
-            this.setFromInPx('-', clickedPos);
-          }
+          this.setFromInPx('-', clickedPos);
         } else if ((clickedPos + this.getThumbWidthInPx() / 2) > this.fromInPx) {
-          if (Math.abs(clickedPos + this.getStepInPx()) > this.fromInPx
-            && (Math.floor(this.fromInPx + Math.round(Math.abs(this.fromInPx - clickedPos)
-              / this.getStepInPx()) * this.getStepInPx()) <= bottom)) {
-            this.setFromInPx('+', clickedPos);
-          }
+          this.setFromInPx('+', clickedPos);
         }
       }
       if (type === 'range') {
