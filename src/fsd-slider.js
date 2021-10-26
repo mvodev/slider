@@ -1,7 +1,7 @@
-import './styles/fsd-slider.scss';
 import View from './view/View';
 import Model from './model/Model';
 import Presenter from './presenter/Presenter';
+import './styles/fsd-slider.scss';
 
 (function ($) {
   const FsdSlider = function (root, settings, callback) {

@@ -1,6 +1,8 @@
+import * as chai from 'chai';
+
 import View from '../view/View';
 import Messages from '../utils/messages';
-import * as chai from 'chai';
+
 document.body.innerHTML = '<div id="slider-test2"></div>';
 global.ResizeObserver = require('resize-observer-polyfill');
 let assert = chai.assert;

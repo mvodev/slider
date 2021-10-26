@@ -1,5 +1,7 @@
-import Model from '../model/Model';
 import * as chai from 'chai';
+
+import Model from '../model/Model';
+
 let assert = chai.assert;
 let expect = chai.expect;
 describe('Model set settings', function () {

@@ -1,12 +1,12 @@
 import Range from './Range';
-import Messages from '../../utils/messages';
 import RangeLabel from './RangeLabel';
-import ISettings from '../../model/ISettings';
-import defaultSettings from '../../model/defaultSettings';
-import EventObservable from '../../observers/EventObservable';
+import Messages from '../../utils/messages';
 import CONSTANTS from '../../utils/constants';
 import Utils from '../../utils/Utils';
 import CLASS_NAMING from '../../utils/classNaming';
+import ISettings from '../../model/ISettings';
+import defaultSettings from '../../model/defaultSettings';
+import EventObservable from '../../observers/EventObservable';
 
 class Slider extends EventObservable {
   private range!: Range;

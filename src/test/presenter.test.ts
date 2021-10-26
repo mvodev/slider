@@ -1,5 +1,6 @@
-import Model from '../model/Model';
 import * as chai from 'chai';
+
+import Model from '../model/Model';
 import Presenter from '../presenter/Presenter';
 import View from '../view/View';
 // https://github.com/jsdom/jsdom
