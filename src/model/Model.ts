@@ -143,16 +143,13 @@ class Model extends EventObservable {
         throw new Error('step must not be zero');
       } else if (newStep > (Math.abs(max - min))) {
         throw new Error('step must be more than difference between max and min');
-      } else {
-        // eslint-disable-next-line no-lonely-if
-        if (step !== newStep) {
-          this.settings.step = newStep;
-          this.settings.from = min;
-          if ((this.settings.from + this.settings.step) >= max) {
-            this.settings.to = max;
-          } else {
-            this.settings.to = this.settings.from + this.settings.step;
-          }
+      } else if (step !== newStep) {
+        this.settings.step = newStep;
+        this.settings.from = min;
+        if ((this.settings.from + this.settings.step) >= max) {
+          this.settings.to = max;
+        } else {
+          this.settings.to = this.settings.from + this.settings.step;
         }
       }
     }
