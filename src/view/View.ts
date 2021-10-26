@@ -31,7 +31,8 @@ class View extends EventObservable implements IObserver {
   }
 
   refreshView(msg: Messages, settings: ISettings): void {
-    if (msg === Messages.INIT || msg === Messages.UPDATE) {
+    const messageInitOrUpdate = (msg === Messages.INIT) || (msg === Messages.UPDATE);
+    if (messageInitOrUpdate) {
       this.updateViewSettings(settings);
       this.render(this.viewSettings);
     } else if (msg === Messages.FROM_IS_SET) {
