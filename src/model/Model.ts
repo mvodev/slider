@@ -79,7 +79,8 @@ class Model extends EventObservable {
   }
 
   private validateMin(newMin:number|undefined, newMax:number|undefined) {
-    if (newMin !== undefined && newMax !== undefined) {
+    const newMinAndMaxIsValid = newMin !== undefined && newMax !== undefined;
+    if (newMinAndMaxIsValid) {
       if (Math.abs(newMax - newMin) < this.settings.step) {
         throw new Error('difference between min and max more than step');
       }
@@ -95,9 +96,11 @@ class Model extends EventObservable {
 
   private validateMax(newMax:number|undefined) {
     if (newMax !== undefined) {
-      if (this.settings.isRange && newMax < this.settings.to) {
+      const newMaxLessThanTo = this.settings.isRange && newMax < this.settings.to;
+      const newMaxLessThanFrom = !this.settings.isRange && newMax < this.settings.from;
+      if (newMaxLessThanTo) {
         throw new Error('min value more than to value');
-      } else if (!this.settings.isRange && newMax < this.settings.from) {
+      } else if (newMaxLessThanFrom) {
         throw new Error('min value more than from value');
       } else {
         this.settings.max = newMax;
@@ -106,14 +109,16 @@ class Model extends EventObservable {
   }
 
   private validateFrom(newFrom:number|undefined) {
-    if (newFrom !== undefined && !this.settings.isRange) {
+    const newFromIsValidWithoutRangeSettings = newFrom !== undefined && !this.settings.isRange;
+    const newFromIsValidWithRangeSettings = newFrom !== undefined && this.settings.isRange;
+    if (newFromIsValidWithoutRangeSettings) {
       if (newFrom > this.settings.max) {
         throw new Error('from more than max');
       } else if (newFrom < this.settings.min) {
         throw new Error('from less than min');
       } else this.settings.from = newFrom;
     }
-    if (newFrom !== undefined && this.settings.isRange) {
+    if (newFromIsValidWithRangeSettings) {
       if (newFrom > this.settings.to) {
         throw new Error('from more than to');
       } else if (newFrom < this.settings.min) {
@@ -123,7 +128,8 @@ class Model extends EventObservable {
   }
 
   private validateTo(newTo:number|undefined) {
-    if (newTo !== undefined && this.settings.isRange) {
+    const newToIsValid = newTo !== undefined && this.settings.isRange;
+    if (newToIsValid) {
       if (newTo < this.settings.from) {
         throw new Error('to less than from');
       } else if (newTo > this.settings.max) {
