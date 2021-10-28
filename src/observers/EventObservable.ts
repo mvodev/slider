@@ -1,6 +1,6 @@
+import Messages from '../utils/messages';
 import IObservable from './IObservable';
 import IObserver from './IObserver';
-import Messages from '../utils/messages';
 
 class EventObservable implements IObservable {
   private observers: Array<IObserver>;

@@ -1,7 +1,7 @@
-import Thumb from './Thumb';
-import ColoredRange from './ColoredRange';
 import ISettings from '../../model/ISettings';
 import CLASS_NAMING from '../../utils/classNaming';
+import Thumb from './Thumb';
+import ColoredRange from './ColoredRange';
 
 class Range {
   private range: HTMLDivElement;

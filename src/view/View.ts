@@ -1,9 +1,9 @@
-import Slider from './components/Slider';
 import ISettings from '../model/ISettings';
 import Messages from '../utils/messages';
 import EventObservable from '../observers/EventObservable';
 import defaultSettings from '../model/defaultSettings';
 import IObserver from '../observers/IObserver';
+import Slider from './components/Slider';
 
 class View extends EventObservable implements IObserver {
   private slider!: Slider;

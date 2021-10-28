@@ -1,8 +1,9 @@
 import * as chai from 'chai';
 
+import '../../slider/fsd-slider.css';
 import View from '../view/View';
 import Messages from '../utils/messages';
-import '../../slider/fsd-slider.css';
+
 global.ResizeObserver = require('resize-observer-polyfill');
 let assert = chai.assert;
 document.body.innerHTML = '<div id="slider-test"></>';

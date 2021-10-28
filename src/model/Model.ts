@@ -1,8 +1,8 @@
-import ISettings from './ISettings';
-import defaultSettings from './defaultSettings';
 import Messages from '../utils/messages';
 import Utils from '../utils/Utils';
 import EventObservable from '../observers/EventObservable';
+import ISettings from './ISettings';
+import defaultSettings from './defaultSettings';
 
 class Model extends EventObservable {
   private settings: ISettings;
