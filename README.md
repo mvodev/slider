@@ -26,7 +26,7 @@ $sl1.fsdSlider({
  handleEvent: (message, result) => {
   let s = JSON.parse(result)
   if (s.isRange) {
-   $sl1_input.val(s.from + '  -  ' + s.to);
+   $sl1_input.val(`${s.from} - ${s.to}`);
   }
   else {
    $sl1_input.val(s.from);
@@ -59,7 +59,7 @@ let $sl1_input = $('.input-result1');
  handleEvent: (message, result) => {
   let s = JSON.parse(result)
   if (s.isRange) {
-   $sl1_input.val(s.from + '  -  ' + s.to);
+   $sl1_input.val(`${s.from} - ${s.to}`);
   }
   else {
    $sl1_input.val(s.from);
@@ -80,7 +80,7 @@ let $sl1_input = $('.input-result1');
  ```
  ## API:
  ```
- let sl1_instance = $sl1.data("fsd-slider");
+ let sl1_instance = $sl1.data('fsd-slider');
  sl1_instance.update(newSettings); - возможность передать новые настройки в слайдер
  ```
 ## Описание проекта:
