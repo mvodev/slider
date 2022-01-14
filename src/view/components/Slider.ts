@@ -421,10 +421,18 @@ class Slider extends EventObservable {
     const valueInPercentage = this.convertFromPxToPercent(shiftInPx);
     if (type === 'thumbFrom') {
       this.range.setThumbPositionFrom(valueInPercentage, this.settings.isVertical);
-      this.notifyObservers(Messages.SET_FROM, JSON.stringify({ from: valueInPercentage }), 0);
+      this.notifyObservers(
+        Messages.SET_FROM,
+        JSON.stringify({ from: valueInPercentage }),
+        CONSTANTS.widthUnused,
+      );
     } else {
       this.range.setThumbPositionTo(valueInPercentage, this.settings.isVertical);
-      this.notifyObservers(Messages.SET_TO, JSON.stringify({ to: valueInPercentage }), 0);
+      this.notifyObservers(
+        Messages.SET_TO,
+        JSON.stringify({ to: valueInPercentage }),
+        CONSTANTS.widthUnused,
+      );
     }
     this.setColoredRange();
   }
