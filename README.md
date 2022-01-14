@@ -12,7 +12,23 @@ npm run build
 ## Запуск тестов
 npm run test
 ## Пример инициализации:
+Создайте div с классом slider(имя класса для примера,возможно любое имя класса)
+и, если необходимо, input для вывода результатов(в примере с классом input-result).
 ```
+const $sl = $('.slider');
+const $sl_result = $('.input-result');
+
+const sl1Settings = {
+  min: 5000,
+  max: 25000,
+  from: 8000,
+  step: 1000,
+  to: 18000,
+  isVertical: false,
+  hideThumbLabel: false,
+  isRange: true,
+};
+
 $sl1.fsdSlider({
  min: -15,
  max: -10,
@@ -27,10 +43,10 @@ $sl1.fsdSlider({
  handleEvent: (message, result) => {
   let s = JSON.parse(result)
   if (s.isRange) {
-   $sl1_input.val(`${s.from} - ${s.to}`);
+   $sl_result.val(`${s.from} - ${s.to}`);
   }
   else {
-   $sl1_input.val(s.from);
+   $sl_result.val(s.from);
   }
  }
 });
@@ -55,15 +71,15 @@ isRange - булево значение true данного параметра �
 Передайте объект,содержащий функцию handleEvent.
 Внутри handleEvent можно передавать значения необходимым input.
 ```
-let $sl1_input = $('.input-result1');
+const $sl_result = $('.input-result');
 {
  handleEvent: (message, result) => {
   let s = JSON.parse(result)
   if (s.isRange) {
-   $sl1_input.val(`${s.from} - ${s.to}`);
+   $sl_result.val(`${s.from} - ${s.to}`);
   }
   else {
-   $sl1_input.val(s.from);
+   $sl_result.val(s.from);
   }
  }
 }
@@ -81,8 +97,8 @@ let $sl1_input = $('.input-result1');
  ```
  ## API:
  ```
- let sl1_instance = $sl1.data('fsd-slider');
- sl1_instance.update(newSettings); - возможность передать новые настройки в слайдер
+ const sl_instance = $sl.data('fsd-slider');
+ sl_instance.update(newSettings); - возможность передать новые настройки в слайдер
  ```
 ## Описание проекта:
 ### Основные классы:
