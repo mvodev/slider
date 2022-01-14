@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const path = require('path');
-const HTMLWebpackPlugin = require('html-webpack-plugin');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const cssLoaders = (extra) => {
@@ -36,13 +34,6 @@ const libConfig = {
     },
   },
   plugins: [
-    new HTMLWebpackPlugin(
-      {
-        template: './index.pug',
-        chunks: ['lib'],
-      },
-    ),
-    new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: 'fsd-slider.css',
     }),
@@ -52,18 +43,6 @@ const libConfig = {
       {
         test: /\.css$/,
         use: cssLoaders(),
-      },
-      {
-        test: /\.pug$/,
-        use: ['pug-loader'],
-      },
-      {
-        test: /\.(png|jpg|svg|gif)$/,
-        use: ['file-loader'],
-      },
-      {
-        test: /\.(ttf|woff|woff2|eot|otf)$/,
-        use: ['file-loader'],
       },
       {
         test: /\.s[ac]ss$/,

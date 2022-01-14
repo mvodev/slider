@@ -62,7 +62,6 @@
   },
   "scripts": {
     "test": "karma start karma.conf.js ",
-    "dev": "webpack --mode development",
     "build": "webpack --mode production"
   },
   "author": "Vadim Manushin",
