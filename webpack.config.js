@@ -43,14 +43,6 @@ const libConfig = {
         chunks: ['lib'],
       },
     ),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: path.resolve(__dirname, 'src/assets/'),
-          to: path.resolve(__dirname, 'docs'),
-        },
-      ],
-    }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: 'fsd-slider.css',
