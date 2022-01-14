@@ -8,6 +8,7 @@ git clone https://mvodev.github.io/FSDCourse4/
 npm i
 Запустить production build
 npm run build
+Результат сборки в папке slider
 ## Запуск тестов
 npm run test
 ## Пример инициализации:
