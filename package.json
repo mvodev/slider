@@ -61,9 +61,8 @@
     "webpack-cli": "^4.9.0"
   },
   "scripts": {
-    "test": "karma start karma.conf.js ",
-    "dev": "webpack --mode development",
-    "build": "webpack --mode production"
+    "test": "webpack --mode development && karma start karma.conf.js ",
+    "dev": "webpack --mode development"
   },
   "author": "Vadim Manushin",
   "license": "MIT"
