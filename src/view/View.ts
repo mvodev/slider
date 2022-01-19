@@ -26,10 +26,6 @@ class View extends EventObservable implements IObserver {
     this.notifyObservers(msg, settings, this.getThumbWidthInPercentage());
   }
 
-  private render(s: ISettings): void {
-    this.slider.render(JSON.stringify(s));
-  }
-
   refreshView(msg: Messages, settings: ISettings): void {
     const messageInitOrUpdate = (msg === Messages.INIT) || (msg === Messages.UPDATE);
     if (messageInitOrUpdate) {
@@ -52,6 +48,10 @@ class View extends EventObservable implements IObserver {
 
   private updateViewSettings(s: ISettings) {
     this.viewSettings = Object.assign(this.viewSettings, s);
+  }
+
+  private render(s: ISettings): void {
+    this.slider.render(JSON.stringify(s));
   }
 }
 

@@ -13,24 +13,6 @@ class Model extends EventObservable {
     this.setSettings(settings);
   }
 
-  private setSettings(settings: ISettings): void {
-    if (settings !== undefined) {
-      const isMaxMoreThanMin = settings.max > settings.min;
-      const isToMoreThanFrom = settings.isRange ? (settings.to > settings.from) : true;
-      const isFromInDiapason = (settings.from > settings.min) && (settings.from < settings.max);
-      const isToInDiapason = settings.isRange ? (settings.to < settings.max) : true;
-      const isStepValid = (Math.abs(settings.max - settings.min) > settings.step)
-        && settings.step > 0;
-      const isSettingsValid = isMaxMoreThanMin && isToMoreThanFrom
-        && isFromInDiapason && isToInDiapason && isStepValid;
-      if (isSettingsValid) {
-        this.settings = { ...settings };
-      } else {
-        throw new Error('settings is not valid');
-      }
-    }
-  }
-
   getSettings(): string {
     return JSON.stringify(this.settings);
   }
@@ -56,6 +38,24 @@ class Model extends EventObservable {
     } else if (to <= this.settings.from) {
       this.settings.to = this.settings.from;
     } else this.settings.to = to;
+  }
+
+  private setSettings(settings: ISettings): void {
+    if (settings !== undefined) {
+      const isMaxMoreThanMin = settings.max > settings.min;
+      const isToMoreThanFrom = settings.isRange ? (settings.to > settings.from) : true;
+      const isFromInDiapason = (settings.from > settings.min) && (settings.from < settings.max);
+      const isToInDiapason = settings.isRange ? (settings.to < settings.max) : true;
+      const isStepValid = (Math.abs(settings.max - settings.min) > settings.step)
+        && settings.step > 0;
+      const isSettingsValid = isMaxMoreThanMin && isToMoreThanFrom
+        && isFromInDiapason && isToInDiapason && isStepValid;
+      if (isSettingsValid) {
+        this.settings = { ...settings };
+      } else {
+        throw new Error('settings is not valid');
+      }
+    }
   }
 
   private validateSettings(settings: ISettings): void {

@@ -76,6 +76,58 @@ class Slider extends EventObservable {
     this.calculateThumbPos();
   }
 
+  getThumbWidthInPercentage(): number {
+    if (this.settings.isVertical) {
+      return ((this.getThumbFromHTML().offsetHeight / this.getSliderLengthInPx()) * 100);
+    }
+    return ((this.getThumbFromHTML().offsetWidth / this.getSliderLengthInPx()) * 100);
+  }
+
+  private getSliderLengthInPx(): number {
+    if (this.settings.isVertical) {
+      return this.getRangeHTML().offsetHeight;
+    }
+    return this.getRangeHTML().offsetWidth;
+  }
+
+  private dispatchEvent(shiftInPx: number, type: string) {
+    const valueInPercentage = this.convertFromPxToPercent(shiftInPx);
+    if (type === 'thumbFrom') {
+      this.range.setThumbPositionFrom(valueInPercentage, this.settings.isVertical);
+      this.notifyObservers(Messages.SET_FROM, JSON.stringify({ from: valueInPercentage }), 0);
+    } else {
+      this.range.setThumbPositionTo(valueInPercentage, this.settings.isVertical);
+      this.notifyObservers(Messages.SET_TO, JSON.stringify({ to: valueInPercentage }), 0);
+    }
+    this.setColoredRange();
+  }
+
+  getRangeHTML(): HTMLDivElement {
+    return this.range.getRangeHTML();
+  }
+
+  setValueToLabelThumbFrom(value: number): void {
+    this.range.setValueToLabelThumbFrom(value);
+    this.settings.from = value;
+  }
+
+  setValueToLabelThumbTo(value: number): void {
+    this.range.setValueToLabelThumbTo(value);
+    this.settings.to = value;
+  }
+
+  getRangeLabelHTML(): HTMLDivElement {
+    return this.rangeLabel.getRangeLabelHTML();
+  }
+
+  getThumbFromHTML(): HTMLElement {
+    return this.range.getThumbFromHTML();
+  }
+
+  getMinRangeHTML(): HTMLElement {
+    return this.rangeLabel.getMinRangeHTML();
+  }
+
   private calculateThumbPos(): void {
     const {
       from, to, step, min,
@@ -401,58 +453,6 @@ class Slider extends EventObservable {
       return 0;
     }
     return +result.toFixed(20);
-  }
-
-  getThumbWidthInPercentage(): number {
-    if (this.settings.isVertical) {
-      return ((this.getThumbFromHTML().offsetHeight / this.getSliderLengthInPx()) * 100);
-    }
-    return ((this.getThumbFromHTML().offsetWidth / this.getSliderLengthInPx()) * 100);
-  }
-
-  private getSliderLengthInPx(): number {
-    if (this.settings.isVertical) {
-      return this.getRangeHTML().offsetHeight;
-    }
-    return this.getRangeHTML().offsetWidth;
-  }
-
-  private dispatchEvent(shiftInPx: number, type: string) {
-    const valueInPercentage = this.convertFromPxToPercent(shiftInPx);
-    if (type === 'thumbFrom') {
-      this.range.setThumbPositionFrom(valueInPercentage, this.settings.isVertical);
-      this.notifyObservers(Messages.SET_FROM, JSON.stringify({ from: valueInPercentage }), 0);
-    } else {
-      this.range.setThumbPositionTo(valueInPercentage, this.settings.isVertical);
-      this.notifyObservers(Messages.SET_TO, JSON.stringify({ to: valueInPercentage }), 0);
-    }
-    this.setColoredRange();
-  }
-
-  getRangeHTML(): HTMLDivElement {
-    return this.range.getRangeHTML();
-  }
-
-  setValueToLabelThumbFrom(value: number): void {
-    this.range.setValueToLabelThumbFrom(value);
-    this.settings.from = value;
-  }
-
-  setValueToLabelThumbTo(value: number): void {
-    this.range.setValueToLabelThumbTo(value);
-    this.settings.to = value;
-  }
-
-  getRangeLabelHTML(): HTMLDivElement {
-    return this.rangeLabel.getRangeLabelHTML();
-  }
-
-  getThumbFromHTML(): HTMLElement {
-    return this.range.getThumbFromHTML();
-  }
-
-  getMinRangeHTML(): HTMLElement {
-    return this.rangeLabel.getMinRangeHTML();
   }
 
   private setVertical(): void {
