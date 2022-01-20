@@ -40,7 +40,7 @@ $sl1.fsdSlider({
  isRange: true
 }, 
 {
- handleEvent: (message, result) => {
+ handleEvent: (_message, result) => {
   let s = JSON.parse(result)
   if (s.isRange) {
    $sl_result.val(`${s.from} - ${s.to}`);
@@ -73,7 +73,7 @@ isRange - булево значение true данного параметра �
 ```
 const $sl_result = $('.input-result');
 {
- handleEvent: (message, result) => {
+ handleEvent: (_message, result) => {
   let s = JSON.parse(result)
   if (s.isRange) {
    $sl_result.val(`${s.from} - ${s.to}`);
