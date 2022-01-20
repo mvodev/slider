@@ -40,23 +40,6 @@ class RangeLabel {
     return this.minLabel;
   }
 
-  private initComponents() {
-    this.rangeLabelContainer = document.createElement('div');
-    this.rangeLabelContainer.classList.add(CLASS_NAMING.rangeLabel);
-    this.minLabel = document.createElement('span');
-    this.minLabel.classList.add(CLASS_NAMING.rangeLabelScale);
-    this.maxLabel = document.createElement('span');
-    this.maxLabel.classList.add(CLASS_NAMING.rangeLabelScale);
-    this.rangeLabelContainer.appendChild(this.minLabel);
-    this.labels.push(this.minLabel);
-    const pivotMark = document.createElement('span');
-    pivotMark.classList.add(CLASS_NAMING.rangeLabelScale);
-    this.labels.push(pivotMark);
-    this.rangeLabelContainer.appendChild(pivotMark);
-    this.rangeLabelContainer.appendChild(this.maxLabel);
-    this.labels.push(this.maxLabel);
-  }
-
   setVertical(): void {
     this.rangeLabelContainer.classList.add(CLASS_NAMING.rangeLabelIsVertical);
   }
@@ -75,6 +58,23 @@ class RangeLabel {
 
   showLabels(): void {
     this.rangeLabelContainer.classList.remove(CLASS_NAMING.hideElement);
+  }
+
+  private initComponents() {
+    this.rangeLabelContainer = document.createElement('div');
+    this.rangeLabelContainer.classList.add(CLASS_NAMING.rangeLabel);
+    this.minLabel = document.createElement('span');
+    this.minLabel.classList.add(CLASS_NAMING.rangeLabelScale);
+    this.maxLabel = document.createElement('span');
+    this.maxLabel.classList.add(CLASS_NAMING.rangeLabelScale);
+    this.rangeLabelContainer.appendChild(this.minLabel);
+    this.labels.push(this.minLabel);
+    const pivotMark = document.createElement('span');
+    pivotMark.classList.add(CLASS_NAMING.rangeLabelScale);
+    this.labels.push(pivotMark);
+    this.rangeLabelContainer.appendChild(pivotMark);
+    this.rangeLabelContainer.appendChild(this.maxLabel);
+    this.labels.push(this.maxLabel);
   }
 }
 export default RangeLabel;

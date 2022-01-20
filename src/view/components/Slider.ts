@@ -76,6 +76,43 @@ class Slider extends EventObservable {
     this.calculateThumbPos();
   }
 
+  getThumbLabelFrom(): HTMLElement {
+    return this.range.getThumbLabelFromHTML();
+  }
+
+  getThumbWidthInPercentage(): number {
+    if (this.settings.isVertical) {
+      return ((this.getThumbFromHTML().offsetHeight / this.getSliderLengthInPx()) * 100);
+    }
+    return ((this.getThumbFromHTML().offsetWidth / this.getSliderLengthInPx()) * 100);
+  }
+
+  getRangeHTML(): HTMLDivElement {
+    return this.range.getRangeHTML();
+  }
+
+  setValueToLabelThumbFrom(value: number): void {
+    this.range.setValueToLabelThumbFrom(value);
+    this.settings.from = value;
+  }
+
+  setValueToLabelThumbTo(value: number): void {
+    this.range.setValueToLabelThumbTo(value);
+    this.settings.to = value;
+  }
+
+  getRangeLabelHTML(): HTMLDivElement {
+    return this.rangeLabel.getRangeLabelHTML();
+  }
+
+  getThumbFromHTML(): HTMLElement {
+    return this.range.getThumbFromHTML();
+  }
+
+  getMinRangeHTML(): HTMLElement {
+    return this.rangeLabel.getMinRangeHTML();
+  }
+
   private calculateThumbPos(): void {
     const {
       from, to, step, min,
@@ -403,13 +440,6 @@ class Slider extends EventObservable {
     return +result.toFixed(20);
   }
 
-  getThumbWidthInPercentage(): number {
-    if (this.settings.isVertical) {
-      return ((this.getThumbFromHTML().offsetHeight / this.getSliderLengthInPx()) * 100);
-    }
-    return ((this.getThumbFromHTML().offsetWidth / this.getSliderLengthInPx()) * 100);
-  }
-
   private getSliderLengthInPx(): number {
     if (this.settings.isVertical) {
       return this.getRangeHTML().offsetHeight;
@@ -437,32 +467,6 @@ class Slider extends EventObservable {
     this.setColoredRange();
   }
 
-  getRangeHTML(): HTMLDivElement {
-    return this.range.getRangeHTML();
-  }
-
-  setValueToLabelThumbFrom(value: number): void {
-    this.range.setValueToLabelThumbFrom(value);
-    this.settings.from = value;
-  }
-
-  setValueToLabelThumbTo(value: number): void {
-    this.range.setValueToLabelThumbTo(value);
-    this.settings.to = value;
-  }
-
-  getRangeLabelHTML(): HTMLDivElement {
-    return this.rangeLabel.getRangeLabelHTML();
-  }
-
-  getThumbFromHTML(): HTMLElement {
-    return this.range.getThumbFromHTML();
-  }
-
-  getMinRangeHTML(): HTMLElement {
-    return this.rangeLabel.getMinRangeHTML();
-  }
-
   private setVertical(): void {
     this.unbindEvents();
     this.container.classList.add(CLASS_NAMING.sliderIsVertical);
@@ -488,10 +492,6 @@ class Slider extends EventObservable {
   private getStepInPx(): number {
     return +((this.getSliderLengthInPx() - this.getThumbWidthInPx())
     / (Math.abs((this.settings.max - this.settings.min) / this.settings.step))).toFixed(20);
-  }
-
-  getThumbLabelFrom(): HTMLElement {
-    return this.range.getThumbLabelFromHTML();
   }
 
   private getLabels(): HTMLElement[] {
