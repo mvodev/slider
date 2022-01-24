@@ -22,7 +22,7 @@ class View extends EventObservable implements IObserver {
     } else throw new Error('root elem of Slider is null!');
   }
 
-  handleEvent(msg: Messages, settings: string): void {
+  handleEvent(settings: string, msg: Messages): void {
     this.notifyObservers(msg, settings, this.getThumbWidthInPercentage());
   }
 

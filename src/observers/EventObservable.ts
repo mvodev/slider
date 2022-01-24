@@ -14,13 +14,13 @@ class EventObservable implements IObservable {
   }
 
   removeObserver(o: IObserver): void {
-    this.observers.filter((subscriber) => subscriber !== o);
+    this.observers = this.observers.filter((subscriber) => subscriber !== o);
   }
 
   notifyObservers(msg: Messages, settings: string, width: number): void {
     this.observers.forEach((elem) => {
       if (elem && ('handleEvent' in elem)) {
-        elem.handleEvent(msg, settings, width);
+        elem.handleEvent(settings, msg, width);
       }
     });
   }

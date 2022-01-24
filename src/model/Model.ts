@@ -3,6 +3,7 @@ import Utils from '../utils/Utils';
 import EventObservable from '../observers/EventObservable';
 import ISettings from './ISettings';
 import defaultSettings from './defaultSettings';
+import CONSTANTS from '../utils/constants';
 
 class Model extends EventObservable {
   private settings: ISettings;
@@ -19,7 +20,7 @@ class Model extends EventObservable {
 
   updateSettings(settings: ISettings): void {
     this.validateSettings(settings);
-    this.notifyObservers(Messages.UPDATE, this.getSettings(), 0);
+    this.notifyObservers(Messages.UPDATE, this.getSettings(), CONSTANTS.widthUnused);
   }
 
   setFrom(valueInPercent: number, thumbWidthInPercent: number): void {

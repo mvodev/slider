@@ -17,7 +17,7 @@ class Presenter extends EventObservable implements IObserver {
     this.model = model;
   }
 
-  handleEvent(msg: Messages, s: string, thumbWidthInPercentage: number) : void {
+  handleEvent(s: string, msg: Messages, thumbWidthInPercentage: number) : void {
     if (msg === Messages.UPDATE) {
       this.view.refreshView(Messages.UPDATE, JSON.parse(s));
       this.notifyObservers(Messages.UPDATE, this.model.getSettings(), thumbWidthInPercentage);
