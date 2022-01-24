@@ -62,7 +62,8 @@
   },
   "scripts": {
     "test": "webpack --mode production && karma start karma.conf.js ",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development"
   },
   "author": "Vadim Manushin",
   "license": "MIT"
