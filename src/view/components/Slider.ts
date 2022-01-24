@@ -76,30 +76,15 @@ class Slider extends EventObservable {
     this.calculateThumbPos();
   }
 
+  getThumbLabelFrom(): HTMLElement {
+    return this.range.getThumbLabelFromHTML();
+  }
+
   getThumbWidthInPercentage(): number {
     if (this.settings.isVertical) {
       return ((this.getThumbFromHTML().offsetHeight / this.getSliderLengthInPx()) * 100);
     }
     return ((this.getThumbFromHTML().offsetWidth / this.getSliderLengthInPx()) * 100);
-  }
-
-  private getSliderLengthInPx(): number {
-    if (this.settings.isVertical) {
-      return this.getRangeHTML().offsetHeight;
-    }
-    return this.getRangeHTML().offsetWidth;
-  }
-
-  private dispatchEvent(shiftInPx: number, type: string) {
-    const valueInPercentage = this.convertFromPxToPercent(shiftInPx);
-    if (type === 'thumbFrom') {
-      this.range.setThumbPositionFrom(valueInPercentage, this.settings.isVertical);
-      this.notifyObservers(Messages.SET_FROM, JSON.stringify({ from: valueInPercentage }), 0);
-    } else {
-      this.range.setThumbPositionTo(valueInPercentage, this.settings.isVertical);
-      this.notifyObservers(Messages.SET_TO, JSON.stringify({ to: valueInPercentage }), 0);
-    }
-    this.setColoredRange();
   }
 
   getRangeHTML(): HTMLDivElement {
@@ -455,6 +440,33 @@ class Slider extends EventObservable {
     return +result.toFixed(20);
   }
 
+  private getSliderLengthInPx(): number {
+    if (this.settings.isVertical) {
+      return this.getRangeHTML().offsetHeight;
+    }
+    return this.getRangeHTML().offsetWidth;
+  }
+
+  private dispatchEvent(shiftInPx: number, type: string) {
+    const valueInPercentage = this.convertFromPxToPercent(shiftInPx);
+    if (type === 'thumbFrom') {
+      this.range.setThumbPositionFrom(valueInPercentage, this.settings.isVertical);
+      this.notifyObservers(
+        Messages.SET_FROM,
+        JSON.stringify({ from: valueInPercentage }),
+        CONSTANTS.widthUnused,
+      );
+    } else {
+      this.range.setThumbPositionTo(valueInPercentage, this.settings.isVertical);
+      this.notifyObservers(
+        Messages.SET_TO,
+        JSON.stringify({ to: valueInPercentage }),
+        CONSTANTS.widthUnused,
+      );
+    }
+    this.setColoredRange();
+  }
+
   private setVertical(): void {
     this.unbindEvents();
     this.container.classList.add(CLASS_NAMING.sliderIsVertical);
@@ -480,10 +492,6 @@ class Slider extends EventObservable {
   private getStepInPx(): number {
     return +((this.getSliderLengthInPx() - this.getThumbWidthInPx())
     / (Math.abs((this.settings.max - this.settings.min) / this.settings.step))).toFixed(20);
-  }
-
-  getThumbLabelFrom(): HTMLElement {
-    return this.range.getThumbLabelFromHTML();
   }
 
   private getLabels(): HTMLElement[] {

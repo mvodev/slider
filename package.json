@@ -61,7 +61,8 @@
     "webpack-cli": "^4.9.0"
   },
   "scripts": {
-    "test": "webpack --mode development && karma start karma.conf.js ",
+    "test": "webpack --mode production && karma start karma.conf.js ",
+    "build": "webpack --mode production",
     "dev": "webpack --mode development"
   },
   "author": "Vadim Manushin",

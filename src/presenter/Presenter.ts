@@ -4,6 +4,7 @@ import View from '../view/View';
 import Messages from '../utils/messages';
 import IObserver from '../observers/IObserver';
 import EventObservable from '../observers/EventObservable';
+import CONSTANTS from '../utils/constants';
 
 class Presenter extends EventObservable implements IObserver {
   private view: View;
@@ -16,7 +17,7 @@ class Presenter extends EventObservable implements IObserver {
     this.model = model;
   }
 
-  handleEvent(msg: Messages, s: string, thumbWidthInPercentage: number) : void {
+  handleEvent(s: string, msg: Messages, thumbWidthInPercentage: number) : void {
     if (msg === Messages.UPDATE) {
       this.view.refreshView(Messages.UPDATE, JSON.parse(s));
       this.notifyObservers(Messages.UPDATE, this.model.getSettings(), thumbWidthInPercentage);
@@ -33,7 +34,7 @@ class Presenter extends EventObservable implements IObserver {
 
   initialize(): void {
     this.view.refreshView(Messages.INIT, JSON.parse(this.model.getSettings()));
-    this.notifyObservers(Messages.UPDATE, this.model.getSettings(), 0);
+    this.notifyObservers(Messages.UPDATE, this.model.getSettings(), CONSTANTS.widthUnused);
   }
 
   update(newSettings: ISettings): void {

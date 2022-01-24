@@ -4,5 +4,6 @@ const CONSTANTS = {
   thumbTo: 'thumbTo',
   dataAttrName: 'data-value',
   threshold: 0.0001,
+  widthUnused: -1,
 };
 export default CONSTANTS;
