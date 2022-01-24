@@ -30,12 +30,17 @@ const sl1Settings = {
   isRange: true,
 };
 
-$sl1.fsdSlider(sl1Settings, {
-  handleEvent: (_message, result) => {
+$sl1.fsdSlider(sl1Settings);
+
+const callback1 = {
+  handleEvent: (result) => {
     const s = JSON.parse(result);
     setValuesToControlPanel(s, 'slider1');
   },
-});
+};
+
+const sl1Instance = $sl1.data('fsd-slider');
+sl1Instance.addCallback(callback1);
 
 const $sl2 = $('.slider2');
 const sl2Settings = {
@@ -48,12 +53,17 @@ const sl2Settings = {
   isRange: false,
 };
 
-$sl2.fsdSlider(sl2Settings, {
-  handleEvent: (_message, result) => {
+const callback2 = {
+  handleEvent: (result) => {
     const s = JSON.parse(result);
     setValuesToControlPanel(s, 'slider2');
   },
-});
+};
+
+$sl2.fsdSlider(sl2Settings);
+
+const sl2Instance = $sl2.data('fsd-slider');
+sl2Instance.addCallback(callback2);
 
 const $sl3 = $('.slider3');
 const sl3Settings = {
@@ -67,16 +77,17 @@ const sl3Settings = {
   isRange: true,
 };
 
-$sl3.fsdSlider(sl3Settings, {
-  handleEvent: (_message, result) => {
+$sl3.fsdSlider(sl3Settings);
+
+const callback3 = {
+  handleEvent: (result) => {
     const s = JSON.parse(result);
     setValuesToControlPanel(s, 'slider3');
   },
-});
+};
 
-const sl1Instance = $sl1.data('fsdSlider');
-const sl2Instance = $sl2.data('fsdSlider');
-const sl3Instance = $sl3.data('fsdSlider');
+const sl3Instance = $sl3.data('fsd-slider');
+sl3Instance.addCallback(callback3);
 
 function collectData(sliderNumber) {
   const result = {
@@ -105,6 +116,10 @@ function inputHandler() {
 $('input').on('change', inputHandler);
 
 function setSettingsToInputs(sliderNumber, sliderSettings) {
+  $(`.js-control-panel__min-${sliderNumber}`).val(sliderSettings.min);
+  $(`.js-control-panel__max-${sliderNumber}`).val(sliderSettings.max);
+  $(`.js-control-panel__from-${sliderNumber}`).val(sliderSettings.from);
+  $(`.js-control-panel__step-${sliderNumber}`).val(sliderSettings.step);
   if (sliderSettings.isVertical) {
     $(`.js-control-panel__is-vertical-${sliderNumber}`).prop('checked', true);
   } else {
@@ -112,6 +127,7 @@ function setSettingsToInputs(sliderNumber, sliderSettings) {
   }
   if (sliderSettings.isRange) {
     $(`.js-control-panel__is-range-${sliderNumber}`).prop('checked', true);
+    $(`.js-control-panel__to-${sliderNumber}`).val(sliderSettings.to);
   } else {
     $(`.js-control-panel__is-range-${sliderNumber}`).prop('checked', false);
   }
