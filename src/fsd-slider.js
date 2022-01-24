@@ -5,10 +5,10 @@ import './styles/fsd-slider.scss';
 
 (function ($) {
   const FsdSlider = function (root, settings, callback) {
-    const model = new Model(settings);
+    this.model = new Model(settings);
     const view = new View(root);
-    this.presenter = new Presenter(view, model);
-    model.addObserver(this.presenter);
+    this.presenter = new Presenter(view, this.model);
+    this.model.addObserver(this.presenter);
     view.addObserver(this.presenter);
     this.presenter.addObserver(callback);
     this.presenter.initialize();
@@ -17,6 +17,9 @@ import './styles/fsd-slider.scss';
     update(newSettings) {
       this.presenter.update(newSettings);
     },
+    getSettings() {
+      return this.model.getSettings();
+    }
   };
   $.fn.fsdSlider = function (settings, callback) {
     return this.each(function () {

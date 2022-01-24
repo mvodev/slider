@@ -102,6 +102,7 @@ const $sl_result = $('.input-result');
  ```
  const sl_instance = $sl.data('fsd-slider');
  sl_instance.update(newSettings); - возможность передать новые настройки в слайдер
+ sl_instance.getSettings(); - возвращает настройки слайдера в виде строки
  ```
 ## Описание проекта:
 ### Основные классы:
