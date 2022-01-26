@@ -2,14 +2,14 @@
 ## Страница проекта
 https://mvodev.github.io/FSDCourse4/
 ## Развертывание
-Клонировать  
+Клонировать:  
 git clone https://mvodev.github.io/FSDCourse4/  
-Установить  
+Установить:  
 npm i  
-Запустить production build
+Запустить production build:
 npm run build
 Результат сборки в папке slider  
-Запустить development build  
+Запустить development build:  
 npm run dev  
 Результат сборки в папке docs(тестовая страница со скриптами и стилями)  
 ## Запуск тестов
