@@ -1,6 +1,7 @@
 {
   "name": "fsd-course4",
   "version": "1.0.0",
+  "private": true,
   "description": "MetaLamp Course4",
   "dependencies": {
     "@types/jquery": "^3.5.6",
