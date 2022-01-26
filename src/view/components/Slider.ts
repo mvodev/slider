@@ -76,6 +76,11 @@ class Slider extends EventObservable {
     this.calculateThumbPos();
   }
 
+  destroy(): void {
+    this.unbindEvents();
+    this.container.remove();
+  }
+
   getThumbLabelFrom(): HTMLElement {
     return this.range.getThumbLabelFromHTML();
   }

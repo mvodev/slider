@@ -24,6 +24,9 @@ import './styles/fsd-slider.scss';
     },
     removeCallback(callback) {
       this.presenter.removeObserver(callback);
+    },
+    destroy(){
+      this.presenter.destroy();
     }
   };
   $.fn.fsdSlider = function (settings, callback) {

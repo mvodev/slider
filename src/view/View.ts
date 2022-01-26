@@ -42,6 +42,10 @@ class View extends EventObservable implements IObserver {
     return this.slider;
   }
 
+  destroy():void {
+    this.slider.destroy();
+  }
+
   private render(s: ISettings): void {
     this.slider.render(JSON.stringify(s));
   }

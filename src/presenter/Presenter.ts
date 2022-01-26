@@ -40,5 +40,9 @@ class Presenter extends EventObservable implements IObserver {
   update(newSettings: ISettings): void {
     this.model.updateSettings(newSettings);
   }
+
+  destroy():void {
+    this.view.destroy();
+  }
 }
 export default Presenter;
