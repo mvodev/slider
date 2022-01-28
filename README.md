@@ -4,9 +4,9 @@ https://mvodev.github.io/FSDCourse4/
 ## Развертывание
 Прежде чем приступить к установке убедитесь что у вас имеются следующие компоненты списка:
 
-+ [Node.js(начиная с версии 14.17.3)][https://nodejs.org/en/]
-+ [Webpack][https://webpack.js.org/]
-+ [Git][https://git-scm.com/]
++ [Node.js(начиная с версии 14.17.3)](https://nodejs.org/en/)
++ [Webpack](https://webpack.js.org/)
++ [Git](https://git-scm.com/)
 
 ### Клонировать:  
 ```
