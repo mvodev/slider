@@ -1,5 +1,9 @@
 import Messages from '../utils/messages';
-import Utils from '../utils/Utils';
+import {
+  convertFromInputToNumber,
+  convertFromInputToBoolean,
+  numDigitsAfterDecimal,
+} from '../utils/Utils';
 import EventObservable from '../observers/EventObservable';
 import ISettings from './ISettings';
 import defaultSettings from './defaultSettings';
@@ -60,14 +64,14 @@ class Model extends EventObservable {
   }
 
   private validateSettings(settings: ISettings): void {
-    const newMin = Utils.convertFromInputToNumber(settings.min);
-    const newMax = Utils.convertFromInputToNumber(settings.max);
-    const newFrom = Utils.convertFromInputToNumber(settings.from);
-    const newTo = Utils.convertFromInputToNumber(settings.to);
-    const newStep = Utils.convertFromInputToNumber(settings.step);
-    const newIsVertical = Utils.convertFromInputToBoolean(settings.isVertical);
-    const newHideThumbLabel = Utils.convertFromInputToBoolean(settings.hideThumbLabel);
-    const newRange = Utils.convertFromInputToBoolean(settings.isRange);
+    const newMin = convertFromInputToNumber(settings.min);
+    const newMax = convertFromInputToNumber(settings.max);
+    const newFrom = convertFromInputToNumber(settings.from);
+    const newTo = convertFromInputToNumber(settings.to);
+    const newStep = convertFromInputToNumber(settings.step);
+    const newIsVertical = convertFromInputToBoolean(settings.isVertical);
+    const newHideThumbLabel = convertFromInputToBoolean(settings.hideThumbLabel);
+    const newRange = convertFromInputToBoolean(settings.isRange);
 
     this.validateMin(newMin, newMax);
     this.validateMax(newMax);
@@ -169,7 +173,7 @@ class Model extends EventObservable {
     if (newRange !== undefined) {
       if (!isRange) {
         this.settings.to = ((from + step) > max) ? max
-          : (+Math.round(from + step).toFixed(Utils.numDigitsAfterDecimal(step)));
+          : (+Math.round(from + step).toFixed(numDigitsAfterDecimal(step)));
       }
       this.settings.isRange = newRange;
       if (from >= to) {
@@ -192,7 +196,7 @@ class Model extends EventObservable {
     }
     const diapason = Math.abs(max - min);
     const res = Math.round(+(((diapason * valueInPercent) / (100 - thumbWidthInPercent)))
-      .toFixed(Utils.numDigitsAfterDecimal(step)) * delimeter)
+      .toFixed(numDigitsAfterDecimal(step)) * delimeter)
       / delimeter + min;
     if (res < min) return min;
     if (res > max) return max;

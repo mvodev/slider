@@ -1,6 +1,6 @@
 import Messages from '../../utils/messages';
 import CONSTANTS from '../../utils/constants';
-import Utils from '../../utils/Utils';
+import { roundWithStep } from '../../utils/Utils';
 import CLASS_NAMING from '../../utils/classNaming';
 import ISettings from '../../model/ISettings';
 import defaultSettings from '../../model/defaultSettings';
@@ -124,7 +124,7 @@ class Slider extends EventObservable {
     } = this.settings;
     this.fromInPx = this.convertFromValueToPx(from);
     if (this.settings.isRange) {
-      this.toInPx = this.convertFromValueToPx(Utils.roundWithStep(to, step, min));
+      this.toInPx = this.convertFromValueToPx(roundWithStep(to, step, min));
     } else this.toInPx = this.getSliderLengthInPx();
   }
 
@@ -137,7 +137,7 @@ class Slider extends EventObservable {
   private setLabelsPosition(): void {
     const diapason = Math.abs(this.settings.max - this.settings.min);
     const pivot = (diapason / 2) + this.settings.min;
-    const pivotRounded = Utils.roundWithStep((pivot), this.settings.step, this.settings.min);
+    const pivotRounded = roundWithStep((pivot), this.settings.step, this.settings.min);
     const minLabel = this.getLabels()[0];
     const averageLabel = this.getLabels()[1];
     const maxLabel = this.getLabels()[2];
@@ -224,7 +224,7 @@ class Slider extends EventObservable {
     } = this.settings;
     if (elemIsTarget) {
       const targetValue = Number(e.target.getAttribute(CONSTANTS.dataAttrName));
-      const roundedValue = Utils.roundWithStep(targetValue, step, min);
+      const roundedValue = roundWithStep(targetValue, step, min);
       if (!isRange) {
         if (targetValue === max) {
           this.dispatchEvent(this.convertFromValueToPx(targetValue), CONSTANTS.thumbFrom);
