@@ -1,12 +1,13 @@
 import View from './view/View';
 import Model from './model/Model';
+import defaultSettings from './model/defaultSettings';
 import Presenter from './presenter/Presenter';
 import './styles/fsd-slider.scss';
 
 (function ($) {
   const FsdSlider = function (root, settings) {
     this.model = new Model(settings);
-    const view = new View(root);
+    const view = new View(root, defaultSettings);
     this.presenter = new Presenter(view, this.model);
     this.model.addObserver(this.presenter);
     view.addObserver(this.presenter);
@@ -25,7 +26,7 @@ import './styles/fsd-slider.scss';
     removeCallback(callback) {
       this.presenter.removeObserver(callback);
     },
-    destroy(){
+    destroy() {
       this.presenter.destroy();
     }
   };
