@@ -1,4 +1,4 @@
-# MetaLamp учебный проект слайдера
+# MetaLamp учебный проект слайдера для jQuery
 ## Страница проекта
 https://mvodev.github.io/FSDCourse4/
 ## Развертывание
