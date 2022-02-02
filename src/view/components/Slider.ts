@@ -283,33 +283,38 @@ class Slider extends EventObservable {
         if (clickedPosLessFrom) {
           thumbType = CONSTANTS.thumbFrom;
           if (Math.abs(clickedPos - this.getStepInPx()) <= this.fromInPx) {
-            this.setFromInPx('-', clickedPos);
+            this.setFromInPx('-', clickedPos - this.getThumbWidthInPx() / 2);
           }
         } else if (clickedPosMoreThanTo) {
           thumbType = CONSTANTS.thumbTo;
           if ((clickedPos + this.getStepInPx()) > this.toInPx) {
             if (clickedPos >= bottom) {
               this.dispatchEvent(clickedPos, CONSTANTS.thumbTo);
-            } else {
-              this.setToInPx('+', clickedPos);
+            } else if (Math.abs(clickedPos - this.toInPx) > this.getThumbWidthInPx()) {
+              this.setToInPx('+', clickedPos - this.getThumbWidthInPx() / 2);
             }
           }
         } else if (clickedPosBetweenFromAndTo) {
           const pivot = (this.toInPx - this.fromInPx) / 2;
           if ((clickedPos) <= (pivot + this.fromInPx)) {
             thumbType = CONSTANTS.thumbFrom;
-            // this.setFromInPx('+', clickedPos);
+            if (Math.abs(clickedPos - this.fromInPx) - this.getThumbWidthInPx()
+              > CONSTANTS.threshold) {
+              this.setFromInPx('+', clickedPos - this.getThumbWidthInPx() / 2);
+            }
           } else if ((clickedPos) > (pivot + this.fromInPx)) {
             thumbType = CONSTANTS.thumbTo;
-            // this.setToInPx('-', clickedPos);
+            this.setToInPx('-', clickedPos - this.getThumbWidthInPx() / 2);
           }
         }
       } else {
         thumbType = CONSTANTS.thumbFrom;
         if ((clickedPos + this.getThumbWidthInPx() / 2) < this.fromInPx) {
-          // this.setFromInPx('-', clickedPos);
-        } else if ((clickedPos + this.getThumbWidthInPx() / 2) > this.fromInPx) {
-          // this.setFromInPx('+', clickedPos);
+          this.setFromInPx('-', clickedPos - this.getThumbWidthInPx() / 2);
+        } else if ((clickedPos + this.getThumbWidthInPx() / 2) > this.fromInPx
+          && ((Math.abs(clickedPos - this.fromInPx) - this.getThumbWidthInPx())
+            > CONSTANTS.threshold)) {
+          this.setFromInPx('+', clickedPos - this.getThumbWidthInPx() / 2);
         }
       }
       if (type === 'range') {
@@ -369,15 +374,15 @@ class Slider extends EventObservable {
     } else {
       result = this.fromInPx - this.roundPos(this.fromInPx, newPos);
     }
-    // if (Math.abs(this.toInPx - result) < CONSTANTS.threshold) {
-    //   result = this.toInPx - this.getStepInPx();
-    // }
+    if (Math.abs(this.toInPx - result) < CONSTANTS.threshold) {
+      result = this.toInPx - this.getStepInPx();
+    }
     if (result < 0) {
       result = 0;
     }
-    // if ((result > this.toInPx) && this.settings.isRange) {
-    //   result = this.toInPx - this.getStepInPx();
-    // }
+    if ((result > this.toInPx) && this.settings.isRange) {
+      result = this.toInPx - this.getStepInPx();
+    }
     const isPossibleMoveToMax = result < bottom && newPos >= bottom && !this.settings.isRange;
     if (isPossibleMoveToMax) {
       this.dispatchEvent(newPos, CONSTANTS.thumbFrom);
