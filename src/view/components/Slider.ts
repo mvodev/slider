@@ -1,9 +1,8 @@
 import Messages from '../../utils/messages';
 import CONSTANTS from '../../utils/constants';
-import Utils from '../../utils/Utils';
+import { roundWithStep } from '../../utils/Utils';
 import CLASS_NAMING from '../../utils/classNaming';
 import ISettings from '../../model/ISettings';
-import defaultSettings from '../../model/defaultSettings';
 import EventObservable from '../../observers/EventObservable';
 import Range from './Range';
 import RangeLabel from './RangeLabel';
@@ -31,7 +30,11 @@ class Slider extends EventObservable {
 
   private toInPx: number;
 
-  constructor(rootElem: HTMLDivElement) {
+  private gapIsAllowedToChange: boolean;
+
+  private thumbGap: number;
+
+  constructor(rootElem: HTMLDivElement, defaultSettings:ISettings) {
     super();
     this.settings = { ...defaultSettings };
     if (rootElem) {
@@ -41,6 +44,8 @@ class Slider extends EventObservable {
     }
     this.fromInPx = 0;
     this.toInPx = 0;
+    this.gapIsAllowedToChange = true;
+    this.thumbGap = 0;
     this.initSliderComponents();
   }
 
@@ -74,6 +79,11 @@ class Slider extends EventObservable {
     this.setLabelsPosition();
     this.setColoredRange();
     this.calculateThumbPos();
+  }
+
+  destroy(): void {
+    this.unbindEvents();
+    this.container.remove();
   }
 
   getThumbLabelFrom(): HTMLElement {
@@ -119,7 +129,7 @@ class Slider extends EventObservable {
     } = this.settings;
     this.fromInPx = this.convertFromValueToPx(from);
     if (this.settings.isRange) {
-      this.toInPx = this.convertFromValueToPx(Utils.roundWithStep(to, step, min));
+      this.toInPx = this.convertFromValueToPx(roundWithStep(to, step, min));
     } else this.toInPx = this.getSliderLengthInPx();
   }
 
@@ -132,7 +142,7 @@ class Slider extends EventObservable {
   private setLabelsPosition(): void {
     const diapason = Math.abs(this.settings.max - this.settings.min);
     const pivot = (diapason / 2) + this.settings.min;
-    const pivotRounded = Utils.roundWithStep((pivot), this.settings.step, this.settings.min);
+    const pivotRounded = roundWithStep((pivot), this.settings.step, this.settings.min);
     const minLabel = this.getLabels()[0];
     const averageLabel = this.getLabels()[1];
     const maxLabel = this.getLabels()[2];
@@ -219,7 +229,7 @@ class Slider extends EventObservable {
     } = this.settings;
     if (elemIsTarget) {
       const targetValue = Number(e.target.getAttribute(CONSTANTS.dataAttrName));
-      const roundedValue = Utils.roundWithStep(targetValue, step, min);
+      const roundedValue = roundWithStep(targetValue, step, min);
       if (!isRange) {
         if (targetValue === max) {
           this.dispatchEvent(this.convertFromValueToPx(targetValue), CONSTANTS.thumbFrom);
@@ -260,11 +270,9 @@ class Slider extends EventObservable {
       let thumbType = '';
       const bottom = this.getSliderLengthInPx() - this.getThumbWidthInPx();
       if (isVertical) {
-        clickedPos = e.clientY - this.getRangeHTML().getBoundingClientRect().top
-          - this.getThumbWidthInPx() / 2;
+        clickedPos = e.clientY - this.getRangeHTML().getBoundingClientRect().top;
       } else {
-        clickedPos = e.clientX - this.getRangeHTML().getBoundingClientRect().left
-          - this.getThumbWidthInPx() / 2;
+        clickedPos = e.clientX - this.getRangeHTML().getBoundingClientRect().left;
       }
       if (clickedPos > bottom) clickedPos = bottom;
       if (clickedPos < 0) clickedPos = 0;
@@ -275,33 +283,38 @@ class Slider extends EventObservable {
         if (clickedPosLessFrom) {
           thumbType = CONSTANTS.thumbFrom;
           if (Math.abs(clickedPos - this.getStepInPx()) <= this.fromInPx) {
-            this.setFromInPx('-', clickedPos);
+            this.setFromInPx('-', clickedPos - this.getThumbWidthInPx() / 2);
           }
         } else if (clickedPosMoreThanTo) {
           thumbType = CONSTANTS.thumbTo;
           if ((clickedPos + this.getStepInPx()) > this.toInPx) {
             if (clickedPos >= bottom) {
               this.dispatchEvent(clickedPos, CONSTANTS.thumbTo);
-            } else {
-              this.setToInPx('+', clickedPos);
+            } else if (Math.abs(clickedPos - this.toInPx) > this.getThumbWidthInPx()) {
+              this.setToInPx('+', clickedPos - this.getThumbWidthInPx() / 2);
             }
           }
         } else if (clickedPosBetweenFromAndTo) {
           const pivot = (this.toInPx - this.fromInPx) / 2;
           if ((clickedPos) <= (pivot + this.fromInPx)) {
             thumbType = CONSTANTS.thumbFrom;
-            this.setFromInPx('+', clickedPos);
+            if (Math.abs(clickedPos - this.fromInPx) - this.getThumbWidthInPx()
+              > CONSTANTS.threshold) {
+              this.setFromInPx('+', clickedPos - this.getThumbWidthInPx() / 2);
+            }
           } else if ((clickedPos) > (pivot + this.fromInPx)) {
             thumbType = CONSTANTS.thumbTo;
-            this.setToInPx('-', clickedPos);
+            this.setToInPx('-', clickedPos - this.getThumbWidthInPx() / 2);
           }
         }
       } else {
         thumbType = CONSTANTS.thumbFrom;
         if ((clickedPos + this.getThumbWidthInPx() / 2) < this.fromInPx) {
-          this.setFromInPx('-', clickedPos);
-        } else if ((clickedPos + this.getThumbWidthInPx() / 2) > this.fromInPx) {
-          this.setFromInPx('+', clickedPos);
+          this.setFromInPx('-', clickedPos - this.getThumbWidthInPx() / 2);
+        } else if ((clickedPos + this.getThumbWidthInPx() / 2) > this.fromInPx
+          && ((Math.abs(clickedPos - this.fromInPx) - this.getThumbWidthInPx())
+            > CONSTANTS.threshold)) {
+          this.setFromInPx('+', clickedPos - this.getThumbWidthInPx() / 2);
         }
       }
       if (type === 'range') {
@@ -315,11 +328,21 @@ class Slider extends EventObservable {
     const bottom = this.getSliderLengthInPx() - this.getThumbWidthInPx();
     if (e instanceof MouseEvent) {
       if (this.settings.isVertical) {
-        newPos = e.clientY - this.getRangeHTML().getBoundingClientRect().top
-          - this.getThumbWidthInPx() / 2;
+        if (this.gapIsAllowedToChange) {
+          this.thumbGap = thumbType === CONSTANTS.thumbFrom
+            ? e.clientY - this.getRangeHTML().getBoundingClientRect().top - this.fromInPx
+            : e.clientY - this.getRangeHTML().getBoundingClientRect().top - this.toInPx;
+          this.gapIsAllowedToChange = false;
+        }
+        newPos = e.clientY - this.getRangeHTML().getBoundingClientRect().top - this.thumbGap;
       } else {
-        newPos = e.clientX - this.getRangeHTML().getBoundingClientRect().left
-          - this.getThumbWidthInPx() / 2;
+        if (this.gapIsAllowedToChange) {
+          this.thumbGap = thumbType === CONSTANTS.thumbFrom
+            ? e.clientX - this.getRangeHTML().getBoundingClientRect().left - this.fromInPx
+            : e.clientX - this.getRangeHTML().getBoundingClientRect().left - this.toInPx;
+          this.gapIsAllowedToChange = false;
+        }
+        newPos = e.clientX - this.getRangeHTML().getBoundingClientRect().left - this.thumbGap;
       }
       if (newPos < 0) {
         newPos = 0;
@@ -360,8 +383,8 @@ class Slider extends EventObservable {
     if ((result > this.toInPx) && this.settings.isRange) {
       result = this.toInPx - this.getStepInPx();
     }
-    const isPossibleMoveToBottom = result < bottom && newPos >= bottom && !this.settings.isRange;
-    if (isPossibleMoveToBottom) {
+    const isPossibleMoveToMax = result < bottom && newPos >= bottom && !this.settings.isRange;
+    if (isPossibleMoveToMax) {
       this.dispatchEvent(newPos, CONSTANTS.thumbFrom);
     } else {
       this.fromInPx = result;
@@ -404,6 +427,7 @@ class Slider extends EventObservable {
   private removeHandler() {
     document.removeEventListener('mousemove', this.handleThumbMoveBinded);
     document.removeEventListener('mouseup', this.removeHandlerBinded);
+    this.gapIsAllowedToChange = true;
   }
 
   private convertFromPxToPercent(valueInPX: number): number {

@@ -1,7 +1,6 @@
 import ISettings from '../model/ISettings';
 import Messages from '../utils/messages';
 import EventObservable from '../observers/EventObservable';
-import defaultSettings from '../model/defaultSettings';
 import IObserver from '../observers/IObserver';
 import Slider from './components/Slider';
 
@@ -12,12 +11,12 @@ class View extends EventObservable implements IObserver {
 
   private rootElem!: HTMLDivElement;
 
-  constructor(root: HTMLDivElement) {
+  constructor(root: HTMLDivElement, defaultSettings:ISettings) {
     super();
     this.viewSettings = { ...defaultSettings };
     if (root) {
       this.rootElem = root;
-      this.slider = new Slider(this.rootElem);
+      this.slider = new Slider(this.rootElem, defaultSettings);
       this.slider.addObserver(this);
     } else throw new Error('root elem of Slider is null!');
   }
@@ -40,6 +39,10 @@ class View extends EventObservable implements IObserver {
 
   getSlider(): Slider {
     return this.slider;
+  }
+
+  destroy():void {
+    this.slider.destroy();
   }
 
   private getThumbWidthInPercentage() {
