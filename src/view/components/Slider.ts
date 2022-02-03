@@ -188,6 +188,7 @@ class Slider extends EventObservable {
     this.initResizeObserver();
     this.handleRangeLabelClickBinded = this.handleRangeLabelClick.bind(this);
     this.getRangeHTML().addEventListener('mousedown', this.handleRangeClickBinded);
+    this.getRangeHTML().addEventListener('pointerdown', this.handleRangeClickBinded);
     this.rangeLabel.getLabels().forEach((elem) => elem.addEventListener('click', this.handleRangeLabelClickBinded));
   }
 
@@ -212,13 +213,23 @@ class Slider extends EventObservable {
     this.handleThumbMoveBinded = this.handleThumbMove.bind(this, thumbType);
     this.removeHandlerBinded = this.removeHandler.bind(this);
     document.addEventListener('mousemove', this.handleThumbMoveBinded);
+    document.addEventListener('pointermove', this.handleThumbMoveBinded);
     document.addEventListener('mouseup', this.removeHandlerBinded);
+    document.addEventListener('pointerup', this.removeHandlerBinded);
   }
 
   private unbindEvents() {
     this.removeHandler();
     this.getRangeLabelHTML().removeEventListener('mousedown', this.handleRangeLabelClickBinded);
     this.getRangeHTML().removeEventListener('mousedown', this.handleRangeClickBinded);
+  }
+
+  private removeHandler() {
+    document.removeEventListener('mousemove', this.handleThumbMoveBinded);
+    document.removeEventListener('pointermove', this.handleThumbMoveBinded);
+    document.removeEventListener('mouseup', this.removeHandlerBinded);
+    document.removeEventListener('pointerup', this.removeHandlerBinded);
+    this.gapIsAllowedToChange = true;
   }
 
   private handleRangeLabelClick(e: Event) {
@@ -420,12 +431,6 @@ class Slider extends EventObservable {
     const result = (Math.round(Math.abs(thumbInPx - newPos) / this.getStepInPx())
       * this.getStepInPx());
     return +result.toFixed(20);
-  }
-
-  private removeHandler() {
-    document.removeEventListener('mousemove', this.handleThumbMoveBinded);
-    document.removeEventListener('mouseup', this.removeHandlerBinded);
-    this.gapIsAllowedToChange = true;
   }
 
   private convertFromPxToPercent(valueInPX: number): number {
