@@ -1,8 +1,16 @@
 @import './styles/fsd-slider.scss';
 @import './control-panel/control-panel.scss';
 
+* {
+  box-sizing: border-box;
+}
+
 body{
   background-color:rgb(102, 211, 102);
+  height: 100%;
+}
+html{
+  height: 100%;
 }
 
 .sliders{
@@ -30,7 +38,6 @@ body{
   max-width: 1200px;
   width: 100%;
   min-height: 400px;
-  height: 100%;
   padding: 20px;
 }
 
