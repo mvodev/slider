@@ -188,7 +188,7 @@ class Slider extends EventObservable {
     this.initResizeObserver();
     this.handleRangeLabelClickBinded = this.handleRangeLabelClick.bind(this);
     this.getRangeHTML().addEventListener('mousedown', this.handleRangeClickBinded);
-    this.getRangeHTML().addEventListener('touchstart', this.handleRangeClickBinded);
+    this.getRangeHTML().addEventListener('pointerdown', this.handleRangeClickBinded);
     this.rangeLabel.getLabels().forEach((elem) => elem.addEventListener('click', this.handleRangeLabelClickBinded));
   }
 
@@ -213,9 +213,9 @@ class Slider extends EventObservable {
     this.handleThumbMoveBinded = this.handleThumbMove.bind(this, thumbType);
     this.removeHandlerBinded = this.removeHandler.bind(this);
     document.addEventListener('mousemove', this.handleThumbMoveBinded);
-    document.addEventListener('touchmove', this.handleThumbMoveBinded);
+    document.addEventListener('pointermove', this.handleThumbMoveBinded);
     document.addEventListener('mouseup', this.removeHandlerBinded);
-    document.addEventListener('touchend', this.removeHandlerBinded);
+    document.addEventListener('pointerup', this.removeHandlerBinded);
   }
 
   private unbindEvents() {
@@ -226,9 +226,9 @@ class Slider extends EventObservable {
 
   private removeHandler() {
     document.removeEventListener('mousemove', this.handleThumbMoveBinded);
-    document.removeEventListener('touchmove', this.handleThumbMoveBinded);
+    document.removeEventListener('pointermove', this.handleThumbMoveBinded);
     document.removeEventListener('mouseup', this.removeHandlerBinded);
-    document.removeEventListener('touchend', this.removeHandlerBinded);
+    document.removeEventListener('pointerup', this.removeHandlerBinded);
     this.gapIsAllowedToChange = true;
   }
 
