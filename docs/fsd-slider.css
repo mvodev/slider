@@ -117,8 +117,17 @@
   margin-bottom: 5px;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 body {
   background-color: #66d366;
+  height: 100%;
+}
+
+html {
+  height: 100%;
 }
 
 .sliders {
@@ -146,7 +155,6 @@ body {
   max-width: 1200px;
   width: 100%;
   min-height: 400px;
-  height: 100%;
   padding: 20px;
 }
 
