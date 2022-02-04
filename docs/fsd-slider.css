@@ -41,6 +41,7 @@
   left: -5px;
   cursor: pointer;
   border-radius: 50%;
+  touch-action: none;
 }
 .fsd-slider__thumb-label {
   position: absolute;
@@ -210,6 +211,7 @@ html {
   left: -5px;
   cursor: pointer;
   border-radius: 50%;
+  touch-action: none;
 }
 .fsd-slider__thumb-label {
   position: absolute;
