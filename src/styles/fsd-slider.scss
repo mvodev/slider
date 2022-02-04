@@ -46,6 +46,7 @@
     left: -5px;
     cursor: pointer;
     border-radius: 50%;
+    touch-action: none;
   }
 
   &__thumb-label{
