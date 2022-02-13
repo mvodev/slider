@@ -6,9 +6,8 @@ import ISettings from '../model/ISettings';
 import EventObservable from '../observers/EventObservable';
 import Range from './components/Range';
 import RangeLabel from './components/RangeLabel';
-import IObserver from '../observers/IObserver';
 
-class Slider extends EventObservable implements IObserver {
+class Slider extends EventObservable {
   private range!: Range;
 
   private rangeLabel!: RangeLabel;
@@ -48,10 +47,6 @@ class Slider extends EventObservable implements IObserver {
     this.gapIsAllowedToChange = true;
     this.thumbGap = 0;
     this.initSliderComponents();
-  }
-
-  handleEvent(settings: string, msg: Messages): void {
-    this.notifyObservers(msg, settings, this.getThumbWidthInPercentage());
   }
 
   refreshView(msg: Messages, settings: ISettings): void {
@@ -159,7 +154,7 @@ class Slider extends EventObservable implements IObserver {
   private setLabelsPosition(): void {
     const diapason = Math.abs(this.settings.max - this.settings.min);
     const pivot = (diapason / 2) + this.settings.min;
-    const pivotRounded = roundWithStep((pivot), this.settings.step, this.settings.min);
+    const pivotRounded = roundWithStep(pivot, this.settings.step, this.settings.min);
     const minLabel = this.getLabels()[0];
     const averageLabel = this.getLabels()[1];
     const maxLabel = this.getLabels()[2];
@@ -450,7 +445,8 @@ class Slider extends EventObservable implements IObserver {
     if (valueInPX < 0) {
       return 0;
     }
-    const result = (valueInPX / (this.getSliderLengthInPx())) * 100;
+    const result = (valueInPX / (this.getSliderLengthInPx()
+    - this.getThumbWidthInPx())) * (100 - this.getThumbWidthInPercentage());
     if (result > (100 - this.getThumbWidthInPercentage())) {
       return (100 - this.getThumbWidthInPercentage());
     }
@@ -487,21 +483,29 @@ class Slider extends EventObservable implements IObserver {
     return this.getRangeHTML().offsetWidth;
   }
 
-  private dispatchEvent(shiftInPx: number, type: string) {
+  private dispatchEvent(shiftInPx: number, eventType: string) {
     const valueInPercentage = this.convertFromPxToPercent(shiftInPx);
-    if (type === 'thumbFrom') {
+    if (eventType === CONSTANTS.thumbFrom) {
       this.range.setThumbPositionFrom(valueInPercentage, this.settings.isVertical);
       this.notifyObservers(
         Messages.SET_FROM,
-        JSON.stringify({ from: valueInPercentage }),
-        CONSTANTS.widthUnused,
+        JSON.stringify(
+          {
+            from: ((100 / (100 - this.getThumbWidthInPercentage()))
+          * valueInPercentage),
+          },
+        ),
       );
     } else {
       this.range.setThumbPositionTo(valueInPercentage, this.settings.isVertical);
       this.notifyObservers(
         Messages.SET_TO,
-        JSON.stringify({ to: valueInPercentage }),
-        CONSTANTS.widthUnused,
+        JSON.stringify(
+          {
+            to: ((100 / (100 - this.getThumbWidthInPercentage()))
+          * valueInPercentage),
+          },
+        ),
       );
     }
     this.setColoredRange();

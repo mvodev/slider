@@ -7,7 +7,6 @@ import {
 import EventObservable from '../observers/EventObservable';
 import ISettings from './ISettings';
 import defaultSettings from './defaultSettings';
-import CONSTANTS from '../utils/constants';
 
 class Model extends EventObservable {
   private settings: ISettings;
@@ -24,11 +23,11 @@ class Model extends EventObservable {
 
   updateSettings(settings: ISettings): void {
     this.validateSettings(settings);
-    this.notifyObservers(Messages.UPDATE, this.getSettings(), CONSTANTS.widthUnused);
+    this.notifyObservers(Messages.UPDATE, this.getSettings());
   }
 
-  setFrom(valueInPercent: number, thumbWidthInPercent: number): void {
-    const from = this.convertFromPercentToValue(valueInPercent, thumbWidthInPercent);
+  setFrom(valueInPercent: number): void {
+    const from = this.convertFromPercentToValue(valueInPercent);
     if (from > this.settings.max) {
       this.settings.from = this.settings.max;
     } else if (from < this.settings.min) {
@@ -36,8 +35,8 @@ class Model extends EventObservable {
     } else this.settings.from = from;
   }
 
-  setTo(valueInPercent: number, thumbWidthInPercent: number): void {
-    const to = this.convertFromPercentToValue(valueInPercent, thumbWidthInPercent);
+  setTo(valueInPercent: number): void {
+    const to = this.convertFromPercentToValue(valueInPercent);
     if (to >= this.settings.max) {
       this.settings.to = this.settings.max;
     } else if (to <= this.settings.from) {
@@ -182,12 +181,12 @@ class Model extends EventObservable {
     }
   }
 
-  private convertFromPercentToValue(valueInPercent: number, thumbWidthInPercent:number) {
+  private convertFromPercentToValue(valueInPercent: number) {
     const { min, max, step } = this.settings;
     if (valueInPercent <= 0) {
       return min;
     }
-    if (valueInPercent >= (100 - thumbWidthInPercent)) {
+    if (valueInPercent >= 100) {
       return max;
     }
     let delimeter = 1;
@@ -195,7 +194,7 @@ class Model extends EventObservable {
       delimeter = 1.0 / step;
     }
     const diapason = Math.abs(max - min);
-    const res = Math.round(+(((diapason * valueInPercent) / (100 - thumbWidthInPercent)))
+    const res = Math.round(+(((diapason * valueInPercent) / 100))
       .toFixed(numDigitsAfterDecimal(step)) * delimeter)
       / delimeter + min;
     if (res < min) return min;
