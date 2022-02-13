@@ -1,17 +1,17 @@
 import ISettings from '../model/ISettings';
 import Model from '../model/Model';
-import View from '../view/View';
 import Messages from '../utils/messages';
 import IObserver from '../observers/IObserver';
 import EventObservable from '../observers/EventObservable';
 import CONSTANTS from '../utils/constants';
+import Slider from '../view/Slider';
 
 class Presenter extends EventObservable implements IObserver {
-  private view: View;
+  private view: Slider;
 
   private model: Model;
 
-  constructor(view: View, model: Model) {
+  constructor(view: Slider, model: Model) {
     super();
     this.view = view;
     this.model = model;

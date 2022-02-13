@@ -1,13 +1,14 @@
-import Messages from '../../utils/messages';
-import CONSTANTS from '../../utils/constants';
-import { roundWithStep } from '../../utils/Utils';
-import CLASS_NAMING from '../../utils/classNaming';
-import ISettings from '../../model/ISettings';
-import EventObservable from '../../observers/EventObservable';
-import Range from './Range';
-import RangeLabel from './RangeLabel';
+import Messages from '../utils/messages';
+import CONSTANTS from '../utils/constants';
+import { roundWithStep } from '../utils/Utils';
+import CLASS_NAMING from '../utils/classNaming';
+import ISettings from '../model/ISettings';
+import EventObservable from '../observers/EventObservable';
+import Range from './components/Range';
+import RangeLabel from './components/RangeLabel';
+import IObserver from '../observers/IObserver';
 
-class Slider extends EventObservable {
+class Slider extends EventObservable implements IObserver {
   private range!: Range;
 
   private rangeLabel!: RangeLabel;
@@ -49,7 +50,61 @@ class Slider extends EventObservable {
     this.initSliderComponents();
   }
 
-  render(settings:string): void {
+  handleEvent(settings: string, msg: Messages): void {
+    this.notifyObservers(msg, settings, this.getThumbWidthInPercentage());
+  }
+
+  refreshView(msg: Messages, settings: ISettings): void {
+    const messageInitOrUpdate = (msg === Messages.INIT) || (msg === Messages.UPDATE);
+    if (messageInitOrUpdate) {
+      this.updateViewSettings(settings);
+      this.render(JSON.stringify(this.settings));
+    } else if (msg === Messages.FROM_IS_SET) {
+      this.setValueToLabelThumbFrom(settings.from);
+    } else if (msg === Messages.TO_IS_SET) {
+      this.setValueToLabelThumbTo(settings.to !== undefined ? settings.to : settings.from);
+    }
+  }
+
+  destroy(): void {
+    this.unbindEvents();
+    this.container.remove();
+  }
+
+  getThumbLabelFrom(): HTMLElement {
+    return this.range.getThumbLabelFromHTML();
+  }
+
+  getThumbWidthInPercentage(): number {
+    if (this.settings.isVertical) {
+      return ((this.getThumbFromHTML().offsetHeight / this.getSliderLengthInPx()) * 100);
+    }
+    return ((this.getThumbFromHTML().offsetWidth / this.getSliderLengthInPx()) * 100);
+  }
+
+  private getRangeHTML(): HTMLDivElement {
+    return this.range.getRangeHTML();
+  }
+
+  private setValueToLabelThumbFrom(value: number): void {
+    this.range.setValueToLabelThumbFrom(value);
+    this.settings.from = value;
+  }
+
+  private setValueToLabelThumbTo(value: number): void {
+    this.range.setValueToLabelThumbTo(value);
+    this.settings.to = value;
+  }
+
+  private getRangeLabelHTML(): HTMLDivElement {
+    return this.rangeLabel.getRangeLabelHTML();
+  }
+
+  private getThumbFromHTML(): HTMLElement {
+    return this.range.getThumbFromHTML();
+  }
+
+  private render(settings:string): void {
     this.settings = Object.assign(this.settings, JSON.parse(settings));
     this.container.classList.add(CLASS_NAMING.root);
     this.container.appendChild(this.range.getRangeHTML());
@@ -81,46 +136,8 @@ class Slider extends EventObservable {
     this.calculateThumbPos();
   }
 
-  destroy(): void {
-    this.unbindEvents();
-    this.container.remove();
-  }
-
-  getThumbLabelFrom(): HTMLElement {
-    return this.range.getThumbLabelFromHTML();
-  }
-
-  getThumbWidthInPercentage(): number {
-    if (this.settings.isVertical) {
-      return ((this.getThumbFromHTML().offsetHeight / this.getSliderLengthInPx()) * 100);
-    }
-    return ((this.getThumbFromHTML().offsetWidth / this.getSliderLengthInPx()) * 100);
-  }
-
-  getRangeHTML(): HTMLDivElement {
-    return this.range.getRangeHTML();
-  }
-
-  setValueToLabelThumbFrom(value: number): void {
-    this.range.setValueToLabelThumbFrom(value);
-    this.settings.from = value;
-  }
-
-  setValueToLabelThumbTo(value: number): void {
-    this.range.setValueToLabelThumbTo(value);
-    this.settings.to = value;
-  }
-
-  getRangeLabelHTML(): HTMLDivElement {
-    return this.rangeLabel.getRangeLabelHTML();
-  }
-
-  getThumbFromHTML(): HTMLElement {
-    return this.range.getThumbFromHTML();
-  }
-
-  getMinRangeHTML(): HTMLElement {
-    return this.rangeLabel.getMinRangeHTML();
+  private updateViewSettings(s: ISettings) {
+    this.settings = Object.assign(this.settings, s);
   }
 
   private calculateThumbPos(): void {
