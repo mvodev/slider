@@ -10,30 +10,35 @@ class Presenter extends EventObservable implements IObserver {
 
   private model: Model;
 
-  constructor(view: Slider, model: Model) {
+  private initialSettings: ISettings;
+
+  constructor(view: Slider, model: Model, initialSettings: ISettings) {
     super();
     this.view = view;
     this.model = model;
+    this.initialSettings = initialSettings;
   }
 
   handleEvent(sliderSettings: ISettings, eventType: Messages) : void {
     if (eventType === Messages.UPDATE) {
       this.view.refreshView(Messages.UPDATE, sliderSettings);
-      this.notifyObservers(Messages.UPDATE, this.model.getSettings());
+      this.notifyObservers(Messages.UPDATE, sliderSettings);
     } else if (eventType === Messages.SET_FROM) {
       this.model.setFrom(sliderSettings.from);
-      this.view.refreshView(Messages.FROM_IS_SET, this.model.getSettings());
-      this.notifyObservers(Messages.UPDATE, this.model.getSettings());
     } else if (eventType === Messages.SET_TO) {
       this.model.setTo(sliderSettings.to);
-      this.view.refreshView(Messages.TO_IS_SET, this.model.getSettings());
-      this.notifyObservers(Messages.UPDATE, this.model.getSettings());
+    } else if (eventType === Messages.FROM_IS_SET) {
+      this.view.refreshView(Messages.FROM_IS_SET, sliderSettings);
+      this.notifyObservers(Messages.UPDATE, sliderSettings);
+    } else if (eventType === Messages.TO_IS_SET) {
+      this.view.refreshView(Messages.TO_IS_SET, sliderSettings);
+      this.notifyObservers(Messages.UPDATE, sliderSettings);
     }
   }
 
   initialize(): void {
-    this.view.refreshView(Messages.INIT, this.model.getSettings());
-    this.notifyObservers(Messages.UPDATE, this.model.getSettings());
+    this.view.refreshView(Messages.INIT, this.initialSettings);
+    this.notifyObservers(Messages.UPDATE, this.initialSettings);
   }
 
   update(newSettings: ISettings): void {

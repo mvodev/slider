@@ -8,7 +8,7 @@ import './styles/fsd-slider.scss';
   const FsdSlider = function (root, settings) {
     this.model = new Model(settings);
     const view = new Slider(root, defaultSettings);
-    this.presenter = new Presenter(view, this.model);
+    this.presenter = new Presenter(view, this.model, settings);
     this.model.addObserver(this.presenter);
     view.addObserver(this.presenter);
     this.presenter.initialize();

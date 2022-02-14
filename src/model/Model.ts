@@ -33,6 +33,7 @@ class Model extends EventObservable {
     } else if (from < this.settings.min) {
       this.settings.from = this.settings.min;
     } else this.settings.from = from;
+    this.notifyObservers(Messages.FROM_IS_SET, this.getSettings());
   }
 
   setTo(valueInPercent: number): void {
@@ -42,6 +43,7 @@ class Model extends EventObservable {
     } else if (to <= this.settings.from) {
       this.settings.to = this.settings.from;
     } else this.settings.to = to;
+    this.notifyObservers(Messages.TO_IS_SET, this.getSettings());
   }
 
   private setSettings(settings: ISettings): void {

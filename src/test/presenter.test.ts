@@ -31,7 +31,7 @@ describe("Presenter", function () {
   };
   const model = new Model(settings);
   const view = new Slider(root3, settings);
-  const presenter = new Presenter(view, model);
+  const presenter = new Presenter(view, model, settings);
   model.addObserver(presenter);
   view.addObserver(presenter);
   presenter.initialize();
