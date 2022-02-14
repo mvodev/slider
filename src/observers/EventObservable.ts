@@ -18,10 +18,10 @@ class EventObservable implements IObservable {
     this.observers = this.observers.filter((subscriber) => subscriber !== o);
   }
 
-  notifyObservers(msg: Messages, settings: ISettings): void {
+  notifyObservers(eventType: Messages, message: ISettings): void {
     this.observers.forEach((elem) => {
       if (elem && ('handleEvent' in elem)) {
-        elem.handleEvent(settings, msg);
+        elem.handleEvent(message, eventType);
       }
     });
   }

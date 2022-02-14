@@ -5,6 +5,6 @@ import IObserver from './IObserver';
 interface IObservable {
   addObserver(o: IObserver): void;
   removeObserver(o: IObserver): void;
-  notifyObservers(type: Messages, data: ISettings): void;
+  notifyObservers(eventType: Messages, message: ISettings): void;
 }
 export default IObservable;
