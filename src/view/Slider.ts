@@ -70,15 +70,23 @@ class Slider extends EventObservable {
     return this.range.getThumbLabelFromHTML();
   }
 
+  getMinRangeHTML(): HTMLElement {
+    return this.rangeLabel.getMinRangeHTML();
+  }
+
+  getRangeLabelHTML(): HTMLDivElement {
+    return this.rangeLabel.getRangeLabelHTML();
+  }
+
+  getRangeHTML(): HTMLDivElement {
+    return this.range.getRangeHTML();
+  }
+
   getThumbWidthInPercentage(): number {
     if (this.settings.isVertical) {
       return ((this.getThumbFromHTML().offsetHeight / this.getSliderLengthInPx()) * 100);
     }
     return ((this.getThumbFromHTML().offsetWidth / this.getSliderLengthInPx()) * 100);
-  }
-
-  private getRangeHTML(): HTMLDivElement {
-    return this.range.getRangeHTML();
   }
 
   private setValueToLabelThumbFrom(value: number): void {
@@ -89,10 +97,6 @@ class Slider extends EventObservable {
   private setValueToLabelThumbTo(value: number): void {
     this.range.setValueToLabelThumbTo(value);
     this.settings.to = value;
-  }
-
-  private getRangeLabelHTML(): HTMLDivElement {
-    return this.rangeLabel.getRangeLabelHTML();
   }
 
   private getThumbFromHTML(): HTMLElement {

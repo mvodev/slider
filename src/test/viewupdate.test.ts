@@ -1,13 +1,13 @@
 import * as chai from 'chai';
 
-import View from '../view/View';
+import Slider from '../view/Slider';
 import Messages from '../utils/messages';
 
 document.body.innerHTML = '<div id="slider-test2"></div>';
 global.ResizeObserver = require('resize-observer-polyfill');
 let assert = chai.assert;
 describe("View update", function () {
-  let s = {
+  let settings = {
     min: 15,
     max: 25,
     from: 17,
@@ -17,7 +17,7 @@ describe("View update", function () {
     hideThumbLabel: true,
     isRange: false,
   };
-  let sUpdated = {
+  let settingsUpdated = {
     min: 10,
     max: 25,
     from: 17,
@@ -28,10 +28,10 @@ describe("View update", function () {
     isRange: false,
   };
   const root: HTMLDivElement = document.querySelector('#slider-test2');
-  const view = new View(root);
-  view.refreshView(Messages.INIT, s);
-  view.refreshView(Messages.UPDATE, sUpdated);
+  const view = new Slider(root, settings);
+  view.refreshView(Messages.INIT, settings);
+  view.refreshView(Messages.UPDATE, settingsUpdated);
   it("View set correct value for min label after update", function () {
-    assert.equal(view.getSlider().getMinRangeHTML().innerText, "" + sUpdated.min);
+    assert.equal(view.getMinRangeHTML().innerText, "" + settingsUpdated.min);
   });
 });

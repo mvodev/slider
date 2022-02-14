@@ -2,12 +2,8 @@ import * as chai from 'chai';
 
 import Model from '../model/Model';
 import Presenter from '../presenter/Presenter';
-import View from '../view/View';
-// https://github.com/jsdom/jsdom
-//const jsdom = require("jsdom");
-//const { JSDOM } = jsdom;
-//const dom = new JSDOM(`<!DOCTYPE html><p>Hello world</p>`);
-//console.log(dom.window.document.querySelector("p").textContent);
+import Slider from '../view/Slider';
+
 global.ResizeObserver = require('resize-observer-polyfill');
 let assert = chai.assert;
 document.body.innerHTML = '<div id="slider-test3"></>';
@@ -34,7 +30,7 @@ describe("Presenter", function () {
     isRange: true,
   };
   const model = new Model(settings);
-  const view = new View(root3);
+  const view = new Slider(root3, settings);
   const presenter = new Presenter(view, model);
   model.addObserver(presenter);
   view.addObserver(presenter);
@@ -42,11 +38,11 @@ describe("Presenter", function () {
 
   it("Slider is correctly set min after presenter update", function () {
     presenter.update(settingsUpdated);
-    assert.equal(JSON.parse(model.getSettings()).min, -10);
+    assert.equal(model.getSettings().min, -10);
   });
   it("Slider is correctly set min value in rangeLabel after presenter update", function () {
     presenter.update(settingsUpdated);
-    assert.equal(view.getSlider().getMinRangeHTML().innerText, "-10");
+    assert.equal(view.getMinRangeHTML().innerText, "-10");
   });
 });
 

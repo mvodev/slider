@@ -16,28 +16,28 @@ describe('Model set settings', function () {
     isRange: true,
   });
   it('Model return correct min after set settings', function () {
-    assert.equal(JSON.parse(model.getSettings()).min, -15);
+    assert.equal(model.getSettings().min, -15);
   });
   it('Model return correct max after set settings', function () {
-    assert.equal(JSON.parse(model.getSettings()).max, 10);
+    assert.equal(model.getSettings().max, 10);
   });
   it('Model return correct step after set settings', function () {
-    assert.equal(JSON.parse(model.getSettings()).step, 0.2);
+    assert.equal(model.getSettings().step, 0.2);
   });
   it('Model return correct from after set settings', function () {
-    assert.equal(JSON.parse(model.getSettings()).from, -14);
+    assert.equal(model.getSettings().from, -14);
   });
   it('Model return correct to after set settings', function () {
-    assert.equal(JSON.parse(model.getSettings()).to, -11);
+    assert.equal(model.getSettings().to, -11);
   });
   it('Model return correct isRange after set settings', function () {
-    assert.equal(JSON.parse(model.getSettings()).isRange, true);
+    assert.equal(model.getSettings().isRange, true);
   });
   it('Model return correct isVertical after set settings', function () {
-    assert.equal(JSON.parse(model.getSettings()).isVertical, false);
+    assert.equal(model.getSettings().isVertical, false);
   });
   it('Model return correct hideThumbLabel after set settings', function () {
-    assert.equal(JSON.parse(model.getSettings()).hideThumbLabel, false);
+    assert.equal(model.getSettings().hideThumbLabel, false);
   });
 });
 
@@ -68,7 +68,7 @@ describe('Model validate settings', function () {
         isRange: true,
       })
     }).to.throw();
-    expect(JSON.parse(model.getSettings()).min).equal(-15);
+    expect(model.getSettings().min).equal(-15);
   });
   it('Model return correct max after validate settings', function () {
     expect(function () {
@@ -83,7 +83,7 @@ describe('Model validate settings', function () {
         isRange: true,
       });
     }).to.throw();
-    assert.equal(JSON.parse(model.getSettings()).max, 10);
+    assert.equal(model.getSettings().max, 10);
   });
   it('Model return correct to after validate settings', function () {
     expect(function () {
@@ -135,7 +135,7 @@ describe('Model validate settings', function () {
       hideThumbLabel: false,
       isRange: true,
     });
-    assert.equal(JSON.parse(model.getSettings()).isVertical, true);
+    assert.equal(model.getSettings().isVertical, true);
   });
   it('Model return correct hideThumbLabel after validate settings', function () {
     model.updateSettings({
@@ -148,7 +148,7 @@ describe('Model validate settings', function () {
       hideThumbLabel: true,
       isRange: true,
     });
-    assert.equal(JSON.parse(model.getSettings()).hideThumbLabel, true);
+    assert.equal(model.getSettings().hideThumbLabel, true);
   });
   it('Model return correct step after validate settings', function () {
 
@@ -164,7 +164,7 @@ describe('Model validate settings', function () {
         isRange: true,
       });
     }).to.throw();
-    assert.equal(JSON.parse(model.getSettings()).step, 0.2);
+    assert.equal(model.getSettings().step, 0.2);
   });
   it('Model return correct isRange after validate settings', function () {
     model.updateSettings({
@@ -177,7 +177,7 @@ describe('Model validate settings', function () {
       hideThumbLabel: false,
       isRange: false,
     });
-    assert.equal(JSON.parse(model.getSettings()).isRange, false);
+    assert.equal(model.getSettings().isRange, false);
   });
 });
 
@@ -203,8 +203,8 @@ describe('Model validate step settings', function () {
       hideThumbLabel: true,
       isRange: true,
     });
-    assert.equal(JSON.parse(model.getSettings()).step, 5);
-    assert.equal(JSON.parse(model.getSettings()).from, -15);
-    assert.equal(JSON.parse(model.getSettings()).to, -10);
+    assert.equal(model.getSettings().step, 5);
+    assert.equal(model.getSettings().from, -15);
+    assert.equal(model.getSettings().to, -10);
   });
 });
