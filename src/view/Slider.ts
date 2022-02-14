@@ -53,7 +53,7 @@ class Slider extends EventObservable {
     const messageInitOrUpdate = (msg === Messages.INIT) || (msg === Messages.UPDATE);
     if (messageInitOrUpdate) {
       this.updateViewSettings(settings);
-      this.render(JSON.stringify(this.settings));
+      this.render({ ...this.settings });
     } else if (msg === Messages.FROM_IS_SET) {
       this.setValueToLabelThumbFrom(settings.from);
     } else if (msg === Messages.TO_IS_SET) {
@@ -99,12 +99,12 @@ class Slider extends EventObservable {
     return this.range.getThumbFromHTML();
   }
 
-  private render(settings:string): void {
-    this.settings = Object.assign(this.settings, JSON.parse(settings));
+  private render(settings:ISettings): void {
+    this.settings = Object.assign(this.settings, settings);
     this.container.classList.add(CLASS_NAMING.root);
     this.container.appendChild(this.range.getRangeHTML());
     this.range.render(settings);
-    this.rangeLabel.render(JSON.parse(settings));
+    this.rangeLabel.render(settings);
     this.container.appendChild(this.rangeLabel.getRangeLabelHTML());
     this.rootElem.appendChild(this.container);
     if (this.settings.hideThumbLabel) {
@@ -485,28 +485,17 @@ class Slider extends EventObservable {
 
   private dispatchEvent(shiftInPx: number, eventType: string) {
     const valueInPercentage = this.convertFromPxToPercent(shiftInPx);
+    const result = { ...this.settings };
     if (eventType === CONSTANTS.thumbFrom) {
       this.range.setThumbPositionFrom(valueInPercentage, this.settings.isVertical);
-      this.notifyObservers(
-        Messages.SET_FROM,
-        JSON.stringify(
-          {
-            from: ((100 / (100 - this.getThumbWidthInPercentage()))
-          * valueInPercentage),
-          },
-        ),
-      );
+      result.from = ((100 / (100 - this.getThumbWidthInPercentage()))
+          * valueInPercentage);
+      this.notifyObservers(Messages.SET_FROM, result);
     } else {
       this.range.setThumbPositionTo(valueInPercentage, this.settings.isVertical);
-      this.notifyObservers(
-        Messages.SET_TO,
-        JSON.stringify(
-          {
-            to: ((100 / (100 - this.getThumbWidthInPercentage()))
-          * valueInPercentage),
-          },
-        ),
-      );
+      result.to = ((100 / (100 - this.getThumbWidthInPercentage()))
+          * valueInPercentage);
+      this.notifyObservers(Messages.SET_TO, result);
     }
     this.setColoredRange();
   }

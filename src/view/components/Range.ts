@@ -30,8 +30,8 @@ class Range {
     return this.range;
   }
 
-  render(settings: string): void {
-    Object.assign(this.viewSettings, JSON.parse(settings));
+  render(settings: ISettings): void {
+    Object.assign(this.viewSettings, settings);
     if (this.viewSettings.isRange) {
       this.range.appendChild(this.thumbTo.getThumbHTML());
     } else if (!this.viewSettings.isRange) {

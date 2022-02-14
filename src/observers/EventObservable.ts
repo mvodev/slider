@@ -1,3 +1,4 @@
+import ISettings from '../model/ISettings';
 import Messages from '../utils/messages';
 import IObservable from './IObservable';
 import IObserver from './IObserver';
@@ -17,7 +18,7 @@ class EventObservable implements IObservable {
     this.observers = this.observers.filter((subscriber) => subscriber !== o);
   }
 
-  notifyObservers(msg: Messages, settings: string): void {
+  notifyObservers(msg: Messages, settings: ISettings): void {
     this.observers.forEach((elem) => {
       if (elem && ('handleEvent' in elem)) {
         elem.handleEvent(settings, msg);

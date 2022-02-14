@@ -16,23 +16,23 @@ class Presenter extends EventObservable implements IObserver {
     this.model = model;
   }
 
-  handleEvent(s: string, msg: Messages) : void {
+  handleEvent(s: ISettings, msg: Messages) : void {
     if (msg === Messages.UPDATE) {
-      this.view.refreshView(Messages.UPDATE, JSON.parse(s));
+      this.view.refreshView(Messages.UPDATE, s);
       this.notifyObservers(Messages.UPDATE, this.model.getSettings());
     } else if (msg === Messages.SET_FROM) {
-      this.model.setFrom(JSON.parse(s).from);
-      this.view.refreshView(Messages.FROM_IS_SET, JSON.parse(this.model.getSettings()));
+      this.model.setFrom(s.from);
+      this.view.refreshView(Messages.FROM_IS_SET, this.model.getSettings());
       this.notifyObservers(Messages.UPDATE, this.model.getSettings());
     } else if (msg === Messages.SET_TO) {
-      this.model.setTo(JSON.parse(s).to);
-      this.view.refreshView(Messages.TO_IS_SET, JSON.parse(this.model.getSettings()));
+      this.model.setTo(s.to);
+      this.view.refreshView(Messages.TO_IS_SET, this.model.getSettings());
       this.notifyObservers(Messages.UPDATE, this.model.getSettings());
     }
   }
 
   initialize(): void {
-    this.view.refreshView(Messages.INIT, JSON.parse(this.model.getSettings()));
+    this.view.refreshView(Messages.INIT, this.model.getSettings());
     this.notifyObservers(Messages.UPDATE, this.model.getSettings());
   }
 

@@ -17,8 +17,8 @@ class Model extends EventObservable {
     this.setSettings(settings);
   }
 
-  getSettings(): string {
-    return JSON.stringify(this.settings);
+  getSettings(): ISettings {
+    return { ...this.settings };
   }
 
   updateSettings(settings: ISettings): void {

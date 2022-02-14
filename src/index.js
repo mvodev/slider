@@ -34,8 +34,7 @@ $sl1.fsdSlider(sl1Settings);
 
 const callback1 = {
   handleEvent: (result) => {
-    const s = JSON.parse(result);
-    setValuesToControlPanel(s, 'slider1');
+    setValuesToControlPanel(result, 'slider1');
   },
 };
 
@@ -55,8 +54,7 @@ const sl2Settings = {
 
 const callback2 = {
   handleEvent: (result) => {
-    const s = JSON.parse(result);
-    setValuesToControlPanel(s, 'slider2');
+    setValuesToControlPanel(result, 'slider2');
   },
 };
 
@@ -81,8 +79,7 @@ $sl3.fsdSlider(sl3Settings);
 
 const callback3 = {
   handleEvent: (result) => {
-    const s = JSON.parse(result);
-    setValuesToControlPanel(s, 'slider3');
+    setValuesToControlPanel(result, 'slider3');
   },
 };
 
