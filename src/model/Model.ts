@@ -17,11 +17,11 @@ class Model extends EventObservable {
     this.setSettings(settings);
   }
 
-  getSettings(): ISettings {
+  private getSettings(): ISettings {
     return { ...this.settings };
   }
 
-  updateSettings(settings: ISettings): void {
+  updateSettings(settings: ISettings): void | Error {
     this.validateSettings(settings);
     this.notifyObservers(Messages.UPDATE, this.getSettings());
   }
@@ -46,7 +46,7 @@ class Model extends EventObservable {
     this.notifyObservers(Messages.TO_IS_SET, this.getSettings());
   }
 
-  private setSettings(settings: ISettings): void {
+  private setSettings(settings: ISettings): void | Error {
     if (settings !== undefined) {
       const isMaxMoreThanMin = settings.max > settings.min;
       const isToMoreThanFrom = settings.isRange ? (settings.to > settings.from) : true;
@@ -64,7 +64,7 @@ class Model extends EventObservable {
     }
   }
 
-  private validateSettings(settings: ISettings): void {
+  private validateSettings(settings: ISettings): void | Error {
     const newMin = convertFromInputToNumber(settings.min);
     const newMax = convertFromInputToNumber(settings.max);
     const newFrom = convertFromInputToNumber(settings.from);
@@ -84,7 +84,7 @@ class Model extends EventObservable {
     this.validateRange(newRange);
   }
 
-  private validateMin(newMin:number|undefined, newMax:number|undefined) {
+  private validateMin(newMin:number|undefined, newMax:number|undefined): void | Error {
     const newMinAndMaxIsValid = newMin !== undefined && newMax !== undefined;
     if (newMinAndMaxIsValid) {
       if (Math.abs(newMax - newMin) < this.settings.step) {
@@ -100,7 +100,7 @@ class Model extends EventObservable {
     }
   }
 
-  private validateMax(newMax:number|undefined) {
+  private validateMax(newMax:number|undefined): void | Error {
     if (newMax !== undefined) {
       const newMaxLessThanTo = this.settings.isRange && newMax < this.settings.to;
       const newMaxLessThanFrom = !this.settings.isRange && newMax < this.settings.from;
@@ -114,7 +114,7 @@ class Model extends EventObservable {
     }
   }
 
-  private validateFrom(newFrom:number|undefined) {
+  private validateFrom(newFrom:number|undefined): void | Error {
     const newFromIsValidWithoutRangeSettings = newFrom !== undefined && !this.settings.isRange;
     const newFromIsValidWithRangeSettings = newFrom !== undefined && this.settings.isRange;
     if (newFromIsValidWithoutRangeSettings) {
@@ -133,7 +133,7 @@ class Model extends EventObservable {
     }
   }
 
-  private validateTo(newTo:number|undefined) {
+  private validateTo(newTo:number|undefined): void | Error {
     const newToIsValid = newTo !== undefined && this.settings.isRange;
     if (newToIsValid) {
       if (newTo < this.settings.from) {
@@ -144,7 +144,7 @@ class Model extends EventObservable {
     }
   }
 
-  private validateStep(newStep:number|undefined) {
+  private validateStep(newStep:number|undefined): void | Error {
     const {
       min, max, step,
     } = this.settings;
@@ -167,7 +167,7 @@ class Model extends EventObservable {
     }
   }
 
-  private validateRange(newRange:boolean|undefined) {
+  private validateRange(newRange:boolean|undefined): void | Error {
     const {
       min, max, step, isRange, to, from,
     } = this.settings;
@@ -183,7 +183,7 @@ class Model extends EventObservable {
     }
   }
 
-  private convertFromPercentToValue(valueInPercent: number) {
+  private convertFromPercentToValue(valueInPercent: number): number {
     const { min, max, step } = this.settings;
     if (valueInPercent <= 0) {
       return min;

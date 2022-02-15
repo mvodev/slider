@@ -1,9 +1,11 @@
 import * as chai from 'chai';
 
 import Model from '../model/Model';
+import ModelTester from './ModelTester';
 
 let assert = chai.assert;
 let expect = chai.expect;
+
 describe('Model set settings', function () {
   const model = new Model({
     min: -15,
@@ -15,29 +17,44 @@ describe('Model set settings', function () {
     hideThumbLabel: false,
     isRange: true,
   });
+
+  const tester = new ModelTester(model);
+  model.addObserver(tester);
+
+  tester.test({
+    min: -15,
+    max: 10,
+    from: -14,
+    step: 0.2,
+    to: -11,
+    isVertical: false,
+    hideThumbLabel: false,
+    isRange: true,
+  });
+
   it('Model return correct min after set settings', function () {
-    assert.equal(model.getSettings().min, -15);
+    assert.equal(tester.getResult().min, -15);
   });
   it('Model return correct max after set settings', function () {
-    assert.equal(model.getSettings().max, 10);
+    assert.equal(tester.getResult().max, 10);
   });
   it('Model return correct step after set settings', function () {
-    assert.equal(model.getSettings().step, 0.2);
+    assert.equal(tester.getResult().step, 0.2);
   });
   it('Model return correct from after set settings', function () {
-    assert.equal(model.getSettings().from, -14);
+    assert.equal(tester.getResult().from, -14);
   });
   it('Model return correct to after set settings', function () {
-    assert.equal(model.getSettings().to, -11);
+    assert.equal(tester.getResult().to, -11);
   });
   it('Model return correct isRange after set settings', function () {
-    assert.equal(model.getSettings().isRange, true);
+    assert.equal(tester.getResult().isRange, true);
   });
   it('Model return correct isVertical after set settings', function () {
-    assert.equal(model.getSettings().isVertical, false);
+    assert.equal(tester.getResult().isVertical, false);
   });
   it('Model return correct hideThumbLabel after set settings', function () {
-    assert.equal(model.getSettings().hideThumbLabel, false);
+    assert.equal(tester.getResult().hideThumbLabel, false);
   });
 });
 
@@ -55,9 +72,12 @@ describe('Model validate settings', function () {
     isRange: true,
   });
 
+  const tester = new ModelTester(model);
+  model.addObserver(tester);
+
   it('Model return correct min after validate settings', function () {
     expect(function () {
-      model.updateSettings({
+      tester.test({
         min: -8,
         max: 10,
         from: -14,
@@ -68,11 +88,23 @@ describe('Model validate settings', function () {
         isRange: true,
       })
     }).to.throw();
-    expect(model.getSettings().min).equal(-15);
+    try{
+      tester.test({
+        min: -8,
+        max: 10,
+        from: -14,
+        step: 0.2,
+        to: -11,
+        isVertical: false,
+        hideThumbLabel: false,
+        isRange: true,
+      });
+      assert.equal(tester.getResult().min, -15);
+    }catch(e) {}
   });
   it('Model return correct max after validate settings', function () {
     expect(function () {
-      model.updateSettings({
+      tester.test({
         min: -15,
         max: -25,
         from: -14,
@@ -83,13 +115,10 @@ describe('Model validate settings', function () {
         isRange: true,
       });
     }).to.throw();
-    assert.equal(model.getSettings().max, 10);
-  });
-  it('Model return correct to after validate settings', function () {
-    expect(function () {
-      const model = new Model({
+    try{
+      tester.test({
         min: -15,
-        max: 10,
+        max: -25,
         from: -14,
         step: 0.2,
         to: -11,
@@ -97,21 +126,39 @@ describe('Model validate settings', function () {
         hideThumbLabel: false,
         isRange: true,
       });
-      model.updateSettings({
+      assert.equal(tester.getResult().max, 10);
+    }catch(e){}
+  });
+  it('Model return correct to after validate settings', function () {
+    expect(function () {
+      tester.test({
         min: -15,
-        max: 10,
+        max: -25,
         from: -14,
         step: 0.2,
-        to: 200,
+        to: 100,
         isVertical: false,
         hideThumbLabel: false,
         isRange: true,
       });
     }).to.throw();
+    try {
+      tester.test({
+        min: -15,
+        max: -25,
+        from: -14,
+        step: 0.2,
+        to: 100,
+        isVertical: false,
+        hideThumbLabel: false,
+        isRange: true,
+      });
+      assert.equal(tester.getResult().to, -11);
+    } catch(e) {}
   });
   it('Model return correct from after validate settings', function () {
     expect(function () {
-      model.updateSettings({
+      tester.test({
         min: -15,
         max: 10,
         from: 200,
@@ -122,10 +169,23 @@ describe('Model validate settings', function () {
         isRange: true,
       });
     }).to.throw();
+    try{
+      tester.test({
+        min: -15,
+        max: 10,
+        from: 200,
+        step: 0.2,
+        to: -11,
+        isVertical: false,
+        hideThumbLabel: false,
+        isRange: true,
+      });
+      assert.equal(tester.getResult().from, -14);
+    }catch(e){}
   });
 
   it('Model return correct isVertical after validate settings', function () {
-    model.updateSettings({
+    tester.test({
       min: -15,
       max: 10,
       from: -14,
@@ -135,10 +195,10 @@ describe('Model validate settings', function () {
       hideThumbLabel: false,
       isRange: true,
     });
-    assert.equal(model.getSettings().isVertical, true);
+    assert.equal(tester.getResult().isVertical, true);
   });
   it('Model return correct hideThumbLabel after validate settings', function () {
-    model.updateSettings({
+    tester.test({
       min: -15,
       max: 10,
       from: -14,
@@ -148,12 +208,12 @@ describe('Model validate settings', function () {
       hideThumbLabel: true,
       isRange: true,
     });
-    assert.equal(model.getSettings().hideThumbLabel, true);
+    assert.equal(tester.getResult().hideThumbLabel, true);
   });
   it('Model return correct step after validate settings', function () {
 
     expect(function () {
-      model.updateSettings({
+        tester.test({
         min: -15,
         max: -25,
         from: -14,
@@ -164,10 +224,22 @@ describe('Model validate settings', function () {
         isRange: true,
       });
     }).to.throw();
-    assert.equal(model.getSettings().step, 0.2);
+    try{
+      tester.test({
+        min: -15,
+        max: -25,
+        from: -14,
+        step: -5,
+        to: -11,
+        isVertical: false,
+        hideThumbLabel: true,
+        isRange: true,
+      });
+      assert.equal(tester.getResult().step, 0.2);
+    }catch(e){}
   });
   it('Model return correct isRange after validate settings', function () {
-    model.updateSettings({
+    tester.test({
       min: -15,
       max: 10,
       from: -14,
@@ -177,34 +249,6 @@ describe('Model validate settings', function () {
       hideThumbLabel: false,
       isRange: false,
     });
-    assert.equal(model.getSettings().isRange, false);
-  });
-});
-
-describe('Model validate step settings', function () {
-  const model = new Model({
-    min: -15,
-    max: 10,
-    from: -14,
-    step: 0.2,
-    to: -11,
-    isVertical: false,
-    hideThumbLabel: false,
-    isRange: true,
-  });
-  it('Model return correct step and from and to after validate settings', function () {
-    model.updateSettings({
-      min: -15,
-      max: 10,
-      from: -14,
-      step: 5,
-      to: -11,
-      isVertical: false,
-      hideThumbLabel: true,
-      isRange: true,
-    });
-    assert.equal(model.getSettings().step, 5);
-    assert.equal(model.getSettings().from, -15);
-    assert.equal(model.getSettings().to, -10);
+    assert.equal(tester.getResult().isRange, false);
   });
 });
