@@ -10,7 +10,7 @@ global.ResizeObserver = require('resize-observer-polyfill');
 let assert = chai.assert;
 document.body.innerHTML = '<div id="slider-test3"></>';
 
-describe("Presenter", function () {
+describe("Presenter tests", function () {
   const root3: HTMLDivElement = document.querySelector('#slider-test3');
   const settings = {
     min: 0,
