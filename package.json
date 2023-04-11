@@ -1,8 +1,8 @@
 {
-  "name": "fsd-course4",
+  "name": "slider-project-metalamp",
   "version": "1.0.0",
   "private": true,
-  "description": "MetaLamp Course4",
+  "description": "MetaLamp Slider project",
   "dependencies": {
     "@types/jquery": "^3.5.6",
     "@types/resize-observer-browser": "^0.1.6",
